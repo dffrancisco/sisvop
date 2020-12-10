@@ -40,11 +40,8 @@ if (!empty($_GET['p'])) {
         <script src="js/index.js" type="text/javascript"></script>
 
 
-<<<<<<< HEAD
-        <title>Entrada</title>
-=======
         <title>Sisvop</title>
->>>>>>> 81e8569bfd09bd208328731e209730cddbe0d271
+
     </head>
     <body>
         <nav>
@@ -52,11 +49,9 @@ if (!empty($_GET['p'])) {
 
                 <ul id="nav-mobile" class="left">
                     <li><a onclick="pnMenuToggle()" href="#!"><i class="fa fa-bars fa-2x"></i></a></li>
-<<<<<<< HEAD
-                    <li><a href="#" class="" style="font-size: 20px" >Entrada</a><li>
-=======
+
                     <li><a href="#" class="" style="font-size: 20px" >Sisvop</a><li>
->>>>>>> 81e8569bfd09bd208328731e209730cddbe0d271
+
                 </ul>
 
                 <a href="#" class="brand-logo center truncate"  style="font-size: 18px" id="pnTitulo" >Modelo</a>
@@ -73,11 +68,9 @@ if (!empty($_GET['p'])) {
         </div>
 
         <div class="pnMenu">
-<<<<<<< HEAD
-            <a href="?p=entrada/entrada"><li><i class="fa fa-address-book"></i>Entrada</li></a>
-=======
+
             <a href="?p=produtos/produtos"><li><i class="fa fa-address-book"></i>Produto</li></a>
->>>>>>> 81e8569bfd09bd208328731e209730cddbe0d271
+
             <a href="?p=cargo/cargo"><li><i class="fa fa-address-book"></i>Cargo</li></a>
             <a href="?p=empresa/empresa"><li><i class="fa fa-address-book"></i>Empresas</li></a>
             <li><a href="#!">Funcionários</a></li>
