@@ -14,14 +14,15 @@ if (!empty($_GET['p'])) {
         <meta name="google" content="notranslate">
 
         <link rel="stylesheet" href="css/index.css" type="text/css"/>
+        <link rel="stylesheet" href="produtos/produtos.css" type="text/css"/>
 
         <script src="js/jquery-2.2.1.min.js" type="text/javascript"></script>
 
         <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-        <link href="css/materialize.min.css" rel="stylesheet" type="text/css"/>
-
-        <script src="js/materialize.min.js" type="text/javascript"></script>
-
+        <!-- <link href="css/materialize.min.css" rel="stylesheet" type="text/css"/> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <!-- <script src="js/materialize.min.js" type="text/javascript"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <script src="plugins/xGridV2/xGridV2.js" type="text/javascript"></script>
         <link rel="stylesheet" href="plugins/xGridV2/xGridV2.css" type="text/css"/>
 
@@ -31,19 +32,31 @@ if (!empty($_GET['p'])) {
         <script src="plugins/modais.js" type="text/javascript"></script>
         <script src="plugins/util.js" type="text/javascript"></script>
 
+        <script src="plugins/axios.min.js" type="text/javascript"></script>
+
+        
+
 
         <script src="js/index.js" type="text/javascript"></script>
 
 
+<<<<<<< HEAD
         <title>Entrada</title>
+=======
+        <title>Sisvop</title>
+>>>>>>> 81e8569bfd09bd208328731e209730cddbe0d271
     </head>
     <body>
         <nav>
-            <div class="nav-wrapper">
+            <div class="nav-wrapper nav-blue">
 
                 <ul id="nav-mobile" class="left">
                     <li><a onclick="pnMenuToggle()" href="#!"><i class="fa fa-bars fa-2x"></i></a></li>
+<<<<<<< HEAD
                     <li><a href="#" class="" style="font-size: 20px" >Entrada</a><li>
+=======
+                    <li><a href="#" class="" style="font-size: 20px" >Sisvop</a><li>
+>>>>>>> 81e8569bfd09bd208328731e209730cddbe0d271
                 </ul>
 
                 <a href="#" class="brand-logo center truncate"  style="font-size: 18px" id="pnTitulo" >Modelo</a>
@@ -60,7 +73,11 @@ if (!empty($_GET['p'])) {
         </div>
 
         <div class="pnMenu">
+<<<<<<< HEAD
             <a href="?p=entrada/entrada"><li><i class="fa fa-address-book"></i>Entrada</li></a>
+=======
+            <a href="?p=produtos/produtos"><li><i class="fa fa-address-book"></i>Produto</li></a>
+>>>>>>> 81e8569bfd09bd208328731e209730cddbe0d271
             <a href="?p=cargo/cargo"><li><i class="fa fa-address-book"></i>Cargo</li></a>
             <a href="?p=empresa/empresa"><li><i class="fa fa-address-book"></i>Empresas</li></a>
             <li><a href="#!">Funcionários</a></li>

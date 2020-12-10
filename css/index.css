@@ -212,4 +212,7 @@ input:focus, select:focus, textarea:focus{
     background: #e8f1f7 !important;
 }
 
+.nav-blue{
+    background-color: #1d4b70 !important;
+}
 /*materialize* fim *********************************/
