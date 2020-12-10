@@ -1,29 +1,18 @@
-$.ajaxSetup({
-    url: '_TEMPLATE_SQL/per.__.php',
-    data: {
-        class: '__'
-    }
-});
 
 $(function () {
-
+    exemplo.getExemplo()
 });
 
 
 var exemplo = (function () {
 
     function getExemplo() {
-        $.ajax({
-            data: {
-                call: 'exemplo',
-                param: {
-                    id_empresa: 808
-                }
-            },
-            success: function (r) {
+        axios.post('empresa/per.empresa.php', {
+            call: 'exemplo'
+        })
+            .then(r => {
                 console.log(r);
-            }
-        });
+            })
     }
 
     return {

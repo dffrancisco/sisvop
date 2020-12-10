@@ -1,22 +1,23 @@
 <?php
+class Sql__
+{
 
-include_once '../DM/prepareSql.php';
 
-class Sql__ {
-
-  private $conexao;
+  public $db;
   
-  function __construct($conexao) {
-    $this->conexao = $conexao;
+  function __construct()
+  {
+    $this->db = new PDO('sqlite:/var/www/html/Estoque.sqlite');
   }
-  
-  
-    function exemplo($param) {
-    $sql = 'select * from empresa
-            where id_empresa = :id_empresa';
-    return executa::SQL($this->conexao, $sql, $param);
+
+
+  function exemplo()
+  {
+    $sql = 'select * from produtos';
+
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(); 
+
   }
-  
-  
-  
 }

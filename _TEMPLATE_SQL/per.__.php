@@ -4,33 +4,23 @@
 //ini_set('display_startup_errors', 1);
 //error_reporting(E_ALL);
 
-
-include_once '../../superClass/connect/class.connect_firebird.php';
-include_once '../DM/prepareSql.php';
 include_once './sql.__.php';
 
-
-extract($_POST);
+extract(json_decode(file_get_contents("php://input"), TRUE));
 
 class __ {
 
-    private $conexao;
-    private $sql__;
+    private $sql;
 
-    function __construct($id_sociedade) {
-        $this->conexao = ConexaoFirebird::getConectar($id_sociedade);
-        if (!$this->conexao) {
-            die('{"loja":"off"}');
-            return false;
-        }
-
-//        instancia da class        
-        $this->sql__ = new Sql__($this->conexao);
+    function __construct() {
+        
+        //instancia da class        
+        $this->sql = new Sql__();
     }
 
     function exemplo($param) {
-        $call = $this->sql__->exemplo($param);
-        retorno::json($call);
+        $call = $this->sql->exemplo($param);
+        echo json_encode($call);
     }
 
 }

@@ -32,6 +32,10 @@ if (!empty($_GET['p'])) {
         <script src="plugins/modais.js" type="text/javascript"></script>
         <script src="plugins/util.js" type="text/javascript"></script>
 
+        <script src="plugins/axios.min.js" type="text/javascript"></script>
+
+        
+
 
         <script src="js/index.js" type="text/javascript"></script>
 
