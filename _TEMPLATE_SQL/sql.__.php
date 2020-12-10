@@ -2,8 +2,9 @@
 class Sql__
 {
 
-  public $db;
 
+  public $db;
+  
   function __construct()
   {
     $this->db = new PDO('sqlite:/var/www/html/Estoque.sqlite');

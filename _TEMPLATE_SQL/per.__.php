@@ -6,7 +6,6 @@
 
 include_once './sql.__.php';
 
-
 extract(json_decode(file_get_contents("php://input"), TRUE));
 
 class __ {

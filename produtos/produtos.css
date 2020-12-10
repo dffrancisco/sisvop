@@ -1,0 +1,33 @@
+.tabela{
+    padding: 10px;
+}
+
+.corInp {
+    border-left: 3px solid #55828b !important;
+    margin-top: 8px !important;
+    
+}
+.margintop{
+    margin-top: 10px !important;
+}
+
+.list{
+
+    margin-left: 5px !important;
+    
+}
+
+.btnP{
+
+    font-size: 14px !important;
+}
+
+.btnDel{
+    
+    background-color: rgb(226, 25, 25) !important;
+    border: red !important;
+}
+
+label{
+    color: rgb(71, 71, 71) !important;
+}
