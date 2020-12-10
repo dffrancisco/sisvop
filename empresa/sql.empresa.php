@@ -1,5 +1,5 @@
 <?php
-class Sql__
+class SqlEmpresa
 {
 
   public $db;
