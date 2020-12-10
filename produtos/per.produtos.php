@@ -5,17 +5,17 @@
 //error_reporting(E_ALL);
 
 
-include_once '../../superClass/connect/class.connect_firebird.php';
+//include_once '../../superClass/connect/class.connect_firebird.php';
 include_once '../DM/prepareSql.php';
-include_once './sql.__.php';
+include_once './sql.produtos.php';
 
 
 extract($_POST);
 
-class __ {
+class produto {
 
     private $conexao;
-    private $sql__;
+    private $sqlProdutos;
 
     function __construct($id_sociedade) {
         $this->conexao = ConexaoFirebird::getConectar($id_sociedade);
@@ -25,16 +25,16 @@ class __ {
         }
 
 //        instancia da class        
-        $this->sql__ = new Sql__($this->conexao);
+        $this->sqlProdutos = new SqlProdutos($this->conexao);
     }
 
     function exemplo($param) {
-        $call = $this->sql__->exemplo($param);
+        $call = $this->sqlProdutos->exemplo($param);
         retorno::json($call);
     }
 
 }
 
-$class = new __();
+$class = new produto();
 $class->$call(@$param);
 

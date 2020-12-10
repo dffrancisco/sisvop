@@ -2,7 +2,7 @@
 
 include_once '../DM/prepareSql.php';
 
-class Sql__ {
+class SqlProdutos {
 
   private $conexao;
   
