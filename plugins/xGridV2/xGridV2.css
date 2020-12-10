@@ -359,7 +359,7 @@
 
 .x-grayV2 .xGridV2-content {
   background: #f8f8f8;
-  height: calc(100% - 22px);
+  height: calc(100% - 24px);
 }
 
 .x-grayV2 .xGridV2-content .xGridV2-col {
@@ -880,3 +880,113 @@
   background-color: #0174ad;
 }
 
+
+/*-------------- clown ------------------*/
+
+.x-clownV2 {
+  color: #55828B;
+  border: 1px solid #55828B;
+  font-size: 10px;
+  font-family: Verdana, Arial, sans-serif;
+  background: #55828B;
+}
+
+.x-clownV2 .xGridV2-title {
+  border-bottom: 1px solid #55828B;
+  color: #131313;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.x-clownV2 .xGridV2-title .xGridV2-col {
+  border-right: 1px solid #55828B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4px;
+}
+
+.x-clownV2 .xGridV2-title .xGridV2-col:last-child {
+  margin-right: 10px;
+}
+
+.x-clownV2 .xGridV2-content {
+  background: #F6F8FA;
+  height: calc(100% - 22px);
+}
+
+.x-clownV2 .xGridV2-content .xGridV2-col {
+  border-right: 1px solid #55828B;
+  cursor: pointer;
+  padding: 1px;
+  text-align: center;
+  padding: 4px;
+}
+
+.x-clownV2 .xGridV2-content .xGridV2-row:nth-child(odd) {
+  background-color: #e7e8e9;
+}
+
+.x-clownV2 .xGridV2-Selected {
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0%, #2d80be),
+    color-stop(19%, #3189CC),
+    color-stop(72%, #286FA6),
+    color-stop(100%, #1f5680)
+  );
+  border-color: #014ab8;
+  color: #ffffff !important;
+  outline: 0;
+}
+
+.x-clownV2 .xGridV2-load {
+  height: 24px;
+  width: 160px;
+}
+
+.x-clownV2 .xGridV2-SelectedFocusOut {
+  background: #4391cc !important;
+  outline: 0;
+}
+
+.x-clownV2 .xGridV2-content nav {
+  color: #c6bdcd;
+}
+
+/*****scrollbar*****/
+
+.x-clownV2::-webkit-scrollbar-track-piece,
+.x-clownV2 .xGridV2-content::-webkit-scrollbar-track-piece {
+  border-left: none;
+  background: rgba(0, 0, 0, 0);
+}
+
+.x-clownV2::-webkit-scrollbar,
+.x-clownV2 .xGridV2-content::-webkit-scrollbar {
+  width: 10px;
+  background: #ffffff;
+}
+
+.x-clownV2::-webkit-scrollbar-corner {
+    background: #ffffff;
+  }
+
+.x-clownV2::-webkit-scrollbar-thumb:vertical,
+.x-clownV2::-webkit-scrollbar-thumb:horizontal,
+.x-clownV2 .xGridV2-content::-webkit-scrollbar-thumb:vertical,
+.x-clownV2 .xGridV2-content::-webkit-scrollbar-thumb:horizontal {
+  background: #e4e3e3;
+  border-radius: 5px;
+}
+
+.x-clownV2::-webkit-scrollbar-thumb:vertical:hover,
+.x-clownV2::-webkit-scrollbar-thumb:horizontal:hover,
+.x-clownV2 .xGridV2-content::-webkit-scrollbar-thumb:vertical:hover,
+.x-clownV2 .xGridV2-content::-webkit-scrollbar-thumb:horizontal:hover {
+  box-shadow: none;
+  background: #d7dada;
+}

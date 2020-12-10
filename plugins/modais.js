@@ -54,7 +54,7 @@ const confirmaCodigo = function (arg) {
     let argDefault = {
         msg: '',
         title: 'Mensagem do Sistema',
-        theme: 'xModal-dark',
+        theme: 'xModal-bublue',
         onClose: false,
         call: false,
         cancel: false
@@ -139,7 +139,7 @@ const confirma = function (arg) {
     let argDefault = {
         msg: '',
         title: 'Mensagem do Sistema',
-        theme: 'xModal-dark',
+        theme: 'xModal-bublue',
         onClose: false,
         call: false,
         cancel: false
@@ -198,7 +198,7 @@ const aguarde = function (arg) {
     let argDefault = {
         msg: '',
         title: 'Mensagem do Sistema',
-        theme: 'xModal-dark',
+        theme: 'xModal-bublue',
     }
 
     if (typeof arg == 'string') {
