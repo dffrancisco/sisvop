@@ -1,0 +1,210 @@
+ul.xMenu{
+    list-style:none; 
+    margin:0;
+    padding:0;
+    font: 300 15px sans-serif;
+    position: fixed;
+    /* box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); */
+    box-shadow: 1px 1px 10px rgb(65, 65, 65);
+    z-index: 99999;
+    border-radius: 5px;
+    display: none;
+    background-color: #ffffff;
+    opacity: 1;
+    overflow: hidden;
+    max-height: 400px;
+    transition: max-height 0.1s cubic-bezier(1,.5,.5,0)
+}
+ul.xMenu.hide{
+    /* max-height: 0; */
+    display: none !important;
+    pointer-events: none;
+}
+ul.xMenu i{
+    min-width: 26px;  
+    text-align: center;
+}
+
+ul.xMenu *{
+    transition:color .2s, background .2s;
+}
+
+ul.xMenu li{
+    min-width:150px;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 6px 8px;
+    /*background-color: #fff;*/
+    /*background-color: #eaeaea;*/
+    border-bottom:1px solid #e0e0e0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 20px;
+}
+
+/*ul.xMenu li a{
+    color:#333;
+    text-decoration:none;
+}*/
+
+ul.xMenu li[disable='true'] label:first-child, ul li[disable='disabled'] label:first-child {
+    cursor: no-drop;
+}
+ul.xMenu li label:first-child{
+    cursor: pointer;  
+}
+
+ul.xMenu li:hover{
+    background-color: #eeeeee;
+}
+
+ul.xMenu li:first-child{
+    border-radius: 5px 5px 0 0;
+}
+
+ul.xMenu li:last-child{
+    /*// background:#ecf0f1;*/
+    border-bottom:0;
+    border-radius: 0 0 5px 5px
+}
+
+ul.xMenu li:last-child a{width:26%;}
+ul.xMenu li:last-child:hover a{color:#2c3e50}
+ul.xMenu li:last-child:hover a:hover{color:#2980b9}
+
+ul.xMenu li span{
+    padding-left: 8px;
+}
+ul.xMenu li.disabled{
+    cursor: no-drop !important;
+    color: #afafaf;
+}
+ul.xMenu li[disabled='disabled'], ul.xMenu li[disable='true'] {
+    cursor: no-drop !important;
+    color: #afafaf;
+}
+
+ul.xMenu li div{
+    display: inline;
+}
+
+ul.xMenu li div span{
+    text-align: left;
+}
+ul.xMenu li div:nth-child(1){
+    min-width: 28px;
+    text-align: center;
+}
+ul.xMenu li div:nth-child(2){
+    flex-grow: 4;
+}
+
+/* ul.xMenu li div:nth-child(1){
+    padding-top: 2px;
+    float: left; 
+    max-width: 28px
+} 
+ul.xMenu li div:nth-child(2){
+    float: left; 
+    max-width: 21px
+} 
+ul.xMenu li div:nth-child(3){
+    float: left; 
+    padding-top: 5px;
+} 
+ul.xMenu li div:nth-child(4){
+    float: right; 
+    max-width: 80px; 
+    font-size: 13px;
+    padding-top: 7px;
+    color: #666666;
+
+}  */
+
+/*chekbox*/
+.xMenuCheckLa input{
+    display: none;
+}
+
+ul.xMenu li[disable='true'] .xMenuCheckLa, ul.xMenu li[disable='disable'] .xMenuCheckLa{
+    cursor: no-drop;
+}
+
+.xMenuCheckLa{
+    /*cursor: pointer;*/
+    text-indent: -9999px;
+    width: 25px;
+    height: 14px;
+    background: #6b6b6b;
+    display: block;
+    border-radius: 100px;
+    position: relative;
+    transition: 0.8s;
+    cursor: pointer;
+}
+
+.xMenuCheckLa:after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-radius: 90px;
+    transition: 0.3s;
+}
+
+.xMenuCheckLa.checked:after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 12px;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-radius: 90px;
+    transition: 0.3s;
+}
+
+.xMenuCheckLa.checked{
+    background: #57b9d6;
+    transition: 0.8s;
+}
+
+.xMenuCheckIn:checked + label:after {
+    left: calc(100% - 2px);
+    transform: translateX(-100%);
+}
+
+.xMenuCheckLa:active:after {
+    width: 15px;
+}
+
+.pnBackgroudxMenu{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    z-index: 9999;
+}
+
+ul.xMenu li div i.icon{
+    color: #6b6b6b;
+    min-width: 17px;
+}
+
+ul.xMenu li div span.short{
+    color: rgba(115,115,115,0.71);
+}
+
+ul.xMenu li div span.short-submenu{
+    color: rgba(78, 78, 78, 0.931);
+    font-size: 12px;
+}
+
