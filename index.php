@@ -22,6 +22,16 @@ if (!empty($_GET['p'])) {
 
         <script src="js/materialize.min.js" type="text/javascript"></script>
 
+        <script src="plugins/xGridV2/xGridV2.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="plugins/xGridV2/xGridV2.css" type="text/css"/>
+
+        <script src="plugins/xModal/xModal.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="plugins/xModal/xModal.css" type="text/css"/>
+
+        <script src="plugins/modais.js" type="text/javascript"></script>
+        <script src="plugins/util.js" type="text/javascript"></script>
+
+
         <script src="js/index.js" type="text/javascript"></script>
 
 
