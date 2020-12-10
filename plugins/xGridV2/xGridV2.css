@@ -884,7 +884,7 @@
 /*-------------- clown ------------------*/
 
 .x-clownV2 {
-  color: #55828B;
+  color: black;
   border: 1px solid #55828B;
   font-size: 10px;
   font-family: Verdana, Arial, sans-serif;
@@ -912,8 +912,8 @@
 }
 
 .x-clownV2 .xGridV2-content {
-  background: #F6F8FA;
-  height: calc(100% - 22px);
+  background: #b7bbbe;
+  height: calc(100% - 24px);
 }
 
 .x-clownV2 .xGridV2-content .xGridV2-col {
@@ -925,7 +925,7 @@
 }
 
 .x-clownV2 .xGridV2-content .xGridV2-row:nth-child(odd) {
-  background-color: #e7e8e9;
+  background-color: #d5dadd;
 }
 
 .x-clownV2 .xGridV2-Selected {
@@ -933,10 +933,10 @@
     linear,
     left top,
     left bottom,
-    color-stop(0%, #2d80be),
-    color-stop(19%, #3189CC),
-    color-stop(72%, #286FA6),
-    color-stop(100%, #1f5680)
+    color-stop(0%, #6DEC91),
+    color-stop(19%, #25E85C),
+    color-stop(72%, #1DB548),
+    color-stop(100%, #1BA843)
   );
   border-color: #014ab8;
   color: #ffffff !important;
@@ -949,7 +949,7 @@
 }
 
 .x-clownV2 .xGridV2-SelectedFocusOut {
-  background: #4391cc !important;
+  background: #25E85C !important;
   outline: 0;
 }
 
@@ -979,7 +979,7 @@
 .x-clownV2::-webkit-scrollbar-thumb:horizontal,
 .x-clownV2 .xGridV2-content::-webkit-scrollbar-thumb:vertical,
 .x-clownV2 .xGridV2-content::-webkit-scrollbar-thumb:horizontal {
-  background: #e4e3e3;
+  background: #498279;
   border-radius: 5px;
 }
 

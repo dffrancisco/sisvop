@@ -6,14 +6,31 @@
 <div class="container">
 
 
-<div class="row">
-<div class="tabela col s12 margintop"id="pnFields">
 
-        <input type="text" class="corInp" placeholder="Código">
-        <input type="text" class="corInp" placeholder="Descrição">
-        <input type="text" class="corInp" placeholder="Quantidade">
-        <input type="text" class="corInp" placeholder="Valor">     
-</div>
+<div class="tabela col s12 margintop" id="pnFields">
+        <div class="row">
+                <div class="col s3">
+                <label>Codigo</label>      
+                <input type="text" class="corInp" placeholder="Código" name="codigo">
+          
+                </div>
+                <div class="col s3">
+                <label>Descrição</label>  
+                <input type="text" class="corInp" placeholder="Descrição" name="descricao">
+              
+                </div>
+                <div class="col s3">
+                <label>Quantidade</label>  
+                <input type="text" class="corInp" placeholder="Quantidade" name="qtd">
+              
+                </div>
+                <div class="col s3">
+                <label>Valor</label>  
+                 <input type="text" class="corInp" placeholder="Valor" name="valor">     
+
+                </div>
+
+        </div>
 </div>
 
 <div id="xgProduto" class="list"></div>

@@ -200,7 +200,7 @@ input, select, textarea{
     -moz-box-shadow:inset 0px 1px 3px #bbb !important;
     font-size:12px !important;
     height: 18px !important;
-    width: auto !important;
+    width: 100% !important;
 }
 
 select{

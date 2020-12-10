@@ -3,9 +3,13 @@ let xgProduto;
 $(function () {
   produto.grid();
   produto.getProduto();
+  xgProduto.queryOpen(0,'')
 });
 
 const produto = (function () {
+
+  let url = 'produtos/per.produtos.php'
+
   function getProduto() {
     console.log("getprodutosfasdfa");
   }
@@ -14,6 +18,19 @@ const produto = (function () {
     return "R$ " + value;
   }
 
+  function novo(){
+    xgProduto.clearElementSideBySide()
+    xgProduto.focusField()
+    xgProduto.disable()
+    }
+
+    function savar(){
+      axios.post(url,{
+        call:'insert',
+        param:xgProduto.getElementSideBySideJson()
+      })
+    }
+  
   function grid() {
     xgProduto = new xGridV2.create({
       el: "#xgProduto",
@@ -30,9 +47,7 @@ const produto = (function () {
               html: "Novo",
               class: "btnP",
               state: xGridV2.state.insert,
-              click: () => {
-                
-              },
+              click: novo,
             },
 
             edit: {
@@ -40,34 +55,40 @@ const produto = (function () {
               class: "btnP",
               state: xGridV2.state.update,
               click: () => {
-                if (grid.dataSource()) console.log(grid.dataSource().descricao);
+               // if (grid.dataSource()) console.log(grid.dataSource().descricao);
 
-                grid.disableFieldsSideBySide(true);
+                //grid.disableFieldsSideBySide(true);
               },
-            },
+            },            
 
-            deletar:{
-              html : "Deletar",
+            deletar: {
+              html: "Deletar",
               class: "btnP btnDel",
               state: xGridV2.state.delete,
-              click:() =>{
-                if(grid.dataSource().id){
+              click: () => {
+                if (grid.dataSource().id) {
 
                 }
               },
             },
+            save: {
+              html: "Salvar",
+              class: "btnP",
+              state: xGridV2.state.save,
+              click: savar
+            },
 
-            cancelar:{
-              html : "Cancelar",
+            cancelar: {
+              html: "Cancelar",
               class: "btnP",
               state: xGridV2.state.cancel,
-              click:() =>{
-                if(grid.dataSource().id){
-
-                }
+              click: () => {
+                
+                xgProduto.enable()
+                xgProduto.focus()
               },
             },
-            
+
           },
         },
       },
@@ -75,7 +96,7 @@ const produto = (function () {
         Código: {
           dataField: "codigo",
           center: true,
-          width: "10%",        
+          width: "10%",
         },
         Descrição: {
           dataField: "descricao",
@@ -85,7 +106,7 @@ const produto = (function () {
         QTD: {
           dataField: "qtd",
           width: "15%",
-          center: true,          
+          center: true,
         },
         // 'Marca': { dataField: 'marca', width: '17%', class: 'fontGrid' },
         // 'Departamento': { dataField: 'departamento', class: 'fontGrid' },
@@ -93,24 +114,30 @@ const produto = (function () {
           dataField: "valor",
           render: addReal,
           width: "15%",
-          center: true,     
+          center: true,
         },
       },
       query: {
         execute: (r) => {
-          
 
-          // getProdutos(r.offset, r.param.search);
+          getProdutos(r.offset, r.param.search)
+
         },
       },
     });
   }
 
   function getProdutos(offset, search) {
-    axios.post("/products", { offset: offset, search: search }).then((rs) => {
-      grid.querySourceAdd(rs.data);
-      if (offset == 0) grid.focus();
-    });
+
+    axios.post(url, {
+      call: 'getProdutos',
+      param: { offset: offset, search: search }
+    })
+      .then(rs => {
+        xgProduto.querySourceAdd(rs.data);
+        if (offset == 0) xgProduto.focus();
+      })
+
   }
 
   return {

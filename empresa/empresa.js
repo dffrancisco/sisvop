@@ -8,7 +8,7 @@ $(function () {
 
 
 var exemplo = (function () {
-
+    let url = 'empresa/per.empresa.php'
     let grid = ()=>{
         xgProduto = new xGridV2.create({
             el:'#xgProduto',
@@ -21,7 +21,7 @@ var exemplo = (function () {
     }
 
     function getExemplo() {
-        axios.post('empresa/per.empresa.php', {
+        axios.post(url, {
             call: 'exemplo'
         })
             .then(r => {

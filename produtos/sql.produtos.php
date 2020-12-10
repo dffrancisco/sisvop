@@ -1,22 +1,34 @@
 <?php
+class SqlProdutos
+{
 
-include_once '../DM/prepareSql.php';
+  public $db;
 
-class SqlProdutos {
-
-  private $conexao;
-  
-  function __construct($conexao) {
-    $this->conexao = $conexao;
+  function __construct()
+  {
+    $this->db = new PDO('sqlite:/var/www/html/Estoque.sqlite');
   }
-  
-  
-    function exemplo($param) {
-    $sql = 'select * from empresa
-            where id_empresa = :id_empresa';
-    return executa::SQL($this->conexao, $sql, $param);
+
+
+  function getProdutos($param)
+  {
+
+    $sql = 'select * from produtos limit ' . $param['offset'] . ', 5';
+
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(); 
   }
-  
-  
-  
+
+  function insert($param){
+    $sql = 'insert into produtos' .
+           '(codigo, descricao)' .
+           'values' .
+           "(".$param['codigo']. ", '".$param['descricao'] ."')";
+
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+
+  }
+
 }
