@@ -3,45 +3,113 @@ let xgProduto;
 $(function () {
   produto.grid();
   produto.getProduto();
-  xgProduto.queryOpen(0,'')
+  xgProduto.queryOpen(0, '')
 });
 
 const produto = (function () {
 
   let url = 'produtos/per.produtos.php'
+  let controleGrid;
 
   function getProduto() {
-    console.log("getprodutosfasdfa");
   }
 
   function addReal(value) {
     return "R$ " + value;
   }
 
-  function novo(){
+  function novo() {
+    controleGrid = 'insert';
     xgProduto.clearElementSideBySide()
     xgProduto.focusField()
     xgProduto.disable()
+  }
+
+  function searchConf(){
+
+    let param;
+    param = document.getElementById('pesquisa').value;
+    console.log(param)
+
+    axios.post(url, { 
+      call: 'searchConf', 
+      param: param
+    })
+  }
+
+  function savar() {
+    let param;
+    let diff;
+    param = xgProduto.getElementSideBySideJson()
+
+    // if(controleGrid == 'insert'){
+    // }
+
+    if (controleGrid == 'edit') {
+      param.id = xgProduto.dataSource().id;
+      // diff = xgProduto.getDiffTwoJson()
     }
 
-    function savar(){
-      axios.post(url,{
-        call:'insert',
-        param:xgProduto.getElementSideBySideJson()
+
+
+
+    axios.post(url, {
+      call: 'save',
+      param: param
+    })
+      .then(r => {
+        if (r.data.id) {
+          param.id = r.data.id
+          xgProduto.insertLine(param)
+        } else {        
+          xgProduto.dataSource(param)
+        }
+
+      })
+
+    xgProduto.enable()
+    xgProduto.focus()
+  }
+
+
+  function deletar() {
+    let param;
+    if (xgProduto.dataSource().id) {
+      param = xgProduto.dataSource().id
+      confirmaCodigo({
+        msg: 'Digite o código de confirmação',
+        call: () => {
+          axios.post(url, {
+            call: 'delete',
+            param: param
+          })
+            .then(r=>{
+              xgProduto.deleteLine()
+            })
+        }
       })
     }
-  
+
+  }
+
   function grid() {
     xgProduto = new xGridV2.create({
       el: "#xgProduto",
-      height: 220,
-      heightLine: 40,
+      height: 210,
+      heightLine: 35,
       theme: "x-clownV2",
       sideBySide: {
         el: "#pnFields",
         frame: {
-          el: "#pnButtons",
+          el: "#pnButtons",          
           buttons: {
+
+            pesquisar: {
+              html: "Pesquisar",
+              class: "btnP btnPesq",
+              click: searchConf,
+            },
+
 
             novo: {
               html: "Novo",
@@ -55,21 +123,18 @@ const produto = (function () {
               class: "btnP",
               state: xGridV2.state.update,
               click: () => {
-               // if (grid.dataSource()) console.log(grid.dataSource().descricao);
+                controleGrid = 'edit';
+                // if (grid.dataSource()) console.log(grid.dataSource().descricao);
 
                 //grid.disableFieldsSideBySide(true);
               },
-            },            
+            },
 
             deletar: {
               html: "Deletar",
               class: "btnP btnDel",
               state: xGridV2.state.delete,
-              click: () => {
-                if (grid.dataSource().id) {
-
-                }
-              },
+              click: deletar,
             },
             save: {
               html: "Salvar",
@@ -83,14 +148,14 @@ const produto = (function () {
               class: "btnP",
               state: xGridV2.state.cancel,
               click: () => {
-                
+
                 xgProduto.enable()
                 xgProduto.focus()
               },
             },
 
-          },
-        },
+          },                    
+        },       
       },
       columns: {
         Código: {
@@ -166,168 +231,3 @@ var exemplo = (function () {
   };
 })();
 
-
-var json = [{
-  name: '#################################',
-  login: 'Meire <br>Legal',
-  cpf: '444',
-  old: 40,
-  tel: '845-453',
-  qto: 13,
-  cidade: 'SIA',
-  casado: 1
-}, {
-  name: 'Kallebe Alves',
-  login: 'Kallebe',
-  cpf: '654654',
-  old: 16,
-  tel: '888-345',
-  qto: 98,
-  cidade: 'Recando da Emas',
-  casado: 0
-
-}, {
-  name: 'Alves Xico',
-  login: 'Alves',
-  cpf: '11577',
-  old: 37,
-  tel: '466-664',
-  qto: 8,
-  cidade: 'Taguatinga',
-  casado: 0
-}, {
-  name: 'Sousa Alves',
-  login: 'Sousa',
-  cpf: '874465',
-  old: 22,
-  tel: '858-999',
-  qto: 21,
-  cidade: 'Setor O',
-  casado: 0
-}, {
-  name: 'Kalline Rocha',
-  login: 'Kalline',
-  cpf: '1111',
-  old: 11,
-  tel: '787-995',
-  qto: 11,
-  cidade: 'Gura',
-  casado: 1
-}, {
-  name: 'Francisco Alves',
-  login: 'Francisco',
-  cpf: '778.583.951-48',
-  old: 37,
-  tel: '999-999',
-  qto: 7,
-  cidade: 'Brasilia',
-  casado: 1
-}, {
-  name: 'Meire Clecia',
-  login: 'Meire <br>Legal',
-  cpf: '222',
-  old: 40,
-  tel: '845-453',
-  qto: 13,
-  cidade: 'SIA',
-  casado: 1
-}, {
-  name: 'Kallebe Alves',
-  login: 'Kallebe',
-  cpf: '654654',
-  old: 16,
-  tel: '888-345',
-  qto: 98,
-  cidade: 'Recando da Emas',
-  casado: 1
-}, {
-  name: 'Alves Xico',
-  login: 'Alves',
-  cpf: '11577',
-  old: 37,
-  tel: '466-664',
-  qto: 8,
-  cidade: 'Taguatinga',
-  casado: 1
-}, {
-  name: 'Sousa Alves',
-  login: 'Sousa',
-  cpf: '874465',
-  old: 22,
-  tel: '858-999',
-  qto: 21,
-  cidade: 'Setor O',
-  casado: 1
-}, {
-  name: 'Kalline Rocha',
-  login: 'Kalline',
-  cpf: '1111',
-  old: 11,
-  tel: '787-995',
-  qto: 11,
-  cidade: 'Gura',
-  casado: 1
-}, {
-  name: 'Francisco Alves',
-  login: 'Francisco',
-  cpf: '778.583.951-48',
-  old: 37,
-  tel: '999-999',
-  qto: 7,
-  cidade: 'Brasilia',
-  casado: 1
-}, {
-  name: 'Meire Clecia',
-  login: 'Meire <br>Legal',
-  cpf: '222',
-  old: 40,
-  tel: '845-453',
-  qto: 13,
-  cidade: 'SIA',
-  casado: 1
-}, {
-  name: 'Kallebe Alves',
-  login: 'Kallebe',
-  cpf: '654654',
-  old: 16,
-  tel: '888-345',
-  qto: 98,
-  cidade: 'Recando da Emas',
-  casado: 1
-}, {
-  name: 'Alves Xico',
-  login: 'Alves',
-  cpf: '11577',
-  old: 37,
-  tel: '466-664',
-  qto: 8,
-  cidade: 'Taguatinga',
-  casado: 1
-}, {
-  name: 'Sousa Alves',
-  login: 'Sousa',
-  cpf: '874465',
-  old: 22,
-  tel: '858-999',
-  qto: 21,
-  cidade: 'Setor O',
-  casado: 1
-}, {
-  name: 'Kalline Rocha',
-  login: 'Kalline',
-  cpf: '1111',
-  old: 11,
-  tel: '787-995',
-  qto: 11,
-  cidade: 'Gura',
-  casado: 1
-}, {
-  name: 'Francisco Alves',
-  login: 'Francisco',
-  cpf: '778.583.951-48',
-  old: 37,
-  tel: '999-999',
-  qto: 7,
-  cidade: 'Brasilia',
-  casado: 1
-}];

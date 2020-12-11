@@ -24,8 +24,26 @@ class Produtos
         echo json_encode($call);
     }
 
-    function insert($param){
-        print_r($param);
+    function save($param){
+
+        if(empty($param['id'])){
+            $id = $this->sql->insert($param);
+            echo '{"id":"'.$id.'"}';
+        } else {
+            echo 'aqui é o update';
+            $call = $this->sql->update($param);
+
+        }
+       
+
+    }
+
+    function delete($param){
+        $id = $this->sql->delete($param);
+    }
+
+    function searchConf($param){
+        $id = $this->sql->searchConf($param);
     }
 }
 

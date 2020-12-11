@@ -11,7 +11,7 @@
         <div class="row">
                 <div class="col s3">
                 <label>Codigo</label>      
-                <input type="text" class="corInp" placeholder="Código" name="codigo">
+                <input type="number" class="corInp" placeholder="Código" name="codigo">
           
                 </div>
                 <div class="col s3">
@@ -21,20 +21,26 @@
                 </div>
                 <div class="col s3">
                 <label>Quantidade</label>  
-                <input type="text" class="corInp" placeholder="Quantidade" name="qtd">
+                <input type="number" class="corInp" placeholder="Quantidade" name="qtd">
               
                 </div>
                 <div class="col s3">
                 <label>Valor</label>  
-                 <input type="text" class="corInp" placeholder="Valor" name="valor">     
+                 <input type="number" class="corInp" placeholder="Valor" name="valor">     
 
                 </div>
+
+                
 
         </div>
 </div>
 
 <div id="xgProduto" class="list"></div>
 
-<div id="pnButtons" class="center-align"></div>
+<div id="pnButtons" class="right-align row">
+        <div class="col s3">
+        <input type="text" class="corInp margintop" placeholder="Pesquisar" id="pesquisa" >
+        </div>
+</div>
 <div id="pnCodigoTela">Estoque</div>
 <div>
