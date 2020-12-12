@@ -1,0 +1,263 @@
+.xCalk {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    outline: 0;
+    max-height: 500px;
+    max-width: 230px;
+}
+
+.xCalk .xCalkHistory {
+    height: 40%;
+    padding: 5px;
+    text-align: right;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.xCalk .xCalkResult {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.xCalk .xCalkButtons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+}
+
+.xCalk .xCalkButtons div {
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+.xCalk .xCalkResult span:first-child {
+    width: 100%;
+    overflow: hidden;
+    text-align: right;
+}
+
+.xCalk .xCalkResult span:nth-child(2) {
+    font-size: .7em;
+    margin-top: -12px;
+    padding-left: 3px;
+    padding-right: 5px;
+}
+
+.xCalk .xCalkAutoSum {
+    position: relative;
+    top: -46px;
+    left: -111px;
+    font-size: 11px;
+    height: 12px;
+}
+
+.xCalk .xCalkHistoryBox {
+    box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.21);
+    margin-bottom: 6px;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.xCalkHistoryBox .labelOp {
+    padding-right: 6px;
+}
+
+.xCalkHistoryBox .xCalkLabelAutoSum {
+    font-size: 10px;
+    opacity: 0.8;
+}
+
+.xCalk .xCalkResult label {
+    font-size: .7em;
+    margin-top: -12px;
+}
+/*****scrollbar*****/
+
+.xCalk .xCalkHistory::-webkit-scrollbar-track-piece {
+    border-left: none;
+    background: rgba(0, 0, 0, 0.00);
+}
+
+.xCalk .xCalkHistory::-webkit-scrollbar {
+    width: 10px;
+}
+
+.xModal-modal-main::-webkit-resizer {
+    background: rgba(0, 0, 0, 0.10);
+}
+/* Cor do indicador de rolagem */
+
+.xCalk .xCalkHistory::-webkit-scrollbar-thumb:vertical,
+.xCalk .xCalkHistory::-webkit-scrollbar-thumb:horizontal {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+}
+/* Cor do indicador de rolagem - ao passar o mouse */
+
+.xCalk .xCalkHistory::-webkit-scrollbar-thumb:vertical:hover,
+.xCalk .xCalkHistory::-webkit-scrollbar-thumb:horizontal:hover {
+    box-shadow: none;
+    background: rgba(0, 0, 0, 0.55);
+}
+/* ----------------themes---------------------- */
+/* --------xCalkBlue----------------- */
+
+.xCalkBlue {
+    background: #2c3643;
+    font-family: sans-serif;
+    /* border: 1px solid #4b6d91; */
+}
+
+.xCalkBlue .xCalkHistory {
+    background: #4b6d91;
+    color: #e1e7ef;
+}
+
+.xCalkBlue .xCalkHistory label {
+    padding-right: 5px;
+    color: #96aabf;
+}
+
+.xCalkBlue .xCalkResult {
+    color: #e1e7ef;
+    background: #698eb6;
+    height: 60px;
+}
+
+.xCalkBlue .xCalkButtons {
+    height: calc(60% - 70px);
+    background-color: rgb(255, 255, 255);
+}
+
+.xCalkBlue .xCalkButtons div {
+    border-radius: 50%;
+    height: 38px;
+    width: 38px;
+    display: flex;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.53);
+}
+
+.xCalkBlue .xCalkButtons div:hover {
+    opacity: 0.8;
+    cursor: pointer;
+    box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.53);
+}
+
+.xCalkBlue .xCalkResult span:first-child {
+    font-size: 2em;
+    padding: 10px 10px 0 0;
+}
+
+.xCalkBlue .op {
+    background: #4b6d91;
+    color: #efefef;
+    font-size: 1em;
+}
+
+.xCalkBlue .num {
+    background: #f2f5f9;
+    color: #567697;
+    font-size: .8em;
+}
+
+.xCalkBlue .like {
+    background: #eb8468;
+    color: #efefef;
+}
+
+.xCalkBlue .ax {
+    background: #f2f5f9;
+    color: #567697;
+    font-size: .8em;
+}
+/* --------xCalkDark----------------- */
+
+.xCalkDark {
+    font-family: sans-serif;
+    /* border: 1px solid #4b6d91; */
+}
+
+.xCalkDark .xCalkHistory {
+    background: linear-gradient(151deg, rgba(79, 91, 106, 1) 0%, rgba(54, 66, 80, 1) 100%);
+    color: #e1e7ef;
+    box-shadow: -3px 4px 4px -4px #333;
+    border-bottom: 1px solid #5c697a;
+    font-size: .9em;
+}
+
+.xCalkDark .xCalkHistory label {
+    padding-right: 5px;
+    color: #7c8592;
+}
+
+.xCalkDark .xCalkResult {
+    color: #e1e7ef;
+    background: linear-gradient(151deg, rgba(79, 91, 106, 1) 0%, rgba(54, 66, 80, 1) 100%);
+    height: 60px;
+    /* box-shadow: 0 -5px 5px -5px #333; */
+    /* box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.53); */
+}
+
+.xCalkDark .xCalkButtons {
+    height: calc(60% - 70px);
+    background: #475362;
+}
+
+.xCalkDark .xCalkButtons div {
+    display: flex;
+    width: calc(100% - 3px);
+    height: calc(100% - 3px);
+    padding: 1px;
+    background: #374352;
+    transition: 0.5s;
+}
+
+.xCalkDark .xCalkButtons div:hover {
+    /* opacity: 0.8; */
+    cursor: pointer;
+    background: linear-gradient(151deg, rgba(79, 91, 106, 1) 0%, rgba(54, 66, 80, 1) 100%);
+}
+
+.xCalkDark .xCalkButtons div:active {
+    /* opacity: 0.8; */
+    cursor: pointer;
+    background: linear-gradient(151deg, rgba(54, 66, 80, 1) 0%, rgba(79, 91, 106, 1) 100%);
+}
+
+.xCalkDark .xCalkResult span:first-child {
+    font-size: 1.5em;
+    padding: 10px 10px 0 0;
+}
+
+#xCalk .xCalkResult span:nth-child(2) {
+    color: #7c8592;
+}
+
+#xCalk .xCalkResult label {
+    color: #7c8592;
+}
+
+.xCalkDark .op {
+    color: #d4d7da;
+    font-size: 1.2em;
+}
+
+.xCalkDark .num {
+    color: #d4d7da;
+    font-size: 1.2em;
+}
+
+.xCalkDark .like {
+    color: #d4d7da;
+    font-size: 1.2em;
+}
+
+.xCalkDark .ax {
+    color: #636f7c;
+    font-size: 1em;
+}
