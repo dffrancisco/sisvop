@@ -19,7 +19,6 @@ class Produtos
 
     function getProdutos($param)
     {
-        
         $call = $this->sql->getProdutos($param);
         echo json_encode($call);
     }

@@ -2,8 +2,8 @@ let xgProduto;
 
 $(function () {
   produto.grid();
-  produto.getProduto();
-  xgProduto.queryOpen(0, '')
+  xgProduto.queryOpen({ search: '' })
+
 });
 
 const produto = (function () {
@@ -11,8 +11,6 @@ const produto = (function () {
   let url = 'produtos/per.produtos.php'
   let controleGrid;
 
-  function getProduto() {
-  }
 
   function addReal(value) {
     return "R$ " + value;
@@ -25,16 +23,13 @@ const produto = (function () {
     xgProduto.disable()
   }
 
-  function searchConf(){
+  function searchConf() {
 
-    let param;
-    param = document.getElementById('pesquisa').value;
-    console.log(param)
+    let search = document.getElementById('edtPesquisa').value;
+   
+    xgProduto.queryOpen({ search })
 
-    axios.post(url, { 
-      call: 'searchConf', 
-      param: param
-    })
+
   }
 
   function savar() {
@@ -61,7 +56,7 @@ const produto = (function () {
         if (r.data.id) {
           param.id = r.data.id
           xgProduto.insertLine(param)
-        } else {        
+        } else {
           xgProduto.dataSource(param)
         }
 
@@ -83,7 +78,7 @@ const produto = (function () {
             call: 'delete',
             param: param
           })
-            .then(r=>{
+            .then(r => {
               xgProduto.deleteLine()
             })
         }
@@ -101,7 +96,7 @@ const produto = (function () {
       sideBySide: {
         el: "#pnFields",
         frame: {
-          el: "#pnButtons",          
+          el: "#pnButtons",
           buttons: {
 
             pesquisar: {
@@ -154,8 +149,8 @@ const produto = (function () {
               },
             },
 
-          },                    
-        },       
+          },
+        },
       },
       columns: {
         Código: {
@@ -167,6 +162,7 @@ const produto = (function () {
           dataField: "descricao",
           width: "60%",
           style: "font-size: 16px;",
+
         },
         QTD: {
           dataField: "qtd",
@@ -184,19 +180,19 @@ const produto = (function () {
       },
       query: {
         execute: (r) => {
-
-          getProdutos(r.offset, r.param.search)
+          console.log(r)
+          getProdutos(r.param.search, r.offset)
 
         },
       },
     });
   }
 
-  function getProdutos(offset, search) {
-
+  function getProdutos(search, offset) {
+    console.log(search, offset)
     axios.post(url, {
       call: 'getProdutos',
-      param: { offset: offset, search: search }
+      param: { search: search, offset: offset }
     })
       .then(rs => {
         xgProduto.querySourceAdd(rs.data);
@@ -206,7 +202,6 @@ const produto = (function () {
   }
 
   return {
-    getProduto: getProduto,
     grid: grid,
   };
 })();

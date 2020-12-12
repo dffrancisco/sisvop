@@ -39,7 +39,7 @@
 
 <div id="pnButtons" class="right-align row">
         <div class="col s3">
-        <input type="text" class="corInp margintop" placeholder="Pesquisar" id="pesquisa" >
+        <input type="text" class="corInp margintop" placeholder="Pesquisar" id="edtPesquisa" >
         </div>
 </div>
 <div id="pnCodigoTela">Estoque</div>

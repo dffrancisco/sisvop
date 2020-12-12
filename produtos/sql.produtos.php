@@ -14,57 +14,57 @@ class SqlProdutos
   function getProdutos($param)
   {
 
-    $sql = 'select * from produtos limit ' . $param['offset'] . ', 10';
-
-      $query = $this->db->prepare($sql);
-      $query->execute(); 
-    return $query->fetchAll(); 
+    $sql = 'select * from produtos ' .
+      "where descricao like '" . $param['search']. "%'" .
+      'limit ' . $param['offset'] . ', 10';
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll();
   }
 
-  function insert($param){
-   
-    
+  function insert($param)
+  {
+
+
     $sql = 'INSERT INTO produtos' .
-           '(qtd, descricao, valor, codigo)' .
-           'VALUES' .
-           "(".$param['qtd']. ", '".$param['descricao'] ."', ".$param['valor'] .", ".$param['codigo'] .")";
-    
-   
-     $this->db->exec($sql);
-     return $this->db->lastInsertId();
+      '(qtd, descricao, valor, codigo)' .
+      'VALUES' .
+      "(" . $param['qtd'] . ", '" . $param['descricao'] . "', " . $param['valor'] . ", " . $param['codigo'] . ")";
 
+
+    $this->db->exec($sql);
+    return $this->db->lastInsertId();
   }
 
-  function update($param){
-   
-    
+  function update($param)
+  {
+
+
     $sql = 'UPDATE produtos ' .
-            'SET qtd = '.$param['qtd'].', descricao = "'.$param['descricao'] .'", valor = '.$param['valor'] .', codigo = '.$param['codigo']. ' WHERE id =' . $param['id'];                       
-    
+      'SET qtd = ' . $param['qtd'] . ', descricao = "' . $param['descricao'] . '", valor = ' . $param['valor'] . ', codigo = ' . $param['codigo'] . ' WHERE id =' . $param['id'];
 
-    
-     $this->db->exec($sql);
-     return $this->db->lastInsertId();
 
+
+    $this->db->exec($sql);
+    return $this->db->lastInsertId();
   }
 
-  function delete($param){
-   
+  function delete($param)
+  {
+
     $sql = 'DELETE FROM produtos WHERE id = ' . $param;
 
-     $this->db->exec($sql);
-     return $this->db->lastInsertId();
-
+    $this->db->exec($sql);
+    return $this->db->lastInsertId();
   }
 
-  function searchConf($param){
-   
-    $sql = 'select * from produtos where descricao like '."'%$param%'";
+  function searchConf($param)
+  {
 
-      $query = $this->db->prepare($sql);
-      $query->execute(); 
-      return $query->fetchAll(); 
+    $sql = 'select * from produtos where descricao like ' . "'%$param%'";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll();
   }
-
-
 }
