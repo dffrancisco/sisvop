@@ -4,7 +4,7 @@
 
 .corInp {
     border-left: 3px solid #55828b !important;
-    margin-top: 8px !important;
+  /*  margin-top: 8px !important;*/
     
 }
 .margintop{
@@ -17,9 +17,10 @@
     
 }
 
-.btnP{
-
+.btnP{    
+    background-color: #2E4BAB !important;
     font-size: 14px !important;
+    border: #2E4BAB !important;   
 }
 
 .btnDel{
@@ -30,4 +31,9 @@
 
 label{
     color: rgb(71, 71, 71) !important;
+}
+
+.btnPesq{
+    float: left;
+    margin-left: 1rem !important;
 }

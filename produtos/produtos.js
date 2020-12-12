@@ -2,23 +2,96 @@ let xgProduto;
 
 $(function () {
   produto.grid();
-  produto.getProduto();
+  xgProduto.queryOpen({ search: '' })
+
 });
 
 const produto = (function () {
-  function getProduto() {
-    console.log("getprodutosfasdfa");
-  }
+
+  let url = 'produtos/per.produtos.php'
+  let controleGrid;
+
 
   function addReal(value) {
     return "R$ " + value;
   }
 
+  function novo() {
+    controleGrid = 'insert';
+    xgProduto.clearElementSideBySide()
+    xgProduto.focusField()
+    xgProduto.disable()
+  }
+
+  function searchConf() {
+
+    let search = document.getElementById('edtPesquisa').value;
+   
+    xgProduto.queryOpen({ search })
+
+
+  }
+
+  function savar() {
+    let param;
+    let diff;
+    param = xgProduto.getElementSideBySideJson()
+
+    // if(controleGrid == 'insert'){
+    // }
+
+    if (controleGrid == 'edit') {
+      param.id = xgProduto.dataSource().id;
+      // diff = xgProduto.getDiffTwoJson()
+    }
+
+
+
+
+    axios.post(url, {
+      call: 'save',
+      param: param
+    })
+      .then(r => {
+        if (r.data.id) {
+          param.id = r.data.id
+          xgProduto.insertLine(param)
+        } else {
+          xgProduto.dataSource(param)
+        }
+
+      })
+
+    xgProduto.enable()
+    xgProduto.focus()
+  }
+
+
+  function deletar() {
+    let param;
+    if (xgProduto.dataSource().id) {
+      param = xgProduto.dataSource().id
+      confirmaCodigo({
+        msg: 'Digite o código de confirmação',
+        call: () => {
+          axios.post(url, {
+            call: 'delete',
+            param: param
+          })
+            .then(r => {
+              xgProduto.deleteLine()
+            })
+        }
+      })
+    }
+
+  }
+
   function grid() {
     xgProduto = new xGridV2.create({
       el: "#xgProduto",
-      height: 220,
-      heightLine: 40,
+      height: 210,
+      heightLine: 35,
       theme: "x-clownV2",
       sideBySide: {
         el: "#pnFields",
@@ -26,13 +99,18 @@ const produto = (function () {
           el: "#pnButtons",
           buttons: {
 
+            pesquisar: {
+              html: "Pesquisar",
+              class: "btnP btnPesq",
+              click: searchConf,
+            },
+
+
             novo: {
               html: "Novo",
               class: "btnP",
               state: xGridV2.state.insert,
-              click: () => {
-                
-              },
+              click: novo,
             },
 
             edit: {
@@ -40,34 +118,37 @@ const produto = (function () {
               class: "btnP",
               state: xGridV2.state.update,
               click: () => {
-                if (grid.dataSource()) console.log(grid.dataSource().descricao);
+                controleGrid = 'edit';
+                // if (grid.dataSource()) console.log(grid.dataSource().descricao);
 
-                grid.disableFieldsSideBySide(true);
+                //grid.disableFieldsSideBySide(true);
               },
             },
 
-            deletar:{
-              html : "Deletar",
+            deletar: {
+              html: "Deletar",
               class: "btnP btnDel",
               state: xGridV2.state.delete,
-              click:() =>{
-                if(grid.dataSource().id){
-
-                }
-              },
+              click: deletar,
+            },
+            save: {
+              html: "Salvar",
+              class: "btnP",
+              state: xGridV2.state.save,
+              click: savar
             },
 
-            cancelar:{
-              html : "Cancelar",
+            cancelar: {
+              html: "Cancelar",
               class: "btnP",
               state: xGridV2.state.cancel,
-              click:() =>{
-                if(grid.dataSource().id){
+              click: () => {
 
-                }
+                xgProduto.enable()
+                xgProduto.focus()
               },
             },
-            
+
           },
         },
       },
@@ -75,17 +156,18 @@ const produto = (function () {
         Código: {
           dataField: "codigo",
           center: true,
-          width: "10%",        
+          width: "10%",
         },
         Descrição: {
           dataField: "descricao",
           width: "60%",
           style: "font-size: 16px;",
+
         },
         QTD: {
           dataField: "qtd",
           width: "15%",
-          center: true,          
+          center: true,
         },
         // 'Marca': { dataField: 'marca', width: '17%', class: 'fontGrid' },
         // 'Departamento': { dataField: 'departamento', class: 'fontGrid' },
@@ -93,28 +175,33 @@ const produto = (function () {
           dataField: "valor",
           render: addReal,
           width: "15%",
-          center: true,     
+          center: true,
         },
       },
       query: {
         execute: (r) => {
-          
+          console.log(r)
+          getProdutos(r.param.search, r.offset)
 
-          // getProdutos(r.offset, r.param.search);
         },
       },
     });
   }
 
-  function getProdutos(offset, search) {
-    axios.post("/products", { offset: offset, search: search }).then((rs) => {
-      grid.querySourceAdd(rs.data);
-      if (offset == 0) grid.focus();
-    });
+  function getProdutos(search, offset) {
+    console.log(search, offset)
+    axios.post(url, {
+      call: 'getProdutos',
+      param: { search: search, offset: offset }
+    })
+      .then(rs => {
+        xgProduto.querySourceAdd(rs.data);
+        if (offset == 0) xgProduto.focus();
+      })
+
   }
 
   return {
-    getProduto: getProduto,
     grid: grid,
   };
 })();
@@ -139,168 +226,3 @@ var exemplo = (function () {
   };
 })();
 
-
-var json = [{
-  name: '#################################',
-  login: 'Meire <br>Legal',
-  cpf: '444',
-  old: 40,
-  tel: '845-453',
-  qto: 13,
-  cidade: 'SIA',
-  casado: 1
-}, {
-  name: 'Kallebe Alves',
-  login: 'Kallebe',
-  cpf: '654654',
-  old: 16,
-  tel: '888-345',
-  qto: 98,
-  cidade: 'Recando da Emas',
-  casado: 0
-
-}, {
-  name: 'Alves Xico',
-  login: 'Alves',
-  cpf: '11577',
-  old: 37,
-  tel: '466-664',
-  qto: 8,
-  cidade: 'Taguatinga',
-  casado: 0
-}, {
-  name: 'Sousa Alves',
-  login: 'Sousa',
-  cpf: '874465',
-  old: 22,
-  tel: '858-999',
-  qto: 21,
-  cidade: 'Setor O',
-  casado: 0
-}, {
-  name: 'Kalline Rocha',
-  login: 'Kalline',
-  cpf: '1111',
-  old: 11,
-  tel: '787-995',
-  qto: 11,
-  cidade: 'Gura',
-  casado: 1
-}, {
-  name: 'Francisco Alves',
-  login: 'Francisco',
-  cpf: '778.583.951-48',
-  old: 37,
-  tel: '999-999',
-  qto: 7,
-  cidade: 'Brasilia',
-  casado: 1
-}, {
-  name: 'Meire Clecia',
-  login: 'Meire <br>Legal',
-  cpf: '222',
-  old: 40,
-  tel: '845-453',
-  qto: 13,
-  cidade: 'SIA',
-  casado: 1
-}, {
-  name: 'Kallebe Alves',
-  login: 'Kallebe',
-  cpf: '654654',
-  old: 16,
-  tel: '888-345',
-  qto: 98,
-  cidade: 'Recando da Emas',
-  casado: 1
-}, {
-  name: 'Alves Xico',
-  login: 'Alves',
-  cpf: '11577',
-  old: 37,
-  tel: '466-664',
-  qto: 8,
-  cidade: 'Taguatinga',
-  casado: 1
-}, {
-  name: 'Sousa Alves',
-  login: 'Sousa',
-  cpf: '874465',
-  old: 22,
-  tel: '858-999',
-  qto: 21,
-  cidade: 'Setor O',
-  casado: 1
-}, {
-  name: 'Kalline Rocha',
-  login: 'Kalline',
-  cpf: '1111',
-  old: 11,
-  tel: '787-995',
-  qto: 11,
-  cidade: 'Gura',
-  casado: 1
-}, {
-  name: 'Francisco Alves',
-  login: 'Francisco',
-  cpf: '778.583.951-48',
-  old: 37,
-  tel: '999-999',
-  qto: 7,
-  cidade: 'Brasilia',
-  casado: 1
-}, {
-  name: 'Meire Clecia',
-  login: 'Meire <br>Legal',
-  cpf: '222',
-  old: 40,
-  tel: '845-453',
-  qto: 13,
-  cidade: 'SIA',
-  casado: 1
-}, {
-  name: 'Kallebe Alves',
-  login: 'Kallebe',
-  cpf: '654654',
-  old: 16,
-  tel: '888-345',
-  qto: 98,
-  cidade: 'Recando da Emas',
-  casado: 1
-}, {
-  name: 'Alves Xico',
-  login: 'Alves',
-  cpf: '11577',
-  old: 37,
-  tel: '466-664',
-  qto: 8,
-  cidade: 'Taguatinga',
-  casado: 1
-}, {
-  name: 'Sousa Alves',
-  login: 'Sousa',
-  cpf: '874465',
-  old: 22,
-  tel: '858-999',
-  qto: 21,
-  cidade: 'Setor O',
-  casado: 1
-}, {
-  name: 'Kalline Rocha',
-  login: 'Kalline',
-  cpf: '1111',
-  old: 11,
-  tel: '787-995',
-  qto: 11,
-  cidade: 'Gura',
-  casado: 1
-}, {
-  name: 'Francisco Alves',
-  login: 'Francisco',
-  cpf: '778.583.951-48',
-  old: 37,
-  tel: '999-999',
-  qto: 7,
-  cidade: 'Brasilia',
-  casado: 1
-}];

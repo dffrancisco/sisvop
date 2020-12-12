@@ -174,7 +174,7 @@ body{
 nav{
     /* height: 40px !important;   
     line-height: 41px !important; */
-    background-color: #00695c !important;
+    background-color: #004b69 !important;
 }
 
 @media only screen and (min-width: 601px){ 
@@ -200,7 +200,7 @@ input, select, textarea{
     -moz-box-shadow:inset 0px 1px 3px #bbb !important;
     font-size:12px !important;
     height: 18px !important;
-    width: auto !important;
+    width: 100% !important;
 }
 
 select{

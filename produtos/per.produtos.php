@@ -1,40 +1,50 @@
 <?php
 
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-
-//include_once '../../superClass/connect/class.connect_firebird.php';
-include_once '../DM/prepareSql.php';
 include_once './sql.produtos.php';
 
+extract(json_decode(file_get_contents("php://input"), TRUE));
 
-extract($_POST);
+class Produtos
+{
+    private $sql;
 
-class produto {
+    function __construct()
+    {
+        $this->sql = new SqlProdutos();
+    }
 
-    private $conexao;
-    private $sqlProdutos;
+    function getProdutos($param)
+    {
+        $call = $this->sql->getProdutos($param);
+        echo json_encode($call);
+    }
 
-    function __construct($id_sociedade) {
-        $this->conexao = ConexaoFirebird::getConectar($id_sociedade);
-        if (!$this->conexao) {
-            die('{"loja":"off"}');
-            return false;
+    function save($param){
+
+        if(empty($param['id'])){
+            $id = $this->sql->insert($param);
+            echo '{"id":"'.$id.'"}';
+        } else {
+            echo 'aqui é o update';
+            $call = $this->sql->update($param);
+
         }
+       
 
-//        instancia da class        
-        $this->sqlProdutos = new SqlProdutos($this->conexao);
     }
 
-    function exemplo($param) {
-        $call = $this->sqlProdutos->exemplo($param);
-        retorno::json($call);
+    function delete($param){
+        $id = $this->sql->delete($param);
     }
 
+    function searchConf($param){
+        $id = $this->sql->searchConf($param);
+    }
 }
 
-$class = new produto();
+$class = new Produtos();
 $class->$call(@$param);
-
