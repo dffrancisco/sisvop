@@ -53,7 +53,9 @@ if (!empty($_GET['p'])) {
 
                 <ul id="nav-mobile" class="left">
                     <li><a onclick="pnMenuToggle()" href="#!"><i class="fa fa-bars fa-2x"></i></a></li>
+
                     <li><a href="#" class="" style="font-size: 20px" >Sisvop</a><li>
+
                 </ul>
 
                 <a href="#" class="brand-logo center truncate"  style="font-size: 18px" id="pnTitulo" >Modelo</a>
@@ -70,7 +72,9 @@ if (!empty($_GET['p'])) {
         </div>
 
         <div class="pnMenu">
+
             <a href="?p=produtos/produtos"><li><i class="fa fa-address-book"></i>Produto</li></a>
+
             <a href="?p=cargo/cargo"><li><i class="fa fa-address-book"></i>Cargo</li></a>
             <a href="?p=empresa/empresa"><li><i class="fa fa-address-book"></i>Empresas</li></a>
             <li><a href="#!">Funcionários</a></li>
