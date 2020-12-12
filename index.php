@@ -34,7 +34,11 @@ if (!empty($_GET['p'])) {
 
         <script src="plugins/axios.min.js" type="text/javascript"></script>
 
-        
+        <script src="plugins/jquery.maskMoney.js" type="text/javascript"></script>
+        <script src="plugins/jquery.mask.min.js" type="text/javascript"></script>
+
+        <link href="plugins/xCalk/style.css" rel="stylesheet" type="text/css"/>
+        <script src="plugins/xCalk/xCalk.js" type="text/javascript"></script>
 
 
         <script src="js/index.js" type="text/javascript"></script>
