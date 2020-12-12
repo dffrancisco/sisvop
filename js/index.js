@@ -1,6 +1,19 @@
-
+let calc;
 
 $(function () {
+    calc = new xCalkModal()
+
+    $('.real').maskMoney({thousands: '.', decimal: ',', allowZero: true});
+
+    $('.date').mask('00/00/0000');
+    $('.ano').mask('0000');
+    
+
+    $('.CPF').mask('999.999.999-99');
+    $('.CNPJ').mask('99.999.999.9999-99');
+    $('.CEP').mask('00.000-000');
+    $('.TELEFONE').mask('(00) 0000-00000');
+    $('.inteiro').maskMoney({thousands: '.', decimal: ',', precision: 0, allowZero: true});
 
     $('.pnMenu a').click(function () {
         pnMenuToggle();
@@ -14,6 +27,12 @@ $(function () {
             if ($('.pnUser').hasClass('pnUserToggle'))
                 pnUserToggle();
         }
+
+        $(document).keydown(function (e) {
+            if (e.keyCode === 115) { //F4
+                calc.open()
+            }
+        });
     });
 
 
