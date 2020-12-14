@@ -29,7 +29,7 @@ class Produtos
             $id = $this->sql->insert($param);
             echo '{"id":"'.$id.'"}';
         } else {
-            echo 'aqui é o update';
+            
             $call = $this->sql->update($param);
 
         }
