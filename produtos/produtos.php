@@ -26,7 +26,7 @@
                 </div>
                 <div class="col s3">
                 <label>Valor</label>  
-                 <input type="number" class="corInp" placeholder="Valor" name="valor">     
+                 <input type="text" class="corInp real" placeholder="Valor" name="valor">     
 
                 </div>
 

@@ -32,9 +32,8 @@ const produto = (function () {
 
   }
 
-  function savar() {
+  function salvar() {
     let param;
-    let diff;
     param = xgProduto.getElementSideBySideJson()
 
     // if(controleGrid == 'insert'){
@@ -42,10 +41,7 @@ const produto = (function () {
 
     if (controleGrid == 'edit') {
       param.id = xgProduto.dataSource().id;
-      // diff = xgProduto.getDiffTwoJson()
     }
-
-
 
 
     axios.post(url, {
@@ -135,7 +131,7 @@ const produto = (function () {
               html: "Salvar",
               class: "btnP",
               state: xGridV2.state.save,
-              click: savar
+              click: salvar
             },
 
             cancelar: {

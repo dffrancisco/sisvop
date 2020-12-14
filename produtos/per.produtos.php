@@ -1,8 +1,8 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 include_once './sql.produtos.php';
 
@@ -27,9 +27,7 @@ class Produtos
 
         if(empty($param['id'])){
             $id = $this->sql->insert($param);
-            echo '{"id":"'.$id.'"}';
         } else {
-            echo 'aqui é o update';
             $call = $this->sql->update($param);
 
         }
