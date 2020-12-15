@@ -16,23 +16,53 @@ class Marca{
         
         //instancia da class        
         $this->sql = new SqlMarca();
+
     }
 
     function getMarca($param) {
+        
         $call = $this->sql->getMarca($param);
+        
         echo json_encode($call);
+
     }
-
+    
     function salvar($param) {
-
+        
+        
         if(empty($param['id_marca'])){
-            
-            $call = $this->sql->inserirMarca($param);
-            echo '{"id_marca":"'.$call.'"}';
 
+            // Entrou registro sem ID
+            
+            if($call = $this->sql->findMarca($param)){
+                print_r('ja existe1');
+                // Nome já existe no banco
+                //Fazer nada até o momento
+
+            }else{
+                
+                // Nome não existe no banco
+                $idMarca = $this->sql->inserirMarca($param);
+                echo '{"id_marca":"'.$idMarca.'"}';
+                
+            }      
+            
         }else{
 
-            $call = $this->sql->atualizaMarca($param);
+            //Entrou registro com ID
+
+            if($call = $this->sql->findMarca($param)){
+
+                //Nome já existe no banco
+                //Fazer nada até o momento
+                print_r('ja existe2');
+
+            }else{
+
+                //Nome não existe no banco
+                $call = $this->sql->atualizaMarca($param);
+                print_r( $call);
+            }   
 
         }
         
@@ -41,6 +71,7 @@ class Marca{
     function deletar($param){
 
         $call = $this->sql->deletarMarca($param);
+
     }
 
 }

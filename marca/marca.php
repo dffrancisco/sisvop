@@ -7,7 +7,7 @@
         <div class="tabela margintop" id="pnFields">
         
             <label>Marca</label><br>
-            <input type="text" class="corInp" name="marca">
+            <input type="text" class="corInp" name="marca" id="editMarca">
     
         </div>
 
