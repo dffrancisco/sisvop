@@ -19,6 +19,7 @@ const marca = (function (){
             el: '#pnGridMarca',
             height: '200',
             theme: 'x-clownV2',
+            heightLine: '35',
             
             columns:{
 
@@ -79,7 +80,7 @@ const marca = (function (){
                     getMarcas(r.param.search, r.offset);   
 
                 } 
-            } ,
+            }
         });
     }    
 
@@ -98,7 +99,7 @@ const marca = (function (){
                 xgMarca.focus();
             }
 
-        })            
+        });            
     }
 
     function novo(){
@@ -156,11 +157,14 @@ const marca = (function (){
 
             param.id_marca = xgMarca.dataSource().id_marca;
 
-        }else if(controleGrid == 'new'){
+        }
+        
+        else if(controleGrid == 'new'){
 
             param.id_marca = ''
         }
         
+        console.log(param)
         axios.post(url,{
 
             call: 'salvar',
@@ -170,13 +174,17 @@ const marca = (function (){
             
             if(rs.data.id_marca){
 
+                console.log('insert: ')
                 param.id_marca = rs.data.id_marca; 
                 xgMarca.insertLine(param);
 
                 cancelar()            
                 
-            }else{ 
-
+            }
+            
+            else{ 
+                
+                console.log('edit: ')
                 xgMarca.dataSource(param); // <-- ESTÁ dando erro aqui
                 
                 cancelar()
