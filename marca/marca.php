@@ -13,7 +13,14 @@
 
         <div id="pnGridMarca" class="list"></div>
 
-    <div id="pnButtons" class="right-align"></div>
+    <div></div>
+    <div id="pnButtons" class="right-align row">
+    
+        <div class="col s4">
+        <input type="text" class="corInp margintop" placeholder="Pesquisar" id="edtPesquisa" >
+        </div>
+    </div>
+    
 
     <div id="pnCodigoTela">Marca</div>
 </div>

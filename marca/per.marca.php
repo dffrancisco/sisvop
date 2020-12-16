@@ -12,68 +12,36 @@ class Marca{
 
     private $sql;
 
-    function __construct() {
-        
+    function __construct() {        
         //instancia da class        
         $this->sql = new SqlMarca();
-
     }
 
-    function getMarca($param) {
-        
-        $call = $this->sql->getMarca($param);
-        
+    function getMarca($param) {  
+        $call = $this->sql->getMarca($param);        
         echo json_encode($call);
-
     }
     
-    function salvar($param) {
-        
-        
-        if(empty($param['id_marca'])){
+    function findMarca($param){
+        $call = $this->sql->findMarca($param);
+        echo json_encode($call);
+    }
 
-            // Entrou registro sem ID
+    function salvar($param) { 
+        if(empty($param['id_marca'])){      
+            $idMarca = $this->sql->inserirMarca($param);
+            echo '{"id_marca":"'.$idMarca.'"}'; 
+
+        }else{   
+            $call = $this->sql->atualizaMarca($param);
+            print_r($call);
             
-            if($call = $this->sql->findMarca($param)){
-                print_r('ja existe1');
-                // Nome já existe no banco
-                //Fazer nada até o momento
-
-            }else{
-                
-                // Nome não existe no banco
-                $idMarca = $this->sql->inserirMarca($param);
-                echo '{"id_marca":"'.$idMarca.'"}';
-                
-            }      
-            
-        }else{
-
-            //Entrou registro com ID
-
-            if($call = $this->sql->findMarca($param)){
-
-                //Nome já existe no banco
-                //Fazer nada até o momento
-                print_r('ja existe2');
-
-            }else{
-
-                //Nome não existe no banco
-                $call = $this->sql->atualizaMarca($param);
-                print_r( $call);
-            }   
-
-        }
-        
+        }        
     }
 
     function deletar($param){
-
         $call = $this->sql->deletarMarca($param);
-
     }
-
 }
 
 $class = new Marca();
