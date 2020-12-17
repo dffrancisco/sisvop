@@ -1,7 +1,6 @@
 let xgMarca;
 
 $(function () {
-    // chama as funções
     marca.grid();
     xgMarca.queryOpen({ search: '' })
 
@@ -12,7 +11,6 @@ const marca = (function () {
     let controleGrid;
 
     function grid() {
-        //instancia o xGrid
         xgMarca = new xGridV2.create({
             el: '#pnGridMarca',
             height: '200',
@@ -22,7 +20,6 @@ const marca = (function () {
             columns: {
                 Marca: {
                     dataField: 'marca',
-                    // style: "font-size: 12px",
                 },
             },
 
@@ -84,13 +81,9 @@ const marca = (function () {
 
                             })
                                 .then(rs => {
-                                    if (rs.data.length > 0) {
-                                        xgMarca.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado!')
+                                    if (rs.data[0]) {
+                                        xgMarca.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
                                         xgMarca.focusField(r.field);
-
-                                    } else {
-                                        console.log("nao tem registro")
-
                                     }
                                 })
                     }
@@ -100,7 +93,6 @@ const marca = (function () {
             query: {
                 execute: (r) => {
                     getMarcas(r.param.search, r.offset);
-
                 }
             },
         });
@@ -108,103 +100,98 @@ const marca = (function () {
 
     function getMarcas(search, offset) {
         axios.post(url, {
-            //Chama o método de chamada do banco de dados
             call: 'getMarca',
             param: { search: search, offset: offset }
 
         }).then(rs => {
-            // Chama a query do xGrid
             xgMarca.querySourceAdd(rs.data);
 
             if (rs.data[0])
                 xgMarca.focus();
 
-
         });
     }
 
     function pesquisar() {
-        let search = $('#edtPesquisa').val();
+        let search = $('#edtPesquisa').val().trim();
 
-        xgMarca.queryOpen({ param })
-        // param.offset = 0;
+        xgMarca.queryOpen({ search })
+        xgMarca.focus();
 
-        // axios.post(url, {
-        //     call: 'getMarca',
-        //     param: param
-        // }).then(rs => {
-        //     xgMarca.querySourceAdd(rs.data);
-
-        //     if (rs.data[0])
-        //         xgMarca.focus();
-        // })
     }
 
     function novo() {
         controleGrid = "new"
-        //Limpa elementos dos inputs
         xgMarca.clearElementSideBySide()
-        //Redireciona o typing para o input
         xgMarca.focusField()
-        //desativa o xGrid
         xgMarca.disable()
 
     }
 
     function edit() {
         controleGrid = "edit"
+        xgMarca.focusField()
 
     }
 
     function deletar() {
         let param;
-        // Verifica se o id
         if (xgMarca.dataSource().id_marca) {
-            //adiciona o ID ao PARAM
             param = xgMarca.dataSource().id_marca;
 
-            // Chama função de deletar no PHP
-            axios.post(url, {
-                call: 'deletar',
-                param: param
+            confirmaCodigo({
+                msg: 'Digite o código de confirmação',
 
-            }).then(rs => {
-                // Retira a Linha do xGrid
-                xgMarca.deleteLine();
+                call: () => {
+                    axios.post(url, {
+                        call: 'deletar',
+                        param: param
 
-            });
+                    }).then(rs => {
+                        xgMarca.deleteLine();
+
+                    });
+                }
+            })
         }
     }
 
     const salvar = () => {
         let param = xgMarca.getElementSideBySideJson();
+        // if (xgMarca.getDuplicityAll() == false)
+        //     return false
 
-        if (xgMarca.getDuplicityAll() == false)
-            return false
+        if (param.marca || param.marca.length > 0) {
 
-        if (controleGrid == 'edit')
-            param.id_marca = xgMarca.dataSource().id_marca;
+            if (controleGrid == 'edit')
+                param.id_marca = xgMarca.dataSource().id_marca;
 
-        if (controleGrid == 'new')
-            param.id_marca = ''
+            if (controleGrid == 'new')
+                param.id_marca = ''
 
-        console.log(param)
-        axios.post(url, {
-            call: 'salvar',
-            param: param
+            axios.post(url, {
+                call: 'salvar',
+                param: param
 
-        }).then(rs => {
-            if (rs.data.id_marca) {
-                param.id_marca = rs.data.id_marca;
-                xgMarca.insertLine(param);
-                cancelar()
+            }).then(rs => {
 
-            } else {
-                xgMarca.dataSource(param); // <-- ESTÁ dando erro aqui                
-                cancelar()
+                if (rs.data.id_marca) {
+                    param.id_marca = rs.data.id_marca;
+                    xgMarca.insertLine(param);
+                    cancelar()
 
-            }
-        });
+                } else {
+                    xgMarca.dataSource(param);
+                    cancelar()
+
+                }
+            });
+        } else {
+            xgMarca.showMessageDuplicity('O campo está com valor duplicado ou vazio!')
+            xgMarca.enable();
+            xgMarca.focus();
+
+        }
     }
 
     function cancelar() {
