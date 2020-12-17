@@ -1115,6 +1115,7 @@ let xGridV2 = (function () {
                                 return
 
                             this.elementSideBySide[field].addEventListener('focusout', (e) => {
+
                                 if (this.sourceSelect[field] != e.target.value) {
                                     let text = field
 
@@ -1168,9 +1169,13 @@ let xGridV2 = (function () {
                             //text: this.elementSideBySide[field].previousSibling.previousElementSibling.innerText
                             text: text
                         })
+
+                         //   console.log(that, 'ssss')
+
                         return false
                     }
                 }
+             //   console.log(that)
 
                 return that
             },

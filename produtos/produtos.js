@@ -115,9 +115,7 @@ const produto = (function () {
               state: xGridV2.state.update,
               click: () => {
                 controleGrid = 'edit';
-                // if (grid.dataSource()) console.log(grid.dataSource().descricao);
-
-                //grid.disableFieldsSideBySide(true);
+            
               },
             },
 
@@ -203,22 +201,4 @@ const produto = (function () {
 })();
 
 
-
-var exemplo = (function () {
-  function getExemplo() {
-    $.ajax({
-      data: {
-        call: "exemplo",
-        param: {},
-      },
-      success: function (r) {
-        console.log(r);
-      },
-    });
-  }
-
-  return {
-    getExemplo: getExemplo,
-  };
-})();
 
