@@ -15,7 +15,7 @@ class SqlProdutos
   {
 
     $sql = 'select * from produtos ' .
-      "where descricao like '" . $param['search']. "%'" .
+      "where descricao like '" . $param['search'] . "%'" .
       'limit ' . $param['offset'] . ', 10';
      
     $query = $this->db->prepare($sql);
@@ -39,8 +39,6 @@ class SqlProdutos
 
   function update($param)
   {
-
-   
 
     $sql = 'UPDATE produtos ' .
       'SET qtd = ' . $param['qtd'] . ', descricao = "' . $param['descricao'] . '", valor = ' . $param['valor'] . ', codigo = ' . $param['codigo'] . ' WHERE id =' . $param['id'];

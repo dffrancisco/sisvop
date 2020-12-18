@@ -32,9 +32,8 @@ const produto = (function () {
 
   }
 
-  function savar() {
+  function salvar() {
     let param;
-    let diff;
     param = xgProduto.getElementSideBySideJson()
 
     // if(controleGrid == 'insert'){
@@ -42,10 +41,7 @@ const produto = (function () {
 
     if (controleGrid == 'edit') {
       param.id = xgProduto.dataSource().id;
-      // diff = xgProduto.getDiffTwoJson()
     }
-
-
 
 
     axios.post(url, {
@@ -119,9 +115,7 @@ const produto = (function () {
               state: xGridV2.state.update,
               click: () => {
                 controleGrid = 'edit';
-                // if (grid.dataSource()) console.log(grid.dataSource().descricao);
-
-                //grid.disableFieldsSideBySide(true);
+            
               },
             },
 
@@ -135,7 +129,7 @@ const produto = (function () {
               html: "Salvar",
               class: "btnP",
               state: xGridV2.state.save,
-              click: savar
+              click: salvar
             },
 
             cancelar: {
@@ -207,22 +201,4 @@ const produto = (function () {
 })();
 
 
-
-var exemplo = (function () {
-  function getExemplo() {
-    $.ajax({
-      data: {
-        call: "exemplo",
-        param: {},
-      },
-      success: function (r) {
-        console.log(r);
-      },
-    });
-  }
-
-  return {
-    getExemplo: getExemplo,
-  };
-})();
 

@@ -1,62 +1,81 @@
 <script src="empresa/empresa.js" type="text/javascript"></script>
 
-<title>Documentos da Empresa</title>
+<title>Empresa</title>
+<input type="hidden" id="id_empresa">
+
 <div class="container">
     <div class="row">
-        <form class="col s12">
-            <div class="row">
-                <div class="input-field col s3">
-                    <input placeholder="" id="first_name" type="text" class="validate">
-                    <label for="first_name">CNPJ</label>
-                </div>
-                <div class="input-field col s9">
-                    <input placeholder="" id="last_name" type="text" class="validate">
-                    <label for="last_name">Razão social</label>
-                </div>
-            </div>                       
-            <div class="row">
-                <div class="input-field col s7">
-                    <input placeholder="" id="first_name" type="text" class="validate">
-                    <label for="first_name">Nome fantasia</label>
-                </div>
-                <div class="input-field col s5">
-                    <input placeholder="" id="last_name" type="text" class="validate">
-                    <label for="last_name">Inscrição estadual</label>
-                </div>
+        <div class="row">
+            <div class="col s3">
+                <label>CNPJ</label>
+                <input placeholder="" type="text" class="CNPJ" id="edtCnpj" disabled>
             </div>
-            <div class="row">
-                <div class="input-field col s4">
-                    <input placeholder="" id="first_name" type="text" class="validate">
-                    <label for="first_name">Telefone fixo</label>
-                </div>
-                <div class="input-field col s4">
-                    <input placeholder="" id="last_name" type="text" class="validate">
-                    <label for="last_name">Telefone</label>
-                </div>
-                <div class="col s4">
-                    <label for="last_name">CEP</label>
-                    <input placeholder="" id="last_name" type="text" class="validate">
-                </div>
+            <div class=" col s9">
+                <label>Razão social</label>
+                <input placeholder="" type="text" class="validate" id="edtRazao" disabled>
             </div>
-            <div class="row">
-                <div class="col s10">
-                    <label for="last_name">Endereço</label>
-                    <input placeholder="" id="last_name" type="text" class="validate">
-                </div>
-                <div class="col s2">
-                    <label for="last_name">UF</label>
-                    <input placeholder="" id="last_name" type="text" class="validate">
-                </div>
-            </div>           
-        </form>
+        </div>
+
+
+        <div class="row">
+            <div class="col s7">
+                <label>Nome fantasia</label>
+                <input placeholder="" type="text" class="validate" id="edtFantasia" disabled>
+            </div>
+            <div class="col s5">
+                <label>Inscrição estadual</label>
+                <input placeholder="" type="text" class="validate" id="edtIscricao" disabled>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col s4">
+                <label>Telefone fixo</label>
+                <input placeholder="" type="text" class="validate TELEFONE" id="edtFixo" disabled>
+            </div>
+            <div class="col s4">
+                <label>Telefone</label>
+                <input placeholder="" type="text" class="validate TELEFONE" id="edtCelular" disabled>
+            </div>
+            <div class="col s4">
+                <label>CEP</label>
+                <input placeholder="" type="text" class="validate CEP" id="edtCep" disabled> 
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col s10">
+                <label>Endereço</label>
+                <input placeholder="" type="text" class="validate" id="edtEnd" disabled>
+            </div>
+            <div class="col s2">
+                <label>UF</label>
+                <input placeholder="" type="text" class="validate" id="edtUf" disabled>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col s6">
+                <label>Cidade</label>
+                <input placeholder="" type="text" class="validate" id="edtCidade" disabled>
+            </div>
+            <div class="col s6">
+                <label>Bairro</label>
+                <input placeholder="" type="text" class="validate" id="edtBairro" disabled>
+            </div>
+        </div>
     </div>
 
     <div id="pnButtons" class="right-align">
-        <button class="btn-Frame btn-Frame-blue">Salvar</button>
-        <button class="btn-Frame btn-Frame-blue">Editar</button>
-        <button class="btn-Frame btn-Frame-blue">Novo</button>
+        <button class="btn-Frame btn-Frame-blue btnP" id="btnNovo" disabled>Novo</button>
+        <button class="btn-Frame btn-Frame-blue btnP" id="btnEditar">Editar</button>
+        <button class="btn-Frame btn-Frame-blue btnP" id="btnSalvar" disabled>Salvar</button>
+        <button class="btn-Frame btn-Frame-blue btnP" id="btnCancelar" disabled>Cancelar</button>
     </div>
 </div>
 
 
-<div id="pnCodigoTela">Empresa</div>
+<div id="pnCodigoTela">Documentos</div>

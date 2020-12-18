@@ -78,8 +78,8 @@ if (!empty($_GET['p'])) {
             <a href="?p=marca/marca"><li><i class="fa fa-address-book"></i>Marcas</li></a>
 
             <a href="?p=cargo/cargo"><li><i class="fa fa-address-book"></i>Cargo</li></a>
-            <a href="?p=empresa/empresa"><li><i class="fa fa-address-book"></i>Empresas</li></a>
-            <li><a href="#!">Funcionários</a></li>
+            <a href="?p=empresa/empresa"><li><i class="fa fa-building"></i>Empresas</li></a>
+            <a href="?p=funcionarios/funcionarios"><li><i class="fa fa-user-circle-o"></i>Funcionários</li></a>
             <!--      <li><a href="#!">Férias</a></li>
                   <li><a href="#!">Impostos</a></li>
                   <li><a href="#!">Tipos de Lançamentos</a></li>-->
