@@ -15,7 +15,7 @@ class SqlProdutos
   {
 
     $sql = 'select * from produtos ' .
-      "where descricao like '" . $param['search']. "%'" .
+      "where descricao like '" . $param['search'] . "%'" .
       'limit ' . $param['offset'] . ', 10';
     $query = $this->db->prepare($sql);
     $query->execute();
