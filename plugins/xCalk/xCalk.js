@@ -344,7 +344,7 @@ function xCalkModal(params) {
     pnCalk.appendChild(divCalk)
     document.body.prepend(pnCalk);
     let argDefault = {
-        themeModal: 'xModal-dark',
+        themeModal: 'xModal-bublue',
         themeCalk: 'xCalkBlue',
         height: 535,
         width: 230,
@@ -361,10 +361,10 @@ function xCalkModal(params) {
 
     const pnCalculator = new xModal.create({
         el: '#pnCalk',
-        theme: 'xModal-dark',
+        theme: 'xModal-bublue',
         title: 'Calculadora',
         height: 535,
-        width: 230,
+        width: 240,
         modal: false,
         left: 0,
         top: 0,
