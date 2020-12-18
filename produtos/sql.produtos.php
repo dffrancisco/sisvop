@@ -7,7 +7,7 @@ class SqlProdutos
   function __construct()
   {
     $this->db = new PDO('sqlite:/var/www/html/Estoque.sqlite');
-    //$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   }
 
 
@@ -17,6 +17,7 @@ class SqlProdutos
     $sql = 'select * from produtos ' .
       "where descricao like '" . $param['search']. "%'" .
       'limit ' . $param['offset'] . ', 10';
+     
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll();
@@ -39,11 +40,12 @@ class SqlProdutos
   function update($param)
   {
 
+   
 
     $sql = 'UPDATE produtos ' .
       'SET qtd = ' . $param['qtd'] . ', descricao = "' . $param['descricao'] . '", valor = ' . $param['valor'] . ', codigo = ' . $param['codigo'] . ' WHERE id =' . $param['id'];
 
-
+ print_r($sql);
 
     $this->db->exec($sql);
     return $this->db->lastInsertId();
@@ -58,13 +60,4 @@ class SqlProdutos
     return $this->db->lastInsertId();
   }
 
-  function searchConf($param)
-  {
-
-    $sql = 'select * from produtos where descricao like ' . "'%$param%'";
-
-    $query = $this->db->prepare($sql);
-    $query->execute();
-    return $query->fetchAll();
-  }
 }
