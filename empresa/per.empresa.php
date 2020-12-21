@@ -17,9 +17,19 @@ class Empresa
         $this->sql = new SqlEmpresa();
     }
 
-    function exemplo($param)
+    function save($param)
     {
-        $call = $this->sql->exemplo($param);
+
+        if (empty($param['id_empresa'])) {
+           echo $this->sql->insert($param);
+        } else {
+            $this->sql->update($param);
+        }
+    }
+
+    function getEmpresa($param)
+    {
+        $call = $this->sql->getEmpresa($param);
         echo json_encode($call);
     }
 }
