@@ -13,11 +13,10 @@
         </div>
 
 
-
         <div class="row">
             <div class="col s5">
                 <label>RG</label>
-                <input placeholder="" type="text" class="validate" id="edtRg" name="rg" disabled>
+                <input placeholder="" type="number" class="validate" id="edtRg" name="rg" disabled>
             </div>
             <div class="col s7">
                 <label>CPF</label>

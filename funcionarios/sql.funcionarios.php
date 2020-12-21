@@ -45,7 +45,7 @@ class SqlFuncionarios
       'VALUES' .
       "('" . $nome . "', '" . $telefone . "', '" . $cpf . "', '" . $rg . "', '" . $cep . "', '" . $endereco . "', '" . $cidade . "', '" . $uf . "', '" . $bairro . "')";
 
-
+    //echo $sql;
 
     $this->db->exec($sql);
     return $this->db->lastInsertId();
