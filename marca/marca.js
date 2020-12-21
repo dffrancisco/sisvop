@@ -43,7 +43,7 @@ const marca = (function () {
                         },
                         edit: {
                             html: "Editar",
-                            class: "btnP",
+                            class: "btnP btnEdit",
                             state: xGridV2.state.update,
                             click: edit,
                         },
@@ -106,36 +106,50 @@ const marca = (function () {
         }).then(rs => {
             xgMarca.querySourceAdd(rs.data);
 
-            if (rs.data[0])
+            if (rs.data[0]) {
                 xgMarca.focus();
+                $('.btnEdit').removeAttr("disabled")
+                $('.btnDel').removeAttr("disabled")
+                
 
+            }else {
+                $('.btnEdit').prop("disabled", true)
+                $('.btnDel').prop("disabled", true)
+                xgMarca.clearElementSideBySide()
+            }
         });
     }
 
     function pesquisar() {
         let search = $('#edtPesquisa').val().trim();
-
         xgMarca.queryOpen({ search })
         xgMarca.focus();
-
     }
 
     function novo() {
         controleGrid = "new"
+        $('.btnEdit').removeAttr("disabled")
+        $('.btnDel').removeAttr("disabled")
+        $('#edtPesquisa').prop("disabled", true)
+        $('.btnPesq').prop("disabled", true)
+
         xgMarca.clearElementSideBySide()
         xgMarca.focusField()
         xgMarca.disable()
-
     }
 
     function edit() {
         controleGrid = "edit"
+        $('.btnDel').removeAttr("disabled")
+        $('#edtPesquisa').prop("disabled", true)
+        $('.btnPesq').prop("disabled", true)
         xgMarca.focusField()
 
     }
 
     function deletar() {
         let param;
+        
         if (xgMarca.dataSource().id_marca) {
             param = xgMarca.dataSource().id_marca;
 
@@ -148,6 +162,7 @@ const marca = (function () {
                         param: param
 
                     }).then(rs => {
+
                         xgMarca.deleteLine();
 
                     });
@@ -175,6 +190,8 @@ const marca = (function () {
 
             }).then(rs => {
 
+                $('.btnEdit').removeAttr("disabled")
+
                 if (rs.data.id_marca) {
                     param.id_marca = rs.data.id_marca;
                     xgMarca.insertLine(param);
@@ -195,6 +212,9 @@ const marca = (function () {
     }
 
     function cancelar() {
+        $('.btnPesq').removeAttr("disabled")
+        $('#edtPesquisa').removeAttr("disabled")
+         
         xgMarca.enable();
         xgMarca.focus();
 
