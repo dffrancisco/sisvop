@@ -15,6 +15,7 @@ if (!empty($_GET['p'])) {
 
         <link rel="stylesheet" href="css/index.css" type="text/css"/>
         <link rel="stylesheet" href="produtos/produtos.css" type="text/css"/>
+        <link rel="stylesheet" href="marca/marca.css" type="text/css"/>
 
         <script src="js/jquery-2.2.1.min.js" type="text/javascript"></script>
 
@@ -74,6 +75,7 @@ if (!empty($_GET['p'])) {
         <div class="pnMenu">
 
             <a href="?p=produtos/produtos"><li><i class="fa fa-address-book"></i>Produto</li></a>
+            <a href="?p=marca/marca"><li><i class="fa fa-address-book"></i>Marcas</li></a>
 
             <a href="?p=cargo/cargo"><li><i class="fa fa-address-book"></i>Cargo</li></a>
             <a href="?p=empresa/empresa"><li><i class="fa fa-building"></i>Empresas</li></a>
