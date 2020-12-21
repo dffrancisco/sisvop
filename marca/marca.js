@@ -108,11 +108,14 @@ const marca = (function () {
 
             if (rs.data[0]) {
                 xgMarca.focus();
+                $('.btnEdit').removeAttr("disabled")
+                $('.btnDel').removeAttr("disabled")
+                
 
             }else {
                 $('.btnEdit').prop("disabled", true)
                 $('.btnDel').prop("disabled", true)
-                // xgMarca.clearElementSideBySide()
+                xgMarca.clearElementSideBySide()
             }
         });
     }
