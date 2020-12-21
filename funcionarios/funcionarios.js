@@ -229,7 +229,6 @@ const funcionario = (function () {
             }
         }
 
-        console.log(param)
         if (controleGrid == 'edit') {
             param.id_funcionario = xgFuncionarios.dataSource().id_funcionario;
         }
