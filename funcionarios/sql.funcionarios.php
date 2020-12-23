@@ -13,10 +13,25 @@ class SqlFuncionarios
 
   function getFuncionarios($param)
   {
+  
+    // $sql = 'select f.id_funcionario, f.nome, ' . 
+    // 'f.telefone, f.cpf, f.rg, f.cep, f.endereco, ' . 
+    // 'f.cidade, f.uf ,b.bairro from funcionarios as f INNER JOIN bairro as b ' . 
+    // 'on f.id_bairro = b.id_bairro ' .
+    //   "where nome like '" . $param['search'] . "%'" .
+    //   'limit ' . $param['offset'] . ', 10';
 
-    $sql = 'select * from funcionarios ' .
-      "where nome like '" . $param['search'] . "%'" .
-      'limit ' . $param['offset'] . ', 10';
+      extract($param);
+      
+      $sql = "select a.id_funcionario, a.nome, a.telefone, a.cpf, a.rg, 
+             a.cep, a.endereco, a.cidade, a.uf, b.bairro, b.id_bairro 
+            from funcionarios a, bairro b
+            where b.id_bairro = a.id_bairro
+            and a.nome like '$search%'
+            limit $offset, 10";
+          
+  
+
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll();
@@ -30,7 +45,7 @@ class SqlFuncionarios
     $sql = 'select '.$field.' from funcionarios ' .
            "WHERE ". $field ." =  '". $value ."'";
 
-          // echo $sql;
+         
            
      $query = $this->db->prepare($sql);
      $query->execute();
@@ -41,10 +56,9 @@ class SqlFuncionarios
   {
     extract($param);
     $sql = 'INSERT INTO funcionarios' .
-      '(nome, telefone, cpf, rg, cep, endereco, cidade, uf, bairro )' .
+      '(nome, telefone, cpf, rg, cep, endereco, cidade, uf, id_bairro )' .
       'VALUES' .
-      "('" . $nome . "', '" . $telefone . "', '" . $cpf . "', '" . $rg . "', '" . $cep . "', '" . $endereco . "', '" . $cidade . "', '" . $uf . "', '" . $bairro . "')";
-
+      "('" . $nome . "', '" . $telefone . "', '" . $cpf . "', '" . $rg . "', '" . $cep . "', '" . $endereco . "', '" . $cidade . "', '" . $uf . "', '" . $id_bairro . "')";
 
     $this->db->exec($sql);
     return $this->db->lastInsertId();
@@ -54,7 +68,7 @@ class SqlFuncionarios
   {
     extract($param);
     $sql = 'UPDATE funcionarios ' .
-    'SET nome = "'.$nome.'", telefone = "'.$telefone.'", cpf = "'.$cpf.'", rg = "'.$rg.'", cep = "'.$cep.'", endereco = "'.$endereco.'", cidade = "'.$cidade.'", uf = "'.$uf.'" , bairro = "'.$bairro.'" ' .
+    'SET nome = "'.$nome.'", telefone = "'.$telefone.'", cpf = "'.$cpf.'", rg = "'.$rg.'", cep = "'.$cep.'", endereco = "'.$endereco.'", cidade = "'.$cidade.'", uf = "'.$uf.'" , id_bairro = "'.$id_bairro.'" ' .
     'WHERE id_funcionario = ' . $id_funcionario;
 
 
@@ -69,5 +83,13 @@ class SqlFuncionarios
 
     $this->db->exec($sql);
     return $this->db->lastInsertId();
+  }
+
+  function getBairro(){
+    $sql = 'SELECT * FROM bairro';
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll();
   }
 }
