@@ -31,7 +31,7 @@ const funcionario = (function () {
                     dataField: "cpf",
                     center: true,
                 },
-                
+
             },
             sideBySide: {
                 el: "#pnFields",
@@ -141,7 +141,7 @@ const funcionario = (function () {
             query: {
                 execute: (r) => {
                     getFuncionarios(r.param.search, r.offset)
-                    
+
                 }
 
             }
@@ -164,21 +164,7 @@ const funcionario = (function () {
 
                 if (rs.data[0]) {
                     xgFuncionarios.focus();
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> e9e71a487664bdc331fa338f3d36d603236ed6b6
-                } else {
-                    $('.btnEdit').prop('disabled', true)
-                    $('.btnDel').prop('disabled', true)
-                    $('.btnPesq').prop('disabled', true)
                 }
-<<<<<<< HEAD
-=======
-                 }
->>>>>>> 92d124814698c690bce31d35389b2771ffef2ab4
-=======
->>>>>>> e9e71a487664bdc331fa338f3d36d603236ed6b6
 
             })
 
@@ -186,17 +172,17 @@ const funcionario = (function () {
 
     }
 
-    function getBairro(){
+    function getBairro() {
 
-        axios.post(url,{
+        axios.post(url, {
             call: 'getBairro',
 
-        }).then(rs =>{
-            for(let i in rs.data){
-            let table = `<option value="${rs.data[i].id_bairro}"> ${rs.data[i].bairro}</option>`
-            $('#slctBairro').append(table)
+        }).then(rs => {
+            for (let i in rs.data) {
+                let table = `<option value="${rs.data[i].id_bairro}"> ${rs.data[i].bairro}</option>`
+                $('#slctBairro').append(table)
             }
-            
+
         })
     }
 
@@ -261,7 +247,7 @@ const funcionario = (function () {
             param.id_funcionario = xgFuncionarios.dataSource().id_funcionario;
         }
 
-        if(controleGrid == 'insert'){
+        if (controleGrid == 'insert') {
             param.id_funcionario = ''
         }
         axios.post(url, {
