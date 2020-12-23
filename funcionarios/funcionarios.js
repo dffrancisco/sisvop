@@ -165,14 +165,20 @@ const funcionario = (function () {
                 if (rs.data[0]) {
                     xgFuncionarios.focus();
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> e9e71a487664bdc331fa338f3d36d603236ed6b6
                 } else {
                     $('.btnEdit').prop('disabled', true)
                     $('.btnDel').prop('disabled', true)
                     $('.btnPesq').prop('disabled', true)
                 }
+<<<<<<< HEAD
 =======
                  }
 >>>>>>> 92d124814698c690bce31d35389b2771ffef2ab4
+=======
+>>>>>>> e9e71a487664bdc331fa338f3d36d603236ed6b6
 
             })
 

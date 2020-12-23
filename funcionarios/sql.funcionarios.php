@@ -59,11 +59,15 @@ class SqlFuncionarios
       '(nome, telefone, cpf, rg, cep, endereco, cidade, uf, id_bairro )' .
       'VALUES' .
 <<<<<<< HEAD
+<<<<<<< HEAD
       "('" . $nome . "', '" . $telefone . "', '" . $cpf . "', '" . $rg . "', '" . $cep . "', '" . $endereco . "', '" . $cidade . "', '" . $uf . "', '" . $bairro . "')";
 
 =======
       "('" . $nome . "', '" . $telefone . "', '" . $cpf . "', '" . $rg . "', '" . $cep . "', '" . $endereco . "', '" . $cidade . "', '" . $uf . "', '" . $id_bairro . "')";
 >>>>>>> 92d124814698c690bce31d35389b2771ffef2ab4
+=======
+      "('" . $nome . "', '" . $telefone . "', '" . $cpf . "', '" . $rg . "', '" . $cep . "', '" . $endereco . "', '" . $cidade . "', '" . $uf . "', '" . $id_bairro . "')";
+>>>>>>> e9e71a487664bdc331fa338f3d36d603236ed6b6
 
     $this->db->exec($sql);
     return $this->db->lastInsertId();
