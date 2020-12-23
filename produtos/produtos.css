@@ -1,12 +1,6 @@
 .tabela{
     padding: 10px;
 }
-
-.corInp {
-    border-left: 3px solid #55828b !important;
-  /*  margin-top: 8px !important;*/
-    
-}
 .margintop{
     margin-top: 10px !important;
 }
@@ -16,6 +10,7 @@
     margin-left: 5px !important;
     
 }
+
 
 .btnP{    
     background-color: #2E4BAB !important;

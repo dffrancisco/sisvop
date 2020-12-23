@@ -25,8 +25,9 @@ class Produtos
 
     function save($param){
 
-        if(empty($param['id'])){
-            $id = $this->sql->insert($param);
+        if(empty($param['id_produto'])){
+            $id_produto = $this->sql->insert($param);
+            echo '{"id_produto":"' . $id_produto . '"}';
         } else {
             $call = $this->sql->update($param);
 
@@ -36,11 +37,21 @@ class Produtos
     }
 
     function delete($param){
-        $id = $this->sql->delete($param);
+        $id_produto = $this->sql->delete($param);
     }
 
     function searchConf($param){
-        $id = $this->sql->searchConf($param);
+        $id_produto = $this->sql->searchConf($param);
+    }
+
+    function getMarca(){
+        $call = $this->sql->getMarca();
+        echo json_encode($call);
+    }
+
+    function getCodigo($param){
+        $codigo = $this->sql->getCodigo($param);
+        echo json_encode($codigo);
     }
 }
 

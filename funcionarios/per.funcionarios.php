@@ -33,7 +33,6 @@ class Funcionarios
             echo '{"id_funcionario":"' . $id_funcionario . '"}';
         } else {
            $id_funcionario = $this->sql->update($param);
-            echo '{"id_funcionario":"' . $id_funcionario . '"}';
 
         }
     }

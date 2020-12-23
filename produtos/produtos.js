@@ -2,6 +2,7 @@ let xgProduto;
 
 $(function () {
   produto.grid();
+  produto.getMarca();
   xgProduto.queryOpen({ search: '' })
 
 });
@@ -11,86 +12,42 @@ const produto = (function () {
   let url = 'produtos/per.produtos.php'
   let controleGrid;
 
-
-  function addReal(value) {
-    return "R$ " + value;
-  }
-
-  function novo() {
-    controleGrid = 'insert';
-    xgProduto.clearElementSideBySide()
-    xgProduto.focusField()
-    xgProduto.disable()
-  }
-
-  function searchConf() {
-
-    let search = document.getElementById('edtPesquisa').value;
-   
-    xgProduto.queryOpen({ search })
-
-
-  }
-
-  function salvar() {
-    let param;
-    param = xgProduto.getElementSideBySideJson()
-
-    // if(controleGrid == 'insert'){
-    // }
-
-    if (controleGrid == 'edit') {
-      param.id = xgProduto.dataSource().id;
-    }
-
-
-    axios.post(url, {
-      call: 'save',
-      param: param
-    })
-      .then(r => {
-        if (r.data.id) {
-          param.id = r.data.id
-          xgProduto.insertLine(param)
-        } else {
-          xgProduto.dataSource(param)
-        }
-
-      })
-
-    xgProduto.enable()
-    xgProduto.focus()
-  }
-
-
-  function deletar() {
-    let param;
-    if (xgProduto.dataSource().id) {
-      param = xgProduto.dataSource().id
-      confirmaCodigo({
-        msg: 'Digite o código de confirmação',
-        call: () => {
-          axios.post(url, {
-            call: 'delete',
-            param: param
-          })
-            .then(r => {
-              xgProduto.deleteLine()
-            })
-        }
-      })
-    }
-
-  }
-
   function grid() {
     xgProduto = new xGridV2.create({
       el: "#xgProduto",
       height: 210,
       heightLine: 35,
       theme: "x-clownV2",
+
+      columns: {
+        Código: {
+          dataField: "codigo",
+          center: true,
+          width: "10%",
+        },
+        Descrição: {
+          dataField: "descricao",
+          width: "60%",
+          style: "font-size: 16px;",
+
+        },
+        QTD: {
+          dataField: "qtd",
+          width: "15%",
+          center: true,
+        },
+        // 'Marca': { dataField: 'marca', width: '17%', class: 'fontGrid' },
+        // 'Departamento': { dataField: 'departamento', class: 'fontGrid' },
+        Valor: {
+          dataField: "valor",
+          render: addReal,
+          width: "15%",
+        },
+      },
+
       sideBySide: {
         el: "#pnFields",
+
         frame: {
           el: "#pnButtons",
           buttons: {
@@ -115,7 +72,7 @@ const produto = (function () {
               state: xGridV2.state.update,
               click: () => {
                 controleGrid = 'edit';
-            
+
               },
             },
 
@@ -145,36 +102,30 @@ const produto = (function () {
 
           },
         },
-      },
-      columns: {
-        Código: {
-          dataField: "codigo",
-          center: true,
-          width: "10%",
-        },
-        Descrição: {
-          dataField: "descricao",
-          width: "60%",
-          style: "font-size: 16px;",
+        duplicity: {
+          dataField: ['codigo'],
 
-        },
-        QTD: {
-          dataField: "qtd",
-          width: "15%",
-          center: true,
-        },
-        // 'Marca': { dataField: 'marca', width: '17%', class: 'fontGrid' },
-        // 'Departamento': { dataField: 'departamento', class: 'fontGrid' },
-        Valor: {
-          dataField: "valor",
-          render: addReal,
-          width: "15%",
-          center: true,
+          execute: (r) => {
+            let param = {}
+            param.codigo = r.value,
+            axios.post(url, {
+              call: 'getCodigo',
+              param: param
+
+            })
+              .then(rs => {
+                if (rs.data[0]) {
+                  xgProduto.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
+                  xgProduto.focusField(r.field);
+                }
+              })
+          }
         },
       },
+
+
       query: {
         execute: (r) => {
-          console.log(r)
           getProdutos(r.param.search, r.offset)
 
         },
@@ -183,20 +134,128 @@ const produto = (function () {
   }
 
   function getProdutos(search, offset) {
-    console.log(search, offset)
     axios.post(url, {
       call: 'getProdutos',
       param: { search: search, offset: offset }
     })
       .then(rs => {
         xgProduto.querySourceAdd(rs.data);
-        if (offset == 0) xgProduto.focus();
+        if (rs.data[0]) xgProduto.focus();
       })
 
   }
 
+  function deletar() {
+    let param;
+    if (xgProduto.dataSource().id_produto) {
+      param = xgProduto.dataSource().id_produto
+      confirmaCodigo({
+        msg: 'Digite o código de confirmação',
+        call: () => {
+          axios.post(url, {
+            call: 'delete',
+            param: param
+          })
+            .then(r => {
+              xgProduto.deleteLine()
+            })
+        }
+      })
+    }
+
+  }
+
+  function salvar() {
+    let param;
+    param = xgProduto.getElementSideBySideJson()
+    param.data_cadastro = $('#edtData').val()
+
+    let valCampos = {
+      codigo: $('#editCodigo').val(),
+      descricao: $('#editDescricao').val(),
+      valor: $('#editValor').val(),
+      endereco: $('#editEndereco').val(),
+      qtd: $('#editQtd').val(),
+      marca: $('#editMarca').val(),
+  }
+  valCampos.valor= valCampos.valor.replace(',', '');
+
+  for (let i in valCampos) {
+      if (valCampos[i] == '' || valCampos.valor == 0) {
+          show('Por favor preencha todos os campos')
+          return false
+      }
+  }
+  console.log()
+  return false
+
+    if (controleGrid == 'insert') {
+      param.id_produto = ''
+    }
+
+    if (controleGrid == 'edit') {
+      param.id_produto = xgProduto.dataSource().id_produto;
+    }
+
+    axios.post(url, {
+      call: 'save',
+      param: param
+    })
+      .then(r => {
+        if (r.data.id_produto) {
+          param.id_produto = r.data.id_produto
+          xgProduto.insertLine(param)
+
+        } else {
+
+          xgProduto.dataSource(param)
+        }
+
+      })
+
+    xgProduto.enable()
+    xgProduto.focus()
+  }
+
+  function addReal(value) {
+    return "R$ " + value;
+  }
+
+  function novo() {
+    controleGrid = 'insert';
+    xgProduto.clearElementSideBySide()
+    xgProduto.focusField()
+    xgProduto.disable()
+
+    let date = new Date().toLocaleDateString('pt-BR')
+    $('#edtData').val(date)
+
+
+  }
+
+  function searchConf() {
+
+    let search = document.getElementById('edtPesquisa').value;
+
+    xgProduto.queryOpen({ search })
+
+  }
+
+  function getMarca() {
+    axios.post(url, {
+      call: 'getMarca',
+
+    }).then(rs => {
+      for (let i in rs.data) {
+        let table = `<option value="${rs.data[i].id_marca}"> ${rs.data[i].marca}</option>`
+        $('#slctMarca').append(table)
+      }
+
+    })
+  }
   return {
     grid: grid,
+    getMarca: getMarca,
   };
 })();
 
