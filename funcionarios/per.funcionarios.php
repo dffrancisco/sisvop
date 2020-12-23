@@ -50,6 +50,11 @@ class Funcionarios
         echo json_encode($call);
 
     }
+
+    function getBairro(){
+        $call = $this->sql->getBairro();
+        echo json_encode($call);
+    }
 }
 
 $class = new Funcionarios();
