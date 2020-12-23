@@ -154,7 +154,7 @@ const marca = (function () {
             param = xgMarca.dataSource().id_marca;
 
             confirmaCodigo({
-                msg: 'Digite o código de confirmação',
+                msg: 'Para deletar o registro insira o código abaixo!',
 
                 call: () => {
                     axios.post(url, {

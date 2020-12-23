@@ -2,6 +2,7 @@ let xgFuncionarios;
 
 $(function () {
     funcionario.grid();
+    funcionario.getBairro();
     xgFuncionarios.queryOpen({ search: '' })
 
 
@@ -29,7 +30,8 @@ const funcionario = (function () {
                 CPF: {
                     dataField: "cpf",
                     center: true,
-                }
+                },
+                
             },
             sideBySide: {
                 el: "#pnFields",
@@ -139,6 +141,7 @@ const funcionario = (function () {
             query: {
                 execute: (r) => {
                     getFuncionarios(r.param.search, r.offset)
+                    
                 }
 
             }
@@ -148,6 +151,7 @@ const funcionario = (function () {
 
     return {
         grid: grid,
+        getBairro: getBairro,
     };
 
     function getFuncionarios(search, offset) {
@@ -160,16 +164,34 @@ const funcionario = (function () {
 
                 if (rs.data[0]) {
                     xgFuncionarios.focus();
+<<<<<<< HEAD
                 } else {
                     $('.btnEdit').prop('disabled', true)
                     $('.btnDel').prop('disabled', true)
                     $('.btnPesq').prop('disabled', true)
                 }
+=======
+                 }
+>>>>>>> 92d124814698c690bce31d35389b2771ffef2ab4
 
             })
 
 
 
+    }
+
+    function getBairro(){
+
+        axios.post(url,{
+            call: 'getBairro',
+
+        }).then(rs =>{
+            for(let i in rs.data){
+            let table = `<option value="${rs.data[i].id_bairro}"> ${rs.data[i].bairro}</option>`
+            $('#slctBairro').append(table)
+            }
+            
+        })
     }
 
     function search() {
@@ -203,6 +225,7 @@ const funcionario = (function () {
 
 
         let param = xgFuncionarios.getElementSideBySideJson()
+        param.bairro = $('#slctBairro option:selected').text()
 
         // xgFuncionarios.getDuplicityAll()
 
@@ -219,7 +242,7 @@ const funcionario = (function () {
             endereco: $('#edtEnd').val(),
             uf: $('#edtUf').val(),
             cidade: $('#edtCidade').val(),
-            bairro: $('#edtBairro').val(),
+            bairro: $('#slctBairro').val(),
         }
         for (let i in valCampos) {
             if (valCampos[i] == '') {
@@ -230,6 +253,10 @@ const funcionario = (function () {
 
         if (controleGrid == 'edit') {
             param.id_funcionario = xgFuncionarios.dataSource().id_funcionario;
+        }
+
+        if(controleGrid == 'insert'){
+            param.id_funcionario = ''
         }
         axios.post(url, {
             call: 'save',

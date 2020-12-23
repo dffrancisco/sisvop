@@ -63,7 +63,9 @@
             </div> -->
             <div class="col s6">
                 <label>Bairro</label>
-                <input placeholder="" type="text" class="validate" id="edtBairro" name="bairro" disabled>
+                <select id="slctBairro" name="id_bairro" class="validate">
+                </select>
+                <!-- <input placeholder="" type="text" class="validate" id="edtBairro" name="bairro" disabled> -->
             </div>
         </div>
     </div>
