@@ -164,7 +164,11 @@ const funcionario = (function () {
 
                 if (rs.data[0]) {
                     xgFuncionarios.focus();
-                 }
+                } else {
+                    $('.btnEdit').prop('disabled', true)
+                    $('.btnDel').prop('disabled', true)
+                    $('.btnPesq').prop('disabled', true)
+                }
 
             })
 
@@ -236,7 +240,6 @@ const funcionario = (function () {
             cidade: $('#edtCidade').val(),
             bairro: $('#slctBairro').val(),
         }
-
         for (let i in valCampos) {
             if (valCampos[i] == '') {
                 show('Por favor preencha todos os campos')
@@ -290,7 +293,7 @@ const funcionario = (function () {
 
     }
 
-    function cancelar(){
+    function cancelar() {
         xgFuncionarios.enable()
         xgFuncionarios.clearElementSideBySide()
         xgFuncionarios.focus();

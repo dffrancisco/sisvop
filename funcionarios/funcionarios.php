@@ -50,8 +50,17 @@
         <div class="row">
             <div class="col s6">
                 <label>Cidade</label>
-                <input placeholder="" type="text" class="validate" id="edtCidade" name="cidade" disabled>
+                <select>
+                    <option value="" disabled selected>Cidade</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select>
             </div>
+            <!-- <div class="col s6">
+                <label>Cidade</label>
+                <input placeholder="" type="text" class="validate" id="edtCidade" name="cidade" disabled>
+            </div> -->
             <div class="col s6">
                 <label>Bairro</label>
                 <select id="slctBairro" name="id_bairro" class="validate">
