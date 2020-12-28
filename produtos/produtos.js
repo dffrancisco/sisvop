@@ -56,26 +56,19 @@ const produto = (function () {
               html: "Pesquisar",
               class: "btnP btnPesq",
               click: searchConf,
-            },
-
-
+            },            
             novo: {
               html: "Novo",
               class: "btnP",
               state: xGridV2.state.insert,
               click: novo,
             },
-
             edit: {
               html: "Editar",
               class: "btnP",
               state: xGridV2.state.update,
-              click: () => {
-                controleGrid = 'edit';
-
-              },
+              click: editar,
             },
-
             deletar: {
               html: "Deletar",
               class: "btnP btnDel",
@@ -88,16 +81,11 @@ const produto = (function () {
               state: xGridV2.state.save,
               click: salvar
             },
-
             cancelar: {
               html: "Cancelar",
               class: "btnP",
               state: xGridV2.state.cancel,
-              click: () => {
-
-                xgProduto.enable()
-                xgProduto.focus()
-              },
+              click: cancelar,
             },
 
           },
@@ -108,17 +96,17 @@ const produto = (function () {
           execute: (r) => {
             let param = {}
             param.codigo = r.value,
-            axios.post(url, {
-              call: 'getCodigo',
-              param: param
+              axios.post(url, {
+                call: 'getCodigo',
+                param: param
 
-            })
-              .then(rs => {
-                if (rs.data[0]) {
-                  xgProduto.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
-                  xgProduto.focusField(r.field);
-                }
               })
+                .then(rs => {
+                  if (rs.data[0]) {
+                    xgProduto.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
+                    xgProduto.focusField(r.field);
+                  }
+                })
           }
         },
       },
@@ -177,17 +165,15 @@ const produto = (function () {
       endereco: $('#editEndereco').val(),
       qtd: $('#editQtd').val(),
       marca: $('#editMarca').val(),
-  }
-  valCampos.valor= valCampos.valor.replace(',', '');
+    }
+    valCampos.valor = valCampos.valor.replace(',', '');
 
-  for (let i in valCampos) {
+    for (let i in valCampos) {
       if (valCampos[i] == '' || valCampos.valor == 0) {
-          show('Por favor preencha todos os campos')
-          return false
+        show('Por favor preencha todos os campos')
+        return false
       }
-  }
-  console.log()
-  return false
+    }
 
     if (controleGrid == 'insert') {
       param.id_produto = ''
@@ -226,17 +212,22 @@ const produto = (function () {
     xgProduto.clearElementSideBySide()
     xgProduto.focusField()
     xgProduto.disable()
-
     let date = new Date().toLocaleDateString('pt-BR')
     $('#edtData').val(date)
+    $('#edtPesquisa').prop("disabled", true)
+    $('.btnPesq').prop("disabled", true)
+  }
 
+  function editar() {
+    controleGrid = 'edit';
+    $('#edtPesquisa').prop("disabled", true)
+    $('.btnPesq').prop("disabled", true)
 
   }
 
   function searchConf() {
 
-    let search = document.getElementById('edtPesquisa').value;
-
+    let search = $('#edtPesquisa').val().trim();
     xgProduto.queryOpen({ search })
 
   }
@@ -253,11 +244,17 @@ const produto = (function () {
 
     })
   }
+
+  function cancelar() {
+
+    $('.btnPesq').removeAttr("disabled")
+    $('#edtPesquisa').removeAttr("disabled")
+    xgProduto.enable()
+    xgProduto.focus()
+  }
+
   return {
     grid: grid,
     getMarca: getMarca,
   };
 })();
-
-
-

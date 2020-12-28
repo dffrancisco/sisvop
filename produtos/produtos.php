@@ -53,12 +53,12 @@
  
 
     <div id="xgProduto" class="list"></div>
-
-
-    <div id="pnButtons" class="right-align row">
-    <div class="col s4">
-        <input type="text" class="corInp margintop" placeholder="Pesquisar" id="edtPesquisa" >
+    <div class="row">
+        <div class="col s3">
+            <input type="text" class="margintop " placeholder="Pesquisar" id="edtPesquisa">
         </div>
+        <div id="pnButtons" class="right-align col s9"></div>
     </div>
+
     <div id="pnCodigoTela">Estoque</div>
     <div>

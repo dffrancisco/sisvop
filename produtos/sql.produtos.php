@@ -19,7 +19,8 @@ class SqlProdutos
             from produtos a, marca b
             where b.id_marca = a.id_marca
             and a.descricao like '$search%'
-            limit $offset, 10";
+            ORDER BY qtd asc limit $offset, 10";
+
      
     $query = $this->db->prepare($sql);
     $query->execute();
