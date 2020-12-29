@@ -1070,8 +1070,8 @@ let xGridV2 = (function () {
                                 btn.innerHTML = this.arg.sideBySide.frame.buttons[key].html
 
                                 if (this.arg.sideBySide.frame.buttons[key].click)
-                                    btn.addEventListener('click', (e) => {
-                                        if (ax.arg.sideBySide.frame.buttons[key].click(this.sourceSelect, e) == false) return false
+                                    btn.addEventListener('click', async (e) => {
+                                        if (await ax.arg.sideBySide.frame.buttons[key].click(this.sourceSelect, e) == false) return false
 
                                         if ([state.insert, state.update].indexOf(e.target.getAttribute('state')) >= 0) {
                                             this.disableFieldsSideBySide(true)
@@ -1115,7 +1115,6 @@ let xGridV2 = (function () {
                                 return
 
                             this.elementSideBySide[field].addEventListener('focusout', (e) => {
-
                                 if (this.sourceSelect[field] != e.target.value) {
                                     let text = field
 
@@ -1145,39 +1144,38 @@ let xGridV2 = (function () {
                 setTimeout(() => this.messageDuplicity.remove(), 5000)
                 document.body.appendChild(this.messageDuplicity)
             },
+            
             getDuplicityAll() {
-                let that = true;
+                return new Promise(async (res, rej) => {
+                    for (let i in this.arg.sideBySide.duplicity.dataField) {
+                        let field = this.arg.sideBySide.duplicity.dataField[i]
+                        let text = ''
+                        if (this.sourceSelect[field] != this.elementSideBySide[field].value) {
 
-                for (let i in this.arg.sideBySide.duplicity.dataField) {
-                    let field = this.arg.sideBySide.duplicity.dataField[i]
-                    let text = ''
-                    if (this.sourceSelect[field] != this.elementSideBySide[field].value) {
-
-                        if (this.elementSideBySide[field].previousSibling.previousElementSibling)
-                            text = this.elementSideBySide[field].previousSibling.previousElementSibling.innerText
-                        else
-                            if (this.elementSideBySide[field].getAttribute('placeholder'))
-                                text = this.elementSideBySide[field].getAttribute('placeholder')
+                            if (this.elementSideBySide[field].previousSibling.previousElementSibling)
+                                text = this.elementSideBySide[field].previousSibling.previousElementSibling.innerText
                             else
-                                if (this.elementSideBySide[field].getAttribute('label'))
-                                    text = this.elementSideBySide[field].getAttribute('label')
+                                if (this.elementSideBySide[field].getAttribute('placeholder'))
+                                    text = this.elementSideBySide[field].getAttribute('placeholder')
+                                else
+                                    if (this.elementSideBySide[field].getAttribute('label'))
+                                        text = this.elementSideBySide[field].getAttribute('label')
 
 
-                        that = this.arg.sideBySide.duplicity.execute({
-                            field: field,
-                            value: this.elementSideBySide[field].value.trim(),
-                            //text: this.elementSideBySide[field].previousSibling.previousElementSibling.innerText
-                            text: text
-                        })
+                            let r = await this.arg.sideBySide.duplicity.execute({
+                                field: field,
+                                value: this.elementSideBySide[field].value.trim(),
+                                //text: this.elementSideBySide[field].previousSibling.previousElementSibling.innerText
+                                text: text
+                            })
 
-                         //   console.log(that, 'ssss')
 
-                        return false
+                            return res(r)
+                        }
                     }
-                }
-             //   console.log(that)
 
-                return that
+                    res(false)
+                })
             },
             tabToEnter(name) {
 

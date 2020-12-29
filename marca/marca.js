@@ -16,19 +16,14 @@ const marca = (function () {
             height: '200',
             theme: 'x-clownV2',
             heightLine: '35',
-
             columns: {
-                Marca: {
-                    dataField: 'marca',
-                },
+                Marca: { dataField: 'marca' },
             },
-
             sideBySide: {
                 el: "#pnFields",
 
                 frame: {
                     el: "#pnButtons",
-
                     buttons: {
                         pesquisa: {
                             html: "Pesquisar",
@@ -70,26 +65,24 @@ const marca = (function () {
 
                 duplicity: {
                     dataField: ['marca'],
-
                     execute: (r) => {
                         let param = {}
-                        param.marca = r.value,
+                        param.marca = r.value
 
-                            axios.post(url, {
-                                call: 'findMarca',
-                                param: param
-
+                        return axios.post(url, {
+                            call: 'findMarca',
+                            param: param
+                        })
+                            .then(rs => {
+                                if (rs.data[0]) {
+                                    xgMarca.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
+                                    xgMarca.focusField(r.field);
+                                    return false;
+                                }
                             })
-                                .then(rs => {
-                                    if (rs.data[0]) {
-                                        xgMarca.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
-                                        xgMarca.focusField(r.field);
-                                    }
-                                })
                     }
                 }
             },
-
             query: {
                 execute: (r) => {
                     getMarcas(r.param.search, r.offset);
@@ -110,9 +103,9 @@ const marca = (function () {
                 xgMarca.focus();
                 $('.btnEdit').removeAttr("disabled")
                 $('.btnDel').removeAttr("disabled")
-                
 
-            }else {
+
+            } else {
                 $('.btnEdit').prop("disabled", true)
                 $('.btnDel').prop("disabled", true)
                 xgMarca.clearElementSideBySide()
@@ -149,7 +142,7 @@ const marca = (function () {
 
     function deletar() {
         let param;
-        
+
         if (xgMarca.dataSource().id_marca) {
             param = xgMarca.dataSource().id_marca;
 
@@ -171,12 +164,27 @@ const marca = (function () {
         }
     }
 
-    const salvar = () => {
+    const salvar = async () => {
         let param = xgMarca.getElementSideBySideJson();
-        // if (xgMarca.getDuplicityAll() == false)
-        //     return false
+
+        let allDuplicty = await xgMarca.getDuplicityAll()
+
+          if (allDuplicty == false)
+            return false;
+
 
         if (param.marca || param.marca.length > 0) {
+
+            let valCampos = {
+                nome: $('#edtMarca').val(),
+            }
+
+            for (let i in valCampos) {
+                if (valCampos == '') {
+                    show('Por favor preencha todos os campos')
+                    return false
+                }
+            }
 
             if (controleGrid == 'edit')
                 param.id_marca = xgMarca.dataSource().id_marca;
@@ -214,15 +222,13 @@ const marca = (function () {
     function cancelar() {
         $('.btnPesq').removeAttr("disabled")
         $('#edtPesquisa').removeAttr("disabled")
-         
+
         xgMarca.enable();
         xgMarca.focus();
-
     }
 
     return {
         grid: grid,
-
     };
 
 })();
