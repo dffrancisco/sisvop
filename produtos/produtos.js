@@ -155,8 +155,7 @@ const produto = (function () {
   }
 
   const salvar = async () =>{
-    let param;
-    param = xgProduto.getElementSideBySideJson()
+    let param = xgProduto.getElementSideBySideJson()
     param.data_cadastro = $('#edtData').val()
 
     let allDuplicty = await xgMarca.getDuplicityAll()
