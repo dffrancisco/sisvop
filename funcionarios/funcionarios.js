@@ -2,7 +2,10 @@ let xgFuncionarios;
 
 $(function () {
     funcionario.grid();
+    funcionario.getBairro();
     xgFuncionarios.queryOpen({ search: '' })
+
+
 
 });
 
@@ -27,7 +30,8 @@ const funcionario = (function () {
                 CPF: {
                     dataField: "cpf",
                     center: true,
-                }
+                },
+                
             },
             sideBySide: {
                 el: "#pnFields",
@@ -43,7 +47,7 @@ const funcionario = (function () {
 
                         edit: {
                             html: "Editar",
-                            class: "btnP",
+                            class: "btnP btnEdit",
                             state: xGridV2.state.update,
                             click: edit,
                         },
@@ -66,11 +70,7 @@ const funcionario = (function () {
                             html: "Cancelar",
                             class: "btnP",
                             state: xGridV2.state.cancel,
-                            click: () => {
-
-                                xgFuncionarios.enable()
-                                xgFuncionarios.focus()
-                            },
+                            click: cancelar,
                         },
 
                         pesquisar: {
@@ -88,24 +88,31 @@ const funcionario = (function () {
                             param: r
                         })
 
-
                             .then(rs => {
-
                                 if (rs.data[0]) {
-                                    xgFuncionarios.showMessageDuplicity(`O campo ${r.text} foi cadastrado`)
+                                    xgFuncionarios.showMessageDuplicity(`O campo ${r.text} já foi cadastrado`)
                                     xgFuncionarios.focusField(r.field);
                                 }
-                                else {
+
+                                if (r.field == 'cpf') {
                                     let validCpf = $('#edtCpf').val()
                                     validCpf = validCpf.replace('.', '');
                                     validCpf = validCpf.replace('.', '');
                                     let cpf = validCpf.replace('-', '');
-                                    console.log(cpf)
                                     let Soma;
                                     let Resto;
                                     Soma = 0;
-                                    if (cpf == "00000000000") return false;
-                                    
+                                    if (cpf == 00000000000 || cpf == 11111111111 || cpf == 22222222222 || cpf == 33333333333 || cpf == 44444444444 || cpf == 55555555555
+                                        || cpf == 66666666666 || cpf == 77777777777 || cpf == 88888888888 || cpf == 999999999999
+                                    ) {
+                                        xgFuncionarios.showMessageDuplicity(`CPF inválido`)
+                                        xgFuncionarios.focusField(r.field);
+                                    }
+
+                                    if (cpf.length < 11) {
+                                        xgFuncionarios.showMessageDuplicity(`CPF inválido`)
+                                        xgFuncionarios.focusField(r.field);
+                                    }
 
                                     for (i = 1; i <= 9; i++) Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);
                                     Resto = (Soma * 10) % 11;
@@ -123,15 +130,10 @@ const funcionario = (function () {
 
                                         xgFuncionarios.showMessageDuplicity(`CPF inválido`)
                                         xgFuncionarios.focusField(r.field);
-
                                     }
-
-
                                 }
 
-
                             })
-
                     }
                 }
 
@@ -139,12 +141,18 @@ const funcionario = (function () {
             query: {
                 execute: (r) => {
                     getFuncionarios(r.param.search, r.offset)
+                    
                 }
 
             }
 
         });
     }
+
+    return {
+        grid: grid,
+        getBairro: getBairro,
+    };
 
     function getFuncionarios(search, offset) {
         axios.post(url, {
@@ -153,15 +161,34 @@ const funcionario = (function () {
         })
             .then(rs => {
                 xgFuncionarios.querySourceAdd(rs.data);
-                if (rs.data[0]) xgFuncionarios.focus();
+
+                if (rs.data[0]) {
+                    xgFuncionarios.focus();
+                } else {
+                    $('.btnEdit').prop('disabled', true)
+                    $('.btnDel').prop('disabled', true)
+                    $('.btnPesq').prop('disabled', true)
+                }
+
             })
+
+
 
     }
 
-    return {
-        grid: grid,
-    };
+    function getBairro(){
 
+        axios.post(url,{
+            call: 'getBairro',
+
+        }).then(rs =>{
+            for(let i in rs.data){
+            let table = `<option value="${rs.data[i].id_bairro}"> ${rs.data[i].bairro}</option>`
+            $('#slctBairro').append(table)
+            }
+            
+        })
+    }
 
     function search() {
 
@@ -174,12 +201,12 @@ const funcionario = (function () {
 
     function novo() {
         controleGrid = 'insert';
+        $('.btnEdit').removeAttr('disabled')
+        $('.btnDel').removeAttr('disabled')
+        $('.container .validate').removeAttr("disabled")
         xgFuncionarios.clearElementSideBySide()
         xgFuncionarios.focusField()
         xgFuncionarios.disable()
-        $('.container .validate').removeAttr("disabled")
-        
-
     }
 
     function edit() {
@@ -194,18 +221,39 @@ const funcionario = (function () {
 
 
         let param = xgFuncionarios.getElementSideBySideJson()
+        param.bairro = $('#slctBairro option:selected').text()
 
         // xgFuncionarios.getDuplicityAll()
 
         // if (xgFuncionarios.getDuplicityAll() == false) {
-        //     return false
+        //     return false        
         // }
+
+        let valCampos = {
+            nome: $('#edtNome').val(),
+            rg: $('#edtRg').val(),
+            cpf: $('#edtCpf').val(),
+            telefone: $('#edtTel').val(),
+            cep: $('#edtCep').val(),
+            endereco: $('#edtEnd').val(),
+            uf: $('#edtUf').val(),
+            cidade: $('#edtCidade').val(),
+            bairro: $('#slctBairro').val(),
+        }
+        for (let i in valCampos) {
+            if (valCampos[i] == '') {
+                show('Por favor preencha todos os campos')
+                return false
+            }
+        }
 
         if (controleGrid == 'edit') {
             param.id_funcionario = xgFuncionarios.dataSource().id_funcionario;
         }
 
-       
+        if(controleGrid == 'insert'){
+            param.id_funcionario = ''
+        }
         axios.post(url, {
             call: 'save',
             param: param
@@ -230,7 +278,7 @@ const funcionario = (function () {
         if (xgFuncionarios.dataSource().id_funcionario) {
             param = xgFuncionarios.dataSource().id_funcionario
             confirmaCodigo({
-                msg: 'Dígite o código de confirmação',
+                msg: 'Para deletar o registro insira o código',
                 call: () => {
                     axios.post(url, {
                         call: 'delete',
@@ -245,28 +293,11 @@ const funcionario = (function () {
 
     }
 
-    function TestaCPF() {
-        let strCPF = $('#edtCpf').val()
-        let Soma;
-        let Resto;
-        Soma = 0;
-        if (strCPF == "00000000000") return false;
-
-        for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
-        Resto = (Soma * 10) % 11;
-
-        if ((Resto == 10) || (Resto == 11)) Resto = 0;
-        if (Resto != parseInt(strCPF.substring(9, 10))) return false;
-
-        Soma = 0;
-        for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
-        Resto = (Soma * 10) % 11;
-
-        if ((Resto == 10) || (Resto == 11)) Resto = 0;
-        if (Resto != parseInt(strCPF.substring(10, 11))) return false;
-
-
-        return true;
+    function cancelar() {
+        xgFuncionarios.enable()
+        xgFuncionarios.clearElementSideBySide()
+        xgFuncionarios.focus();
+        $('.container .validate').prop("disabled", true)
     }
 
 })();

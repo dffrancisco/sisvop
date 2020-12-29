@@ -13,11 +13,10 @@
         </div>
 
 
-
         <div class="row">
             <div class="col s5">
                 <label>RG</label>
-                <input placeholder="" type="text" class="validate" id="edtRg" name="rg" disabled>
+                <input placeholder="" type="number" class="validate" id="edtRg" name="rg" disabled>
             </div>
             <div class="col s7">
                 <label>CPF</label>
@@ -51,11 +50,22 @@
         <div class="row">
             <div class="col s6">
                 <label>Cidade</label>
-                <input placeholder="" type="text" class="validate" id="edtCidade" name="cidade" disabled>
+                <select>
+                    <option value="" disabled selected>Cidade</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select>
             </div>
+            <!-- <div class="col s6">
+                <label>Cidade</label>
+                <input placeholder="" type="text" class="validate" id="edtCidade" name="cidade" disabled>
+            </div> -->
             <div class="col s6">
                 <label>Bairro</label>
-                <input placeholder="" type="text" class="validate" id="edtBairro" name="bairro" disabled>
+                <select id="slctBairro" name="id_bairro" class="validate">
+                </select>
+                <!-- <input placeholder="" type="text" class="validate" id="edtBairro" name="bairro" disabled> -->
             </div>
         </div>
     </div>
