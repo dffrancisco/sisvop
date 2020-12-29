@@ -16,19 +16,14 @@ const marca = (function () {
             height: '200',
             theme: 'x-clownV2',
             heightLine: '35',
-
             columns: {
-                Marca: {
-                    dataField: 'marca',
-                },
+                Marca: { dataField: 'marca' },
             },
-
             sideBySide: {
                 el: "#pnFields",
 
                 frame: {
                     el: "#pnButtons",
-
                     buttons: {
                         pesquisa: {
                             html: "Pesquisar",
@@ -70,26 +65,42 @@ const marca = (function () {
 
                 duplicity: {
                     dataField: ['marca'],
-
                     execute: (r) => {
                         let param = {}
-                        param.marca = r.value,
+                        param.marca = r.value
 
-                            axios.post(url, {
-                                call: 'findMarca',
-                                param: param
+                        // let rs = await axios.post(url, {
+                        //     call: 'findMarca',
+                        //     param: param
+                        // })
 
+                        // if (rs.data.length > 0) {
+                        //     xgMarca.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
+                        //     xgMarca.focusField(r.field);
+                        //     console.log(call);
+                        //     if (call != undefined)
+                        //         call('tem dup')
+                        // }
+                        // else
+                        //     if (call != undefined)
+                        //         call('nao dup')
+
+
+
+                        return axios.post(url, {
+                            call: 'findMarca',
+                            param: param
+                        })
+                            .then(rs => {
+                                if (rs.data[0]) {
+                                    xgMarca.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
+                                    xgMarca.focusField(r.field);
+                                    return false;
+                                }
                             })
-                                .then(rs => {
-                                    if (rs.data[0]) {
-                                        xgMarca.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
-                                        xgMarca.focusField(r.field);
-                                    }
-                                })
                     }
                 }
             },
-
             query: {
                 execute: (r) => {
                     getMarcas(r.param.search, r.offset);
@@ -158,8 +169,18 @@ const marca = (function () {
 
     const salvar = () => {
         let param = xgMarca.getElementSideBySideJson();
+
+
+        let rs = xgMarca.getDuplicityAll()
+
+        console.log(rs, 'resposta')
+
+
         // if (xgMarca.getDuplicityAll() == false)
         //     return false
+
+
+        return false;
 
         if (param.marca || param.marca.length > 0) {
 
@@ -197,12 +218,10 @@ const marca = (function () {
     function cancelar() {
         xgMarca.enable();
         xgMarca.focus();
-
     }
 
     return {
         grid: grid,
-
     };
 
 })();
