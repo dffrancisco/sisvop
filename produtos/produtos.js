@@ -56,7 +56,7 @@ const produto = (function () {
               html: "Pesquisar",
               class: "btnP btnPesq",
               click: searchConf,
-            },            
+            },
             novo: {
               html: "Novo",
               class: "btnP",
@@ -105,6 +105,7 @@ const produto = (function () {
                   if (rs.data[0]) {
                     xgProduto.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
                     xgProduto.focusField(r.field);
+                    return false
                   }
                 })
           }
@@ -153,10 +154,15 @@ const produto = (function () {
 
   }
 
-  function salvar() {
+  const salvar = async () =>{
     let param;
     param = xgProduto.getElementSideBySideJson()
     param.data_cadastro = $('#edtData').val()
+
+    let allDuplicty = await xgMarca.getDuplicityAll()
+
+    if (allDuplicty == false)
+      return false;
 
     let valCampos = {
       codigo: $('#editCodigo').val(),

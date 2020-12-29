@@ -7,12 +7,10 @@
 
         <div class="tabela margintop" id="pnFields">
         
-            <label>Marca</label>
+            <label>Marca</label><br>
             <input type="text" class="corInp" name="marca" id="editMarca">
     
         </div>
-
-    </div>
 
     <div id="pnGridMarca" class="list"></div>
 
