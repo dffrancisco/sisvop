@@ -69,24 +69,6 @@ const marca = (function () {
                         let param = {}
                         param.marca = r.value
 
-                        // let rs = await axios.post(url, {
-                        //     call: 'findMarca',
-                        //     param: param
-                        // })
-
-                        // if (rs.data.length > 0) {
-                        //     xgMarca.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
-                        //     xgMarca.focusField(r.field);
-                        //     console.log(call);
-                        //     if (call != undefined)
-                        //         call('tem dup')
-                        // }
-                        // else
-                        //     if (call != undefined)
-                        //         call('nao dup')
-
-
-
                         return axios.post(url, {
                             call: 'findMarca',
                             param: param
@@ -121,9 +103,9 @@ const marca = (function () {
                 xgMarca.focus();
                 $('.btnEdit').removeAttr("disabled")
                 $('.btnDel').removeAttr("disabled")
-                
 
-            }else {
+
+            } else {
                 $('.btnEdit').prop("disabled", true)
                 $('.btnDel').prop("disabled", true)
                 xgMarca.clearElementSideBySide()
@@ -160,7 +142,7 @@ const marca = (function () {
 
     function deletar() {
         let param;
-        
+
         if (xgMarca.dataSource().id_marca) {
             param = xgMarca.dataSource().id_marca;
 
@@ -182,20 +164,15 @@ const marca = (function () {
         }
     }
 
-    const salvar = () => {
+    const salvar = async () => {
         let param = xgMarca.getElementSideBySideJson();
 
 
-        let rs = xgMarca.getDuplicityAll()
+        let allDuplicty = await xgMarca.getDuplicityAll()
 
-        console.log(rs, 'resposta')
+        if (allDuplicty == false)
+            return false;
 
-
-        // if (xgMarca.getDuplicityAll() == false)
-        //     return false
-
-
-        return false;
 
         if (param.marca || param.marca.length > 0) {
 
@@ -235,7 +212,7 @@ const marca = (function () {
     function cancelar() {
         $('.btnPesq').removeAttr("disabled")
         $('#edtPesquisa').removeAttr("disabled")
-         
+
         xgMarca.enable();
         xgMarca.focus();
     }
