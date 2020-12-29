@@ -13,14 +13,6 @@ class SqlFuncionarios
 
   function getFuncionarios($param)
   {
-  
-    // $sql = 'select f.id_funcionario, f.nome, ' . 
-    // 'f.telefone, f.cpf, f.rg, f.cep, f.endereco, ' . 
-    // 'f.cidade, f.uf ,b.bairro from funcionarios as f INNER JOIN bairro as b ' . 
-    // 'on f.id_bairro = b.id_bairro ' .
-    //   "where nome like '" . $param['search'] . "%'" .
-    //   'limit ' . $param['offset'] . ', 10';
-
       extract($param);
       
       $sql = "select a.id_funcionario, a.nome, a.telefone, a.cpf, a.rg, 
@@ -58,16 +50,8 @@ class SqlFuncionarios
     $sql = 'INSERT INTO funcionarios' .
       '(nome, telefone, cpf, rg, cep, endereco, cidade, uf, id_bairro )' .
       'VALUES' .
-<<<<<<< HEAD
-<<<<<<< HEAD
-      "('" . $nome . "', '" . $telefone . "', '" . $cpf . "', '" . $rg . "', '" . $cep . "', '" . $endereco . "', '" . $cidade . "', '" . $uf . "', '" . $bairro . "')";
 
-=======
       "('" . $nome . "', '" . $telefone . "', '" . $cpf . "', '" . $rg . "', '" . $cep . "', '" . $endereco . "', '" . $cidade . "', '" . $uf . "', '" . $id_bairro . "')";
->>>>>>> 92d124814698c690bce31d35389b2771ffef2ab4
-=======
-      "('" . $nome . "', '" . $telefone . "', '" . $cpf . "', '" . $rg . "', '" . $cep . "', '" . $endereco . "', '" . $cidade . "', '" . $uf . "', '" . $id_bairro . "')";
->>>>>>> e9e71a487664bdc331fa338f3d36d603236ed6b6
 
     $this->db->exec($sql);
     return $this->db->lastInsertId();
