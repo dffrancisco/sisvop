@@ -14,12 +14,6 @@ class SqlFuncionarios
   function getFuncionarios($param)
   {
   
-    // $sql = 'select f.id_funcionario, f.nome, ' . 
-    // 'f.telefone, f.cpf, f.rg, f.cep, f.endereco, ' . 
-    // 'f.cidade, f.uf ,b.bairro from funcionarios as f INNER JOIN bairro as b ' . 
-    // 'on f.id_bairro = b.id_bairro ' .
-    //   "where nome like '" . $param['search'] . "%'" .
-    //   'limit ' . $param['offset'] . ', 10';
 
       extract($param);
       

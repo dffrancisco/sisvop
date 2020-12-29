@@ -256,6 +256,7 @@ const funcionario = (function () {
 
         })
             .then(r => {
+                console.log(r)
                 if (r.data.id_funcionario) {
                     param.id_funcionario = r.data.id_funcionario
                     xgFuncionarios.insertLine(param)

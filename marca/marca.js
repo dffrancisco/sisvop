@@ -185,6 +185,8 @@ const marca = (function () {
     const salvar = () => {
         let param = xgMarca.getElementSideBySideJson();
 
+        // if (xgMarca.getDuplicityAll() == false){
+
 
         let rs = xgMarca.getDuplicityAll()
 
@@ -192,12 +194,25 @@ const marca = (function () {
 
 
         // if (xgMarca.getDuplicityAll() == false)
+
         //     return false
+        // }
 
 
         return false;
 
         if (param.marca || param.marca.length > 0) {
+
+            let valCampos = {
+                nome: $('#edtMarca').val(),
+            }
+    
+            for (let i in valCampos) {
+                if (valCampos == '') {
+                    show('Por favor preencha todos os campos')
+                    return false
+                }
+            }
 
             if (controleGrid == 'edit')
                 param.id_marca = xgMarca.dataSource().id_marca;
