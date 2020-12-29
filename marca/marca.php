@@ -4,10 +4,13 @@
 
 <div class="container">
 
-    <div class="tabela margintop" id="pnFields">
 
-        <label>Marca</label><br>
-        <input type="text" class="corInp" name="marca" id="editMarca">
+        <div class="tabela margintop" id="pnFields">
+        
+            <label>Marca</label>
+            <input type="text" class="corInp" name="marca" id="editMarca">
+    
+        </div>
 
     </div>
 
