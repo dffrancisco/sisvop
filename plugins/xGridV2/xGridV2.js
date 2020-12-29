@@ -1144,6 +1144,7 @@ let xGridV2 = (function () {
                 setTimeout(() => this.messageDuplicity.remove(), 5000)
                 document.body.appendChild(this.messageDuplicity)
             },
+            
             getDuplicityAll() {
                 return new Promise(async (res, rej) => {
                     for (let i in this.arg.sideBySide.duplicity.dataField) {
