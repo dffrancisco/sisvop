@@ -4,6 +4,7 @@
 
 <div class="container">
 
+
         <div class="tabela margintop" id="pnFields">
         
             <label>Marca</label>
@@ -11,17 +12,16 @@
     
         </div>
 
-        <div id="pnGridMarca" class="list"></div>
-
-    <div></div>
-    <div id="pnButtons" class="right-align row">
-    
-        <div class="col s4">
-        <input type="text" class="corInp margintop" placeholder="Pesquisar" id="edtPesquisa" >
-        </div>
     </div>
-    
+
+    <div id="pnGridMarca" class="list"></div>
+
+    <div class="row">
+        <div class="col s3">
+            <input type="text" class="margintop" placeholder="Pesquisar" id="edtPesquisa">
+        </div>
+        <div id="pnButtons" class="right-align col s9"></div>
+    </div>
 
     <div id="pnCodigoTela">Marca</div>
 </div>
-
