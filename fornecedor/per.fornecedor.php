@@ -44,9 +44,9 @@ class Fornecedor {
         $call = $this->sql->deletarFornecedor($param);
     }
 
-    function getCgc($param){
-        $cgc = $this->sql->getCgc($param);
-        echo json_encode($cgc);
+    function getCnpj($param){
+        $cnpj = $this->sql->getCnpj($param);
+        echo json_encode($cnpj);
     }
 
 }

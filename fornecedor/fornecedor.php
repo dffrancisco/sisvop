@@ -7,13 +7,13 @@
     <div class="tabela margintop" id="pnFields">
         <div class="row">
             <div class="col s3">
-                <label>CGC</label>
-                <input type="text" id="editCgc" , name="cgc">
+                <label>CNPJ</label>
+                <input type="text" id="editCnpj" name="cnpj" class="CNPJ">
             </div>
 
             <div class="col s9">
                 <label>Razão Social</label>
-                <input type="text" id="editRazaoSocial" , name="razao_social">
+                <input type="text" id="editRazaoSocial" name="razao_social">
             </div>
         </div>
 
@@ -48,7 +48,7 @@
             </div>
             <div class="col s2">
                 <label>CEP</label>
-                <input type="text" id="editCep" name="cep">
+                <input type="text" id="editCep" name="cep" class="CEP">
             </div>
         </div>
 
@@ -62,16 +62,14 @@
                 <label>Telefone 2</label>
                 <input type="text" id="editTel2" name="telefone_2" class="TELEFONE">
             </div>
-            <div class="col s3">
+            <!-- <div class="col s3">
                 <label>FAX</label>
                 <input type="text" id="editFax" name="fax" class="TELEFONE">
-            </div>
+            </div> -->
             <div class="col s3">
                 <label>Inscrição Estadual</label>
                 <input type="text" id="editInscricaoEstadual" name="inscricao_estadual">
             </div>
-        </div>
-        <div class="row">
             <div class="col s3">
                 <label>Data de Cadastro</label>
                 <input type="text" id="editDataCadastro" name="data_cadastro" disabled>
