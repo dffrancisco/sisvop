@@ -211,17 +211,18 @@ const funcionario = (function () {
 
     }
 
-    function salvar() {
-
+    const salvar = async () => {
 
         let param = xgFuncionarios.getElementSideBySideJson()
+
         param.bairro = $('#slctBairro option:selected').text()
 
-        // xgFuncionarios.getDuplicityAll()
 
-        // if (xgFuncionarios.getDuplicityAll() == false) {
-        //     return false        
-        // }
+
+        let allDuplicty = await xgMarca.getDuplicityAll()
+
+        if (allDuplicty == false)
+            return false;
 
         let valCampos = {
             nome: $('#edtNome').val(),
