@@ -76,6 +76,7 @@ if (!empty($_GET['p'])) {
 
             <a href="?p=produtos/produtos"><li><i class="fa fa-address-book"></i>Produto</li></a>
             <a href="?p=fornecedor/fornecedor"><li><i class="fa fa-address-book"></i>Fornecedor</li></a>
+            <a href="?p=saida/saida"><li><i class="fa fa-address-book"></i>Saída</li></a>
             <a href="?p=marca/marca"><li><i class="fa fa-address-book"></i>Marcas</li></a>
             <a href="?p=cargo/cargo"><li><i class="fa fa-address-book"></i>Cargo</li></a>
             <a href="?p=empresa/empresa"><li><i class="fa fa-building"></i>Empresas</li></a>

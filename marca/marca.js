@@ -19,6 +19,9 @@ const marca = (function () {
             columns: {
                 Marca: { dataField: 'marca' },
             },
+            onSelectLine:(r)=>{
+               console.log(r)
+            },
             sideBySide: {
                 el: "#pnFields",
 
