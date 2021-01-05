@@ -13,8 +13,6 @@ class SqlFuncionarios
 
   function getFuncionarios($param)
   {
-  
-
       extract($param);
       
       $sql = "select a.id_funcionario, a.nome, a.telefone, a.cpf, a.rg, 

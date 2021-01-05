@@ -18,7 +18,7 @@ class SqlProdutos
             a.id_marca, a.data_cadastro, a.endereco, b.marca, b.id_marca 
             from produtos a, marca b
             where b.id_marca = a.id_marca
-            and a.descricao like '$search%'
+            and a.descricao like '$search%' 
             ORDER BY qtd asc limit $offset, 10";
 
      
@@ -31,7 +31,7 @@ class SqlProdutos
   {
     extract($param);
     $sql = "INSERT INTO produtos (qtd, descricao, valor, codigo, id_marca, data_cadastro, endereco)
-    VALUES('$qtd', '$descricao', '$valor', '$codigo', '$id_marca', strftime('%d/%m/%Y'), '$endereco')";
+    VALUES('$qtd', '$descricao', '$valor', '$codigo', '$id_marca', '$data_cadastro', '$endereco')";
 
 
     $this->db->exec($sql);
