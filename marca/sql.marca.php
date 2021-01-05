@@ -16,6 +16,7 @@ class SqlMarca
             'ORDER BY marca ASC '.
             'limit ' . $param['offset'] . ', 10 ';
 
+    
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(); 

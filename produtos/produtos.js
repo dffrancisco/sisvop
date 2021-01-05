@@ -36,8 +36,6 @@ const produto = (function () {
           width: "15%",
           center: true,
         },
-        // 'Marca': { dataField: 'marca', width: '17%', class: 'fontGrid' },
-        // 'Departamento': { dataField: 'departamento', class: 'fontGrid' },
         Valor: {
           dataField: "valor",
           render: addReal,
@@ -110,7 +108,6 @@ const produto = (function () {
           }
         },
       },
-
 
       query: {
         execute: (r) => {
