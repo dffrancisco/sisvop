@@ -74,13 +74,13 @@ if (!empty($_GET['p'])) {
 
         <div class="pnMenu">
 
-            <a href="?p=produtos/produtos"><li><i class="fa fa-address-book"></i>Produto</li></a>
-            <a href="?p=marca/marca"><li><i class="fa fa-address-book"></i>Marcas</li></a>
+            <a href="?p=produtos/produtos"><li><i class="fa fa-product-hunt"></i>Produtos</li></a>
+            <a href="?p=marca/marca"><li><i class="fa fa-copyright"></i>Marcas</li></a>
             <a href="?p=clientes/clientes"><li><i class="fa fa-address-book"></i>Clientes</li></a>
 
-            <a href="?p=empresa/empresa"><li><i class="fa fa-building"></i>Empresas</li></a>
+            <a href="?p=empresa/empresa"><li><i class="fa fa-building"></i>Empresa</li></a>
             <a href="?p=funcionarios/funcionarios"><li><i class="fa fa-user-circle-o"></i>Funcionários</li></a>
-            <a href="?p=entrada/entrada"><li><i class="fa fa-user-circle-o"></i>Entrada de notas</li></a>
+            <a href="?p=entrada/entrada"><li><i class="fa fa-shopping-cart"></i>Entrada de notas</li></a>
             
             <hr/>
             <li>Sair</li>
