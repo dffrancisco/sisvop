@@ -96,9 +96,7 @@ const funcionario = (function () {
 
                                 if (r.field == 'cpf') {
                                     let validCpf = $('#edtCpf').val()
-                                    validCpf = validCpf.replace('.', '');
-                                    validCpf = validCpf.replace('.', '');
-                                    let cpf = validCpf.replace('-', '');
+                                    let cpf = validCpf.replace(/[^\d]+/g,'');
                                     let Soma;
                                     let Resto;
                                     Soma = 0;
@@ -238,7 +236,7 @@ const funcionario = (function () {
             bairro: $('#slctBairro').val(),
         }
         for (let i in valCampos) {
-            if (valCampos[i] == '') {
+            if (valCampos[i] == '' || valCampos.uf == null) {
                 show('Por favor preencha todos os campos')
                 return false
             }

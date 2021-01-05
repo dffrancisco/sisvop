@@ -50,7 +50,6 @@ class SqlFuncionarios
     $sql = 'INSERT INTO funcionarios' .
       '(nome, telefone, cpf, rg, cep, endereco, cidade, uf, id_bairro )' .
       'VALUES' .
-
       "('" . $nome . "', '" . $telefone . "', '" . $cpf . "', '" . $rg . "', '" . $cep . "', '" . $endereco . "', '" . $cidade . "', '" . $uf . "', '" . $id_bairro . "')";
 
     $this->db->exec($sql);

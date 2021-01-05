@@ -99,17 +99,8 @@ const marca = (function () {
         }).then(rs => {
             xgMarca.querySourceAdd(rs.data);
 
-            if (rs.data[0]) {
+            if (rs.data[0])
                 xgMarca.focus();
-                $('.btnEdit').removeAttr("disabled")
-                $('.btnDel').removeAttr("disabled")
-
-
-            } else {
-                $('.btnEdit').prop("disabled", true)
-                $('.btnDel').prop("disabled", true)
-                xgMarca.clearElementSideBySide()
-            }
         });
     }
 
@@ -121,22 +112,21 @@ const marca = (function () {
 
     function novo() {
         controleGrid = "new"
-        $('.btnEdit').removeAttr("disabled")
-        $('.btnDel').removeAttr("disabled")
-        $('#edtPesquisa').prop("disabled", true)
-        $('.btnPesq').prop("disabled", true)
-
         xgMarca.clearElementSideBySide()
         xgMarca.focusField()
         xgMarca.disable()
+
+        // $('#edtPesquisa').prop('disabled', true);
+        $('.btnPesq').prop('disabled', true);
     }
 
     function edit() {
         controleGrid = "edit"
-        $('.btnDel').removeAttr("disabled")
-        $('#edtPesquisa').prop("disabled", true)
-        $('.btnPesq').prop("disabled", true)
+        xgMarca.disable()
         xgMarca.focusField()
+
+        // $('#edtPesquisa').prop('disabled', true);
+        $('.btnPesq').prop('disabled', true);
 
     }
 
@@ -166,10 +156,9 @@ const marca = (function () {
 
     const salvar = async () => {
         let param = xgMarca.getElementSideBySideJson();
-
         let allDuplicty = await xgMarca.getDuplicityAll()
 
-          if (allDuplicty == false)
+        if (allDuplicty == false)
             return false;
 
 
@@ -197,34 +186,27 @@ const marca = (function () {
                 param: param
 
             }).then(rs => {
-
-                $('.btnEdit').removeAttr("disabled")
-
                 if (rs.data.id_marca) {
                     param.id_marca = rs.data.id_marca;
                     xgMarca.insertLine(param);
-                    cancelar()
 
                 } else {
                     xgMarca.dataSource(param);
-                    cancelar()
-
                 }
+                cancelar()
             });
         } else {
             xgMarca.showMessageDuplicity('O campo está com valor duplicado ou vazio!')
-            xgMarca.enable();
-            xgMarca.focus();
-
+            console.log('as')
         }
     }
 
     function cancelar() {
-        $('.btnPesq').removeAttr("disabled")
-        $('#edtPesquisa').removeAttr("disabled")
-
         xgMarca.enable();
         xgMarca.focus();
+
+        $('#edtPesquisa').removeAttr('disabled');
+        $('.btnPesq').removeAttr('disabled');
     }
 
     return {
