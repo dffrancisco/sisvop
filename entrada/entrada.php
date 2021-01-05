@@ -27,9 +27,13 @@
             </div>
         </div>
 
-    </div>
 
-    <div id="xgEntrada"></div>
+    </div>
+    <div id="btnFornecedor" class="right-align"></div>
+
+
+    <div id="xgItens" class="list"></div>
+
 </div>
 
 <div id="pnCodigoTela">entrada</div>

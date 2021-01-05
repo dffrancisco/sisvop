@@ -1,32 +1,62 @@
-$.ajaxSetup({
-    url: 'entrada/per.entrada.php',
-    data: {
-        
-    }
-});
-
+let xgItens
 $(function () {
-
+    itens.grid()
 });
 
 
-var exemplo = (function () {
+const itens = (function () {
 
-    function getExemplo() {
-        $.ajax({
-            data: {
-                call: 'exemplo',
-                param: {
-                    id_empresa: 808
+    let url = 'entrada/per.entrada.php'
+    let controleGrid;
+
+    function grid() {
+        xgItens = new xGridV2.create({
+            el: "#xgItens",
+            height: 210,
+            heightLine: 35,
+            theme: "x-clownV2",
+
+            columns: {
+                CNPJ: {
+                    dataField: "cnpj",
+                    center: true,
+                    width: "30%",
+                },
+                Fornecedor: {
+                    dataField: "fornecedor",
+                    width: "50%",
+                },
+                Data: {
+                    dataField: "data",
+                    width: "20%",
                 }
             },
-            success: function (r) {
-                console.log(r);
-            }
-        });
+            sideBySide: {
+                el: "#pnFields",
+
+                frame: {
+                    el: "#btnFornecedor",
+                    buttons: {
+                        novo: {
+                            html: "Novo",
+                            class: "btnP",
+                        },
+
+                    }
+                },
+            },
+            query: {
+                execute: (r) => {
+                    getItens(r.param.search, r.offset)
+
+                },
+            },
+        })
     }
 
+
+
     return {
-        getExemplo: getExemplo
+        grid: grid
     }
 })();
