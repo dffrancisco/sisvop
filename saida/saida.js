@@ -1,22 +1,52 @@
+
+
 let xgSaida;
 let xgItem;
-let xmjanelaSaida;
 let xgCliente;
+let xgProduto;
+let xgCarrinho;
+
+
+let xmListaCliente;
+let xmCadServico;
+
 
 $(function () {
 
-    saida.modal();
-    xmjanelaSaida.open()
+    saida.modalCliente();
+    saida.modalCadServico();
+    saida.grid();
 
     clientes.grid();
-    xgCliente.queryOpen({ search: '' });
 
-    saida.grid();
     itens.grid();
+
+    produtos.grid();
+
+    carrinho.grid();
     
+    xmCadServico.open()
+
+    xgCliente.queryOpen({ search: '' });
+    xgProduto.queryOpen({ search: '' });
+
+    $("#xmEdtCliente").keydown(function (e) {
+
+        if (e.keyCode == 13) {
+            search = $(this).val().trim()
+            xgCliente.queryOpen({ search: search })
+        }
+    })
+
+    $("#xmEdtProduto").keydown(function (e) {
+
+        if (e.keyCode == 13) {
+            search = $(this).val().trim()
+            xgProduto.queryOpen({ search: search })
+        }
+    })
+
 });
-
-
 
 
 const saida = (function () {
@@ -34,10 +64,11 @@ const saida = (function () {
             heightLine: '35',
 
             columns: {
-                'Nº Serviço': { dataField: 'nome' },
-                Cliente: { dataField: 'representante' },
+                'Nº Serviço': { dataField: 'id_lista_servico' },
+                Data: { dataField: 'data' },
+                Hora: { dataField: 'hora' },
+                Status: { dataField: 'status' },
                 Valor: { dataField: 'valor' },
-                Data: { dataField: 'data' }
             },
             onSelectLine: (r) => {
 
@@ -49,24 +80,29 @@ const saida = (function () {
                 frame: {
                     el: '#pnButtons',
                     buttons: {
+                        Buscar: {
+                            html: 'Buscar',
+                            class: 'btnP btnUp btnPesq',
+                            click: buscar,
+                        },
+
                         novo: {
-                            html: 'Novo',
-                            class: 'btnP btnUp',
-                            state: xGridV2.state.insert,
+                            html: "Novo",
+                            class: "btnP",
                             click: novo,
                         },
-                        // edit: {
-                        //     html: 'Editar',
-                        //     class: 'btnP',
-                        //     state: xGridV2.state.update,
-                        //     click: editar,
-                        // },
-                        // deletar: {
-                        //     html: 'Deletar',
-                        //     class: 'btnP btnDel',
-                        //     state: xGridV2.state.delete,
-                        //     click: deletar,
-                        // },
+                        edit: {
+                            html: 'Editar',
+                            class: 'btnP',
+                            state: xGridV2.state.update,
+                            click: editar,
+                        },
+                        deletar: {
+                            html: 'Deletar',
+                            class: 'btnP btnDel',
+                            state: xGridV2.state.delete,
+                            click: deletar,
+                        },
                         // save: {
                         //     html: 'Salvar',
                         //     class: 'btnP',
@@ -83,47 +119,60 @@ const saida = (function () {
                 },
             },
 
-            query: {
-                execute: (r) => {
-                    getListaServicos(r.param.search, r.param.offset);
-                }
-            }
+            // query: {
+            //     execute: (r) => {
+            //         getListaServicos(r.param.search, r.param.offset);
+            //     }
+            // }
         })
     }
 
-    function getListaServicos(search, offset) {
-        axios.post(url, {
-            call: 'getListaServicos',
-            param: { search: search, offset: offset },
-        })
-            .then(rs => {
-                xgSaida.querySourceAdd(rs.data);
-                if (rs.data[0]) xgSaida.focus();
-            })
-    }
+    // function getListaServicos(search, offset) {
+    //     axios.post(url, {
+    //         call: 'getListaServicos',
+    //         param: { search: search, offset: offset },
+    //     })
+    //         .then(rs => {
+    //             xgSaida.querySourceAdd(rs.data);
+    //             if (rs.data[0]) xgSaida.focus();
+    //         })
+    // }
+
 
     function novo() {
-        xmjanelaSaida.open()
+        xmCadServico.open();
+        xgProduto.focus
     }
+
+    function buscar() {
+        xmListaCliente.open();
+        xgCliente.focus();
+    }
+
 
     function editar() { }
 
     function deletar() { }
 
-    function salvar() { }
-
-    function cancelar() { }
-
-    function modal() {
-        xmjanelaSaida = new xModal.create({
-            el: '#janelaSaida'
+    function modalCliente() {
+        xmListaCliente = new xModal.create({
+            el: '#xmListaCliente',
+            title: 'Clientes',
         })
+    }
 
+    function modalCadServico() {
+        xmCadServico = new xModal.create({
+            el: '#xmCadServico',
+            title: 'Cadatrar Serviço',
+            height: 1000,
+        })
     }
 
     return {
         grid: grid,
-        modal: modal
+        modalCliente: modalCliente,
+        modalCadServico: modalCadServico,
     }
 })();
 
@@ -137,64 +186,44 @@ const clientes = (function () {
         xgCliente = new xGridV2.create({
 
             el: '#pnGridCliente',
-            height: '150',
+            height: '300',
             theme: 'x-clownV2',
             heightLine: '35',
 
             columns: {
-                Cliente: { dataField: 'representante' },
+                Representante: { dataField: 'representante' },
+                CNPJ: { dataField: 'cnpj', center: true },
+                UF: { dataField: 'uf', center: true },
+                Cidade: { dataField: 'Cidade' },
             },
 
-            
+
             onKeyDown: {
-                '13': (ln,e) => {
-                    pesquisar();
-                    console.log(ln.id_cliente)
-                    xmjanelaSaida.close()
+                '13': (ln, e) => {
+                    cliente = ln
+                    
+                    $("#spRazao_social").html(cliente.razao);
+                    $("#spCnpj").html(cliente.cnpj);
+                    $("#spRepresentante").html(cliente.representante);
+                    $("#spCidade").html(cliente.cidade);
+                    $("#spUf").html(cliente.uf);
+                    $("#spBairro").html(cliente.Bairro);
+                    $("#spCep").html(cliente.cep);
+
+                    xmListaCliente.close()
+
+                    axios.post(url, {
+                        call: 'getListaServicos',
+                        param: cliente.id_cliente,
+                    }).then(rs => {
+                        xgSaida.querySourceAdd(rs.data);
+                        if (rs.data[0]) xgSaida.focus();
+                    })
                 },
             },
-            
 
             sideBySide: {
                 el: '#pnFieldCliente',
-
-                frame: {
-
-                    enter: {pesquisar},
-                    // el: '#pnButtonsItens',
-                    // buttons: {
-                    //     novo: {
-                    //         html: 'Novo',
-                    //         class: 'btnP',
-                    //         state: xGridV2.state.insert,
-                    //         click: novo,
-                    //     },
-                    //     edit: {
-                    //         html: 'Editar',
-                    //         class: 'btnP',
-                    //         state: xGridV2.state.update,
-                    //         click: editar,
-                    //     },
-                    //     deletar: {
-                    //         html: 'Deletar',
-                    //         class: 'btnP btnDel',
-                    //         state: xGridV2.state.delete,
-                    //         click: deletar,
-                    //     },
-                    //     save: {
-                    //         html: 'Salvar',
-                    //         class: 'btnP',
-                    //         state: xGridV2.state.save,
-                    //         click: salvar,
-                    //     },
-                    //     cancelar: {
-                    //         html: 'Cancelar',
-                    //         class: 'btnP',
-                    //         state: xGridV2.state.cancel,
-                    //         click: cancelar,
-                    //     },
-                    // }
-                },
             },
 
             query: {
@@ -216,24 +245,8 @@ const clientes = (function () {
             })
     }
 
-    function pesquisar(){
-
-console.log('entrou')
-    }
-
-
-    function novo() { }
-
-    function editar() { }
-
-    function deletar() { }
-
-    function salvar() { }
-
-    function cancelar() { }
-
     return {
-        grid: grid
+        grid: grid,
     }
 })();
 
@@ -252,7 +265,7 @@ const itens = (function () {
             heightLine: '35',
 
             columns: {
-                Item: { dataField: 'descricao' },
+                Produto: { dataField: 'descricao' },
                 Marca: { dataField: 'marca' },
                 QTD: { dataField: 'qtd' },
             },
@@ -331,6 +344,103 @@ const itens = (function () {
     }
 })();
 
+const produtos = (function () {
 
+    let url = 'saida/per.saida.php';
+    let ControleGrid;
 
+    function grid() {
 
+        xgProduto = new xGridV2.create({
+
+            el: '#xmPnGridProduto',
+            height: '200',
+            theme: 'x-clownV2',
+            heightLine: '35',
+
+            columns: {
+                Codigo:{dataField: 'codigo'},
+                Produto: { dataField: 'descricao' },
+                Marca: { dataField: 'marca' },
+                QTD: { dataField: 'qtd' },
+            },
+            
+            sideBySide: {
+                el: '#xmEdtProduto',
+            },
+
+            
+            onKeyDown: {
+                '13': (ln, e) => {
+                   console.log(ln.id_produto)
+                   axios.post(url,{
+                       call:'',
+                       param: ln.id_produto,
+                   })
+                },
+            },
+            query: {
+                execute: (r) => {
+                    getProdutos(r.param.search, r.offset);
+                }
+            },
+        })
+    }
+
+    function getProdutos(search, offset) {
+        axios.post(url, {
+            call: 'getProdutos',
+            param: { search: search, offset: offset },
+        })
+            .then(rs => {
+                xgProduto.querySourceAdd(rs.data);
+                if (rs.data[0]) xgProduto.focus();
+            })
+    }
+
+    return {
+        grid: grid
+    }
+})();
+
+const carrinho = (function () {
+
+    let url = 'saida/per.saida.php';
+    let ControleGrid;
+
+    function grid() {
+
+        xgCarrinho = new xGridV2.create({
+
+            el: '#xmPnGridCarrinho',
+            height: '200',
+            theme: 'x-clownV2',
+            heightLine: '35',
+
+            columns: {
+                Codigo:{dataField: 'codigo'},
+                Produto: { dataField: 'descricao' },
+                Marca: { dataField: 'marca' },
+                QTD: { dataField: 'qtd' },
+            },
+            
+            // sideBySide: {
+            //     el: '#xmEdtProduto',
+            // },
+
+            query: {
+                execute: (r) => {
+                    getProdutos(r.param.search, r.offset);
+                }
+            },
+        })
+    }
+
+    function getProdutos(search, offset) {
+        
+    }
+
+    return {
+        grid: grid
+    }
+})();

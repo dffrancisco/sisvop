@@ -138,7 +138,7 @@ const fornecedor = (function () {
     }
 
     function pesquisar() {
-        let search = $('#editPesquisa').val().trim();
+        let search = $('#edtPesquisa').val().trim();
         xgFornecedor.queryOpen({ search });
         xgFornecedor.focus();
     }
@@ -160,11 +160,11 @@ const fornecedor = (function () {
         let date = new Date().toLocaleDateString('pt-BR');
 
         //Insere no campo de data identificado pelo ID
-        $('#editDataCadastro').val(date);
+        $('#edtDataCadastro').val(date);
 
         //Desabilita o campo de digitar palavras para pesquisar
         //Identificado pelo ID
-        $('#editPesquisa').prop("disabled", true)
+        $('#edtPesquisa').prop("disabled", true)
     }
 
     function editar() {
@@ -173,7 +173,7 @@ const fornecedor = (function () {
 
         //Desabilita o campo de digitar palavras para pesquisar
         //Identificado pelo ID
-        $('#editPesquisa').prop("disabled", true)
+        $('#edtPesquisa').prop("disabled", true)
 
         //Desabilita o botão de pesquisa identificado pelo ID
         $('.btnPesq').prop("disabled", true)
@@ -205,7 +205,7 @@ const fornecedor = (function () {
         let param = xgFornecedor.getElementSideBySideJson();
         //Cria um atributo de data e capta o valor do input
         //identificado pelo ID
-        param.data_cadastro = $('#editDataCadastro').val();
+        param.data_cadastro = $('#edtDataCadastro').val();
 
         let allDuplicty = await xgFornecedor.getDuplicityAll();
 
@@ -223,19 +223,19 @@ const fornecedor = (function () {
         // CheckIE(param.inscricao_estadual)
 
         let valCampos = {
-            cnpj: $('#editCnpj').val(),
-            razao_social: $('#editRazaoSocial').val(),
-            nome_fantazia: $('#editFantazia').val(),
-            endereco: $('#editEndereco').val(),
-            cidade: $('#editCidade').val(),
-            bairro: $('#editBairro').val(),
+            cnpj: $('#edtCnpj').val(),
+            razao_social: $('#edtRazaoSocial').val(),
+            nome_fantazia: $('#edtFantazia').val(),
+            endereco: $('#edtEndereco').val(),
+            cidade: $('#edtCidade').val(),
+            bairro: $('#edtBairro').val(),
             id_uf: $('#slctUf').val(),
-            municipio: $('#editMunicipio').val(),
-            cep: $('#editCep').val(),
-            telefone_1: $('#editTel1').val(),
-            telefone_2: $('#editTel2').val(),
-            inscricao_estadual: $('#editInscricaoEstadual').val(),
-            data_cadastro: $('#editDataCadastro').val(),
+            municipio: $('#edtMunicipio').val(),
+            cep: $('#edtCep').val(),
+            telefone_1: $('#edtTel1').val(),
+            telefone_2: $('#edtTel2').val(),
+            inscricao_estadual: $('#edtInscricaoEstadual').val(),
+            data_cadastro: $('#edtDataCadastro').val(),
 
         }
 
@@ -283,7 +283,7 @@ const fornecedor = (function () {
     function cancelar() {
         //Retira o atributo de disabled do input
         //Identficado pelo ID
-        $('#editPesquisa').removeAttr('disabled');
+        $('#edtPesquisa').removeAttr('disabled');
 
         //Retira o atributo de disabled do input
         //Identficado pelo ID
