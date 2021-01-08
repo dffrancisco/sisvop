@@ -35,6 +35,22 @@ class Saida {
         echo json_encode($call);
     }
 
+    function gerarServico($param){
+        $call = $this->sql->gerarServico($param);
+        echo json_encode($call);
+
+    }
+
+    function inserirItens($param){
+        $call = $this->sql->inserirItens($param);
+        echo json_encode($call);
+    }
+
+    function getItens($param){
+        $call = $this->sql->getItens($param);
+        echo json_encode($call);
+    }
+
 }
 
 $class = new Saida();

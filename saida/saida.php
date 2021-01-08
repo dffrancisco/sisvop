@@ -8,6 +8,7 @@
 
         <div class="row">
             <div class="col s4">
+            <span id="spId_cliente" hidden></span>
                 <label>Razão Social</label><br>
                 <span id="spRazao_social" class="spanAutoPreenc">Razão Social<span>
             </div>
@@ -69,6 +70,7 @@
 
 </div>
 
+<!-- xModal da Lista de Clientes -->
 <div id="xmListaCliente">
     <div class="row">
         <div class="col s4" id="pnFieldCliente">
@@ -76,9 +78,11 @@
                 <input type="text" id="xmEdtCliente">
         </div>
     </div>
+    <!-- xGrid de Cliente -->
     <div id="pnGridCliente"></div>
 </div>
 
+<!-- xModal para cadastrar um novo serviço -->
 <div id="xmCadServico">
     <div class="row">
         <div class="col s4" id="pnFieldProduto">
@@ -86,9 +90,49 @@
                 <input type="text" id="xmEdtProduto">
         </div>
     </div>
+    <!-- xGrid dos Produtos -->
     <div id="xmPnGridProduto"></div><br>
+
+    <!-- xGrid do Carrinho -->
     <label>Carrinho</label>
     <div id="xmPnGridCarrinho"></div>
+</div>
+
+<!-- xModal editar a quantidade do produto -->
+<div id="xmQtd">
+    <div class="row">
+        <div class="col s10" id="pnFieldEdtQtd">
+        
+        <input type="hidden" id="xmEdtId" disabled>
+        
+        <input type="hidden" id="xmEdtValor" disable>
+            
+            <lable>Código</label>
+                <input type="text" id="xmEdtCodigo" disabled>
+
+            <lable>Produto</label>
+                <input type="text" id="xmEdtProd" disabled>
+
+            <lable>Marca</label>
+                <input type="text" id="xmEdtMarca" disabled>
+
+            <lable>QTD</label>
+                <input type="number" id="xmEdtQtd">
+        </div>
+    </div>
+    <div id="xmQtdBtn"></div>
+</div>
+
+<!-- xModal para ver os itens do serviço -->
+<div id="xmItens">
+    <div class="row">
+        <div class="col s4" id="pnFieldItens">
+            <lable>Buscar Produto</label>
+            <input type="text" id="xmEdtItens">
+        </div>
+    </div>
+    <!-- xGrid dos Itens -->
+    <div id="xmPnGridItens"></div><br>
 </div>
 
 <div id="pnCodigoTela">Saída</div>

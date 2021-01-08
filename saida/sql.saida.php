@@ -10,18 +10,6 @@ class SqlSaida
     $this->db = new PDO('sqlite:/var/www/html/Estoque.sqlite');
   }
 
-
-  function exemplo()
-  {
-    $sql = 'select * from produtos';
-
-    $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(); 
-
-  }
-
-
   function getCliente($param){
     extract($param);
     $sql = "SELECT a.*, b.*
@@ -41,7 +29,8 @@ class SqlSaida
 
     $sql = "SELECT * 
             FROM lista_servicos
-            WHERE id_cliente == $param";
+            WHERE id_cliente == $param
+            LIMIT 10";
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
@@ -56,17 +45,56 @@ class SqlSaida
             WHERE a.id_marca = b.id_marca 
             AND descricao LIKE '$search%'
             LIMIT $offset, 10";
-
-    // $sql = "select a.id_produto, a.qtd, a.descricao, a.valor, a.codigo, 
-    //         a.id_marca, a.data_cadastro, a.endereco, b.marca, b.id_marca 
-    //         from produtos a, marca b
-    //         where b.id_marca = a.id_marca
-    //         and a.descricao like '$search%' 
-    //         ORDER BY qtd asc limit $offset, 10";
-
      
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll();
   }
+
+  function getProduto($param)
+  {
+    extract($param);
+    $sql = "SELECT a.*, b.* 
+            FROM produtos a, marca b
+            WHERE a.id_marca = b.id_marca 
+            AND id_produto LIKE '$search%'
+            LIMIT $offset, 1";
+     
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll();
+  }
+
+  function gerarServico($param){
+    extract($param);
+    $sql = "INSERT INTO lista_servicos (id_cliente, valor, data, hora, status)
+            VALUES ($idCliente, '$valorT', strftime('%d/%m/%Y'), strftime('%H:%M:%S'), 'ABERTO')";
+   
+    $this->db->exec($sql);
+    return $this->db->lastInsertId();  
+}
+
+  function inserirItens($param){
+    extract($param);
+    $sql = "INSERT INTO lista_itens_servico (id_lista_servico, id_produto, qtd, data)
+            VALUES ($idServico, $idProduto,$qtdProduto, dia, hora)";
+    // print_r($sql);
+    $this->db->exec($sql);
+    return $this->db->lastInsertId();  
+  }
+
+  function getItens($param){
+    extract($param);
+    $sql = "SELECT a.*, b.*
+            FROM produtos a, lista_itens_servico b
+            WHERE b.id_produto = a.id_produto
+            AND id_lista_servico = $search
+            LIMIT $offset, 10";
+
+$query = $this->db->prepare($sql);
+$query->execute();
+return $query->fetchAll();
+  }
+
+  
 }

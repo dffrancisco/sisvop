@@ -266,7 +266,6 @@ const fornecedor = (function () {
         })
             .then(rs => {
 
-                console.log(rs.data)
                 if (rs.data.id_fornecedor) {
                     param.id_fornecedor = rs.data.id_fornecedor;
                     xgFornecedor.insertLine(param);
