@@ -17,6 +17,7 @@ let idListaServico = 0
 let evento
 
 
+let paramDuplicity = []
 let IDs = []
 let prod = []
 let valorP = []
@@ -107,7 +108,7 @@ const saida = (function () {
                     }
                     xmPnGridItens.open()
 
-                    xgItem.queryOpen({search: ln.id_lista_servico })
+                    xgItem.queryOpen({ search: ln.id_lista_servico })
                 },
             },
 
@@ -145,7 +146,7 @@ const saida = (function () {
 
             query: {
                 execute: (r) => {
-                    getListaServicos(r.param.search, r.param.offset);
+                    getListaServicos(r.param.search, r.offset);
                 }
             }
         })
@@ -154,7 +155,7 @@ const saida = (function () {
     function getListaServicos(search, offset) {
         axios.post(url, {
             call: 'getListaServicos',
-            param: search,
+            param: { search, offset }
         }).then(rs => {
             xgSaida.querySourceAdd(rs.data);
             if (rs.data[0]) xgSaida.focus();
@@ -306,8 +307,36 @@ const itens = (function () {
                 Produto: { dataField: 'descricao' },
                 Marca: { dataField: 'marca' },
                 QTD: { dataField: 'qtd' },
+                DATA: { dataField: 'data', center: true }
             },
+            onKeyDown: {
+                '13': (ln, e) => {
 
+                    for (let i = 0; i < 11; i++) {
+                        delete ln[i]
+                    }
+
+                    for (let i in prod) {
+                        if (prod[i].obProduto.id_produto == ln.id_produto) {
+                            show("Item já incluso!");
+                            xgProduto.focus();
+                            return false
+                        }
+                    }
+
+                    $("#xmEdtQtdItem").val('')
+                    $("#xmEdtIdItem").val(ln.id_produto);
+                    $("#xmEdtCodigoItem").val(ln.codigo);
+                    $("#xmEdtProdItem").val(ln.descricao);
+                    $("#xmEdtMarcaItem").val(ln.marca);
+                    $("#xmEdtValorItem").val(ln.valor);
+
+                    evento = 'Inserir'
+
+                    xmEdtQtdItem.open()
+                    $("#xmEdtQtdItem").focus();
+                },
+            },
             // sideBySide: {
             //     el: '#pnFieldsItem',
 
@@ -350,7 +379,6 @@ const itens = (function () {
 
             query: {
                 execute: (r) => {
-                    console.log(r.param)
                     getItens(r.param.search, r.offset);
                 }
             }
@@ -358,7 +386,6 @@ const itens = (function () {
     }
 
     function getItens(search, offset) {
-        console.log(search)
         axios.post(url, {
             call: 'getItens',
             param: { search: search, offset: offset },
@@ -379,8 +406,27 @@ const itens = (function () {
 
     function cancelar() { }
 
+    function xmEdtQtdItem(){
+        xmEdtQtd = new xModal.create({
+            el: '#xmQtdBtnItem',
+            title: 'Produto',
+            height: '350',
+            width: '200',
+            buttons: {
+                btn1: {
+                    html: 'Confirma',
+                    class: 'xmQtdBtn',
+                    click: (e) => {
+                        // carrinho.insertCarrinho()
+                    }
+                }
+            },
+        })
+    }
+
     return {
-        grid: grid
+        grid: grid,
+        xmEdtQtdItem: xmEdtQtdItem
     }
 })();
 
@@ -408,18 +454,16 @@ const produtos = (function () {
             onKeyDown: {
                 '13': (ln, e) => {
 
-                    let paramDuplicity = xgCarrinho.data()
+                    for (let i = 0; i < 11; i++) {
+                        delete ln[i]
+                    }
 
-                    for (let i in paramDuplicity) {
-                        if (paramDuplicity[i].id_produto == obProduto.id_produto) {
+                    for (let i in prod) {
+                        if (prod[i].obProduto.id_produto == ln.id_produto) {
                             show("Item já incluso!");
                             xgProduto.focus();
                             return false
                         }
-                    }
-
-                    for (let i = 0; i < 11; i++) {
-                        delete ln[i]
                     }
 
                     $("#xmEdtQtd").val('')
@@ -428,6 +472,7 @@ const produtos = (function () {
                     $("#xmEdtProd").val(ln.descricao);
                     $("#xmEdtMarca").val(ln.marca);
                     $("#xmEdtValor").val(ln.valor);
+
                     evento = 'Inserir'
 
                     xmEdtQtd.open()
@@ -500,6 +545,43 @@ const carrinho = (function () {
             },
             onKeyDown: {
                 '46': (ln, e) => {
+                    let auxId
+                    let auxQtd
+                    console.log('IDs: ', IDs)
+                    console.log('QTDs: ', QTDs)
+                    for (let i = 0; i < IDs.length; i++) {
+
+                        auxId = IDs[i + 1]
+                        auxQtd = QTDs[i + 1]
+                        if (IDs[i] == ln.id_produto && i == 0) {
+
+                            IDs[i] = auxId
+                            QTDs[i] = auxQtd
+
+                            for (let j = i + 1; j < IDs.length; j++) {
+                                auxId = IDs[j + 1]
+                                auxQtd = QTDs[j + 1]
+                                IDs[j] = auxId
+                                QTDs[j] = auxQtd
+                            }
+
+                            IDs.pop()
+                            QTDs.pop()
+                        }
+                        else if (IDs[i] == ln.id_produto) {
+
+                            IDs[i] = auxId
+                            QTDs[i] = auxQtd
+
+                            IDs.pop()
+                            QTDs.pop()
+                        }
+                    }
+                    total -= 1
+
+                    console.log('IDs: ', IDs)
+                    console.log('QTDs: ', QTDs)
+
                     xgCarrinho.deleteLine()
                 },
                 '13': (ln, e) => {
@@ -520,45 +602,41 @@ const carrinho = (function () {
 
     function insertCarrinho() {
 
-
-        console.log(evento)
-
         obProduto = {
-            id_produto: $("#xmEdtId").val(),
-            qtd: Number($("#xmEdtQtd").val().trim()),
             codigo: $("#xmEdtCodigo").val(),
             descricao: $("#xmEdtProd").val(),
+            id_produto: $("#xmEdtId").val(),
             marca: $("#xmEdtMarca").val(),
+            qtd: Number($("#xmEdtQtd").val().trim()),
             valor: Number($("#xmEdtValor").val().replace(',', '.'))
         }
-
-
-
-        console.log(obProduto)
 
         if (obProduto.qtd == "" || obProduto.qtd == null) {
             show("Campo com valor invalido")
             return false
         }
 
-        xmEdtQtd.close()
-
-        prod[total] = obProduto
         IDs[total] = obProduto.id_produto
         QTDs[total] = obProduto.qtd
-        valorT += obProduto.valor * obProduto.qtd
 
         if (evento == 'Editar') {
-            xgCarrinho.deleteLine()
-            IDs.pop()
-            QTDs.pop()
-
+            for (let i = 0; i < total; i++) {
+                if (prod[i].obProduto.id_produto == obProduto.id_produto) {
+                    prod[i].obProduto.qtd = obProduto.qtd
+                    xgCarrinho.deleteLine()
+                }
+            }
         }
 
         xgCarrinho.insertLine(obProduto);
-        console.log(IDs, ' ', QTDs)
-        total = contador()
 
+        xmEdtQtd.close()
+
+        valorT += obProduto.valor * obProduto.qtd
+
+        if (evento == "Inserir") {
+            total++
+        }
 
         xgProduto.focus()
 
@@ -567,7 +645,10 @@ const carrinho = (function () {
     function salvarCarrinho() {
 
         let idCliente = $("#spId_cliente").text();
+
         valorT = valorT.toFixed(2).replace('.', ',')
+
+        let vezes = total
 
         axios.post(url, {
 
@@ -579,15 +660,16 @@ const carrinho = (function () {
                     idListaServico = rs.data
                 }
 
-                for (let i = 0; i < total; i++) {
+                for (let i = 0; i < IDs.length; i++) {
 
                     param = {
-                        hora: new Date().toLocaleTimeString('pt-BR'),
                         dia: new Date().toLocaleDateString('pt-BR'),
                         idServico: idListaServico,
                         idProduto: IDs[i],
                         qtdProduto: QTDs[i],
                     }
+
+                    console.log(param)
                     axios.post(url, {
                         call: 'inserirItens',
                         param: param,
@@ -596,6 +678,10 @@ const carrinho = (function () {
             })
 
         xgCarrinho.clear()
+        valorT = 0
+        total = 0
+        prod = {}
+        obProduto = {}
         param = {}
 
     }

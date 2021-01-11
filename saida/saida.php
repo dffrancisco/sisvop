@@ -135,4 +135,29 @@
     <div id="xmPnGridItens"></div><br>
 </div>
 
+<!-- xModal para editar a quantidade de itens do serviço -->
+<div id="xmQtd">
+    <div class="row">
+        <div class="col s10" id="pnFieldEdtQtd">
+        
+        <input type="hidden" id="xmEdtIdItem" disabled>
+        
+        <input type="hidden" id="xmEdtValorItem" disable>
+            
+            <lable>Código</label>
+                <input type="text" id="xmEdtCodigoItem" disabled>
+
+            <lable>Produto</label>
+                <input type="text" id="xmEdtProdItem" disabled>
+
+            <lable>Marca</label>
+                <input type="text" id="xmEdtMarcaItem" disabled>
+
+            <lable>QTD</label>
+                <input type="number" id="xmEdtQtdItem">
+        </div>
+    </div>
+    <div id="xmQtdBtnItem"></div>
+</div>
+
 <div id="pnCodigoTela">Saída</div>
