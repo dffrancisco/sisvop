@@ -9,6 +9,7 @@ let xgCarrinho;
 let xmEdtQtd
 let xmListaCliente;
 let xmCadServico;
+let xmEdtQtdItem;
 
 let total = 0;
 let count = 0;
@@ -16,7 +17,7 @@ let valorT = 0
 let idListaServico = 0
 let evento
 
-
+let oldQtd = []
 let paramDuplicity = []
 let IDs = []
 let prod = []
@@ -37,15 +38,12 @@ $(function () {
     clientes.grid();
 
     itens.grid();
+    itens.modalQtdItem()
 
     produtos.grid();
     produtos.modalEdtQtd();
 
     carrinho.grid();
-
-
-    xgCliente.queryOpen({ search: '' });
-    xgProduto.queryOpen({ search: '' });
 
     $("#xmEdtCliente").keydown(function (e) {
 
@@ -110,6 +108,44 @@ const saida = (function () {
 
                     xgItem.queryOpen({ search: ln.id_lista_servico })
                 },
+
+                '46': (ln) => {
+                    console.log(ln.id_lista_servico)
+                    axios.post(url, {
+                        call: 'buscaIds',
+                        param: ln.id_lista_servico
+                    }).then(rs => {
+                        for (let i = 0; i < rs.data.length; i++) {
+
+                            console.log('1º axios: ', rs.data[i])
+
+                            axios.post(url, {
+                                call: 'getProduto',
+                                param: { search: rs.data[i].id_produto, offset: 0 }
+                            })
+                                .then(r => {
+
+                                    newEstoque = Number(r.data[0].qtd) + Number(rs.data[i].qtd)
+
+                                    axios.post(url, {
+                                        call: 'atualizaProduto',
+                                        param: { newEstoque: newEstoque, idProduto: r.data[0].id_produto }
+                                    })
+                                })
+                        }
+                    })
+                    axios.post(url, {
+                        call: 'deletarItens',
+                        param: ln.id_lista_servico
+                    })
+
+                    axios.post(url, {
+                        call: 'deletarServico',
+                        param: ln.id_lista_servico
+                    })
+
+                    xgSaida.deleteLine()
+                }
             },
 
             sideBySide: {
@@ -119,7 +155,7 @@ const saida = (function () {
                     el: '#pnButtons',
                     buttons: {
                         Buscar: {
-                            html: 'Buscar',
+                            html: 'Buscar Cliente',
                             class: 'btnP btnUp btnPesq',
                             click: buscar,
                         },
@@ -130,7 +166,7 @@ const saida = (function () {
                             click: novo,
                         },
                         visualizar: {
-                            html: 'Visualizar',
+                            html: 'Visualizar(ENT)',
                             class: 'btnP',
                             click: editar,
                         },
@@ -165,17 +201,21 @@ const saida = (function () {
 
 
     function novo() {
+        xgProduto.queryOpen({ search: '' });
         xmCadServico.open();
-        xgProduto.focus()
     }
 
     function buscar() {
+        xgCliente.queryOpen({ search: '' });
         xmListaCliente.open();
-        xgCliente.focus();
     }
 
 
-    function editar() { }
+    function editar() {
+        xmPnGridItens.open()
+        exit = xgSaida.dataSource()
+        xgItem.queryOpen({ search: exit.id_lista_servico })
+    }
 
     function deletar() { }
 
@@ -312,7 +352,7 @@ const itens = (function () {
             onKeyDown: {
                 '13': (ln, e) => {
 
-                    for (let i = 0; i < 11; i++) {
+                    for (let i = 0; i < 16; i++) {
                         delete ln[i]
                     }
 
@@ -323,59 +363,53 @@ const itens = (function () {
                             return false
                         }
                     }
+                    console.log(ln)
 
+                    $("#xmEdtIdItem").val(ln.id_produto)
+                    $("#xmEdtValorItem").val(ln.valor)
+                    $("#xmEdtCodigoItem").val(ln.codigo)
+                    $("#xmEdtProdItem").val(ln.descricao)
+                    $("#xmEdtMarcaItem").val(ln.marca)
                     $("#xmEdtQtdItem").val('')
-                    $("#xmEdtIdItem").val(ln.id_produto);
-                    $("#xmEdtCodigoItem").val(ln.codigo);
-                    $("#xmEdtProdItem").val(ln.descricao);
-                    $("#xmEdtMarcaItem").val(ln.marca);
-                    $("#xmEdtValorItem").val(ln.valor);
-
-                    evento = 'Inserir'
 
                     xmEdtQtdItem.open()
-                    $("#xmEdtQtdItem").focus();
+                    $("#xmEdtQtdItem").focus()
+                },
+                '46': (ln) => {
+                    for (let i = 0; i < 16; i++) {
+                        delete ln[i]
+                    }
+                    console.log(ln)
+                    xgItem.deleteLine()
+
+                    axios.post(url, {
+                        call: 'deletarItem',
+                        param: {
+                            id_produto: ln.id_produto,
+                            idListaItem: ln.id_lista_servico
+                        }
+                    })
+
+                    axios.post(url, {
+                        call: 'getProduto',
+                        param: { search: ln.id_produto, offset: 0 }
+                    }).then(rs => {
+
+                        console.log(rs.data[0].qtd)
+                        newEstoque = Number(rs.data[0].qtd) + Number(ln.qtd)
+                        console.log(newEstoque)
+                        axios.post(url, {
+                            call: 'atualizaProduto',
+                            param: {
+                                newEstoque: newEstoque,
+                                idProduto: rs.data[0].id_produto
+                            }
+                        })
+                    })
+
+
                 },
             },
-            // sideBySide: {
-            //     el: '#pnFieldsItem',
-
-            //     frame: {
-            //         el: '#pnButtonsItens',
-            //         buttons: {
-            //             novo: {
-            //                 html: 'Novo',
-            //                 class: 'btnP',
-            //                 state: xGridV2.state.insert,
-            //                 click: novo,
-            //             },
-            //             edit: {
-            //                 html: 'Editar',
-            //                 class: 'btnP',
-            //                 state: xGridV2.state.update,
-            //                 click: editar,
-            //             },
-            //             deletar: {
-            //                 html: 'Deletar',
-            //                 class: 'btnP btnDel',
-            //                 state: xGridV2.state.delete,
-            //                 click: deletar,
-            //             },
-            //             save: {
-            //                 html: 'Salvar',
-            //                 class: 'btnP',
-            //                 state: xGridV2.state.save,
-            //                 click: salvar,
-            //             },
-            //             cancelar: {
-            //                 html: 'Cancelar',
-            //                 class: 'btnP',
-            //                 state: xGridV2.state.cancel,
-            //                 click: cancelar,
-            //             },
-            //         }
-            //     },
-            // },
 
             query: {
                 execute: (r) => {
@@ -396,20 +430,10 @@ const itens = (function () {
             })
     }
 
-    function novo() { }
-
-    function editar() { }
-
-    function deletar() { }
-
-    function salvar() { }
-
-    function cancelar() { }
-
-    function xmEdtQtdItem(){
-        xmEdtQtd = new xModal.create({
-            el: '#xmQtdBtnItem',
-            title: 'Produto',
+    function modalQtdItem() {
+        xmEdtQtdItem = new xModal.create({
+            el: '#xmQtdItem',
+            title: 'Item',
             height: '350',
             width: '200',
             buttons: {
@@ -426,7 +450,7 @@ const itens = (function () {
 
     return {
         grid: grid,
-        xmEdtQtdItem: xmEdtQtdItem
+        modalQtdItem: modalQtdItem
     }
 })();
 
@@ -458,8 +482,8 @@ const produtos = (function () {
                         delete ln[i]
                     }
 
-                    for (let i in prod) {
-                        if (prod[i].obProduto.id_produto == ln.id_produto) {
+                    for (let i in IDs) {
+                        if (IDs[i] == ln.id_produto) {
                             show("Item já incluso!");
                             xgProduto.focus();
                             return false
@@ -473,6 +497,7 @@ const produtos = (function () {
                     $("#xmEdtMarca").val(ln.marca);
                     $("#xmEdtValor").val(ln.valor);
 
+                    oldQtd[total] = ln.qtd
                     evento = 'Inserir'
 
                     xmEdtQtd.open()
@@ -610,7 +635,10 @@ const carrinho = (function () {
             qtd: Number($("#xmEdtQtd").val().trim()),
             valor: Number($("#xmEdtValor").val().replace(',', '.'))
         }
-
+        if (obProduto.qtd > oldQtd[total]) {
+            show('Quantidade maior do que tem em estoque!')
+            return false
+        }
         if (obProduto.qtd == "" || obProduto.qtd == null) {
             show("Campo com valor invalido")
             return false
@@ -618,7 +646,7 @@ const carrinho = (function () {
 
         IDs[total] = obProduto.id_produto
         QTDs[total] = obProduto.qtd
-
+        console.log('ID: ', IDs[total], ' Retirada: ', QTDs[total], ' Antiga: ', oldQtd[total])
         if (evento == 'Editar') {
             for (let i = 0; i < total; i++) {
                 if (prod[i].obProduto.id_produto == obProduto.id_produto) {
@@ -648,8 +676,6 @@ const carrinho = (function () {
 
         valorT = valorT.toFixed(2).replace('.', ',')
 
-        let vezes = total
-
         axios.post(url, {
 
             call: 'gerarServico',
@@ -659,9 +685,11 @@ const carrinho = (function () {
                 if (rs.data[0]) {
                     idListaServico = rs.data
                 }
-
+                console.log('2: ', oldQtd)
                 for (let i = 0; i < IDs.length; i++) {
 
+                    newEstoque = oldQtd[i] - QTDs[i]
+                    console.log('ID: ', IDs[i], ' Retirada: ', QTDs[i], ' restante: ', newEstoque)
                     param = {
                         dia: new Date().toLocaleDateString('pt-BR'),
                         idServico: idListaServico,
@@ -669,17 +697,29 @@ const carrinho = (function () {
                         qtdProduto: QTDs[i],
                     }
 
-                    console.log(param)
                     axios.post(url, {
                         call: 'inserirItens',
                         param: param,
                     })
+
+                    axios.post(url, {
+                        call: 'atualizaProduto',
+                        param: { newEstoque: newEstoque, idProduto: IDs[i] }
+                    })
                 }
             })
+        idC = $("#spId_cliente").text()
+        xgSaida.queryOpen({ search: idC })
 
+        xmCadServico.close()
         xgCarrinho.clear()
+
+        IDs = []
+        QTDs = []
+
         valorT = 0
         total = 0
+
         prod = {}
         obProduto = {}
         param = {}

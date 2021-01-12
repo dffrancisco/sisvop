@@ -78,7 +78,7 @@ class SqlSaida
     extract($param);
     $sql = "INSERT INTO lista_itens_servico (id_lista_servico, id_produto, qtd, data)
             VALUES ($idServico, $idProduto,$qtdProduto, '$dia')";
-    print_r($sql);
+    // print_r($sql);
     $this->db->exec($sql);
     return $this->db->lastInsertId();  
   }
@@ -97,5 +97,51 @@ class SqlSaida
     return $query->fetchAll();
   }
 
-  
+  function atualizaProduto($param){
+    extract($param);
+
+    $sql= "UPDATE produtos 
+           SET qtd = $newEstoque
+           WHERE id_produto = $idProduto";
+    
+    $this->db->exec($sql);
+    return $this->db->lastInsertId();
+  }
+
+  function deletarItem($param){
+    extract($param);
+    $sql="DELETE FROM lista_itens_servico 
+          WHERE id_produto = $id_produto 
+          AND id_lista_servico = $idListaItem";
+
+    $this->db->exec($sql);
+    return $this->db->lastInsertId();
+  }
+
+  function deletarItens($param){
+    $sql="DELETE FROM lista_itens_servico 
+          WHERE  id_lista_servico = $param";
+
+    $this->db->exec($sql);
+    return $this->db->lastInsertId();
+  }
+
+  function deletarServico($param){
+    $sql="DELETE FROM lista_servicos
+          WHERE  id_lista_servico = $param";
+
+    $this->db->exec($sql);
+    return $this->db->lastInsertId();
+  }
+
+  function buscaIds($param)
+  {
+    $sql = "SELECT *
+            FROM lista_itens_servico
+            WHERE id_lista_servico = $param";
+     
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll();
+  }
 }

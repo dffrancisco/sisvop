@@ -35,6 +35,12 @@ class Saida {
         echo json_encode($call);
     }
 
+    function getProduto($param)
+    {
+        $call = $this->sql->getProduto($param);
+        echo json_encode($call);
+    }
+
     function gerarServico($param){
         $call = $this->sql->gerarServico($param);
         echo json_encode($call);
@@ -48,6 +54,29 @@ class Saida {
 
     function getItens($param){
         $call = $this->sql->getItens($param);
+        echo json_encode($call);
+    }
+
+    function atualizaProduto($param){
+        $call = $this->sql->atualizaProduto($param);
+        echo json_encode($call);
+    }
+
+    function deletarItem($param){
+        $call = $this->sql->deletarItem($param);
+        echo json_encode($call);
+    }
+    function deletarItens($param){
+        $call = $this->sql->deletarItens($param);
+        echo json_encode($call);
+    }
+    function deletarServico($param){
+        $call = $this->sql->deletarServico($param);
+        echo json_encode($call);
+    }
+
+    function buscaIds($param){
+        $call = $this->sql->buscaIds($param);
         echo json_encode($call);
     }
 
