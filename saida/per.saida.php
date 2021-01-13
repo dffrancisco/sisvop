@@ -24,6 +24,11 @@ class Saida {
         echo json_encode($call);
     }
 
+    function getClienteAll($param) {
+        $call = $this->sql->getClienteAll($param);
+        echo json_encode($call);
+    }
+
     function getListaServicos($param) {
         $call = $this->sql->getListaServicos($param);
         echo json_encode($call);

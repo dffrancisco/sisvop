@@ -5,17 +5,19 @@ let xgItem;
 let xgCliente;
 let xgProduto;
 let xgCarrinho;
+let xgClienteAll;
 
 let xmEdtQtd
 let xmListaCliente;
+let xmListaClienteAll;
 let xmCadServico;
 let xmEdtQtdItem;
 
 let total = 0;
-let count = 0;
 let valorT = 0
 let idListaServico = 0
-let evento
+let newEstoque = 0
+var evento
 
 let oldQtd = []
 let paramDuplicity = []
@@ -30,15 +32,17 @@ let obProduto = {}
 $(function () {
 
     saida.modalCliente();
+    saida.modalClienteAll();
     saida.modalCadServico();
     saida.modalItens()
     saida.grid();
 
 
     clientes.grid();
+    clientesAll.grid();
 
     itens.grid();
-    itens.modalQtdItem()
+    itens.modalQtdItem();
 
     produtos.grid();
     produtos.modalEdtQtd();
@@ -69,11 +73,21 @@ $(function () {
 
     })
 
+    $(document).keydown(function (e) {
+        if (e.keyCode == 78) {
+            $(".btnN").click()
+
+        }
+
+        if (e.keyCode == 66) {
+            $(".btnPesq").click()
+
+        }
+
+    })
+
 });
 
-function contador() {
-    return count += 1
-}
 
 const saida = (function () {
 
@@ -105,6 +119,7 @@ const saida = (function () {
                         delete ln[i]
                     }
                     xmPnGridItens.open()
+                    $("#xmEdtItensIdServ").val(ln.id_lista_servico)
 
                     xgItem.queryOpen({ search: ln.id_lista_servico })
                 },
@@ -155,14 +170,14 @@ const saida = (function () {
                     el: '#pnButtons',
                     buttons: {
                         Buscar: {
-                            html: 'Buscar Cliente',
+                            html: 'Buscar Cliente(B)',
                             class: 'btnP btnUp btnPesq',
                             click: buscar,
                         },
 
                         novo: {
-                            html: "Novo",
-                            class: "btnP",
+                            html: "Novo(N)",
+                            class: "btnP btnN",
                             click: novo,
                         },
                         visualizar: {
@@ -171,7 +186,7 @@ const saida = (function () {
                             click: editar,
                         },
                         deletar: {
-                            html: 'Deletar',
+                            html: 'Deletar(DEL)',
                             class: 'btnP btnDel',
                             state: xGridV2.state.delete,
                             click: deletar,
@@ -201,15 +216,16 @@ const saida = (function () {
 
 
     function novo() {
-        xgProduto.queryOpen({ search: '' });
-        xmCadServico.open();
+        xgClienteAll.queryOpen({ search: '' });
+        xmListaClienteAll.open()
+
+        evento = 'Inserir'
     }
 
     function buscar() {
         xgCliente.queryOpen({ search: '' });
         xmListaCliente.open();
     }
-
 
     function editar() {
         xmPnGridItens.open()
@@ -223,6 +239,15 @@ const saida = (function () {
         xmListaCliente = new xModal.create({
             el: '#xmListaCliente',
             title: 'Clientes',
+            width: '700',
+        })
+    }
+
+    function modalClienteAll() {
+        xmListaClienteAll = new xModal.create({
+            el: '#xmListaClienteAll',
+            title: 'Novo Serviço',
+            width: '700',
         })
     }
 
@@ -241,6 +266,13 @@ const saida = (function () {
                     }
                 }
             },
+
+            onClose: () => {
+                xgCarrinho.clear()
+                IDs = []
+                QTDs = []
+                total = 0
+            }
         })
     }
 
@@ -248,6 +280,24 @@ const saida = (function () {
         xmPnGridItens = new xModal.create({
             el: '#xmItens',
             title: 'Itens',
+
+            buttons: {
+                btn1: {
+                    html: 'Novo Item',
+                    click: (e) => {
+                        xgProduto.queryOpen({ search: '' })
+                        xmCadServico.open();
+
+                        evento = 'Inserir'
+                    }
+                },
+                btn2: {
+                    html: 'Salvar',
+                    click: (e) => {
+
+                    }
+                }
+            }
 
         })
     }
@@ -257,6 +307,7 @@ const saida = (function () {
         modalCliente: modalCliente,
         modalCadServico: modalCadServico,
         modalItens: modalItens,
+        modalClienteAll: modalClienteAll,
     }
 })();
 
@@ -279,6 +330,7 @@ const clientes = (function () {
                 CNPJ: { dataField: 'cnpj', center: true },
                 UF: { dataField: 'uf', center: true },
                 Cidade: { dataField: 'Cidade' },
+                'Nº de Servicos': { dataField: 'QtdServicos' },
             },
 
             onKeyDown: {
@@ -321,6 +373,83 @@ const clientes = (function () {
             .then(rs => {
                 xgCliente.querySourceAdd(rs.data);
                 if (rs.data[0]) xgCliente.focus();
+            })
+    }
+
+    return {
+        grid: grid,
+    }
+})();
+
+const clientesAll = (function () {
+
+    let url = 'saida/per.saida.php';
+    let ControleGrid;
+
+    function grid() {
+
+        xgClienteAll = new xGridV2.create({
+
+            el: '#pnGridClienteAll',
+            height: '300',
+            theme: 'x-clownV2',
+            heightLine: '35',
+
+            columns: {
+                Representante: { dataField: 'representante' },
+                CNPJ: { dataField: 'cnpj', center: true },
+                UF: { dataField: 'uf', center: true },
+                Cidade: { dataField: 'Cidade' },
+            },
+
+            onKeyDown: {
+                '13': (ln, e) => {
+
+                    for (let i = 0; i < 16; i++) {
+                        delete ln[i]
+                    }
+
+                    cliente = ln
+
+                    $("#spId_cliente").html(cliente.id_cliente);
+                    $("#spRazao_social").html(cliente.razao);
+                    $("#spCnpj").html(cliente.cnpj);
+                    $("#spRepresentante").html(cliente.representante);
+                    $("#spCidade").html(cliente.cidade);
+                    $("#spUf").html(cliente.uf);
+                    $("#spBairro").html(cliente.Bairro);
+                    $("#spCep").html(cliente.cep);
+
+                    $("#inpEdt").val(ln.id_cliente);
+
+                    xmCadServico.open()
+                    xgProduto.queryOpen({ search: '' })
+                    xgSaida.queryOpen({ search: cliente.id_cliente })
+
+                },
+            },
+
+            sideBySide: {
+                el: '#pnFieldClienteAll',
+            },
+
+            query: {
+                execute: (r) => {
+
+                    getClienteAll(r.param.search, r.offset);
+                }
+            }
+        })
+    }
+
+    function getClienteAll(search, offset) {
+        axios.post(url, {
+            call: 'getClienteAll',
+            param: { search: search, offset: offset },
+        })
+            .then(rs => {
+                xgClienteAll.querySourceAdd(rs.data);
+                if (rs.data[0]) xgClienteAll.focus();
             })
     }
 
@@ -490,6 +619,12 @@ const produtos = (function () {
                         }
                     }
 
+                    if (ln.qtd == 0) {
+                        show("Item sem estoque!");
+                        xgProduto.focus();
+                        return false
+                    }
+
                     $("#xmEdtQtd").val('')
                     $("#xmEdtId").val(ln.id_produto);
                     $("#xmEdtCodigo").val(ln.codigo);
@@ -498,7 +633,7 @@ const produtos = (function () {
                     $("#xmEdtValor").val(ln.valor);
 
                     oldQtd[total] = ln.qtd
-                    evento = 'Inserir'
+
 
                     xmEdtQtd.open()
                     $("#xmEdtQtd").focus();
@@ -626,7 +761,7 @@ const carrinho = (function () {
     }
 
     function insertCarrinho() {
-
+        console.log(evento)
         obProduto = {
             codigo: $("#xmEdtCodigo").val(),
             descricao: $("#xmEdtProd").val(),
@@ -635,6 +770,7 @@ const carrinho = (function () {
             qtd: Number($("#xmEdtQtd").val().trim()),
             valor: Number($("#xmEdtValor").val().replace(',', '.'))
         }
+
         if (obProduto.qtd > oldQtd[total]) {
             show('Quantidade maior do que tem em estoque!')
             return false
@@ -644,74 +780,116 @@ const carrinho = (function () {
             return false
         }
 
-        IDs[total] = obProduto.id_produto
-        QTDs[total] = obProduto.qtd
-        console.log('ID: ', IDs[total], ' Retirada: ', QTDs[total], ' Antiga: ', oldQtd[total])
+        // console.log('ID: ', IDs[total], ' Retirada: ', QTDs[total], ' Antiga: ', oldQtd[total])
+
         if (evento == 'Editar') {
-            for (let i = 0; i < total; i++) {
-                if (prod[i].obProduto.id_produto == obProduto.id_produto) {
-                    prod[i].obProduto.qtd = obProduto.qtd
-                    xgCarrinho.deleteLine()
+            for (let i = 0; i < IDs.length; i++) {
+                console.log(i)
+                if (IDs[i] == obProduto.id_produto) {
+                    console.log('ID: ', IDs[i], ' QTDs: ', QTDs[i])
+                    QTDs[i] = obProduto.qtd
+                    xgCarrinho.dataSource('qtd', QTDs[i])
                 }
             }
         }
 
-        xgCarrinho.insertLine(obProduto);
+        if (evento == "Inserir") {
+            IDs[total] = obProduto.id_produto
+            QTDs[total] = obProduto.qtd
+
+            total++
+            xgCarrinho.insertLine(obProduto);
+        }
+
+
+
 
         xmEdtQtd.close()
 
         valorT += obProduto.valor * obProduto.qtd
 
-        if (evento == "Inserir") {
-            total++
-        }
 
         xgProduto.focus()
+
+        console.log(IDs, QTDs)
 
     }
 
     function salvarCarrinho() {
-
-        let idCliente = $("#spId_cliente").text();
+        let id_servico = $('#xmEdtItensIdServ').val()
+        let idCliente = $("#inpEdt").val();
 
         valorT = valorT.toFixed(2).replace('.', ',')
+        pIDs = IDs
+        pQTDs = QTDs
 
-        axios.post(url, {
 
-            call: 'gerarServico',
-            param: { idCliente, valorT }
-        })
-            .then(rs => {
-                if (rs.data[0]) {
-                    idListaServico = rs.data
+
+        if (id_servico > 0 || id_servico != '') {
+
+            for (let i = 0; i < pIDs.length; i++) {
+
+                newEstoque = oldQtd[i] - pQTDs[i]
+                console.log('ID servico: ', idListaServico)
+                console.log('ID: ', pIDs[i], ' Retirada: ', pQTDs[i], ' restante estoque: ', newEstoque)
+                param = {
+                    dia: new Date().toLocaleDateString('pt-BR'),
+                    idServico: id_servico,
+                    idProduto: pIDs[i],
+                    qtdProduto: pQTDs[i],
                 }
-                console.log('2: ', oldQtd)
-                for (let i = 0; i < IDs.length; i++) {
+                console.log('produto: ', param)
+                axios.post(url, {
+                    call: 'inserirItens',
+                    param: param,
+                })
 
-                    newEstoque = oldQtd[i] - QTDs[i]
-                    console.log('ID: ', IDs[i], ' Retirada: ', QTDs[i], ' restante: ', newEstoque)
-                    param = {
-                        dia: new Date().toLocaleDateString('pt-BR'),
-                        idServico: idListaServico,
-                        idProduto: IDs[i],
-                        qtdProduto: QTDs[i],
+                axios.post(url, {
+                    call: 'atualizaProduto',
+                    param: { newEstoque: newEstoque, idProduto: param.idProduto }
+                })
+            }
+        } else {
+            axios.post(url, {
+
+                call: 'gerarServico',
+                param: { idCliente, valorT }
+            })
+                .then(rs => {
+                    if (rs.data[0]) {
+                        idListaServico = rs.data
                     }
 
-                    axios.post(url, {
-                        call: 'inserirItens',
-                        param: param,
-                    })
+                    for (let i = 0; i < pIDs.length; i++) {
 
-                    axios.post(url, {
-                        call: 'atualizaProduto',
-                        param: { newEstoque: newEstoque, idProduto: IDs[i] }
-                    })
-                }
-            })
-        idC = $("#spId_cliente").text()
-        xgSaida.queryOpen({ search: idC })
+                        newEstoque = oldQtd[i] - pQTDs[i]
+                        console.log('ID servico: ', id_servico)
+                        console.log('ID: ', pIDs[i], ' Retirada: ', pQTDs[i], ' restante estoque: ', newEstoque)
+                        param = {
+                            dia: new Date().toLocaleDateString('pt-BR'),
+                            idServico: id_servico,
+                            idProduto: pIDs[i],
+                            qtdProduto: pQTDs[i],
+                        }
+                        console.log('produto: ', param)
+                        axios.post(url, {
+                            call: 'inserirItens',
+                            param: param,
+                        })
+
+                        axios.post(url, {
+                            call: 'atualizaProduto',
+                            param: { newEstoque: newEstoque, idProduto: param.idProduto }
+                        })
+                    }
+                })
+        }
+
+        console.log(idCliente)
+        xgSaida.queryOpen({ search: idCliente })
 
         xmCadServico.close()
+        xmListaClienteAll.close()
         xgCarrinho.clear()
 
         IDs = []

@@ -81,6 +81,17 @@
     <div id="pnGridCliente"></div>
 </div>
 
+<div id="xmListaClienteAll">
+    <div class="row">
+        <div class="col s4" id="pnFieldClienteAll">
+            <label>Buscar Cliente</label>
+            <input type="text" id="xmEdtClienteAll">
+        </div>
+    </div>
+    <!-- xGrid de Cliente -->
+    <div id="pnGridClienteAll"></div>
+</div>
+
 <!-- xModal para cadastrar um novo serviço -->
 <div id="xmCadServico">
     <div class="row">
@@ -89,6 +100,7 @@
             <input type="text" id="xmEdtProduto">
         </div>
     </div>
+    <input type="text" id="inpEdt" hidden>
     <!-- xGrid dos Produtos -->
     <div id="xmPnGridProduto"></div><br>
 
@@ -125,6 +137,7 @@
 <!-- xModal para ver os itens do serviço -->
 <div id="xmItens">
     <div class="row">
+    <input type="text" id="xmEdtItensIdServ" hidden>
         <div class="col s4" id="pnFieldItens">
             <label>Buscar Produto</label>
             <input type="text" id="xmEdtItens">

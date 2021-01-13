@@ -12,6 +12,22 @@ class SqlSaida
 
   function getCliente($param){
     extract($param);
+    $sql = "SELECT a.*, b.*, count(c.id_cliente) AS QtdServicos
+            from clientes a, uf b, lista_servicos c
+            where a.id_uf = b.id_uf
+            AND  c.id_cliente = a.id_cliente
+            AND representante like '$search%'
+            GROUP BY a.id_cliente
+            limit $offset, 10";
+
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(); 
+
+  }
+
+  function getClienteAll($param){
+    extract($param);
     $sql = "SELECT a.*, b.*
             from clientes a, uf b
             where a.id_uf = b.id_uf 
@@ -29,7 +45,7 @@ class SqlSaida
     extract($param);
     $sql = "SELECT * 
             FROM lista_servicos
-            WHERE id_cliente == $search
+            WHERE id_cliente = $search
             LIMIT $offset, 10";
 
     $query = $this->db->prepare($sql);
@@ -104,6 +120,7 @@ class SqlSaida
            SET qtd = $newEstoque
            WHERE id_produto = $idProduto";
     
+    print_r($sql);
     $this->db->exec($sql);
     return $this->db->lastInsertId();
   }
