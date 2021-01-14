@@ -53,8 +53,17 @@ class SqlSaida
     return $query->fetchAll(); 
   }
 
-   function getProdutos($param)
-  {
+  function getListaServico($param){
+    $sql = "SELECT * 
+            FROM lista_servicos
+            WHERE id_lista_servico = $param";
+
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(); 
+  }
+
+  function getProdutos($param){
     extract($param);
     $sql = "SELECT a.*, b.* 
             FROM produtos a, marca b
@@ -67,8 +76,7 @@ class SqlSaida
     return $query->fetchAll();
   }
 
-  function getProduto($param)
-  {
+  function getProduto($param){
     extract($param);
     $sql = "SELECT a.*, b.* 
             FROM produtos a, marca b
@@ -120,7 +128,7 @@ class SqlSaida
            SET qtd = $newEstoque
            WHERE id_produto = $idProduto";
     
-    print_r($sql);
+    // print_r($sql);
     $this->db->exec($sql);
     return $this->db->lastInsertId();
   }
@@ -128,8 +136,7 @@ class SqlSaida
   function deletarItem($param){
     extract($param);
     $sql="DELETE FROM lista_itens_servico 
-          WHERE id_produto = $id_produto 
-          AND id_lista_servico = $idListaItem";
+          WHERE  id_itens_servico = $idItemServico";
 
     $this->db->exec($sql);
     return $this->db->lastInsertId();
@@ -151,8 +158,7 @@ class SqlSaida
     return $this->db->lastInsertId();
   }
 
-  function buscaIds($param)
-  {
+  function buscaIds($param){
     $sql = "SELECT *
             FROM lista_itens_servico
             WHERE id_lista_servico = $param";
@@ -161,4 +167,28 @@ class SqlSaida
     $query->execute();
     return $query->fetchAll();
   }
+
+  function atualizaPreco($param){
+    extract($param);
+    $sql = "UPDATE lista_servicos
+            SET valor = '$newValor'
+            WHERE id_lista_servico = $id_lista_servico";
+
+    print_r($sql);
+    $this->db->exec($sql);
+    return $this->db->lastInsertId();
+  }
+
+  function atualizaStatus($param){
+    extract($param);
+
+    $sql = "UPDATE lista_servicos
+            SET status = '$status'
+            WHERE id_lista_servico = $id_lista_servico";
+
+    print_r($sql);
+    $this->db->exec($sql);
+    return $this->db->lastInsertId();
+  }
+
 }

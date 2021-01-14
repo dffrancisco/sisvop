@@ -155,7 +155,7 @@ const produto = (function () {
     let param = xgProduto.getElementSideBySideJson()
     param.data_cadastro = $('#edtData').val()
 
-    let allDuplicty = await xgMarca.getDuplicityAll()
+    let allDuplicty = await xgProduto.getDuplicityAll()
 
     if (allDuplicty == false)
       return false;

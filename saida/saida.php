@@ -63,8 +63,6 @@
     <div id="pnButtonsItens" class="right-align col s9"></div>
 
     <div id="" class="center-align margintop col s9">
-        <button id="" class="">Print</button>
-        <button id="" class="">A/F</button>
     </div>
 
 </div>
@@ -138,6 +136,7 @@
 <div id="xmItens">
     <div class="row">
     <input type="text" id="xmEdtItensIdServ" hidden>
+    <input type="text" id="xmEdtValorServ" hidden>
         <div class="col s4" id="pnFieldItens">
             <label>Buscar Produto</label>
             <input type="text" id="xmEdtItens">
@@ -147,33 +146,5 @@
     <div id="xmPnGridItens"></div><br>
 </div>
 
-<!-- xModal para editar a quantidade de itens do serviço -->
-<div id="xmQtdItem">
-    <div class="row">
-        <div class="col s10" id="pnFieldEdtQtd">
-
-            <input type="hidden" id="xmEdtIdItem" disabled>
-
-            <input type="hidden" id="xmEdtValorItem" disable>
-
-            <label>Código</label>
-            <input type="text" id="xmEdtCodigoItem" disabled>
-
-            <label>Produto</label>
-            <input type="text" id="xmEdtProdItem" disabled>
-
-            <label>Marca</label>
-            <input type="text" id="xmEdtMarcaItem" disabled>
-
-            <label>QTD</label>
-            <input type="number" id="xmEdtQtdItem">
-
-            <label>Acrescentar<input type="radio" name="acao" value="acres" checked></label>
-            <label>Retirar<input type="radio" name="acao" value="retir"></label>
-
-        </div>
-    </div>
-    <div id="xmQtdBtnItem"></div>
-</div>
 
 <div id="pnCodigoTela">Saída</div>
