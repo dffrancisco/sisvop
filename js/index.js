@@ -6,6 +6,8 @@ $(function () {
     $('.real').maskMoney({thousands: '.', decimal: ',', allowZero: true});
 
     $('.date').mask('00/00/0000');
+
+    $('.numeroNota').mask('000.000.000');
     
 
     $('.CPF').mask('999.999.999-99');

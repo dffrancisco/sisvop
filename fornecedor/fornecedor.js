@@ -75,34 +75,34 @@ const fornecedor = (function () {
                         },
                     }
                 },
-                duplicity: {
-                    dataField: ['cnpj'],
+                // duplicity: {
+                //     dataField: ['cnpj'],
 
-                    execute: (r) => {
+                //     execute: (r) => {
 
-                        let param = {}
-                        param.cnpj = r.value,
+                //         let param = {}
+                //         param.cnpj = r.value,
 
-                            axios.post(url, {
-                                call: 'getCnpj',
-                                param: param,
-                            })
-                                .then(rs => {
-                                    if (controleGrid == 'editar') {
-                                        console.log("if editar")
-                                        return true
-                                    }
-                                    if (rs.data[0]) {
-                                        console.log('dupli')
-                                        xgFornecedor.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!');
-                                        xgFornecedor.focusField(r.field);
-                                        return false
-                                    }
+                //             axios.post(url, {
+                //                 call: 'getCnpj',
+                //                 param: param,
+                //             })
+                //                 .then(rs => {
+                //                     if (controleGrid == 'editar') {
+                //                         console.log("if editar")
+                //                         return true
+                //                     }
+                //                     if (rs.data[0]) {
+                //                         console.log('dupli')
+                //                         xgFornecedor.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!');
+                //                         xgFornecedor.focusField(r.field);
+                //                         return false
+                //                     }
 
-                                    validarCpnj(param.cnpj)
-                                })
-                    }
-                },
+                //                     validarCpnj(param.cnpj)
+                //                 })
+                //     }
+                // },
 
             },
 
@@ -207,12 +207,12 @@ const fornecedor = (function () {
         //identificado pelo ID
         param.data_cadastro = $('#editDataCadastro').val();
 
-        let allDuplicty = await xgFornecedor.getDuplicityAll();
+        // let allDuplicty = await xgFornecedor.getDuplicityAll();
 
-        if (allDuplicty == false) {
-            xgFornecedor.showMessageDuplicity('O campo CNPJ está com valor duplicado ou vazio!');
-            return false
-        }
+        // if (allDuplicty == false) {
+        //     xgFornecedor.showMessageDuplicity('O campo CNPJ está com valor duplicado ou vazio!');
+        //     return false
+        // }
 
         if (controleGrid == 'novo')
             param.id_fornecedor = '';
