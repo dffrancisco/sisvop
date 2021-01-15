@@ -17,10 +17,10 @@ const marca = (function () {
             theme: 'x-clownV2',
             heightLine: '35',
             columns: {
-                Marca: { dataField: 'marca' },
+                Marca: { dataField: 'MARCA' },
             },
-            onSelectLine:(r)=>{
-               console.log(r)
+            onSelectLine: (r) => {
+                console.log(r)
             },
             sideBySide: {
                 el: "#pnFields",
@@ -67,10 +67,10 @@ const marca = (function () {
                 },
 
                 duplicity: {
-                    dataField: ['marca'],
+                    dataField: ['MARCA'],
                     execute: (r) => {
                         let param = {}
-                        param.marca = r.value
+                        param.MARCA = r.value
 
                         return axios.post(url, {
                             call: 'findMarca',
@@ -136,8 +136,8 @@ const marca = (function () {
     function deletar() {
         let param;
 
-        if (xgMarca.dataSource().id_marca) {
-            param = xgMarca.dataSource().id_marca;
+        if (xgMarca.dataSource().ID_MARCA) {
+            param = xgMarca.dataSource().ID_MARCA;
 
             confirmaCodigo({
                 msg: 'Para deletar o registro insira o código abaixo!',
@@ -165,7 +165,7 @@ const marca = (function () {
             return false;
 
 
-        if (param.marca || param.marca.length > 0) {
+        if (param.MARCA || param.MARCA.length > 0) {
 
             let valCampos = {
                 nome: $('#edtMarca').val(),
@@ -179,18 +179,18 @@ const marca = (function () {
             }
 
             if (controleGrid == 'edit')
-                param.id_marca = xgMarca.dataSource().id_marca;
+                param.ID_MARCA = xgMarca.dataSource().ID_MARCA;
 
             if (controleGrid == 'new')
-                param.id_marca = ''
+                param.ID_MARCA = ''
 
             axios.post(url, {
                 call: 'salvar',
                 param: param
 
             }).then(rs => {
-                if (rs.data.id_marca) {
-                    param.id_marca = rs.data.id_marca;
+                if (rs.data.ID_MARCA) {
+                    param.ID_MARCA = rs.data.ID_MARCA;
                     xgMarca.insertLine(param);
 
                 } else {

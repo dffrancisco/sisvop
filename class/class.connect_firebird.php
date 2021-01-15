@@ -15,7 +15,7 @@ class ConexaoFirebird
             if (!$fp) {
                 return false;
             } else {
-                $pdo = new PDO("firebird:dbname=$server:$banco;charset=utf8;", "SYSDBA", base64_decode('MTUyMEFsdmVz'));
+                $pdo = new PDO("firebird:dbname=$server:$banco;charset=utf8;", "SYSDBA", 'Honra2017');
                 return $pdo;
             }
         } catch (PDOException $erro) {
