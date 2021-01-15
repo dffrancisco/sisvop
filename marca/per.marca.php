@@ -12,7 +12,8 @@ class Marca{
 
     private $sql;
 
-    function __construct() {        
+    function __construct() {   
+             
         //instancia da class        
         $this->sql = new SqlMarca();
     }
