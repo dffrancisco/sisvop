@@ -18,8 +18,7 @@ class clientes {
         $this->sql = new SqlClientes();
     }
 
-    function getCliente($param)
-    {
+    function getCliente($param){
         $call = $this->sql->getCliente($param);
         echo json_encode($call);
     }

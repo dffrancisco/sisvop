@@ -62,7 +62,7 @@ const funcionario = (function () {
                             html: "Salvar",
                             class: "btnP",
                             state: xGridV2.state.save,
-                            click: salvar
+                            click: salvar,
 
                         },
 
@@ -146,11 +146,7 @@ const funcionario = (function () {
 
         });
     }
-
-    return {
-        grid: grid,
-        getBairro: getBairro,
-    };
+    
 
     function getFuncionarios(search, offset) {
         axios.post(url, {
@@ -219,22 +215,24 @@ const funcionario = (function () {
 
 
 
-        let allDuplicty = await xgMarca.getDuplicityAll()
+        // let allDuplicty = await xgMarca.getDuplicityAll()
 
-        if (allDuplicty == false)
-            return false;
+        // if (allDuplicty == false)
+        //     return false;
 
-        let valCampos = {
-            nome: $('#edtNome').val(),
-            rg: $('#edtRg').val(),
-            cpf: $('#edtCpf').val(),
-            telefone: $('#edtTel').val(),
-            cep: $('#edtCep').val(),
-            endereco: $('#edtEnd').val(),
-            uf: $('#edtUf').val(),
-            cidade: $('#edtCidade').val(),
-            bairro: $('#slctBairro').val(),
-        }
+        // let valCampos = {
+        //     nome: $('#edtNome').val(),
+        //     rg: $('#edtRg').val(),
+        //     cpf: $('#edtCpf').val(),
+        //     telefone: $('#edtTel').val(),
+        //     cep: $('#edtCep').val(),
+        //     endereco: $('#edtEnd').val(),
+        //     uf: $('#edtUf').val(),
+        //     cidade: $('#edtCidade').val(),
+        //     bairro: $('#slctBairro').val(),
+        // }
+
+
         for (let i in valCampos) {
             if (valCampos[i] == '' || valCampos.uf == null) {
                 show('Por favor preencha todos os campos')
@@ -296,5 +294,9 @@ const funcionario = (function () {
         $('.container .validate').prop("disabled", true)
     }
 
+    return {
+        grid: grid,
+        getBairro: getBairro,
+    };
 })();
 
