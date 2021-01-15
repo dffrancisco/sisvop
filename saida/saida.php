@@ -7,7 +7,7 @@
     <div class="tabela" id="pnFields">
         <div class="row">
             <div class="col s4">
-                <span id="spId_cliente" hidden></span>
+                <span id="spId_cliente"></span>
                 <label>Razão Social</label><br>
                 <span id="spRazao_social" class="spanAutoPreenc">Razão Social<span>
             </div>
@@ -79,17 +79,6 @@
     <div id="pnGridCliente"></div>
 </div>
 
-<div id="xmListaClienteAll">
-    <div class="row">
-        <div class="col s4" id="pnFieldClienteAll">
-            <label>Buscar Cliente</label>
-            <input type="text" id="xmEdtClienteAll">
-        </div>
-    </div>
-    <!-- xGrid de Cliente -->
-    <div id="pnGridClienteAll"></div>
-</div>
-
 <!-- xModal para cadastrar um novo serviço -->
 <div id="xmCadServico">
     <div class="row">
@@ -97,8 +86,13 @@
             <label>Buscar Produto</label>
             <input type="text" id="xmEdtProduto">
         </div>
+
+        <div class="col s4 push-s4">
+            <label>Serviços</label>
+            <select name="id_servico" id="slctServico"></select>
+        </div>
+
     </div>
-    <input type="text" id="inpEdt" hidden>
     <!-- xGrid dos Produtos -->
     <div id="xmPnGridProduto"></div><br>
 
@@ -112,21 +106,28 @@
     <div class="row">
         <div class="col s10" id="pnFieldEdtQtd">
 
-            <input type="hidden" id="xmEdtId" disabled>
+            <span id="xmEdtId" hidden></span>
+            <span id="xmEdtValor" hidden></span>
 
-            <input type="hidden" id="xmEdtValor" disable>
+            <div class="col s10" id="pnFieldEdtQtd">
+                <label>Código</label><br>
+                <span id="xmEdtCodigo" class="spanAutoPreenc"></span>
+            </div>
 
-            <label>Código</label>
-            <input type="text" id="xmEdtCodigo" disabled>
+            <div class="col s10" id="pnFieldEdtQtd">
+                <br><label>Produto</label><br>
+                <span id="xmEdtProd" class="spanAutoPreenc"></span>
+            </div>
 
-            <label>Produto</label>
-            <input type="text" id="xmEdtProd" disabled>
+            <div class="col s10" id="pnFieldEdtQtd">
+                <br><label>Marca</label><br>
+                <span id="xmEdtMarca" class="spanAutoPreenc"></span>
+            </div>
 
-            <label>Marca</label>
-            <input type="text" id="xmEdtMarca" disabled>
-
-            <label>QTD</label>
-            <input type="number" id="xmEdtQtd">
+            <div class="col s10" id="pnFieldEdtQtd">
+                <br><label>QTD</label>
+                <input type="number" id="xmEdtQtd">
+            </div>
         </div>
     </div>
     <div id="xmQtdBtn"></div>
@@ -135,8 +136,8 @@
 <!-- xModal para ver os itens do serviço -->
 <div id="xmItens">
     <div class="row">
-    <input type="text" id="xmEdtItensIdServ" hidden>
-    <input type="text" id="xmEdtValorServ" hidden>
+        <input type="text" id="xmEdtItensIdServ" hidden>
+        <input type="text" id="xmEdtValorServ" hidden>
         <div class="col s4" id="pnFieldItens">
             <label>Buscar Produto</label>
             <input type="text" id="xmEdtItens">

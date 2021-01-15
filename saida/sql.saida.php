@@ -12,12 +12,10 @@ class SqlSaida
 
   function getCliente($param){
     extract($param);
-    $sql = "SELECT a.*, b.*, count(c.id_cliente) AS QtdServicos
+    $sql = "SELECT a.*, b.*
             from clientes a, uf b, lista_servicos c
             where a.id_uf = b.id_uf
-            AND  c.id_cliente = a.id_cliente
             AND representante like '$search%'
-            GROUP BY a.id_cliente
             limit $offset, 10";
 
     $query = $this->db->prepare($sql);
@@ -43,9 +41,12 @@ class SqlSaida
 
   function getListaServicos($param){
     extract($param);
-    $sql = "SELECT * 
-            FROM lista_servicos
-            WHERE id_cliente = $search
+    $sql = "SELECT a.*, b.servico 
+            FROM lista_servicos a, servicos b
+            WHERE 
+            a.id_servico = b.id_servico
+            AND
+            id_cliente = $search
             LIMIT $offset, 10";
 
     $query = $this->db->prepare($sql);
@@ -83,17 +84,29 @@ class SqlSaida
             WHERE a.id_marca = b.id_marca 
             AND id_produto LIKE '$search%'
             LIMIT $offset, 1";
-     
+
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll();
   }
 
+  function getServ(){
+
+    $sql = "SELECT * 
+            FROM servicos";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll();
+
+  }
+
   function gerarServico($param){
     extract($param);
-    $sql = "INSERT INTO lista_servicos (id_cliente, valor, data, hora, status)
-            VALUES ($idCliente, '$valorT', strftime('%d/%m/%Y'), strftime('%H:%M:%S'), 'ABERTO')";
+    $sql = "INSERT INTO lista_servicos (id_cliente, id_servico, valor, data, hora, status)
+            VALUES ($idCliente, $idServico, '$valorT', strftime('%d/%m/%Y'), strftime('%H:%M:%S'), 'ABERTO')";
    
+    print_r($sql);
     $this->db->exec($sql);
     return $this->db->lastInsertId();  
 }
@@ -101,7 +114,7 @@ class SqlSaida
   function inserirItens($param){
     extract($param);
     $sql = "INSERT INTO lista_itens_servico (id_lista_servico, id_produto, qtd, data)
-            VALUES ($idServico, $idProduto,$qtdProduto, '$dia')";
+            VALUES ($id_servico, $idProduto,$qtdProduto, '$dia')";
     // print_r($sql);
     $this->db->exec($sql);
     return $this->db->lastInsertId();  

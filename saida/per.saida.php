@@ -45,6 +45,11 @@ class Saida {
         echo json_encode($call);
     }
 
+    function getServ(){
+        $call = $this->sql->getServ();
+        echo json_encode($call);
+    }
+
     function atualizaStatus($param)
     {
         
@@ -59,6 +64,7 @@ class Saida {
     }
 
     function gerarServico($param){
+        print_r($param);
         $call = $this->sql->gerarServico($param);
         echo json_encode($call);
 
