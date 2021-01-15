@@ -166,8 +166,6 @@ const cliente = (function () {
         let param = xgCliente.getElementSideBySideJson()
         param.data_cadastro = $('#edtData').val()
 
-
-
         // let allDuplicty = await xgCliente.getDuplicityAll()
         // if (allDuplicty == false) {
         //     console.log('travei')

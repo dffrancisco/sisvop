@@ -6,6 +6,7 @@ class SqlEmpresa
 
   function __construct()
   {
+    // $this->db = new PDO('sqlite:/var/www/html/Estoque.sqlite');
     $this->db = new PDO('sqlite:/var/www/html/Estoque.sqlite');
   }
 
@@ -37,7 +38,7 @@ class SqlEmpresa
   {
     $sql = 'UPDATE empresa ' .
       'SET cnpj = "' . $param['cnpj'] . '", razao = "' . $param['razao'] . '", fantasia = "' . $param['fantasia'] . '", fixo = "' . $param['fixo'] .  '", celular = "' . $param['celular'] . '",
-      endereco = "' . $param['endereco'] . '", cep = "' . $param['cep'] . '",  inscricao = "' . $param['inscricao'] . '", cidade = "' . $param['cidade'] . '", bairro = "' . $param['bairro'] . '", uf = "' . $param['uf'] .'" ' ;
+      endereco = "' . $param['endereco'] . '", cep = "' . $param['cep'] . '",  inscricao = "' . $param['inscricao'] . '", cidade = "' . $param['cidade'] . '", bairro = "' . $param['bairro'] . '", uf = "' . $param['uf'] . '" ';
     print_r($sql);
 
 

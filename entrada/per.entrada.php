@@ -1,38 +1,101 @@
 <?php
 
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-
-// include_once '../../superClass/connect/class.connect_firebird.php';
-include_once '../DM/prepareSql.php';
 include_once './sql.entrada.php';
 
-
-extract($_POST);
+extract(json_decode(file_get_contents("php://input"), TRUE));
 
 class Entrada {
 
-    private $conexao;
-    private $sqlEntrada;
+    private $sql;
 
-    function __construct($id_sociedade) {
-        $this->conexao = ConexaoFirebird::getConectar($id_sociedade);
-        if (!$this->conexao) {
-            die('{"loja":"off"}');
-            return false;
+    function __construct() {
+        //instancia da class        
+        $this->sql = new SqlEntrada();
+    }
+
+    function getFornecedor($param){
+        $call = $this->sql->getFornecedor($param);
+        echo json_encode($call);
+    }
+
+    function getDataNota($param){
+        $call = $this->sql->getDataNota($param);
+        echo json_encode($call);
+    }
+
+    function getItensNota($param){
+        $call = $this->sql->getItensNota($param);
+        echo json_encode($call);
+    }
+
+    function getProduto($param){
+        $call = $this->sql->getProduto($param);
+        echo json_encode($call);
+    }
+
+    function getNota($param){
+        $call = $this->sql->getNota($param);
+        echo json_encode($call);
+    }
+
+    function getEditItens($param){
+        $call = $this->sql->getEditItens($param);
+        echo json_encode($call);
+    }
+
+    function deleteNota($param){
+        $id_nota = $this->sql->deleteNota($param);
+    }
+
+    function deleteItens($param){
+        $id_itens_nota = $this->sql->deleteItens($param);
+    }
+
+    function deleteItensNota($param){
+        $id_nota = $this->sql->deleteItensNota($param);
+    }
+
+    function updateProduto($param){
+        $call = $this->sql->updateProduto($param);
+    }
+
+    function updateItens($param){
+        $call = $this->sql->updateItens($param);
+    }
+
+    function insertNota($param){
+
+        if(empty($param['id_nota'])){
+            $id_nota = $this->sql->insertNota($param);
+            $call = $this->sql->getCabecalho($id_nota);
+            echo json_encode($call);
+
+        } else{
+            $id_nota = $this->sql->updateNota($param);
+            $call = $this->sql->getCabecalho($id_nota);
+            echo json_encode($call);
+
         }
 
-//        instancia da class        
-        $this->sqlEntrada = new SqlEntrada($this->conexao);
+        
     }
 
-    function exemplo($param) {
-        $call = $this->sql__->exemplo($param);
-        retorno::json($call);
-    }
+    function insertProduto($param){
 
+        $duplicity = $this->sql->duplicityProduto($param);
+        if(!empty($duplicity)){
+         echo '{"msg":"Produto ja incluso"}';
+        return false;
+        }
+        $id_itens_nota = $this->sql->insertProduto($param);
+        echo '{"id_itens_nota":"' . $id_itens_nota . '"}';
+      
+
+    }
 }
 
 $class = new Entrada();
