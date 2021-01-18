@@ -1,4 +1,8 @@
 <?php
+
+include_once '../class/class.connect_firebird.php';
+include_once '../class/prepareSql.php';
+
 class SqlSaida
 {
 
@@ -7,31 +11,26 @@ class SqlSaida
   
   function __construct()
   {
-    $this->db = new PDO('sqlite:/var/www/html/Estoque.sqlite');
+    $this->db = ConexaoFirebird::getConectar();
   }
 
   function getCliente($param){
-    extract($param);
-    $sql = "SELECT a.*, b.*
-            from clientes a, uf b, lista_servicos c
-            where a.id_uf = b.id_uf
-            AND representante like '$search%'
-            limit $offset, 10";
+    $sql = "SELECT FIRST 10 SKIP :offset
+            a.cnpj, a.razao, a.email, a.inscricao, 
+            a.fixo, a.tel, a.representante 
+            a.data_cadastro, a.cep, a.endereco,
+            a.cidade, a.bairro
+            b.id_uf, b.uf
+            FROM 
+            clientes a, uf b
+            WHERE 
+            a.id_uf = b.id_uf
+            AND 
+            representante like :search%";
 
-    $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(); 
+    $sql = prepare::SQL($sql, $param);
 
-  }
-
-  function getClienteAll($param){
-    extract($param);
-    $sql = "SELECT a.*, b.*
-            from clientes a, uf b
-            where a.id_uf = b.id_uf 
-            AND
-            representante like '$search%'
-            limit $offset, 10";
+    print_r($sql);
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
@@ -40,15 +39,19 @@ class SqlSaida
   }
 
   function getListaServicos($param){
-    extract($param);
-    $sql = "SELECT a.*, b.servico 
-            FROM lista_servicos a, servicos b
+
+    $sql = "SELECT FIRST 10 SKIP :offset
+            a.id_lista_servico, a.id_cliente, 
+            a.valor, a.data, a.hora, a.status,
+            b.id_servico, b.servico 
+            FROM 
+            lista_servicos a, servicos b
             WHERE 
             a.id_servico = b.id_servico
             AND
-            id_cliente = $search
-            LIMIT $offset, 10";
+            id_cliente = :search";
 
+    $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(); 
@@ -65,35 +68,42 @@ class SqlSaida
   }
 
   function getProdutos($param){
-    extract($param);
-    $sql = "SELECT a.*, b.* 
+    $sql = "SELECT FIRST 10 SKIP :offset
+            a.id_produto, a.qtd, a.descricao,
+            a.valor, a.codigo, a.data_cadastro,
+            a.usuario_cadastrado, a.endereco,
+            b.id_marca, b.marca
             FROM produtos a, marca b
             WHERE a.id_marca = b.id_marca 
-            AND descricao LIKE '$search%'
-            LIMIT $offset, 10";
-     
+            AND descricao LIKE :search%";
+
+    $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll();
   }
 
   function getProduto($param){
-    extract($param);
-    $sql = "SELECT a.*, b.* 
+    $sql = "SELECT FIRST 1 SKIP :offset
+            a.id_produto, a.qtd, a.descricao,
+            a.valor, a.codigo, a.data_cadastro,
+            a.usuario_cadastrado, a.endereco,
+            b.id_marca, b.marca
             FROM produtos a, marca b
             WHERE a.id_marca = b.id_marca 
-            AND id_produto LIKE '$search%'
-            LIMIT $offset, 1";
+            AND descricao LIKE :search%";
 
+    $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll();
   }
 
   function getServ(){
-
-    $sql = "SELECT * 
-            FROM servicos";
+    $sql = "SELECT
+            * 
+            FROM 
+            servicos";
 
     $query = $this->db->prepare($sql);
     $query->execute();
@@ -102,71 +112,97 @@ class SqlSaida
   }
 
   function gerarServico($param){
-    extract($param);
-    $sql = "INSERT INTO lista_servicos (id_cliente, id_servico, valor, data, hora, status)
-            VALUES ($idCliente, $idServico, '$valorT', strftime('%d/%m/%Y'), strftime('%H:%M:%S'), 'ABERTO')";
+    $sql = "INSERT INTO lista_servicos 
+            (id_cliente, id_servico, 
+            valor, data, hora, status)
+            VALUES 
+            (:idCliente, :idServico, 
+            :valorT, strftime('%d/%m/%Y'), 
+            strftime('%H:%M:%S'), 'ABERTO')";
    
     print_r($sql);
+    $sql = prepare::SQL($sql, $param);
     $this->db->exec($sql);
     return $this->db->lastInsertId();  
-}
+  }
 
   function inserirItens($param){
-    extract($param);
-    $sql = "INSERT INTO lista_itens_servico (id_lista_servico, id_produto, qtd, data)
-            VALUES ($id_servico, $idProduto,$qtdProduto, '$dia')";
+    $sql = "INSERT INTO 
+            lista_itens_servico 
+            (id_lista_servico, id_produto, qtd, data)
+            VALUES 
+            (:id_servico, :idProduto, :qtdProduto, :dia)";
+
     // print_r($sql);
+    $sql = prepare::SQL($sql, $param);
     $this->db->exec($sql);
     return $this->db->lastInsertId();  
   }
 
   function getItens($param){
-    extract($param);
-    $sql = "SELECT a.*, b.*, c.*
-            FROM produtos a, lista_itens_servico b, marca c
-            WHERE b.id_produto = a.id_produto
-            AND c.id_marca = a.id_marca
-            AND id_lista_servico = $search
-            LIMIT $offset, 10";
+    $sql = "SELECT FIRST 10 SKIP :offset
+            a.id_produto, a.qtd, a.descricao,
+            a.valor, a.codigo, a.data_cadastro,
+            a.usuario_cadastrado, a.endereco,
+            b.id_itens_servico, b.id_lista_servico,
+            b.id_produto, b.qtd, b.data,
+            c.id_marca, c.marca
+            FROM 
+            produtos a, lista_itens_servico b, marca c
+            WHERE 
+            b.id_produto = a.id_produto
+            AND 
+            c.id_marca = a.id_marca
+            AND 
+            id_lista_servico = :search";
 
+    $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll();
   }
 
   function atualizaProduto($param){
-    extract($param);
-
-    $sql= "UPDATE produtos 
-           SET qtd = $newEstoque
-           WHERE id_produto = $idProduto";
+    $sql= "UPDATE 
+           produtos 
+           SET 
+           qtd = :newEstoque
+           WHERE 
+           id_produto = :idProduto";
     
     // print_r($sql);
+    $sql = prepare::SQL($sql, $param);
     $this->db->exec($sql);
     return $this->db->lastInsertId();
   }
 
   function deletarItem($param){
-    extract($param);
     $sql="DELETE FROM lista_itens_servico 
-          WHERE  id_itens_servico = $idItemServico";
+          WHERE  id_itens_servico = :idItemServico";
 
+    $sql = prepare::SQL($sql, $param);
     $this->db->exec($sql);
     return $this->db->lastInsertId();
   }
 
   function deletarItens($param){
-    $sql="DELETE FROM lista_itens_servico 
-          WHERE  id_lista_servico = $param";
+    $sql="DELETE FROM 
+          lista_itens_servico 
+          WHERE 
+          id_lista_servico = :param";
 
+    $sql = prepare::SQL($sql, $param);
     $this->db->exec($sql);
     return $this->db->lastInsertId();
   }
 
   function deletarServico($param){
-    $sql="DELETE FROM lista_servicos
-          WHERE  id_lista_servico = $param";
+    $sql="DELETE FROM
+          lista_servicos
+          WHERE
+          id_lista_servico = :param";
 
+    $sql = prepare::SQL($sql, $param);
     $this->db->exec($sql);
     return $this->db->lastInsertId();
   }
@@ -174,32 +210,37 @@ class SqlSaida
   function buscaIds($param){
     $sql = "SELECT *
             FROM lista_itens_servico
-            WHERE id_lista_servico = $param";
+            WHERE id_lista_servico = :param";
      
+    $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll();
   }
 
   function atualizaPreco($param){
-    extract($param);
-    $sql = "UPDATE lista_servicos
-            SET valor = '$newValor'
-            WHERE id_lista_servico = $id_lista_servico";
+    $sql = "UPDATE 
+            lista_servicos
+            SET 
+            valor = ':newValor'
+            WHERE 
+            id_lista_servico = :id_lista_servico";
 
+    $sql = prepare::SQL($sql, $param);
     print_r($sql);
     $this->db->exec($sql);
     return $this->db->lastInsertId();
   }
 
   function atualizaStatus($param){
-    extract($param);
+    $sql = "UPDATE 
+            lista_servicos
+            SET 
+            status = ':status'
+            WHERE 
+            id_lista_servico = :id_lista_servico";
 
-    $sql = "UPDATE lista_servicos
-            SET status = '$status'
-            WHERE id_lista_servico = $id_lista_servico";
-
-    print_r($sql);
+    $sql = prepare::SQL($sql, $param);
     $this->db->exec($sql);
     return $this->db->lastInsertId();
   }

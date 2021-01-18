@@ -91,7 +91,12 @@ $(function () {
 
     })
 
-
+    a = $('#spId_cliente').val();
+    
+    if(a == '' || a == undefined){
+        console.log('entrou')
+        $('.btnN').attr("disabled",true)
+    }
 
 });
 
@@ -101,6 +106,7 @@ const saida = (function () {
     let url = 'saida/per.saida.php';
     let ControleGrid;
 
+    
     function grid() {
 
         xgSaida = new xGridV2.create({
@@ -185,7 +191,7 @@ const saida = (function () {
 
                         novo: {
                             html: "Novo",
-                            class: "btnP",
+                            class: "btnP btnN",
                             click: novo,
                         },
                         visualizar: {
@@ -463,6 +469,8 @@ const clientes = (function () {
 
                     xgSaida.queryOpen({ search: cliente.id_cliente })
 
+                    $('.btnN').removeAttr("disabled")
+
                 },
             },
 
@@ -481,7 +489,7 @@ const clientes = (function () {
 
     function getCliente(search, offset) {
         axios.post(url, {
-            call: 'getClienteAll',
+            call: 'getCliente',
             param: { search: search, offset: offset },
         })
             .then(rs => {
