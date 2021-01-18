@@ -7,6 +7,7 @@ class ConexaoFirebird
     {
         $banco = '/home/sisvop/sisvop.fdb';
         $server = '10.0.80.38';
+
         // $server = 'vsescola.com.br';
 
         try {

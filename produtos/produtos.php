@@ -9,12 +9,12 @@
         <div class="row">
             <div class="col s3">
                 <label>Codigo</label>
-                <input type="number" id="editCodigo" placeholder="" name="codigo">
+                <input type="number" id="editCodigo" placeholder="" name="CODIGO">
 
             </div>
             <div class="col s9">
                 <label>Descrição</label>
-                <input type="text" id="editDescricao" placeholder="" name="descricao">
+                <input type="text" id="editDescricao" placeholder="" name="DESCRICAO">
 
             </div>
 
@@ -23,16 +23,16 @@
         <div class="row">
             <div class="col s4">
                 <label>Valor</label>
-                <input type="text" class="real" id="editValor" placeholder="" name="valor">
+                <input type="text" class="real" id="editValor" placeholder="" name="VALOR">
             </div>
             <div class="col s4">
                 <label>Endereço</label>
-                <input type="text" class="" id="editEndereco" placeholder="" name="endereco">
+                <input type="text" class="" id="editEndereco" placeholder="" name="ENDERECO">
             </div>
 
             <div class="col s4">
                 <label>Quantidade</label>
-                <input type="text" placeholder="" id="editQtd" name="qtd">
+                <input type="text" placeholder="" id="editQtd" name="QTD">
 
             </div>
         </div>
@@ -40,13 +40,13 @@
         <div class="row">
             <div class="col s4">
                 <label>Data de cadastro</label>
-                <input type="text" id="edtData" id="editData" placeholder="" name="data_cadastro" disabled>
+                <input type="text" id="edtData" id="editData" placeholder="" name="DATA_CADASTRO" disabled>
             </div>
 
 
             <div class="col s8">
                 <label>Marca</label>
-                <select name="id_marca" id="slctMarca"></select>
+                <select name="ID_MARCA" id="slctMarca"></select>
             </div>
         </div>
     </div>
