@@ -1,4 +1,8 @@
 <?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 include_once '../class/class.connect_firebird.php';
 include_once '../class/prepareSql.php';
 
@@ -17,8 +21,8 @@ class SqlMarca
             from marcas 
             WHERE marca like '$search%'
             ORDER BY marca ASC";
-
-    $query = $this->db->prepare($sql);
+              
+   $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
@@ -27,7 +31,7 @@ class SqlMarca
     extract($param);
 
     $sql = "select id_marca from marcas
-            WHERE marca like '%$marca'";
+            WHERE marca like '%$MARCA%'";
 
     $query = $this->db->prepare($sql);
     $query->execute();
@@ -38,21 +42,24 @@ class SqlMarca
     extract($param);
 
     $sql = "INSERT INTO marcas (marca)
-            VALUES('$marca')";
+            VALUES('$MARCA') returning id_marca";
 
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function atualizaMarca($param){
     extract($param);
 
     $sql = "UPDATE marcas
-            SET marca = '$marca'
-            WHERE id_marca = $id_marca";
+            SET marca = '$MARCA'
+            WHERE id_marca = $ID_MARCA
+            returning id_marca";
 
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function deletarMarca($param){

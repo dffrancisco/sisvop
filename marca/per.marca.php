@@ -29,9 +29,9 @@ class Marca
     }
 
     function salvar($param){
-        if (empty($param['id_marca'])) {
+        if (empty($param['ID_MARCA'])) {
             $idMarca = $this->sql->inserirMarca($param);
-            echo '{"id_marca":"' . $idMarca . '"}';
+            echo json_encode($idMarca);
         } else {
             $call = $this->sql->atualizaMarca($param);
             print_r($call);

@@ -13,29 +13,24 @@ class SqlFornecedor
 
   function getFornecedor($param)
   {
+    extract($param);
 
-    // $sql = "select a.id_fornecedor, a.cnpj, a.razao_social, 
-    //         a.nome_fantazia, a.endereco, 
-    //         a.cidade, a.bairro, b.id_uf, b.uf, a.municipio, 
-    //         a.cep, a.telefone_1, a.telefone_2, a.fax, 
-    //         a.inscricao_estadual, a.data_cadastro 
-    //         from fornecedor a, uf b 
-    //         WHERE a.id_uf = b.id_uf AND 
-    //         a.nome_fantazia like '$search%'
-    //         limit $offset, 10";
+    $sql = "SELECT FIRST 10 SKIP $offset
+            a.id_fornecedor, a.cnpj, a.razao,
+            a.fantasia, a.endereco, a.cidade,
+            a.bairro, a.municipio, a.cep,
+            a.tel_1, a.tel_2, a.inscricao,
+            a.data_cadastro,
+            b.id_uf, b.uf
+            FROM fornecedor a, uf b
+            WHERE b.id_uf = a.id_uf 
+            AND fantasia like '$search%'
+            ORDER BY fantasia ASC";
 
-    $sql = "SELECT FIRST 10 SKIP :offset
-            id_marca, marca
-            FROM marcas
-            WHERE marca like ':search%'
-            ORDER BY marca ASC";
-
-    $sql = prepare::SQL($sql, $param);
-            print_r($sql);
-
+print_r($sql);
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
 
   }
 
@@ -46,24 +41,26 @@ class SqlFornecedor
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
   function inserirFornecedor($param){
     $sql = "INSERT INTO fornecedor 
-            (cnpj, razao_social, nome_fantazia, 
+            (cnpj, razao, fantasia, 
             endereco, cidade, bairro, id_uf, 
-            municipio, cep, telefone_1, telefone_2,
-            inscricao_estadual, data_cadastro)
+            municipio, cep, tel_1, tel_2,
+            inscricao, data_cadastro)
             VALUES
-            (:cnpj, :razao_social, :nome_fantazia, 
-            :endereco, :cidade, :bairro, :id_uf, 
-            :municipio, :cep, :telefone_1, :telefone_2,
-            :inscricao_estadual, :data_cadastro)";
-    
-    $sql = prepare::SQL($sql, $param); 
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
+            (:CNPJ, :RAZAO, :FANTASIA, 
+            :ENDERECO, :CIDADE, :BAIRRO, :ID_UF, 
+            :MUNICIPIO, :CEP, :TEL_1, :TEL_2,
+            :INSCRICAO, :DATA_CADASTRO)
+            returning id_fornecedor";
+    $sql = prepare::SQL($sql, $param);
+
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
   function atualizaFornecedor($param){

@@ -28,8 +28,8 @@ const fornecedor = (function () {
             heightLine: '35',
 
             columns: {
-                CNPJ: { dataField: 'cnpj' },
-                Fantazia: { dataField: 'nome_fantazia' },
+                CNPJ: { dataField: 'CNPJ' },
+                Fantasia: { dataField: 'FANTASIA' },
             },
 
             sideBySide: {
@@ -89,11 +89,9 @@ const fornecedor = (function () {
                 //             })
                 //                 .then(rs => {
                 //                     if (controleGrid == 'editar') {
-                //                         console.log("if editar")
                 //                         return true
                 //                     }
                 //                     if (rs.data[0]) {
-                //                         console.log('dupli')
                 //                         xgFornecedor.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!');
                 //                         xgFornecedor.focusField(r.field);
                 //                         return false
@@ -131,7 +129,7 @@ const fornecedor = (function () {
             call: 'getUf'
         }).then(rs => {
             for (let i in rs.data) {
-                let table = `<option value="${rs.data[i].id_uf}"> ${rs.data[i].uf}</option>`
+                let table = `<option value="${rs.data[i].ID_UF}"> ${rs.data[i].UF}</option>`
                 $('#slctUf').append(table)
             }
         })
@@ -225,7 +223,7 @@ const fornecedor = (function () {
         let valCampos = {
             cnpj: $('#edtCnpj').val(),
             razao_social: $('#edtRazaoSocial').val(),
-            nome_fantazia: $('#edtFantazia').val(),
+            nome_fantazia: $('#edtFantasia').val(),
             endereco: $('#edtEndereco').val(),
             cidade: $('#edtCidade').val(),
             bairro: $('#edtBairro').val(),
@@ -265,9 +263,10 @@ const fornecedor = (function () {
             param: param
         })
             .then(rs => {
+                console.log('rs :', rs.data);
 
-                if (rs.data.id_fornecedor) {
-                    param.id_fornecedor = rs.data.id_fornecedor;
+                if (rs.data[0].id_fornecedor) {
+                    param.id_fornecedor = rs.data[0].id_fornecedor;
                     xgFornecedor.insertLine(param);
 
                 }
