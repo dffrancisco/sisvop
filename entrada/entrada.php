@@ -119,12 +119,12 @@
     <div class="row">
         <div class="col s6">
             <label>Nº da nota</label>
-            <input type="text" placeholder="" class="validate numeroNota" name="" id="edtNumero">
+            <input type="text" placeholder="" class="validate numeroNota" id="edtNumero">
         </div>
 
         <div class="col s5">
             <label>Data de Emissão</label>
-            <input type="text" placeholder="" class="validate date" name="" id="edtData">
+            <input type="text" placeholder="" class="validate date" id="edtData">
 
         </div>
 
@@ -133,24 +133,24 @@
 
         <div class="col s4">
             <label>ST</label>
-            <input type="text" placeholder="" class="validate real" name="" id="edtSt">
+            <input type="text" placeholder="" class="validate real" id="edtSt">
 
         </div>
         <div class="col s3">
             <label>Cálculo do ICMS</label>
-            <input type="text" placeholder="" class="validate real" name="" id="edtIcms">
+            <input type="text" placeholder="" class="validate real" id="edtIcms">
 
         </div>
         <div class="col s4">
             <label>Valor total</label>
-            <input type="text" placeholder="" class="validate real" name="" id="edtValor">
+            <input type="text" placeholder="" class="validate real" id="edtValor">
         </div>
     </div>
     <div class="row">
 
         <div class="col s11">
             <label>Chave de acesso</label>
-            <input type="text" placeholder="" class="validate" name="" id="edtChave">
+            <input type="text" placeholder="" class="validate" id="edtChave">
 
         </div>
     </div>

@@ -53,21 +53,21 @@ const itens = (function () {
 
             columns: {
                 Código: {
-                    dataField: "codigo",
+                    dataField: "CODIGO",
                     width: "10%",
                 },
                 Descrição: {
-                    dataField: "descricao",
+                    dataField: "DESCRICAO",
                     width: "50%",
                 },
 
                 Valor: {
-                    dataField: "valor_nota",
+                    dataField: "VALOR_NOTA",
                     width: "20%",
                     center: true,
                 },
                 Qtd: {
-                    dataField: "qtd_nota",
+                    dataField: "QTD_NOTA",
                     width: "20%",
                     center: true,
                 }
@@ -122,21 +122,21 @@ const itens = (function () {
             columns: {
 
                 Fornecedor: {
-                    dataField: "nome_fantazia",
+                    dataField: "NOME_FANTAZIA",
                     width: "35%",
                 },
                 Nº: {
-                    dataField: "numero_nota",
+                    dataField: "NUMERO_NOTA",
                     center: true,
                     width: "25%",
                 },
                 Data: {
-                    dataField: "data_emissao",
+                    dataField: "DATA_EMISSAO",
                     center: true,
                     width: "20%",
                 },
                 Valor: {
-                    dataField: "valor_total",
+                    dataField: "VALOR_TOTAL",
                     center: true,
                     width: "20%",
                 },
@@ -160,11 +160,11 @@ const itens = (function () {
             columns: {
 
                 Nome: {
-                    dataField: "nome_fantazia",
+                    dataField: "NOME_FANTAZIA",
                     width: "65%",
                 },
                 CNPJ: {
-                    dataField: "cnpj",
+                    dataField: "CNPJ",
                     center: true,
                     width: "35%",
                 },

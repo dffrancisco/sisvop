@@ -17,7 +17,7 @@ const marca = (function () {
             theme: 'x-clownV2',
             heightLine: '35',
             columns: {
-                Marca: { dataField: 'MARCA' },
+                Marca: { dataField: 'MARCA'},
             },
             onSelectLine: (r) => {
                 console.log(r)
