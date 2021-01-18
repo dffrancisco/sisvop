@@ -12,27 +12,23 @@ class Marca
 
     private $sql;
 
-    function __construct()
-    {
+    function __construct(){
 
         //instancia da class        
         $this->sql = new SqlMarca();
     }
 
-    function getMarca($param)
-    {
+    function getMarca($param){
         $call = $this->sql->getMarca($param);
         echo json_encode($call);
     }
 
-    function findMarca($param)
-    {
+    function findMarca($param){
         $call = $this->sql->findMarca($param);
         echo json_encode($call);
     }
 
-    function salvar($param)
-    {
+    function salvar($param){
         if (empty($param['id_marca'])) {
             $idMarca = $this->sql->inserirMarca($param);
             echo '{"id_marca":"' . $idMarca . '"}';
@@ -42,8 +38,7 @@ class Marca
         }
     }
 
-    function deletar($param)
-    {
+    function deletar($param){
         $call = $this->sql->deletarMarca($param);
     }
 }

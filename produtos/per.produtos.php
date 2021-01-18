@@ -17,8 +17,7 @@ class Produtos
         $this->sql = new SqlProdutos();
     }
 
-    function getProdutos($param)
-    {
+    function getProdutos($param){
         $call = $this->sql->getProdutos($param);
         echo json_encode($call);
     }

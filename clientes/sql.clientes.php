@@ -1,4 +1,7 @@
 <?php
+include_once '../class/class.connect_firebird.php';
+include_once '../class/prepareSql.php';
+
 class SqlClientes
 {
 
@@ -7,22 +10,30 @@ class SqlClientes
   
   function __construct()
   {
-    $this->db = new PDO('sqlite:/var/www/html/Estoque.sqlite');
+    $this->db = ConexaoFirebird::getConectar();
   }
 
 
   function getCliente($param){
     extract($param);
-    $sql = "select a.*, b.* 
+    $sql = "select first 10 skip $offset a.id_clinte, a.cnpj, a.razao,
+    a.email, a.inscricao, a.fixo, a.tel, a.representante, a.data_cadastro,
+    a.cep, a.endereco, a.id_uf, a.cidade, a.bairro, b.id_uf, b.uf  
     from clientes a, uf b
     where b.id_uf = a.id_uf
-    and a.razao like '$search%' 
-    limit $offset, 10";
+    and a.razao like '$search%' ";
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
 
+  }
+
+  function getUf(){
+    $sql = "SELECT * FROM uf";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function delete($param){
@@ -32,9 +43,13 @@ class SqlClientes
   }
 
   function insert($param){
-    extract($param);
-    $sql = "INSERT INTO clientes (cnpj, razao, email, inscricao, fixo, tel, representante, data_cadastro, cep, endereco, id_uf, cidade, bairro)
-    VALUES('$cnpj', '$razao', '$email', '$inscricao', '$fixo', '$tel', '$representante', '$data_cadastro', '$cep', '$endereco', '$id_uf', '$cidade', '$bairro')";
+    $sql = "INSERT INTO clientes 
+            (cnpj, razao, email, inscricao, fixo, tel, representante, data_cadastro, cep, endereco, id_uf, cidade, bairro)
+            VALUES
+            (:cnpj, :razao, :email, :inscricao, :fixo, :tel, :representante, :data_cadastro, :cep, :endereco, :id_uf, :cidade, :bairro)";
+    
+    $sql = prepare::SQL($sql, $param);
+    
     $this->db->exec($sql);
     return $this->db->lastInsertId();
   }
@@ -55,15 +70,9 @@ class SqlClientes
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
-  function getUf(){
-    $sql = "SELECT * FROM uf";
-    $query = $this->db->prepare($sql);
-    $query->execute();
-    return $query->fetchAll();
-  }
-
+ 
   
 }
