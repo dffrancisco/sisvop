@@ -19,14 +19,12 @@ class Funcionarios
         $this->sql = new SqlFuncionarios();
     }
 
-    function getFuncionarios($param)
-    {
+    function getFuncionarios($param){
         $call = $this->sql->getFuncionarios($param);
         echo json_encode($call);
     }
 
-    function save($param)
-    {
+    function save($param){
         if (empty($param['id_funcionario'])) {
            // echo 'entrou';
             $id_funcionario = $this->sql->insert($param);
@@ -37,17 +35,13 @@ class Funcionarios
         }
     }
 
-    function delete($param)
-    {
+    function delete($param){
         $id = $this->sql->delete($param);
     }
 
-    function duplicity($param)
-    {
+    function duplicity($param){
         $call = $this->sql->duplicity($param);
-
         echo json_encode($call);
-
     }
 
     function getBairro(){
