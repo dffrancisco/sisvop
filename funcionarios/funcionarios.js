@@ -24,11 +24,11 @@ const funcionario = (function () {
             theme: "x-clownV2",
             columns: {
                 Nome: {
-                    dataField: "nome",
+                    dataField: "NOME",
                     width: "60%",
                 },
                 CPF: {
-                    dataField: "cpf",
+                    dataField: "CPF",
                     center: true,
                 },
 

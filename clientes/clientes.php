@@ -7,11 +7,11 @@
         <div class="row">
             <div class="col s3">
                 <label>CNPJ</label>
-                <input placeholder="" type="text" class="CNPJ validate" id="edtCnpj" name="cnpj">
+                <input placeholder="" type="text" class="CNPJ validate" id="edtCnpj" name="CNPJ">
             </div>
             <div class=" col s9">
                 <label>Razão social</label>
-                <input placeholder="" type="text" class="validate" id="edtRazao" name="razao">
+                <input placeholder="" type="text" class="validate" id="edtRazao" name="RAZAO">
             </div>
         </div>
 
@@ -19,11 +19,11 @@
         <div class="row">
             <div class="col s7">
                 <label>E-mail</label>
-                <input placeholder="" type="text" class="validate" id="edtEmail" name="email">
+                <input placeholder="" type="text" class="validate" id="edtEmail" name="EMAIL">
             </div>
             <div class="col s5">
                 <label>Inscrição estadual</label>
-                <input placeholder="" type="text" class="validate" id="edtIscricao" name="inscricao">
+                <input placeholder="" type="text" class="validate" id="edtIscricao" name="INSCRICAO">
             </div>
         </div>
 
@@ -31,19 +31,19 @@
         <div class="row">
             <div class="col s3">
                 <label>Telefone fixo</label>
-                <input placeholder="" type="text" class="validate TELEFONE" id="edtFixo" name="fixo">
+                <input placeholder="" type="text" class="validate TELEFONE" id="edtFixo" name="FIXO">
             </div>
             <div class="col s3">
                 <label>Telefone</label>
-                <input placeholder="" type="text" class="validate TELEFONE" id="edtTel" name="tel">
+                <input placeholder="" type="text" class="validate TELEFONE" id="edtTel" name="TEL">
             </div>
             <div class="col s3">
                 <label>Representante</label>
-                <input placeholder="" type="text" class="validate" id="edtRepresentante" name="representante">
+                <input placeholder="" type="text" class="validate" id="edtRepresentante" name="REPRESENTANTE">
             </div>
             <div class="col s3">
                 <label>Data de cadastro</label>
-                <input placeholder="" type="text" class="validate" id="edtData" name="data_cadastro" disabled>
+                <input placeholder="" type="text" class="validate" id="edtData" name="DATA_CADASTRO" disabled>
             </div>
         </div>
 
@@ -51,26 +51,26 @@
         <div class="row">
             <div class="col s3">
                 <label>CEP</label>
-                <input placeholder="" type="text" class="validate" id="edtCep" name="cep">
+                <input placeholder="" type="text" class="validate" id="edtCep" name="CEP">
             </div>
             <div class="col s9">
                 <label>Endereço</label>
-                <input placeholder="" type="text" class="validate" id="edtEndereco" name="endereco">
+                <input placeholder="" type="text" class="validate" id="edtEndereco" name="ENDERECO">
             </div>
         </div>
 
         <div class="row">
             <div class="col s2">
                 <label>UF</label>
-                <select name="id_uf" id="slctUf"></select>
+                <select name="ID_UF" id="slctUf"></select>
             </div>
             <div class="col s5">
                 <label>Cidade</label>
-                <input placeholder="" type="text" class="validate" id="edtCidade" name="cidade">
+                <input placeholder="" type="text" class="validate" id="edtCidade" name="CIDADE">
             </div>
             <div class="col s5">
                 <label>Bairro</label>
-                <input placeholder="" type="text" class="validate" id="edtBairro" name="bairro">
+                <input placeholder="" type="text" class="validate" id="edtBairro" name="BAIRRO">
             </div>
         </div>
     </div>

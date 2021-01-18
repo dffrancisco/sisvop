@@ -1,4 +1,7 @@
 <?php
+include_once '../class/class.connect_firebird.php';
+include_once '../class/prepareSql.php';
+
 class SqlProdutos
 {
 
@@ -6,29 +9,28 @@ class SqlProdutos
 
   function __construct()
   {
-    $this->db = new PDO('sqlite:/var/www/html/Estoque.sqlite');
+    $this->db = ConexaoFirebird::getConectar();
+  
     $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   }
 
 
-  function getProdutos($param)
-  {
+  function getProdutos($param){
     extract($param);
-    $sql = "select a.id_produto, a.qtd, a.descricao, a.valor, a.codigo, 
+    $sql = "select first 10 skip $offset a.id_produto, a.qtd, a.descricao, a.valor, a.codigo, 
             a.id_marca, a.data_cadastro, a.endereco, b.marca, b.id_marca 
             from produtos a, marca b
             where b.id_marca = a.id_marca
             and a.descricao like '$search%' 
-            ORDER BY qtd asc limit $offset, 10";
+            ORDER BY qtd asc";
 
      
     $query = $this->db->prepare($sql);
     $query->execute();
-    return $query->fetchAll();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function insert($param)
-  {
+  function insert($param){
     extract($param);
     $sql = "INSERT INTO produtos (qtd, descricao, valor, codigo, id_marca, data_cadastro, endereco)
     VALUES('$qtd', '$descricao', '$valor', '$codigo', '$id_marca', '$data_cadastro', '$endereco')";
@@ -38,8 +40,7 @@ class SqlProdutos
     return $this->db->lastInsertId();
   }
 
-  function update($param)
-  {
+  function update($param){
     extract($param);
     $sql = 'UPDATE produtos ' . 
     'SET qtd = "'.$qtd.'", descricao = "'.$descricao.'", valor = "'.$valor.'", codigo = "'.$codigo.'", id_marca = "'.$id_marca.'", endereco = "'.$endereco.'" ' .
@@ -48,8 +49,7 @@ class SqlProdutos
     return $this->db->lastInsertId();
   }
 
-  function delete($param)
-  {
+  function delete($param){
 
     $sql = 'DELETE FROM produtos WHERE id_produto = ' . $param;
 
@@ -61,7 +61,7 @@ class SqlProdutos
     $sql = "SELECT * FROM marca";
     $query = $this->db->prepare($sql);
     $query->execute();
-    return $query->fetchAll();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function getCodigo($param){
@@ -72,7 +72,7 @@ class SqlProdutos
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
 }

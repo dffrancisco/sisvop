@@ -8,7 +8,7 @@
 
             <div class=" col s12">
                 <label>Nome completo</label>
-                <input placeholder="" type="text" class="validate" id="edtNome" name="nome" disabled>
+                <input placeholder="" type="text" class="validate" id="edtNome" name="NOME" disabled>
             </div>
         </div>
 
@@ -16,33 +16,33 @@
         <div class="row">
             <div class="col s5">
                 <label>RG</label>
-                <input placeholder="" type="number" class="validate" id="edtRg" name="rg" disabled>
+                <input placeholder="" type="number" class="validate" id="edtRg" name="RG" disabled>
             </div>
             <div class="col s7">
                 <label>CPF</label>
-                <input placeholder="" type="text" class="validate CPF" id="edtCpf" name="cpf" disabled>
+                <input placeholder="" type="text" class="validate CPF" id="edtCpf" name="CPF" disabled>
             </div>
         </div>
         <div class="row">
             <div class="col s6">
                 <label>Telefone</label>
-                <input placeholder="" type="text" class="validate TELEFONE" id="edtTel" name="telefone" disabled>
+                <input placeholder="" type="text" class="validate TELEFONE" id="edtTel" name="TELEFONE" disabled>
             </div>
 
             <div class="col s6">
                 <label>CEP</label>
-                <input placeholder="" type="text" class="validate CEP" id="edtCep" name="cep" disabled>
+                <input placeholder="" type="text" class="validate CEP" id="edtCep" name="CEP" disabled>
             </div>
         </div>
 
         <div class="row">
             <div class="col s10">
                 <label>Endereço</label>
-                <input placeholder="" type="text" class="validate" id="edtEnd" name="endereco" disabled>
+                <input placeholder="" type="text" class="validate" id="edtEnd" name="ENDERECO" disabled>
             </div>
             <div class="col s2">
                 <label>UF</label>
-                <input placeholder="" type="text" class="validate" id="edtUf" name="uf" disabled>
+                <input placeholder="" type="text" class="validate" id="edtUf" name="UF" disabled>
             </div>
         </div>
 
@@ -51,11 +51,11 @@
 
             <div class="col s6">
                 <label>Cidade</label>
-                <input placeholder="" type="text" class="validate" id="edtCidade" name="cidade" disabled>
+                <input placeholder="" type="text" class="validate" id="edtCidade" name="CIDADE" disabled>
             </div>
             <div class="col s6">
                 <label>Bairro</label>
-                <select id="slctBairro" name="id_bairro" class="validate">
+                <select id="slctBairro" name="ID_BAIRRO" class="validate">
                 </select>
                 <!-- <input placeholder="" type="text" class="validate" id="edtBairro" name="bairro" disabled> -->
             </div>

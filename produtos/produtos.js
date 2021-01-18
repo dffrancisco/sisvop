@@ -21,23 +21,23 @@ const produto = (function () {
 
       columns: {
         Código: {
-          dataField: "codigo",
+          dataField: "CODIGO",
           center: true,
           width: "10%",
         },
         Descrição: {
-          dataField: "descricao",
+          dataField: "DESCRICAO",
           width: "60%",
           style: "font-size: 16px;",
 
         },
         QTD: {
-          dataField: "qtd",
+          dataField: "QTD",
           width: "15%",
           center: true,
         },
         Valor: {
-          dataField: "valor",
+          dataField: "VALOR",
           render: addReal,
           width: "15%",
         },

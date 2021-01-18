@@ -6,19 +6,18 @@ class SqlEntrada
   public $db;
   
   function __construct(){
-    $this->db = new PDO('sqlite:/var/www/html/Estoque.sqlite');
+    $this->db = ConexaoFirebird::getConectar();
   }
 
   function getFornecedor($param){
     extract($param);
-    $sql = "select cnpj, nome_fantazia, id_fornecedor
+    $sql = "select first 10 skip $offset cnpj, nome_fantazia, id_fornecedor
     from fornecedor
-    WHERE nome_fantazia like '$search%' 
-    limit $offset, 10";
+    WHERE nome_fantazia like '$search%'";
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
 
   }
   
@@ -29,14 +28,14 @@ class SqlEntrada
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
   function getNota($param){
 
     extract($param);
 
-    $sql = "SELECT a.id_fornecedor, a.id_nota, a.numero_nota, a.data_emissao, 
+    $sql = "SELECT first 10 skip $offset a.id_fornecedor, a.id_nota, a.numero_nota, a.data_emissao, 
     a.valor_total, b.nome_fantazia 
     FROM nota a, fornecedor b
     WHERE b.id_fornecedor = a.id_fornecedor ";
@@ -50,11 +49,10 @@ class SqlEntrada
     };
     
    
-    $sql = $sql . "LIMIT $offsetNota,10 ";
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
   function getDataNota($param){
@@ -70,7 +68,7 @@ class SqlEntrada
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
   function getItensNota($param){
@@ -84,7 +82,7 @@ class SqlEntrada
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
   function getCabecalho($id_nota){
@@ -96,7 +94,7 @@ class SqlEntrada
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
 
   } 
 
@@ -107,7 +105,7 @@ class SqlEntrada
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
 
   } 
   
@@ -194,7 +192,7 @@ class SqlEntrada
           
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
 
   }
 }

@@ -21,12 +21,12 @@ const cliente = (function () {
 
             columns: {
                 CNPJ: {
-                    dataField: "cnpj",
+                    dataField: "CNPJ",
                     center: true,
                     width: "40%",
                 },
                 Razão: {
-                    dataField: "razao",
+                    dataField: "RAZAO",
                     width: "60%",
                 }
             },
