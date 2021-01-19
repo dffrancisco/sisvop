@@ -27,7 +27,7 @@ class SqlFornecedor
             AND fantasia like '$search%'
             ORDER BY fantasia ASC";
 
-print_r($sql);
+// print_r($sql);
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ); 
@@ -66,7 +66,7 @@ print_r($sql);
   function atualizaFornecedor($param){
 
     $sql = "UPDATE fornecedor 
-            set 
+            SET 
             cnpj = :cnpj, razao_social = :razao_social, 
             nome_fantazia = :nome_fantazia, endereco = :endereco, 
             cidade = :cidade, bairro = :bairro, 
@@ -76,10 +76,11 @@ print_r($sql);
             inscricao_estadual = :inscricao_estadual
             WHERE 
             id_fornecedor = :id_fornecedor";
-
+    
     $sql = prepare::SQL($sql, $param); 
+    print_r($param);
     $this->db->exec($sql);
-    return $this->db->lastInsertId();
+    // return $this->db->lastInsertId();
   }
 
   function deletarFornecedor($param){

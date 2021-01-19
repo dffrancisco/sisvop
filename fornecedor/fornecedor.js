@@ -7,6 +7,18 @@ $(function () {
     fornecedor.grid();
     fornecedor.getUf();
     xgFornecedor.queryOpen({ search: '' });
+
+
+    $("#edtPesquisa").keydown(function (e) {
+
+        if (e.keyCode == 13) {
+            $('.btnPesq').click()
+        }
+
+        if (e.keyCode == 38) {
+            xgFornecedor.focus()
+        }
+    })
 });
 
 //Criando Funcao dentro da variavel fornecedor
@@ -138,7 +150,8 @@ const fornecedor = (function () {
     function pesquisar() {
         let search = $('#edtPesquisa').val().trim();
         xgFornecedor.queryOpen({ search });
-        xgFornecedor.focus();
+        $('#edtPesquisa').focus()
+
     }
 
     function novo() {
@@ -218,6 +231,8 @@ const fornecedor = (function () {
         if (controleGrid == 'editar')
             param.id_fornecedor = xgFornecedor.dataSource().id_fornecedor;
 
+        console.log('xgFornecedor.dataSource().id_fornecedor; :', xgFornecedor.dataSource().id_fornecedor);
+
         // CheckIE(param.inscricao_estadual)
 
         let valCampos = {
@@ -258,12 +273,13 @@ const fornecedor = (function () {
             return false
         }
 
+        console.log('param :', param);
         axios.post(url, {
             call: 'salvar',
             param: param
         })
             .then(rs => {
-                console.log('rs :', rs.data);
+                console.log('rs :', rs);
 
                 if (rs.data[0].id_fornecedor) {
                     param.id_fornecedor = rs.data[0].id_fornecedor;
