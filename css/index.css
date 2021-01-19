@@ -26,7 +26,7 @@ body{
     font-size:12px;
     /*text-shadow:1px 1px 0 rgba(255,255,255,0.5);*/
     margin-left: 0px;
-    margin-top: 55px;
+    /* margin-top: 55px; */
     padding-bottom: 30px;
 }
 
@@ -250,6 +250,24 @@ input:focus, select:focus, textarea:focus{
 
 #edtCodigoConf{
     width: 80px !important;
+}
+
+.tabs .tab a:hover, .tabs .tab a.active {
+    background-color: #4679ad;
+    color: #ffffff;
+}
+
+.tabs{
+    background-color: #eee;
+    border-bottom: 1px solid #d0d0d0;
+}
+
+.tabs .tab a {
+    color: rgb(49, 49, 49);
+}
+
+.tabs .indicator {
+    background-color: #003bff;
 }
 
 /*materialize* fim *********************************/
