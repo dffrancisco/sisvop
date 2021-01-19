@@ -34,7 +34,6 @@ $(function () {
     saida.modalCadServico();
     saida.modalItens()
     saida.grid();
-    produtos.getServico();
 
     clientes.grid();
 
@@ -95,14 +94,12 @@ $(function () {
 
     })
 
-
-
 });
 
 
 const saida = (function () {
 
-    let url = 'saida/per.saida.php';
+    let url = 'servicos/per.servicos.php';
     let ControleGrid;
 
     function grid() {
@@ -456,7 +453,7 @@ const saida = (function () {
 
 const clientes = (function () {
 
-    let url = 'saida/per.saida.php';
+    let url = 'servicos/per.servicos.php';
     let ControleGrid;
 
     function grid() {
@@ -469,24 +466,25 @@ const clientes = (function () {
             heightLine: '35',
 
             columns: {
-                'Razão Social': { dataField: 'razao' },
-                Representante: { dataField: 'representante' },
-                CNPJ: { dataField: 'cnpj', center: true },
-                UF: { dataField: 'uf', center: true },
-                Cidade: { dataField: 'Cidade' },
+                'Razão Social': { dataField: 'FANTASIA' },
+                CNPJ: { dataField: 'CNPJ', center: true },
+                UF: { dataField: 'UF', center: true },
+                Cidade: { dataField: 'CIDADE' },
             },
 
             onKeyDown: {
                 '13': (ln, e) => {
                     cliente = ln
-                    $("#spId_cliente").html(cliente.id_cliente);
-                    $("#spRazao_social").html(cliente.razao);
-                    $("#spCnpj").html(cliente.cnpj);
-                    $("#spRepresentante").html(cliente.representante);
-                    $("#spCidade").html(cliente.cidade);
-                    $("#spUf").html(cliente.uf);
-                    $("#spBairro").html(cliente.Bairro);
-                    $("#spCep").html(cliente.cep);
+                    console.log('cliente :', cliente);
+                    $("#spId_cliente").html(cliente.ID_CLIENTE);
+                    $("#spFantasia").html(cliente.FANTASIA);
+                    // $("#spRazao_social").html(cliente.RAZAO);
+                    $("#spCnpj").html(cliente.CNPJ);
+                    $("#spRepresentante").html(cliente.REPRESENTANTE);
+                    // $("#spCidade").html(cliente.CIDADE);
+                    // $("#spUf").html(cliente.UF);
+                    // $("#spBairro").html(cliente.BAIRRO);
+                    // $("#spCep").html(cliente.CEP);
 
                     xmListaCliente.close()
 
@@ -510,11 +508,12 @@ const clientes = (function () {
 
     function getCliente(search, offset) {
         axios.post(url, {
-            call: 'getClienteAll',
+            call: 'getCliente',
             param: { search: search, offset: offset },
         })
             .then(rs => {
                 xgCliente.querySourceAdd(rs.data);
+                console.log('rs.data :', rs.data);
             })
     }
 
@@ -525,7 +524,7 @@ const clientes = (function () {
 
 const itens = (function () {
 
-    let url = 'saida/per.saida.php';
+    let url = 'servicos/per.servicos.php';
     let ControleGrid;
 
     function grid() {
@@ -659,7 +658,7 @@ const itens = (function () {
 
 const produtos = (function () {
 
-    let url = 'saida/per.saida.php';
+    let url = 'servicos/per.servicos.php';
     let ControleGrid;
 
     function grid() {
@@ -770,7 +769,7 @@ const produtos = (function () {
 
 const carrinho = (function () {
 
-    let url = 'saida/per.saida.php';
+    let url = 'servicos/per.servicos.php';
     let ControleGrid;
 
     function grid() {

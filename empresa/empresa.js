@@ -100,22 +100,23 @@ const Empresa = (function () {
         })
 
             .then(r => {
+                console.log('r  :', r.data[0]);
 
 
 
                 if (r.data[0]) {
-                    $('#id_empresa').val(r.data[0].id_empresa)
-                    $('#edtCnpj').val(r.data[0].cnpj)
-                    $('#edtRazao').val(r.data[0].razao)
-                    $('#edtFantasia').val(r.data[0].fantasia)
-                    $('#edtFixo').val(r.data[0].fixo)
-                    $('#edtCelular').val(r.data[0].celular)
-                    $('#edtIscricao').val(r.data[0].inscricao)
-                    $('#edtEnd').val(r.data[0].endereco)
-                    $('#edtCep').val(r.data[0].cep)
-                    $('#edtCidade').val(r.data[0].cidade)
-                    $('#edtBairro').val(r.data[0].bairro)
-                    $('#edtUf').val(r.data[0].uf)
+                    $('#id_empresa').val(r.data[0].ID_EMPRESA)
+                    $('#edtCnpj').val(r.data[0].CNPJ)
+                    $('#edtRazao').val(r.data[0].RAZAO)
+                    $('#edtFantasia').val(r.data[0].FANTASIA)
+                    $('#edtFixo').val(r.data[0].FIXO)
+                    $('#edtCelular').val(r.data[0].CELULAR)
+                    $('#edtIscricao').val(r.data[0].INSCRICAO)
+                    $('#edtEnd').val(r.data[0].ENDERECO)
+                    $('#edtCep').val(r.data[0].CEP)
+                    $('#edtCidade').val(r.data[0].CIDADE)
+                    $('#edtBairro').val(r.data[0].BAIRRO)
+                    $('#edtUf').val(r.data[0].UF)
 
                 }
                 else {

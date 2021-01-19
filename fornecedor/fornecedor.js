@@ -8,7 +8,6 @@ $(function () {
     fornecedor.getUf();
     xgFornecedor.queryOpen({ search: '' });
 
-
     $("#edtPesquisa").keydown(function (e) {
 
         if (e.keyCode == 13) {
@@ -42,6 +41,10 @@ const fornecedor = (function () {
             columns: {
                 CNPJ: { dataField: 'CNPJ' },
                 Fantasia: { dataField: 'FANTASIA' },
+            },
+            onSelectLine: (ln) => {
+                console.log('ln :', ln);
+
             },
 
             sideBySide: {
@@ -87,32 +90,29 @@ const fornecedor = (function () {
                         },
                     }
                 },
-                // duplicity: {
-                //     dataField: ['cnpj'],
 
-                //     execute: (r) => {
+                duplicity: {
+                    dataField: ['CNPJ'],
+                    execute: (r) => {
+                        let param = {}
+                        param.CNPJ = r.value
 
-                //         let param = {}
-                //         param.cnpj = r.value,
+                        axios.post(url, {
+                            call: 'getCnpj',
+                            param: param,
+                        })
+                            .then(rs => {
+                                console.log('rs :', rs.data);
 
-                //             axios.post(url, {
-                //                 call: 'getCnpj',
-                //                 param: param,
-                //             })
-                //                 .then(rs => {
-                //                     if (controleGrid == 'editar') {
-                //                         return true
-                //                     }
-                //                     if (rs.data[0]) {
-                //                         xgFornecedor.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!');
-                //                         xgFornecedor.focusField(r.field);
-                //                         return false
-                //                     }
-
-                //                     validarCpnj(param.cnpj)
-                //                 })
-                //     }
-                // },
+                                if (rs.data[0]) {
+                                    xgFornecedor.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!');
+                                    xgFornecedor.focusField(r.field);
+                                    return false
+                                }
+                                validarCpnj(param.CNPJ)
+                            })
+                    }
+                },
 
             },
 
@@ -176,12 +176,14 @@ const fornecedor = (function () {
         //Desabilita o campo de digitar palavras para pesquisar
         //Identificado pelo ID
         $('#edtPesquisa').prop("disabled", true)
+
+        $('.btnPesq').prop("disabled", true);
     }
 
     function editar() {
         //Dá valor de editar ao ControleGrid
         controleGrid = 'editar';
-
+        xgFornecedor.focusField();
         //Desabilita o campo de digitar palavras para pesquisar
         //Identificado pelo ID
         $('#edtPesquisa').prop("disabled", true)
@@ -192,21 +194,25 @@ const fornecedor = (function () {
     }
 
     function deletar() {
+        confirmaCodigo({
+            msg: 'Digite o código de confirmação!',
+            call: () => {
+                if (xgFornecedor.dataSource().ID_FORNECEDOR) {
 
-        if (xgFornecedor.dataSource().id_fornecedor) {
+                    let param = xgFornecedor.dataSource().ID_FORNECEDOR;
 
-            let param = xgFornecedor.dataSource().id_fornecedor;
+                    axios.post(url, {
+                        call: 'deletar',
+                        param: param
 
-            axios.post(url, {
-                call: 'deletar',
-                param: param
+                    }).then(rs => {
 
-            }).then(rs => {
+                        xgFornecedor.deleteLine();
 
-                xgFornecedor.deleteLine();
-
-            });
-        }
+                    });
+                }
+            }
+        })
 
     }
 
@@ -216,24 +222,20 @@ const fornecedor = (function () {
         let param = xgFornecedor.getElementSideBySideJson();
         //Cria um atributo de data e capta o valor do input
         //identificado pelo ID
-        param.data_cadastro = $('#edtDataCadastro').val();
+        param.DATA_CADASTRO = $('#edtDataCadastro').val();
 
-        // let allDuplicty = await xgFornecedor.getDuplicityAll();
+        let allDuplicty = await xgFornecedor.getDuplicityAll();
 
-        // if (allDuplicty == false) {
-        //     xgFornecedor.showMessageDuplicity('O campo CNPJ está com valor duplicado ou vazio!');
-        //     return false
-        // }
+        if (allDuplicty == false) {
+            xgFornecedor.showMessageDuplicity('O campo CNPJ está com valor duplicado ou vazio!');
+            return false
+        }
 
         if (controleGrid == 'novo')
             param.id_fornecedor = '';
 
         if (controleGrid == 'editar')
-            param.id_fornecedor = xgFornecedor.dataSource().id_fornecedor;
-
-        console.log('xgFornecedor.dataSource().id_fornecedor; :', xgFornecedor.dataSource());
-
-        // CheckIE(param.inscricao_estadual)
+            param.ID_FORNECEDOR = xgFornecedor.dataSource().ID_FORNECEDOR;
 
         let valCampos = {
             cnpj: $('#edtCnpj').val(),
@@ -246,14 +248,14 @@ const fornecedor = (function () {
             municipio: $('#edtMunicipio').val(),
             cep: $('#edtCep').val(),
             telefone_1: $('#edtTel1').val(),
-            telefone_2: $('#edtTel2').val(),
-            inscricao_estadual: $('#edtInscricaoEstadual').val(),
+            // telefone_2: $('#edtTel2').val(),
+            // inscricao_estadual: $('#edtInscricaoEstadual').val(),
             data_cadastro: $('#edtDataCadastro').val(),
 
         }
 
         valCampos.telefone_1 = valCampos.telefone_1.replace(/[^\d]+/g, '')
-        valCampos.telefone_2 = valCampos.telefone_2.replace(/[^\d]+/g, '')
+        // valCampos.telefone_2 = valCampos.telefone_2.replace(/[^\d]+/g, '')
         valCampos.cep = valCampos.cep.replace(/[^\d]+/g, '')
 
         for (let i in valCampos) {
@@ -263,7 +265,7 @@ const fornecedor = (function () {
             }
         }
 
-        if (valCampos.telefone_1.length < 10 || valCampos.telefone_2.length < 10) {
+        if (valCampos.telefone_1.length < 10) {
             xgFornecedor.showMessageDuplicity('Telefone Inválido!')
             return false
         }
@@ -279,16 +281,15 @@ const fornecedor = (function () {
             param: param
         })
             .then(rs => {
-                console.log('rs :', rs);
+                console.log('rs  :', rs.data);
 
-                if (rs.data[0].id_fornecedor) {
-                    param.id_fornecedor = rs.data[0].id_fornecedor;
+                if (rs.data[0].ID_FORNECEDOR) {
+                    param.ID_FORNECEDOR = rs.data[0].ID_FORNECEDOR;
                     xgFornecedor.insertLine(param);
 
                 }
                 else {
                     xgFornecedor.dataSource(param)
-
                 }
                 cancelar()
             })
@@ -311,6 +312,7 @@ const fornecedor = (function () {
     }
 
     function validarCpnj(cnpj) {
+        console.log('cnpj :', cnpj);
 
         cnpj = cnpj.replace(/[^\d]+/g, '');
 

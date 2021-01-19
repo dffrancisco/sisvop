@@ -23,6 +23,7 @@ class SqlClientes
     where b.id_uf = a.id_uf
     and a.razao like '$search%' ";
 
+    print_r($sql);
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ); 

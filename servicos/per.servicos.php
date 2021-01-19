@@ -17,19 +17,12 @@ class Servicos
     {
 
         //instancia da class        
-        $this->sql = new SqlSaida();
+        $this->sql = new SqlServicos();
     }
 
 
-    function getCliente($param)
-    {
+    function getCliente($param){
         $call = $this->sql->getCliente($param);
-        echo json_encode($call);
-    }
-
-    function getClienteAll($param)
-    {
-        $call = $this->sql->getClienteAll($param);
         echo json_encode($call);
     }
 

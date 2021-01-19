@@ -1,58 +1,52 @@
 <?php
+
+include_once '../class/class.connect_firebird.php';
+include_once '../class/prepareSql.php';
 class Sqlservicos
 {
-
-
   public $db;
 
   function __construct()
   {
-    $this->db = new PDO('sqlite:/var/www/html/Estoque.sqlite');
+    $this->db = ConexaoFirebird::getConectar();
   }
 
   function getCliente($param)
   {
     extract($param);
-    $sql = "SELECT a.*, b.*
-            from clientes a, uf b, lista_servicos c
-            where a.id_uf = b.id_uf
-            AND representante like '$search%'
-            limit $offset, 10";
-
+    $sql = "SELECT FIRST 10 SKIP $offset 
+            a.id_cliente, a.cnpj, a.razao,
+            a.email, a.inscricao, a.fixo,
+            a.tel, a.representante, a.data_cadastro,
+            a.cep, a.endereco, a.cidade, a.bairro,
+            a.fantasia, 
+            b.id_uf, b.uf
+            FROM clientes a, uf b
+            WHERE a.id_uf = b.id_uf
+            AND fantasia LIKE '$search%'";
+            
+    // $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
-    $query->execute();
-    return $query->fetchAll();
-  }
-
-  function getClienteAll($param)
-  {
-    extract($param);
-    $sql = "SELECT a.*, b.*
-            from clientes a, uf b
-            where a.id_uf = b.id_uf 
-            AND
-            representante like '$search%'
-            limit $offset, 10";
-
-    $query = $this->db->prepare($sql);
-    $query->execute();
-    return $query->fetchAll();
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
   function getListaServicos($param)
   {
     extract($param);
-    $sql = "SELECT a.*, b.servico 
+    $sql = "SELECT FIRST 10 SKIP $offset
+            a.id_lista_servico, a.id_cliente,
+            a.valor, a.data, a.hora, a.status,
+            b.id_servico, b.servico 
             FROM lista_servicos a, servicos b
             WHERE 
             a.id_servico = b.id_servico
-            AND
-            id_cliente = $search
-            LIMIT $offset, 10";
+            AND id_cliente = $search";
 
+// $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
-    $query->execute();
-    return $query->fetchAll();
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
   function getListaServico($param)
