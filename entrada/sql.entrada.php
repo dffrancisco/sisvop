@@ -4,34 +4,37 @@ class SqlEntrada
 
 
   public $db;
-  
-  function __construct(){
+
+  function __construct()
+  {
     $this->db = ConexaoFirebird::getConectar();
   }
 
-  function getFornecedor($param){
+  function getFornecedor($param)
+  {
     extract($param);
-    $sql = "select first 10 skip $offset cnpj, nome_fantazia, id_fornecedor
-    from fornecedor
+    $sql = "SELECT first 10 skip $offset cnpj, nome_fantazia, id_fornecedor
+    FROM fornecedor
     WHERE nome_fantazia like '$search%'";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
-
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
-  
-  function getProduto($param){
+
+  function getProduto($param)
+  {
     extract($param);
 
     $sql = "SELECT descricao, qtd, valor, id_produto, codigo FROM produtos WHERE codigo = '$codigo' ";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function getNota($param){
+  function getNota($param)
+  {
 
     extract($param);
 
@@ -39,23 +42,24 @@ class SqlEntrada
     a.valor_total, b.nome_fantazia 
     FROM nota a, fornecedor b
     WHERE b.id_fornecedor = a.id_fornecedor ";
-    
-    if($serchNome != ""){
-      $sql= $sql . "AND b.nome_fantazia like '$serchNome%'";
+
+    if ($serchNome != "") {
+      $sql = $sql . "AND b.nome_fantazia like '$serchNome%'";
     };
 
-    if($serchNumero != ""){
-      $sql= $sql . "AND a.numero_nota like '$serchNumero%'";
+    if ($serchNumero != "") {
+      $sql = $sql . "AND a.numero_nota like '$serchNumero%'";
     };
-    
-   
+
+
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function getDataNota($param){
+  function getDataNota($param)
+  {
     extract($param);
 
     $sql = "SELECT b.nome_fantazia, b.cnpj, a.numero_nota, a.chave_acesso, 
@@ -67,11 +71,12 @@ class SqlEntrada
     AND a.id_nota = $id_nota";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function getItensNota($param){
+  function getItensNota($param)
+  {
     extract($param);
 
     $sql = "SELECT a.codigo, a.descricao, b.valor_nota, b.qtd_nota, a.id_produto, b.id_itens_nota
@@ -81,11 +86,12 @@ class SqlEntrada
     AND c.id_nota = $id_nota";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function getCabecalho($id_nota){
+  function getCabecalho($id_nota)
+  {
     $sql = "SELECT a.id_nota, a.id_fornecedor, a.numero_nota, a.chave_acesso,
     a.data_emissao, a.st, a.icms, a.valor_total, b.cnpj, b.nome_fantazia
     from nota a, fornecedor b
@@ -93,44 +99,47 @@ class SqlEntrada
     and a.id_nota = $id_nota";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
 
-  } 
-
-  function getEditItens($param){
+  function getEditItens($param)
+  {
     $sql = "SELECT qtd_nota, valor_nota 
     FROM lista_itens_nota 
     WHERE id_itens_nota = $param";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
 
-  } 
-  
-  function deleteNota($param){
+  function deleteNota($param)
+  {
     $sql = "DELETE FROM nota  
     WHERE id_nota = $param";
     $this->db->exec($sql);
     return $this->db->lastInsertId();
   }
 
-  function deleteItensNota($param){
+  function deleteItensNota($param)
+  {
     $sql = "DELETE FROM lista_itens_nota  
     WHERE id_nota = $param";
     $this->db->exec($sql);
     return $this->db->lastInsertId();
   }
 
-  function deleteItens($param){
+  function deleteItens($param)
+  {
     $sql = "DELETE FROM lista_itens_nota  
     WHERE id_itens_nota = $param";
     $this->db->exec($sql);
     return $this->db->lastInsertId();
   }
 
-  function insertNota($param){
+  function insertNota($param)
+  {
 
     extract($param);
     $sql = "INSERT INTO nota (id_fornecedor, numero_nota, chave_acesso, data_emissao, icms, st, valor_total)
@@ -139,17 +148,18 @@ class SqlEntrada
     return $this->db->lastInsertId();
   }
 
-  function insertProduto($param){
+  function insertProduto($param)
+  {
     extract($param);
     $sql = "INSERT INTO lista_itens_nota (id_nota, id_produto, qtd_nota, valor_nota)
     VALUES('$id_nota','$id_produto', '$qtd_nota', '$valor_nota')";
 
     $this->db->exec($sql);
     return $this->db->lastInsertId();
-
   }
 
-  function updateProduto($param){
+  function updateProduto($param)
+  {
     extract($param);
     $sql = "UPDATE produtos 
               SET qtd = $qtd_nota + qtd, 
@@ -159,7 +169,8 @@ class SqlEntrada
     $this->db->exec($sql);
   }
 
-  function updateItens($param){
+  function updateItens($param)
+  {
     extract($param);
     $sql = "UPDATE lista_itens_nota 
     SET qtd_nota = '$qtd_nota', 
@@ -168,7 +179,8 @@ class SqlEntrada
     $this->db->exec($sql);
   }
 
-  function updateNota($param){
+  function updateNota($param)
+  {
     extract($param);
     $sql = "UPDATE nota 
     SET id_fornecedor = 20, 
@@ -183,16 +195,16 @@ class SqlEntrada
     return $id_nota;
   }
 
-  function duplicityProduto($param){
+  function duplicityProduto($param)
+  {
     extract($param);
 
     $sql = "SELECT id_produto FROM lista_itens_nota 
           WHERE id_nota = $id_nota 
           and id_produto = $id_produto";
-          
-    $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
 
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 }

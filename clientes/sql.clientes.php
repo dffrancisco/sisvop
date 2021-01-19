@@ -7,72 +7,82 @@ class SqlClientes
 
 
   public $db;
-  
+
   function __construct()
   {
     $this->db = ConexaoFirebird::getConectar();
   }
 
 
-  function getCliente($param){
+  function getCliente($param)
+  {
     extract($param);
-    $sql = "select first 10 skip $offset a.id_clinte, a.cnpj, a.razao,
+
+    $sql = "SELECT first 10 skip $offset a.id_cliente, a.cnpj, a.razao,
     a.email, a.inscricao, a.fixo, a.tel, a.representante, a.data_cadastro,
-    a.cep, a.endereco, a.id_uf, a.cidade, a.bairro, b.id_uf, b.uf  
-    from clientes a, uf b
-    where b.id_uf = a.id_uf
-    and a.razao like '$search%' ";
+    a.cep, a.endereco, a.cidade, a.bairro, b.id_uf, b.uf  
+    FROM clientes a, uf b
+    WHERE b.id_uf = a.id_uf
+    AND a.razao like '$search%' ";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
-
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function getUf(){
+  function getUf()
+  {
     $sql = "SELECT * FROM uf";
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function delete($param){
-    $sql = "DELETE FROM clientes WHERE id_cliente = '$param'";
+  function delete($param)
+  {
+    $sql = "DELETE FROM clientes WHERE ID_CLIENTE = $param
+    RETURNING ID_CLIENTE";
+
+    print_r($param);
+
+
     $this->db->exec($sql);
-    return $this->db->lastInsertId();
   }
 
-  function insert($param){
+  function insert($param)
+  {
+    extract($param);
+
     $sql = "INSERT INTO clientes 
             (cnpj, razao, email, inscricao, fixo, tel, representante, data_cadastro, cep, endereco, id_uf, cidade, bairro)
             VALUES
-            (:cnpj, :razao, :email, :inscricao, :fixo, :tel, :representante, :data_cadastro, :cep, :endereco, :id_uf, :cidade, :bairro)";
-    
-    $sql = prepare::SQL($sql, $param);
-    
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
-  }
-
-  function update($param){
-    extract($param);
-    $sql = "UPDATE clientes SET cnpj = '$cnpj', razao = '$razao', email = '$email', inscricao = '$inscricao', fixo = '$fixo', tel = '$tel', representante = '$representante'
-    WHERE id_cliente = '$id_cliente' ";
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
-  }
-
-  function duplicity($param){
-
-    extract($param);
-    $sql= "SELECT cnpj FROM clientes
-          WHERE cnpj like '%" . $cnpj . "'";
+            ('$CNPJ', '$RAZAO', '$EMAIL', '$INSCRICAO', '$FIXO',' $TEL', '$REPRESENTANTE', '$DATA_CADASTRO', '$CEP', '$ENDERECO', '$ID_UF', '$CIDADE', '$BAIRRO')
+            RETURNING ID_CLIENTE";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
- 
-  
+  function update($param)
+  {
+    extract($param);
+
+    $sql = "UPDATE clientes SET cnpj = '$CNPJ', razao = '$RAZAO', email = '$EMAIL', inscricao = '$INSCRICAO', fixo = '$FIXO', tel = '$TEL', representante = '$REPRESENTANTE'
+    WHERE id_cliente = '$ID_CLIENTE' ";
+    $this->db->exec($sql);
+    return $this->db->lastInsertId();
+  }
+
+  function duplicity($param)
+  {
+
+    extract($param);
+    $sql = "SELECT cnpj FROM clientes
+          WHERE cnpj like $CNPJ";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
 }

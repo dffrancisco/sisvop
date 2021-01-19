@@ -80,7 +80,7 @@ const cliente = (function () {
                     execute: (r) => {
                         let param = {}
                         param.cnpj = r.value,
-                        validarCpnj(param.cnpj),
+                            validarCpnj(param.cnpj),
                             axios.post(url, {
                                 call: 'duplicity',
                                 param: param
@@ -112,6 +112,9 @@ const cliente = (function () {
             param: { search: search, offset: offset }
         })
             .then(rs => {
+
+                console.log('rs :', rs.data);
+
                 xgCliente.querySourceAdd(rs.data);
                 if (rs.data[0]) xgCliente.focus();
             })
@@ -144,11 +147,12 @@ const cliente = (function () {
 
     function deletar() {
         let param;
-        if (xgCliente.dataSource().id_cliente) {
-            param = xgCliente.dataSource().id_cliente
+        if (xgCliente.dataSource().ID_CLIENTE) {
+            param = xgCliente.dataSource().ID_CLIENTE
             confirmaCodigo({
                 msg: 'Digite o código de confirmação',
                 call: () => {
+
                     axios.post(url, {
                         call: 'delete',
                         param: param
@@ -164,7 +168,7 @@ const cliente = (function () {
     const salvar = async () => {
 
         let param = xgCliente.getElementSideBySideJson()
-        param.data_cadastro = $('#edtData').val()
+        param.DATA_CADASTRO = $('#edtData').val()
 
         // let allDuplicty = await xgCliente.getDuplicityAll()
         // if (allDuplicty == false) {
@@ -186,22 +190,22 @@ const cliente = (function () {
             id_uf: $('#slctUf').val(),
             cidade: $('#edtCidade').val(),
             bairro: $('#edtBairro').val(),
-        }   
+        }
 
 
         for (let i in valCampos) {
             if (valCampos[i] == '' || valCampos.id_uf == null) {
-              show('Por favor preencha todos os campos')
-              return false
+                show('Por favor preencha todos os campos')
+                return false
             }
-          }
+        }
 
         if (controleGrid == 'edit') {
-            param.id_cliente = xgCliente.dataSource().id_cliente;
+            param.ID_CLIENTE = xgCliente.dataSource().ID_CLIENTE;
         }
 
         if (controleGrid == 'insert') {
-            param.id_cliente = ''
+            param.ID_CLIENTE = ''
         }
 
         axios.post(url, {
@@ -210,8 +214,8 @@ const cliente = (function () {
 
         })
             .then(r => {
-                if (r.data.id_cliente) {
-                    param.id_cliente = r.data.id_cliente
+                if (r.data.ID_CLIENTE[0]) {
+                    param.ID_CLIENTE = r.data.ID_CLIENTE
                     xgCliente.insertLine(param)
                 } else {
                     xgCliente.dataSource(param)
@@ -236,8 +240,9 @@ const cliente = (function () {
             call: 'getUf',
 
         }).then(rs => {
+
             for (let i in rs.data) {
-                let uf = `<option value="${rs.data[i].id_uf}"> ${rs.data[i].uf}</option>`
+                let uf = `<option value="${rs.data[i].ID_UF}"> ${rs.data[i].UF}</option>`
                 $('#slctUf').append(uf)
             }
 
