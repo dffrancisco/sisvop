@@ -231,7 +231,7 @@ const fornecedor = (function () {
         if (controleGrid == 'editar')
             param.id_fornecedor = xgFornecedor.dataSource().id_fornecedor;
 
-        console.log('xgFornecedor.dataSource().id_fornecedor; :', xgFornecedor.dataSource().id_fornecedor);
+        console.log('xgFornecedor.dataSource().id_fornecedor; :', xgFornecedor.dataSource());
 
         // CheckIE(param.inscricao_estadual)
 
