@@ -179,6 +179,7 @@ const cliente = (function () {
         let valCampos = {
             cnpj: $('#edtCnpj').val(),
             razao: $('#edtRazao').val(),
+            fantasia: $('#edtFantasia').val(),
             email: $('#edtEmail').val(),
             inscricao: $('#edtInscricao').val(),
             fixo: $('#edtFixo').val(),

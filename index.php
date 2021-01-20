@@ -69,10 +69,9 @@ if (!empty($_GET['p'])) {
                 <a href="#" class="brand-logo center truncate" style="font-size: 18px" id="pnTitulo">Modelo</a>
 
                 <ul id="nav-mobile" class="right e">
-                    <li>
-                        <div onclick="pnViewPhoto()" class="viewPhoto"><img class="viewPhotoImg" src="http://www.reallatas.com.br/foto_funcionarios/77858395149.jpg"></div>
-                    </li>
-                    <li><a onclick="pnUserToggle()" href="#!"><span id="spUser"></span> <i class="fa fa-user-circle"></i></a></li>
+
+                    <li><a onclick="pnUserToggle()" href="#!"><span id="spUser"></span> <i
+                                class="fa fa-user-circle"></i></a></li>
                 </ul>
             </div>
         </nav>
@@ -80,7 +79,7 @@ if (!empty($_GET['p'])) {
     </div>
 
     <div class="pnUser">
-        aaa
+        <span id="btnSair" style="font-size: 15px;">SAIR</span>
     </div>
 
     <div class="pnMenu">
@@ -96,52 +95,32 @@ if (!empty($_GET['p'])) {
         <a href="?p=fornecedor/fornecedor">
             <li><i class="fa fa-address-book"></i>Fornecedor</li>
         </a>
-        <a href="?p=saida/saida">
-            <li><i class="fa fa-address-book"></i>Saída</li>
+
+        <a href="?p=usuario/usuario">
+            <li><i class="fa fa-key"></i>Usuario</i></li>
         </a>
-        <a href="?p=servicos/servicos">
-            <li><i class="fa fa-address-book"></i>Serviços</li>
-        </a>
-        <a href="?p=marca/marca">
+        <!-- <a href="?p=marca/marca">
             <li><i class="fa fa-address-book"></i>Marcas</li>
-        </a>
-        <a href="?p=cargo/cargo">
+        </a> -->
+        <!-- <a href="?p=cargo/cargo">
             <li><i class="fa fa-address-book"></i>Cargo</li>
-        </a>
+        </a> -->
         <a href="?p=empresa/empresa">
             <li><i class="fa fa-building"></i>Empresas</li>
         </a>
         <a href="?p=funcionarios/funcionarios">
-            <li><i class="fa fa-user-circle-o"></i>Funcionários</li>
+            <li><i class="fa fa-user-plus"></i>Funcionários</li>
         </a>
         <a href="?p=entrada/entrada">
             <li><i class="fa fa-shopping-cart"></i>Entrada de notas</li>
         </a>
 
+        <a href="?p=saida/saida">
+            <li><i class="fa fa-usd"></i>Saída</li>
+        </a>
+
         <hr />
         <li>Sair</li>
-    </div>
-
-    <div id="pnLogin">
-
-        <section id="content">
-            <form id="frmLogin">
-                <h1>Login SisVop</h1>
-                <div>
-                    <input type="text" placeholder="Código ou Usuário" required id="id_funcionario" />
-                </div>
-                <div>
-                    <input type="password" placeholder="Senha" required id="senha" />
-                </div>
-                <div>
-                    <input type="button" id="enviar" value="Login" />
-
-                </div>
-            </form><!-- form -->
-            <div class="button" style="height: 50px;">
-            </div><!-- button -->
-        </section><!-- content -->
-
     </div>
 
 

@@ -20,7 +20,7 @@ class SqlClientes
 
     $sql = "SELECT first 10 skip $offset a.id_cliente, a.cnpj, a.razao,
     a.email, a.inscricao, a.fixo, a.tel, a.representante, a.data_cadastro,
-    a.cep, a.endereco, a.cidade, a.bairro, b.id_uf, b.uf  
+    a.cep, a.endereco, a.cidade, a.bairro, a.fantasia, b.id_uf, b.uf  
     FROM clientes a, uf b
     WHERE b.id_uf = a.id_uf
     AND a.razao like '$search%' ";
@@ -54,9 +54,9 @@ class SqlClientes
     extract($param);
 
     $sql = "INSERT INTO clientes 
-            (cnpj, razao, email, inscricao, fixo, tel, representante, data_cadastro, cep, endereco, id_uf, cidade, bairro)
+            (cnpj, razao, fantasia, email, inscricao, fixo, tel, representante, data_cadastro, cep, endereco, id_uf, cidade, bairro)
             VALUES
-            ('$CNPJ', '$RAZAO', '$EMAIL', '$INSCRICAO', '$FIXO',' $TEL', '$REPRESENTANTE', '$DATA_CADASTRO', '$CEP', '$ENDERECO', '$ID_UF', '$CIDADE', '$BAIRRO')
+            ('$CNPJ', '$RAZAO', '$EMAIL','$FANTASIA', '$INSCRICAO', '$FIXO',' $TEL', '$REPRESENTANTE', '$DATA_CADASTRO', '$CEP', '$ENDERECO', '$ID_UF', '$CIDADE', '$BAIRRO')
             RETURNING ID_CLIENTE";
 
     $query = $this->db->prepare($sql);
@@ -68,7 +68,7 @@ class SqlClientes
   {
     extract($param);
 
-    $sql = "UPDATE clientes SET cnpj = '$CNPJ', razao = '$RAZAO', email = '$EMAIL', inscricao = '$INSCRICAO', fixo = '$FIXO', tel = '$TEL', representante = '$REPRESENTANTE'
+    $sql = "UPDATE clientes SET cnpj = '$CNPJ', razao = '$RAZAO', fantasia = '$FANTASIA', email = '$EMAIL', inscricao = '$INSCRICAO', fixo = '$FIXO', tel = '$TEL', representante = '$REPRESENTANTE'
     WHERE id_cliente = '$ID_CLIENTE' ";
     $this->db->exec($sql);
     return $this->db->lastInsertId();
