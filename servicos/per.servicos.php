@@ -26,45 +26,38 @@ class Servicos
         echo json_encode($call);
     }
 
-    function getListaServicos($param)
-    {
+    function getListaServicos($param){
         $call = $this->sql->getListaServicos($param);
         echo json_encode($call);
     }
 
-    function getListaServico($param)
-    {
+    function getListaServico($param){
         $call = $this->sql->getListaServico($param);
         echo json_encode($call);
     }
 
-    function getProdutos($param)
-    {
+    function getProdutos($param){
         $call = $this->sql->getProdutos($param);
         echo json_encode($call);
     }
 
-    function getServ()
-    {
+    function getServ(){
         $call = $this->sql->getServ();
         echo json_encode($call);
     }
 
-    function atualizaStatus($param)
-    {
+    function atualizaStatus($param){
 
         $call = $this->sql->atualizaStatus($param);
         echo json_encode($call);
     }
 
-    function getProduto($param)
-    {
+    function getProduto($param){
         $call = $this->sql->getProduto($param);
         echo json_encode($call);
     }
 
-    function gerarServico($param)
-    {
+    function gerarServico($param){
         print_r($param);
         $call = $this->sql->gerarServico($param);
         echo json_encode($call);

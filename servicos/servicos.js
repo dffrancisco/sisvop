@@ -57,10 +57,10 @@ $(function () {
         }
 
         if (e.keyCode == 40) {
+            $("#xmEdtCliente").val('')
             xgCliente.focus()
         }
     })
-
 
     $("#xmEdtProduto").keydown(function (e) {
 
@@ -71,6 +71,7 @@ $(function () {
 
         if (e.keyCode == 40) {
             xgProduto.focus()
+            $("#xmEdtProduto").val('')
         }
     })
 
@@ -93,6 +94,13 @@ $(function () {
         }
 
     })
+
+    $('.btnDel').attr("disabled", true);
+    $('.btnAF').attr("disabled", true);
+    $('.btnV').attr("disabled", true);
+    $('.btnN').attr("disabled", true);
+    $('.btnFS').attr("disabled", true);
+    $('.btnF').attr("disabled", true);
 
 });
 
@@ -124,12 +132,10 @@ const saida = (function () {
                 let status = r.status
 
                 if (status == 'FINALIZADO') {
-                    console.log('FINALIZADO');
                     $('.btnDel').attr("disabled", true);
                     $('.btnAF').text('ABRIR')
 
                 } else {
-                    console.log('ABERTO');
                     $('.btnDel').removeAttr('disabled', true)
                     $('.btnAF').text('FINALIZAR')
                 }
@@ -144,11 +150,9 @@ const saida = (function () {
                     let status = xgSaida.dataSource().status
 
                     if (status == 'FINALIZADO') {
-                        console.log('FINALIZADO');
                         $('.btnItem').attr("disabled", true);
 
                     } else {
-                        console.log('ABERTO');
                         $('.btnItem').removeAttr('disabled', true)
                     }
 
@@ -187,17 +191,17 @@ const saida = (function () {
 
                         novo: {
                             html: "Novo Serviço",
-                            class: "btnP",
+                            class: "btnP btnN",
                             click: novo,
                         },
                         fechar: {
                             html: "Fechar Serviço",
-                            class: "btnP",
+                            class: "btnP btnFS",
                             click: novo,
                         },
                         finalizado: {
                             html: "Serviço Finalizado",
-                            class: "btnP",
+                            class: "btnP btnF",
                             click: novo,
                         },
                         visualizar: {
@@ -252,14 +256,19 @@ const saida = (function () {
             param: { search, offset }
         }).then(rs => {
             xgSaida.querySourceAdd(rs.data);
+            $('.btnN').removeAttr("disabled");
             if (rs.data.length > 0) {
                 $('.btnDel').removeAttr("disabled");
                 $('.btnAF').removeAttr("disabled");
                 $('.btnV').removeAttr("disabled");
+                $('.btnFS').removeAttr("disabled");
+                $('.btnF').removeAttr("disabled");
             } else {
                 $('.btnDel').attr("disabled", true);
                 $('.btnAF').attr("disabled", true);
                 $('.btnV').attr("disabled", true);
+                $('.btnFS').attr("disabled", true);
+                $('.btnF').attr("disabled", true);
             }
 
         })
@@ -268,7 +277,6 @@ const saida = (function () {
     function af() {
 
         let param = xgSaida.dataSource();
-        console.log(param);
 
         for (let i = 0; i < 6; i++) {
             delete param[i]
@@ -278,7 +286,6 @@ const saida = (function () {
 
         if (status == 'FINALIZADO') {
 
-            console.log('finalizado')
 
             xgSaida.dataSource('status', 'ABERTO')
 
@@ -288,7 +295,6 @@ const saida = (function () {
 
         } else {
 
-            console.log('aberto')
 
             xgSaida.dataSource('status', 'FINALIZADO')
 
@@ -309,8 +315,8 @@ const saida = (function () {
         $('#xmEdtItensIdServ').val('')
 
         xgProduto.queryOpen({ search: '' });
+
         xmCadServico.open()
-        evento = 'Inserir'
         $('#xmEdtProduto').focus()
     }
 
@@ -385,7 +391,6 @@ const saida = (function () {
             }
         })
     }
-
 
     function modalCadServico() {
         xmCadServico = new xModal.create({
@@ -475,7 +480,6 @@ const clientes = (function () {
             onKeyDown: {
                 '13': (ln, e) => {
                     cliente = ln
-                    console.log('cliente :', cliente);
                     $("#spId_cliente").html(cliente.ID_CLIENTE);
                     $("#spFantasia").html(cliente.FANTASIA);
                     // $("#spRazao_social").html(cliente.RAZAO);
@@ -488,7 +492,7 @@ const clientes = (function () {
 
                     xmListaCliente.close()
 
-                    xgSaida.queryOpen({ search: cliente.id_cliente })
+                    xgSaida.queryOpen({ search: cliente.ID_CLIENTE })
 
                 },
             },
@@ -513,7 +517,6 @@ const clientes = (function () {
         })
             .then(rs => {
                 xgCliente.querySourceAdd(rs.data);
-                console.log('rs.data :', rs.data);
             })
     }
 
@@ -547,15 +550,19 @@ const itens = (function () {
 
                     for (let i = 0; i < 16; i++) {
                         delete ln[i]
+
                     }
 
                     for (let i in prod) {
                         if (prod[i].obProduto.id_produto == ln.id_produto) {
-                            show("Item já incluso!");
+                            setTimeout(function () {
+                                show("Item já incluso!");
+                            }, 1)
                             xgProduto.focus();
                             return false
                         }
                     }
+
 
                     $("#xmEdtIdItem").val(ln.id_produto)
                     $("#xmEdtValorItem").val(ln.valor)
@@ -565,6 +572,7 @@ const itens = (function () {
                     $("#xmEdtQtdItem").val('')
 
                     $("#xmEdtQtdItem").focus()
+
                 },
                 '46': (ln) => {
                     let status = xgSaida.dataSource().status
@@ -671,10 +679,10 @@ const produtos = (function () {
             heightLine: '35',
 
             columns: {
-                Codigo: { dataField: 'codigo' },
-                Produto: { dataField: 'descricao' },
-                Marca: { dataField: 'marca' },
-                QTD: { dataField: 'qtd' },
+                Codigo: { dataField: 'CODIGO' },
+                Produto: { dataField: 'DESCRICAO' },
+                Marca: { dataField: 'MARCA' },
+                QTD: { dataField: 'QTD' },
             },
 
             onKeyDown: {
@@ -684,28 +692,34 @@ const produtos = (function () {
                         delete ln[i]
                     }
 
-                    for (let i in IDs) {
-                        if (IDs[i] == ln.id_produto) {
-                            show("Item já incluso!");
+                    for (let i in obProduto) {
+                        if (obProduto[i].ID_PRODUTO == ln.ID_PRODUTO) {
+                            setTimeout(function () {
+                                show("Item já incluso!");
+                            }, 1)
                             xgProduto.focus();
                             return false
                         }
                     }
 
                     if (ln.qtd == 0) {
-                        show("Item sem estoque!");
+                        setTimeout(function () {
+                            show("Item já incluso!");
+                        }, 1)
                         xgProduto.focus();
                         return false
                     }
 
-                    $("#xmEdtQtd").val('')
-                    $("#xmEdtId").html(ln.id_produto);
-                    $("#xmEdtCodigo").html(ln.codigo);
-                    $("#xmEdtProd").html(ln.descricao);
-                    $("#xmEdtMarca").html(ln.marca);
-                    $("#xmEdtValor").html(ln.valor);
+                    $("#xmBQtd").html(ln.QTD);
+                    $("#xmSpId").html(ln.ID_PRODUTO);
+                    $("#xmSpCodigo").html(ln.CODIGO);
+                    $("#xmSpProd").html(ln.DESCRICAO);
+                    $("#xmSpMarca").html(ln.MARCA);
+                    $("#xmSpValor").html(ln.VALOR);
 
                     xmEdtQtd.open()
+
+                    evento = 'Inserir'
                     $("#xmEdtQtd").focus();
                 },
             },
@@ -727,6 +741,7 @@ const produtos = (function () {
                 xgProduto.querySourceAdd(rs.data);
             })
 
+        getServico()
     }
 
     function getServico() {
@@ -734,9 +749,8 @@ const produtos = (function () {
             call: 'getServ',
         })
             .then(rs => {
-                console.log(rs.data)
                 for (let i in rs.data) {
-                    let table = `<option value="${rs.data[i].id_servico}"> ${rs.data[i].servico}</option>`
+                    let table = `<option value="${rs.data[i].ID_SERVICO}"> ${rs.data[i].SERVICO}</option>`
                     $('#slctServico').append(table)
                 }
             })
@@ -746,8 +760,8 @@ const produtos = (function () {
         xmEdtQtd = new xModal.create({
             el: '#xmQtd',
             title: 'Produto',
-            height: '350',
-            width: '200',
+            height: '410',
+            width: '280',
             buttons: {
                 btn1: {
                     html: 'Confirma',
@@ -757,13 +771,15 @@ const produtos = (function () {
                     }
                 }
             },
+            onClose: () => {
+                $("#xmEdtQtd").val('');
+            }
         })
     }
 
     return {
         grid: grid,
         modalEdtQtd: modalEdtQtd,
-        getServico: getServico
     }
 })();
 
@@ -787,55 +803,44 @@ const carrinho = (function () {
                 Marca: { dataField: 'marca' },
                 QTD: { dataField: 'qtd' },
             },
+
             onKeyDown: {
                 '46': (ln, e) => {
-                    let auxId
-                    let auxQtd
-                    for (let i = 0; i < IDs.length; i++) {
+                    let auxProduto = {}
+                    for (let i in obProduto) {
 
-                        auxId = IDs[i + 1]
-                        auxQtd = QTDs[i + 1]
-                        if (IDs[i] == ln.id_produto && i == 0) {
+                        if (obProduto[i].ID_PRODUTO == ln.id_produto) {
 
-                            IDs[i] = auxId
-                            QTDs[i] = auxQtd
-
-                            for (let j = i + 1; j < IDs.length; j++) {
-                                auxId = IDs[j + 1]
-                                auxQtd = QTDs[j + 1]
-                                IDs[j] = auxId
-                                QTDs[j] = auxQtd
+                            auxProduto = {
+                                ID_PRODUTO: obProduto[i].ID_PRODUTO,
+                                VALOR: obProduto[i].VALOR,
+                                QTD: obProduto[i].QTD,
                             }
 
-                            IDs.pop()
-                            QTDs.pop()
-                        }
-                        else if (IDs[i] == ln.id_produto) {
+                            j = i + 1;
 
-                            IDs[i] = auxId
-                            QTDs[i] = auxQtd
+                            for (j in obProduto) {
+                                obProduto[i] = obProduto[j]
 
-                            IDs.pop()
-                            QTDs.pop()
+                            }
+                            delete obProduto[j]
                         }
+
                     }
                     total -= 1
-
-
+                    valorT -= auxProduto.VALOR * auxProduto.QTD
                     xgCarrinho.deleteLine()
                 },
                 '13': (ln, e) => {
 
                     xmEdtQtd.open()
-
-
                     $("#xmEdtQtd").val(ln.qtd)
-                    $("#xmEdtId").val(ln.id_produto);
-                    $("#xmEdtCodigo").val(ln.codigo);
-                    $("#xmEdtProd").val(ln.descricao);
-                    $("#xmEdtMarca").val(ln.marca);
-                    $("#xmEdtValor").val(ln.valor);
-                    $("#xmEdtQtd").focus()
+                    $("#xmSpId").html(ln.id_produto);
+                    $("#xmSpCodigo").html(ln.codigo);
+                    $("#xmSpProd").html(ln.descricao);
+                    $("#xmSpMarca").html(ln.marca);
+                    $("#xmSpValor").html(ln.valor);
+                    $("#xmEdtQtd").focus().select();
                     evento = 'Editar'
 
                 },
@@ -844,46 +849,60 @@ const carrinho = (function () {
     }
 
     function insertCarrinho() {
-        obProduto = {
-            codigo: $("#xmEdtCodigo").text(),
-            descricao: $("#xmEdtProd").text(),
-            id_produto: $("#xmEdtId").text(),
-            marca: $("#xmEdtMarca").text(),
+        valProduto = {
+            codigo: $("#xmSpCodigo").text(),
+            descricao: $("#xmSpProd").text(),
+            id_produto: $("#xmSpId").text(),
+            marca: $("#xmSpMarca").text(),
             qtd: Number($("#xmEdtQtd").val().trim()),
-            valor: Number($("#xmEdtValor").text().replace(',', '.'))
+            valor: Number($("#xmSpValor").text().replace(',', '.'))
         }
 
-        if (obProduto.qtd > xgProduto.dataSource().qtd) {
-            show('Quantidade maior do que tem em estoque!')
+        if (valProduto.qtd > xgProduto.dataSource().QTD) {
+            setTimeout(function () {
+                show("Item já incluso!");
+            }, 1)
             return false
         }
-        if (obProduto.qtd == "" || obProduto.qtd == null) {
-            show("Campo com valor inválido")
+        if (valProduto.qtd == "" || valProduto.qtd == null) {
+            setTimeout(function () {
+                show("Item já incluso!");
+            }, 1)
             return false
         }
 
 
         if (evento == 'Editar') {
-            for (let i = 0; i < IDs.length; i++) {
-                if (IDs[i] == obProduto.id_produto) {
-                    QTDs[i] = obProduto.qtd
-                    xgCarrinho.dataSource('qtd', QTDs[i])
+            for (let i in obProduto) {
+                if (obProduto[i].ID_PRODUTO == valProduto.id_produto) {
+                    valorT -= obProduto[i].QTD * obProduto[i].VALOR
+                    obProduto[i].QTD = valProduto.qtd
+                    xgCarrinho.dataSource('qtd', obProduto[i].QTD)
                 }
             }
         }
 
         if (evento == "Inserir" || evento == "Novo Item") {
-            IDs[total] = obProduto.id_produto
-            QTDs[total] = obProduto.qtd
 
+            obProduto[total] = {
+                ID_PRODUTO: valProduto.id_produto,
+                VALOR: valProduto.valor,
+                QTD: valProduto.qtd
+            }
+
+            xgCarrinho.insertLine(valProduto);
             total++
-            xgCarrinho.insertLine(obProduto);
+
         }
+        valorT += valProduto.valor * valProduto.qtd
+
+
+        console.log(total, 'obProduto :', obProduto);
+        console.log(total, ' valorT :', valorT);
+
         xmEdtQtd.close()
-
-        valorT += obProduto.valor * obProduto.qtd
-
         xgProduto.focus()
+
 
     }
 
@@ -893,91 +912,91 @@ const carrinho = (function () {
         let idCliente = $("#spId_cliente").text();
         let idServico = $('#slctServico').val()
         valorT = valorT.toFixed(2).replace('.', ',')
-        pIDs = IDs
-        pQTDs = QTDs
 
-        console.log(idCliente)
+        console.log(new Date().toLocaleTimeString('pt-BR'));
+
         if (id_servico > 0 || id_servico != '') {
-            console.log('tem id de servico')
             valorS = $("#xmEdtValorServ").val()
             valorT = Number(valorT.replace(',', '.')) + Number(valorS.replace(',', '.'))
             valorT = valorT.toFixed(2).replace('.', ',')
 
-            for (let i = 0; i < pIDs.length; i++) {
+            // for (let i = 0; i < pIDs.length; i++) {
 
-                newEstoque = oldQtd[i] - pQTDs[i]
-                param = {
-                    dia: new Date().toLocaleDateString('pt-BR'),
-                    id_servico: id_servico,
-                    idProduto: pIDs[i],
-                    qtdProduto: pQTDs[i],
-                }
-                axios.post(url, {
-                    call: 'inserirItens',
-                    param: param,
-                })
+            //     newEstoque = oldQtd[i] - pQTDs[i]
+            //     param = {
+            //         dia: new Date().toLocaleDateString('pt-BR'),
+            //         id_servico: id_servico,
+            //         idProduto: pIDs[i],
+            //         qtdProduto: pQTDs[i],
+            //     }
 
-                axios.post(url, {
-                    call: 'atualizaProduto',
-                    param: { newEstoque: newEstoque, idProduto: param.idProduto }
-                })
-            }
-            axios.post(url, {
-                call: 'atualizaPreco',
-                param: { newValor: valorT, id_lista_servico: id_servico },
-            })
+            //     axios.post(url, {
+            //         call: 'inserirItens',
+            //         param: param,
+            //     })
 
-            xgItem.queryOpen({ search: id_servico })
-            xmCadServico.close()
+            //     axios.post(url, {
+            //         call: 'atualizaProduto',
+            //         param: { newEstoque: newEstoque, idProduto: param.idProduto }
+            //     })
+            // }
+            // axios.post(url, {
+            //     call: 'atualizaPreco',
+            //     param: { newValor: valorT, id_lista_servico: id_servico },
+            // })
+
+            // xgItem.queryOpen({ search: id_servico })
+            // xmCadServico.close()
 
         } else {
-            console.log('sem id de servico')
             axios.post(url, {
 
                 call: 'gerarServico',
                 param: { idCliente, valorT, idServico }
             })
                 .then(rs => {
-                    if (rs.data[0]) {
-                        for (let i = 0; i < pIDs.length; i++) {
+                    console.log('rs  :', rs);
+                    // if (rs.data[0]) {
+                    //     for (let i in obProduto) {
 
-                            newEstoque = oldQtd[i] - pQTDs[i]
-                            param = {
-                                dia: new Date().toLocaleDateString('pt-BR'),
-                                idServico: rs.data,
-                                idProduto: pIDs[i],
-                                qtdProduto: pQTDs[i],
-                            }
-                            axios.post(url, {
-                                call: 'inserirItens',
-                                param: param,
-                            })
+                    //         newEstoque = oldQtd[i] - pQTDs[i]
+                    //         param = {
+                    //             dia: new Date().toLocaleDateString('pt-BR'),
+                    //             hora: new Date().toLocaleTimeString('pt-BR'),
+                    // idServico: rs.data,
+                    //             idProduto: pIDs[i],
+                    //             qtdProduto: pQTDs[i],
+                    //         }
+                    //         axios.post(url, {
+                    //             call: 'inserirItens',
+                    //             param: param,
+                    //         })
 
-                            axios.post(url, {
-                                call: 'atualizaProduto',
-                                param: { newEstoque: newEstoque, idProduto: param.idProduto }
-                            })
-                        }
+                    //         axios.post(url, {
+                    //             call: 'atualizaProduto',
+                    //             param: { newEstoque: newEstoque, idProduto: param.idProduto }
+                    //         })
+                    //     }
 
-                    }
+                    // }
 
                 })
 
             xmCadServico.close()
         }
 
-        xgSaida.queryOpen({ search: idCliente })
-        xgCarrinho.clear()
+        // xgSaida.queryOpen({ search: idCliente })
+        // xgCarrinho.clear()
 
-        IDs = []
-        QTDs = []
-        id_servico = ''
-        valorT = 0
-        total = 0
+        // IDs = []
+        // QTDs = []
+        // id_servico = ''
+        // valorT = 0
+        // total = 0
 
-        prod = {}
-        obProduto = {}
-        param = {}
+        // prod = {}
+        // obProduto = {}
+        // param = {}
 
     }
 

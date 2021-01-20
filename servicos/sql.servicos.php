@@ -11,8 +11,7 @@ class Sqlservicos
     $this->db = ConexaoFirebird::getConectar();
   }
 
-  function getCliente($param)
-  {
+  function getCliente($param){
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset 
             a.id_cliente, a.cnpj, a.razao,
@@ -31,8 +30,7 @@ class Sqlservicos
     return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
-  function getListaServicos($param)
-  {
+  function getListaServicos($param){
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
             a.id_lista_servico, a.id_cliente,
@@ -43,14 +41,12 @@ class Sqlservicos
             a.id_servico = b.id_servico
             AND id_cliente = $search";
 
-// $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
-  function getListaServico($param)
-  {
+  function getListaServico($param){
     $sql = "SELECT * 
             FROM lista_servicos
             WHERE id_lista_servico = $param";
@@ -60,22 +56,22 @@ class Sqlservicos
     return $query->fetchAll();
   }
 
-  function getProdutos($param)
-  {
+  function getProdutos($param){
     extract($param);
-    $sql = "SELECT a.*, b.* 
-            FROM produtos a, marca b
+    $sql = "SELECT FIRST 10 SKIP $offset
+            a.id_produto, a.qtd, a.descricao,
+            a.valor, a.codigo, 
+            b.id_marca, b.marca 
+            FROM produtos a, marcas b
             WHERE a.id_marca = b.id_marca 
-            AND descricao LIKE '$search%'
-            LIMIT $offset, 10";
+            AND descricao LIKE '$search%'";
 
     $query = $this->db->prepare($sql);
-    $query->execute();
-    return $query->fetchAll();
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
-  function getProduto($param)
-  {
+  function getProduto($param){
     extract($param);
     $sql = "SELECT a.*, b.* 
             FROM produtos a, marca b
@@ -88,23 +84,27 @@ class Sqlservicos
     return $query->fetchAll();
   }
 
-  function getServ()
-  {
+  function getServ(){
 
     $sql = "SELECT * 
             FROM servicos";
 
     $query = $this->db->prepare($sql);
-    $query->execute();
-    return $query->fetchAll();
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
-  function gerarServico($param)
-  {
-    extract($param);
-    $sql = "INSERT INTO lista_servicos (id_cliente, id_servico, valor, data, hora, status)
-            VALUES ($idCliente, $idServico, '$valorT', strftime('%d/%m/%Y'), strftime('%H:%M:%S'), 'ABERTO')";
+  function gerarServico($param){
+    $sql = "INSERT INTO lista_servicos 
+            (id_cliente, id_servico, 
+            valor, data, hora, status)
+            VALUES 
+            (:idCliente, :idServico, 
+            :valorT, strftime('%d/%m/%Y'), 
+            strftime('%H:%M:%S'), 'ABERTO')
+            returning id_lista_servico";
 
+    $sql = prepare::SQL($sql, $param);
     print_r($sql);
     $this->db->exec($sql);
     return $this->db->lastInsertId();

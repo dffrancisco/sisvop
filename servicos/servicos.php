@@ -133,24 +133,28 @@
     <div class="row">
         <div class="col s10" id="pnFieldEdtQtd">
 
-            <span id="xmEdtId" hidden></span>
-            <span id="xmEdtValor" hidden></span>
+            <span id="xmSpId" hidden></span>
+            <span id="xmSpValor" hidden></span>
 
             <div class="col s10" id="pnFieldEdtQtd">
                 <label>Código</label><br>
-                <span id="xmEdtCodigo" class="spanAutoPreenc"></span>
+                <span id="xmSpCodigo" class="spanAutoPreenc"></span>
             </div>
 
             <div class="col s10" id="pnFieldEdtQtd">
                 <br><label>Produto</label><br>
-                <span id="xmEdtProd" class="spanAutoPreenc"></span>
+                <span id="xmSpProd" class="spanAutoPreenc"></span>
             </div>
 
             <div class="col s10" id="pnFieldEdtQtd">
                 <br><label>Marca</label><br>
-                <span id="xmEdtMarca" class="spanAutoPreenc"></span>
+                <span id="xmSpMarca" class="spanAutoPreenc"></span>
             </div>
 
+            <div class="col s10" id="pnFieldEdtQtd">
+                <br><label>Restante no estoque</label><br>
+                <b id="xmBQtd"></b><b> Unidades restantes</b>
+            </div>
             <div class="col s10" id="pnFieldEdtQtd">
                 <br><label>QTD</label>
                 <input type="number" id="xmEdtQtd">
