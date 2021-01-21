@@ -26,7 +26,7 @@ class SqlEntrada
   {
     extract($param);
 
-    $sql = "SELECT descricao, qtd, valor, id_produto, codigo FROM produtos WHERE codigo = '$codigo' ";
+    $sql = "SELECT descricao, qtd, valor, id_produto, codigo FROM produtos WHERE codigo = '$nf' ";
 
     $query = $this->db->prepare($sql);
     $query->execute();
