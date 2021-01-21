@@ -58,13 +58,11 @@ class Servicos
     }
 
     function gerarServico($param){
-        print_r($param);
         $call = $this->sql->gerarServico($param);
         echo json_encode($call);
     }
 
-    function inserirItens($param)
-    {
+    function inserirItens($param){
         $call = $this->sql->inserirItens($param);
         echo json_encode($call);
     }

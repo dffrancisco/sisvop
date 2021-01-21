@@ -120,12 +120,12 @@ const saida = (function () {
             heightLine: '35',
 
             columns: {
-                'Nº Serviço': { dataField: 'id_lista_servico' },
-                'Serviço': { dataField: 'servico' },
-                Data: { dataField: 'data', center: true },
-                Hora: { dataField: 'hora', center: true },
-                Status: { dataField: 'status', center: true },
-                Valor: { dataField: 'valor' },
+                'Nº Serviço': { dataField: 'ID_LISTA_SERVICO' },
+                'Serviço': { dataField: 'SERVICO' },
+                Data: { dataField: 'DATA', center: true },
+                Hora: { dataField: 'HORA', center: true },
+                Status: { dataField: 'STATUS', center: true },
+                Valor: { dataField: 'VALOR' },
                 Tipo: { dataField: 'valor' } //(planejado, acrescimo)
             },
             onSelectLine: (r) => {
@@ -912,6 +912,8 @@ const carrinho = (function () {
         let idCliente = $("#spId_cliente").text();
         let idServico = $('#slctServico').val()
         valorT = valorT.toFixed(2).replace('.', ',')
+        let dia = new Date().toLocaleDateString('pt-BR')
+        let hora = new Date().toLocaleTimeString('pt-BR')
 
         console.log(new Date().toLocaleTimeString('pt-BR'));
 
@@ -952,7 +954,7 @@ const carrinho = (function () {
             axios.post(url, {
 
                 call: 'gerarServico',
-                param: { idCliente, valorT, idServico }
+                param: { idCliente, valorT, idServico, dia, hora }
             })
                 .then(rs => {
                     console.log('rs  :', rs);
