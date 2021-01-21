@@ -75,9 +75,10 @@ const cliente = (function () {
                     }
                 },
                 duplicity: {
-                    dataField: ['cnpj'],
+                    dataField: ['CNPJ'],
 
                     execute: (r) => {
+                        console.log('r :');
                         let param = {}
                         param.cnpj = r.value,
                             validarCpnj(param.cnpj),
@@ -87,6 +88,7 @@ const cliente = (function () {
 
                             })
                                 .then(rs => {
+                                    
                                     if (rs.data[0]) {
                                         xgCliente.showMessageDuplicity('CNPJ inválido')
                                         xgCliente.focusField(r.field);

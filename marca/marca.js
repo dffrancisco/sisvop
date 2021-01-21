@@ -17,10 +17,10 @@ const marca = (function () {
             theme: 'x-clownV2',
             heightLine: '35',
             columns: {
-                Marca: { dataField: 'MARCA'},
+                Marca: { dataField: 'MARCA' },
             },
             onSelectLine: (r) => {
-                console.log(r)
+                console.log('r :', r);
             },
             sideBySide: {
                 el: "#pnFields",
@@ -100,6 +100,7 @@ const marca = (function () {
             param: { search: search, offset: offset }
 
         }).then(rs => {
+            console.log('rs :', rs);
             xgMarca.querySourceAdd(rs.data);
 
             if (rs.data[0])
@@ -178,23 +179,29 @@ const marca = (function () {
                 }
             }
 
-            if (controleGrid == 'edit')
+            if (controleGrid == 'edit') {
                 param.ID_MARCA = xgMarca.dataSource().ID_MARCA;
+            }
 
-            if (controleGrid == 'new')
+            if (controleGrid == 'new') {
                 param.ID_MARCA = ''
+            }
 
             axios.post(url, {
                 call: 'salvar',
                 param: param
 
             }).then(rs => {
-                if (rs.data.ID_MARCA) {
+
+                console.log('param :', param);
+                if (rs.data[0].ID_MARCA) {
+
                     param.ID_MARCA = rs.data.ID_MARCA;
                     xgMarca.insertLine(param);
 
                 } else {
                     xgMarca.dataSource(param);
+
                 }
                 cancelar()
             });

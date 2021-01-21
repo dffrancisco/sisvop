@@ -1,83 +1,96 @@
 <?php
+include_once '../class/class.connect_firebird.php';
+include_once '../class/prepareSql.php';
+
 class SqlFornecedor
 {
   public $db;
   
   function __construct()
   {
-    $this->db = new PDO('sqlite:/var/www/html/Estoque.sqlite');
+    $this->db = ConexaoFirebird::getConectar();
   }
 
-  function getFornecedor($param)
-  {
+  function getFornecedor($param){
     extract($param);
-    $sql = "select a.id_fornecedor, a.cnpj, a.razao_social, 
-            a.nome_fantazia, a.endereco, 
-            a.cidade, a.bairro, b.id_uf, b.uf, a.municipio, 
-            a.cep, a.telefone_1, a.telefone_2, a.fax, 
-            a.inscricao_estadual, a.data_cadastro 
-            from fornecedor a, uf b 
-            WHERE a.id_uf = b.id_uf AND 
-            a.nome_fantazia like '$search%'
-            limit $offset, 10";
-            
-            // print_r($sql);
+    $sql = "SELECT FIRST 10 SKIP $offset
+            a.id_fornecedor, a.cnpj, a.razao,
+            a.fantasia, a.endereco, a.cidade,
+            a.bairro, a.municipio, a.cep,
+            a.tel_1, a.tel_2, a.inscricao,
+            a.data_cadastro,
+            b.id_uf, b.uf
+            FROM fornecedor a, uf b
+            WHERE b.id_uf = a.id_uf 
+            AND fantasia like '$search%'
+            ORDER BY fantasia ASC";
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
 
   }
 
   function getUf(){
-    $sql = 'select * from uf';
+    $sql = 'SELECT
+            *
+            FROM uf';
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
   function inserirFornecedor($param){
-    extract($param);
-    $sql = "INSERT INTO fornecedor (cnpj, razao_social, 
-            nome_fantazia, endereco, cidade, bairro,
-            id_uf, municipio, cep, telefone_1, telefone_2,
-            inscricao_estadual, data_cadastro)
-            VALUES('$cnpj', '$razao_social', '$nome_fantazia', 
-            '$endereco', '$cidade', '$bairro', '$id_uf', 
-            '$municipio', '$cep', '$telefone_1', '$telefone_2',
-            '$inscricao_estadual', '$data_cadastro')";
-
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
+    $sql = "INSERT INTO fornecedor 
+            (cnpj, razao, fantasia, 
+            endereco, cidade, bairro, id_uf, 
+            municipio, cep, tel_1, tel_2,
+            inscricao, data_cadastro)
+            VALUES
+            (:CNPJ, :RAZAO, :FANTASIA, 
+            :ENDERECO, :CIDADE, :BAIRRO, :ID_UF, 
+            :MUNICIPIO, :CEP, :TEL_1, :TEL_2,
+            :INSCRICAO, :DATA_CADASTRO)
+            returning id_fornecedor";
+            
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
   function atualizaFornecedor($param){
-    extract($param);
-
-    $sql = "UPDATE fornecedor set cnpj = '$cnpj', razao_social = '$razao_social', 
-            nome_fantazia = '$nome_fantazia', endereco = '$endereco', 
-            cidade = '$cidade', bairro = '$bairro', id_uf = '$id_uf', 
-            municipio = '$municipio', cep = '$cep', telefone_1 = '$telefone_1', 
-            telefone_2 = '$telefone_2', fax = '$fax', inscricao_estadual = '$inscricao_estadual'
-            WHERE id_fornecedor = $id_fornecedor";
-
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
+    $sql = "UPDATE fornecedor 
+            SET 
+            cnpj = :CNPJ, razao = :RAZAO, 
+            fantasia = :FANTASIA, endereco = :ENDERECO, 
+            cidade = :CIDADE, bairro = :BAIRRO, 
+            id_uf = :ID_UF, municipio = :MUNICIPIO, 
+            cep = :CEP, tel_1 = :TEL_1, 
+            tel_2 = :TEL_2, inscricao = :INSCRICAO
+            WHERE 
+            id_fornecedor = :ID_FORNECEDOR";
+            
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute();
   }
 
   function deletarFornecedor($param){
-    $sql = "DELETE FROM fornecedor WHERE id_fornecedor = $param";
-    
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
+    $sql = "DELETE FROM fornecedor 
+            WHERE 
+            id_fornecedor = $param";
+            
+    $query = $this->db->prepare($sql);
+    $query->execute();
   }
 
   function getCnpj($param){
     extract($param);
     $sql = "SELECT cnpj
             FROM fornecedor
-            WHERE cnpj like '%$cnpj'";
+            WHERE cnpj = '$CNPJ'";
 
     $query = $this->db->prepare($sql);
     $query->execute(); 

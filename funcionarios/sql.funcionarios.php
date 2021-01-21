@@ -14,22 +14,24 @@ class SqlFuncionarios
   }
 
 
+
   function getFuncionarios($param)
   {
-    extract($param);
+      extract($param);
+      $sql = "SELECT FIRST 10 SKIP $offset 
+              a.id_funcionarios, a.nome, 
+              a.telefone, a.cpf, a.rg, 
+              a.cep, a.endereco, a.cidade, 
+              a.uf, b.bairro, b.id_bairro 
+              FROM funcionarios a, bairro b
+              WHERE b.id_bairro = a.id_bairro
+              AND nome LIKE '$search%'";
 
-    $sql = "SELECT first 10 skip $offset a.id_funcionario, a.nome, a.telefone, a.cpf, a.rg, 
-             a.cep, a.endereco, a.cidade, a.uf, b.bairro, b.id_bairro 
-            FROM funcionarios a, bairro b
-            WHERE b.id_bairro = a.id_bairro
-            AND a.nome like '$search%'";
-
-
-
-    $query = $this->db->prepare($sql);
-    $query->execute();
-    return $query->fetchAll(PDO::FETCH_OBJ);
+      $query = $this->db->prepare($sql);
+      $query->execute(); 
+      return $query->fetchAll(PDO::FETCH_OBJ);
   }
+  
 
   function getBairro()
   {
@@ -52,34 +54,45 @@ class SqlFuncionarios
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+
   function insert($param)
   {
-    $sql = "INSERT INTO funcionarios
-             (nome, telefone, cpf, rg, cep, endereco, cidade, uf, id_bairro )
+     $sql = "INSERT INTO funcionarios
+             (nome, telefone, cpf, rg, 
+             cep, endereco, cidade, uf, id_bairro )
              VALUES
-             (:nome, :telefone, :cpf, :rg, :cep, :endereco, :cidade, :uf, :id_bairro)";
-
-    $sql = prepare::SQL($sql, $param);
-
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
+             (:NOME, :TELEFONE, :CPF, :RG, :CEP, 
+             :ENDERECO, :CIDADE, :UF, :ID_BAIRRO)
+             returning id_funcionarios";
+             
+      $sql = prepare::SQL($sql, $param);
+      // print_r($param);
+      $query = $this->db->prepare($sql);
+      $query->execute(); 
+      return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function update($param)
   {
     extract($param);
     $sql = "UPDATE funcionarios
-      SET nome = $nome, telefone = $telefone, cpf = $cpf, rg = $rg, cep =$cep, endereco = $endereco, cidade = $cidade, uf = $uf, id_bairro = $id_bairro 
-      WHERE id_funcionario = $id_funcionario";
+            SET nome = :NOME, telefone = :TELEFONE, 
+            cpf = :CPF, rg = :RG, cep =:CEP, 
+            endereco = :ENDERECO, cidade = :CIDADE, 
+            uf = :UF, id_bairro = :ID_BAIRRO 
+            WHERE id_funcionarios = :ID_FUNCIONARIOS";
 
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
+    $sql = prepare::SQL($sql, $param);
+    // print_r($param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function delete($param)
   {
 
-    $sql = "DELETE FROM funcionarios WHERE id_funcionario = $param";
+    $sql = "DELETE FROM funcionarios WHERE id_funcionarios = $param";
 
     $this->db->exec($sql);
     return $this->db->lastInsertId();

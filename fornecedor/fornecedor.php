@@ -8,59 +8,59 @@
         <div class="row">
             <div class="col s3">
                 <label>CNPJ</label>
-                <input type="text" id="edtCnpj" name="cnpj" class="CNPJ">
+                <input type="text" id="edtCnpj" name="CNPJ" class="CNPJ">
             </div>
 
             <div class="col s9">
                 <label>Razão Social</label>
-                <input type="text" id="edtRazaoSocial" name="razao_social">
+                <input type="text" id="edtRazaoSocial" name="RAZAO">
             </div>
         </div>
 
         <div class="row">
             <div class="col s4">
-                <label>Nome Fantazia</label>
-                <input type="text" id="edtFantazia" name="nome_fantazia">
+                <label>Nome Fantasia</label>
+                <input type="text" id="edtFantasia" name="FANTASIA">
             </div>
             <div class="col s5">
                 <label>Endereço</label>
-                <input type="text" id="edtEndereco" name="endereco">
+                <input type="text" id="edtEndereco" name="ENDERECO">
             </div>
             <div class="col s3">
                 <label>Cidade</label>
-                <input type="text" id="edtCidade" name="cidade">
+                <input type="text" id="edtCidade" name="CIDADE">
             </div>
         </div>
 
         <div class="row">
             <div class="col s4">
                 <label>Bairro</label>
-                <input type="text" id="edtBairro" name="bairro">
+                <input type="text" id="edtBairro" name="BAIRRO">
             </div>
             <div class="col s2">
                 <label>UF</label>
-                <select name="id_uf" id="slctUf"></select>
+                <select name="ID_UF" id="slctUf"></select>
             </div>
 
             <div class="col s4">
                 <label>Município</label>
-                <input type="text" id="edtMunicipio" name="municipio">
+                <input type="text" id="edtMunicipio" name="MUNICIPIO">
             </div>
             <div class="col s2">
                 <label>CEP</label>
-                <input type="text" id="edtCep" name="cep" class="CEP">
+                <input type="text" id="edtCep" name="CEP" class="CEP">
             </div>
         </div>
 
         <div class="row">
             <div class="col s3">
                 <label>Telefone 1</label>
-                <input type="text" id="edtTel1" name="telefone_1" class="TELEFONE">
+                <input type="text" id="edtTel1" name="TEL_1" class="TELEFONE">
             </div>
 
             <div class="col s3">
                 <label>Telefone 2</label>
-                <input type="text" id="edtTel2" name="telefone_2" class="TELEFONE">
+                <input type="text" id="edtTel2" name="TEL_2" class="TELEFONE">
             </div>
             <!-- <div class="col s3">
                 <label>FAX</label>
@@ -68,11 +68,11 @@
             </div> -->
             <div class="col s3">
                 <label>Inscrição Estadual</label>
-                <input type="text" id="edtInscricaoEstadual" name="inscricao_estadual">
+                <input type="text" id="edtInscricaoEstadual" name="INSCRICAO">
             </div>
             <div class="col s3">
                 <label>Data de Cadastro</label>
-                <input type="text" id="edtDataCadastro" name="data_cadastro" disabled>
+                <input type="text" id="edtDataCadastro" name="DATA_CADASTRO" disabled>
             </div>
         </div>
         <!-- <div class="row">

@@ -25,13 +25,14 @@ class Funcionarios
     }
 
     function save($param){
-        if (empty($param['id_funcionario'])) {
-           // echo 'entrou';
+        
+        if (empty($param['ID_FUNCIONARIOS'])) {
+           
             $id_funcionario = $this->sql->insert($param);
-            echo '{"id_funcionario":"' . $id_funcionario . '"}';
+            echo  json_encode($id_funcionario);
         } else {
-           $id_funcionario = $this->sql->update($param);
-
+           $call = $this->sql->update($param);
+           echo 'EDIT';
         }
     }
 
