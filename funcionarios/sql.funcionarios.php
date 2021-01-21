@@ -7,14 +7,16 @@ class SqlFuncionarios
 
 
   public $db;
-  
+
   function __construct()
   {
     $this->db = ConexaoFirebird::getConectar();
   }
 
 
-  function getFuncionarios($param){
+
+  function getFuncionarios($param)
+  {
       extract($param);
       $sql = "SELECT FIRST 10 SKIP $offset 
               a.id_funcionarios, a.nome, 
@@ -29,8 +31,10 @@ class SqlFuncionarios
       $query->execute(); 
       return $query->fetchAll(PDO::FETCH_OBJ);
   }
+  
 
-  function getBairro(){
+  function getBairro()
+  {
     $sql = 'SELECT * FROM bairro';
 
     $query = $this->db->prepare($sql);
@@ -38,18 +42,21 @@ class SqlFuncionarios
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function duplicity($param){
+  function duplicity($param)
+  {
     extract($param);
 
     $sql = "select $field from funcionarios
            WHERE $field =  '$value'";
-           
-     $query = $this->db->prepare($sql);
-     $query->execute();
-     return $query->fetchAll(PDO::FETCH_OBJ);
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function insert($param){
+
+  function insert($param)
+  {
      $sql = "INSERT INTO funcionarios
              (nome, telefone, cpf, rg, 
              cep, endereco, cidade, uf, id_bairro )
@@ -65,7 +72,8 @@ class SqlFuncionarios
       return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function update($param){
+  function update($param)
+  {
     extract($param);
     $sql = "UPDATE funcionarios
             SET nome = :NOME, telefone = :TELEFONE, 
@@ -81,13 +89,12 @@ class SqlFuncionarios
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function delete($param){
+  function delete($param)
+  {
 
     $sql = "DELETE FROM funcionarios WHERE id_funcionarios = $param";
 
     $this->db->exec($sql);
     return $this->db->lastInsertId();
   }
-
- 
 }

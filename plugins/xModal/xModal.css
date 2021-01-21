@@ -580,10 +580,11 @@
 
 .xModal-bublue .xModal-modal-foot {
   text-align: right;
-  padding: 0.8em 1em 1em;
+  padding: 0.4rem;
   border-top: 1px solid #c5c5c5;
   max-height: 72px;
-  height: 47px;
+  height: 38px;
+  /* height: 47px; */
   background-color: #fff;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;

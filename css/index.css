@@ -80,7 +80,7 @@ body{
 .pnUser {
     z-index: 100;
     color:#e0f2f1;
-    background: #00897b;
+    background: #66a7db;
     margin-top: 70px;
     padding: 3px 3px 3px 3px;
     -moz-transition: all 0.5s ease;
@@ -89,12 +89,38 @@ body{
     transition: all 0.5s ease;
     font-size: 1.2em;
     overflow: hidden;
-    width: 220px;
+    width: 100px;
     right: 0;
     position: fixed;
     top: -210px;
     right: 4px;
     border-radius: 5px;
+}
+
+#btnSair{
+    cursor:pointer
+}
+
+#btnSair:hover{
+    color: #c4c4c4;
+}
+
+.btnEyes:hover{
+    color: rgb(134, 134, 134);
+}
+
+.btnEyes{
+    color: rgb(0, 0, 0);
+    cursor:pointer
+    
+}
+
+.eyeSee{
+    color: #000000 ;
+}
+
+.eyeSee:hover{
+    color: rgb(134, 134, 134) ;
 }
 
 .pnUserToggle {
@@ -124,6 +150,8 @@ body{
     background-color: rgb(226, 25, 25) !important;
     border: red !important;
 }
+
+
 
 .btnBuscarFornecedor{    
     background-color: #2E4BAB !important;

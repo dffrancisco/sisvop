@@ -12,7 +12,6 @@
             <div class="col s4">
                 <label>CNPJ</label> <br>
                 <span class="spanAutoPreenc" id="spCnpj"></span>
-
             </div>
 
         </div>

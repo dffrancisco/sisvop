@@ -563,7 +563,7 @@ const itens = (function () {
         valCampos.valor_total = valCampos.valor_total.replace(',', '');
 
         for (let i in valCampos) {
-            if (valCampos[i] == '' || valCampos.valor_total == 0 ) {
+            if (valCampos[i] == '' || valCampos.valor_total == 0) {
                 show('Por favor preencha todos os campos')
                 return false
             }

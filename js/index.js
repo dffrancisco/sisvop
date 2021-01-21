@@ -1,11 +1,9 @@
 let calc;
-let pnLogin;
 let usuario;
-
-
 const login = new Login();
 
 $(function () {
+
     calc = new xCalkModal()
 
     $('.real').maskMoney({ thousands: '.', decimal: ',', allowZero: true });
@@ -43,11 +41,10 @@ $(function () {
 
     $('#pnTitulo').html($('#pnPrincipal title').html());
 
-    login.modal()
 
+
+    login.sair();
     login.session();
-
-    // pnLogin.open()
 
 });
 
@@ -74,77 +71,35 @@ function Login() {
 
     this.session = async function () {
 
-        axios.post(`login/login.php`, {
+        axios.post('login/login.php', {
             call: 'session',
 
         }).then(r => {
 
             if (r.data.semSession) {
                 usuario = '';
-                pnLogin.open()
+                // pnLogin.open()
+                window.location.href = "login";
                 return false
             }
 
             usuario = r.data
             $('#spUser').html(r.data.NOME.split(' ')[0])
-        })
-    };
-
-    this.modal = function () {
-        pnLogin = new xModal.create({
-            el: `#pnLogin`,
-            esc: false,
-            closeBtn: false,
-            title: 'Login',
-            width: 601,
-            height: 403,
-            onOpen: function () {
-                // setTimeout(function () {
-                //     $('#id_funcionario').focus();
-                // }, 100)
-
-                // if (localStorage.getItem('siap_user') != null)
-                //     $('#frmLogin #id_funcionario').val(util.base64_decode(localStorage.getItem('siap_user')));
-
-                // if (localStorage.getItem('siap_pass') != null)
-                //     $('#frmLogin #senha').val(util.base64_decode(localStorage.getItem('siap_pass')));
-            }
-
         })
     }
 
     this.sair = function () {
+        $('#btnSair').click(function () {
+            axios.post(`login/login.php`, {
+                call: 'sair',
 
-        axios.post(`login/login.php`, {
-            call: 'sair',
+            }).then(r => {
+                login.session()
 
-        }).then(r => {
-            this.session()
-
+            })
         })
     };
 
-    this.logar = function (login, senha) {
-
-        axios.post(`login/login.php`, {
-            call: 'setLogin',
-            param: {
-                login: login,
-                senha: senha
-            }
-        }).then(r => {
-            if (r.data.msg) {
-                show(r.data.msg)
-                return false
-            }
-
-            usuario = r.data
-
-            $('#spUser').html(r.data.NOME.split(' ')[0])
-
-            pnLogin.close()
-
-        })
-
-    };
 }
+
+
