@@ -6,48 +6,57 @@
 <div class="container">
     <div class="tabela" id="pnFields">
         <div class="row">
-            <div class="col s5">
-                <span id="spId_cliente" hidden></span>
+            <div class="col s6">
+                <span id="spId_cliente">IDcliente</span>
+                <span id="spId_lista_servico">idServico</span>
                 <label>Fantasia</label><br>
                 <span id="spFantasia" class="spanAutoPreenc">Fantasia<span>
 
             </div>
-            <div class="col s3">
-                <label>Representante</label><br>
-                <span id="spRepresentante" class="spanAutoPreenc">Representante<span>
-            </div>
-            <div class="col s4">
+
+            <div class="col s6">
                 <label>CNPJ</label><br>
                 <span id="spCnpj" class="spanAutoPreenc">CNPJ<span>
             </div>
         </div>
 
+        <div class="row">
+            <div class="col s4">
+                <label>Engenheiro</label><br>
+                <span id="spEngenheiro" class="spanAutoPreenc">Engenheiro</span>
+            </div>
 
+            <div class="col s4">
+                <label>Serviço</label><br>
+                <span id="spServico" class="spanAutoPreenc">Serviço</span>
+            </div>
+
+            <div class="col s4">
+                <label>Executores</label><br>
+                <span id="spExecutores" class="spanAutoPreenc">Executores</span>
+            </div>
+        </div>
 
         <div class="row">
-            <!-- <div class="col s6">
-                <label>Razão Social</label><br>
-                <span id="spRazao_social" class="spanAutoPreenc">Razão Social<span>
-            </div> -->
-
-            <!-- <div class="col s3">
-                <label>Cidade</label><br>
-                <span id="spCidade" class="spanAutoPreenc">Cidade<span>
-            </div>
-
-            <div class="col s1">
-                <label>UF</label><br>
-                <span id=spUf class="spanAutoPreenc">UF<span>
-            </div>
-
-            <div class="col s2">
-                <label>Bairro</label><br>
-                <span id="spBairro" class="spanAutoPreenc">Bairo<span>
-            </div>
             <div class="col s3">
-                <label>CEP</label><br>
-                <span id="spCep" class="spanAutoPreenc">CEP<span>
-            </div> -->
+                <label>Data de início</label><br>
+                <span id="spDataI" class="spanAutoPreenc">Data início</span>
+            </div>
+
+            <div class="col s3">
+                <label>Data de finalização</label><br>
+                <span id="spDataF" class="spanAutoPreenc">Data finalização</span>
+            </div>
+
+            <div class="col s3">
+                <label>Status</label><br>
+                <span id="spStatus" class="spanAutoPreenc">Status</span>
+            </div>
+
+            <div class="col s3">
+                <label>Valor</label><br>
+                <span id="spValor" class="spanAutoPreenc">Valor</span>
+            </div>
         </div>
 
         <br>
@@ -114,11 +123,6 @@
             <input type="text" id="xmEdtProduto">
         </div>
 
-        <div class="col s4 push-s4">
-            <label>Serviços</label>
-            <select name="id_servico" id="slctServico"></select>
-        </div>
-
     </div>
     <!-- xGrid dos Produtos -->
     <div id="xmPnGridProduto"></div><br>
@@ -178,5 +182,63 @@
     <div id="xmPnGridItens"></div><br>
 </div>
 
+<!-- MODAL DE NOVO SERVICO -->
+<div id="xmServico">
+    <span id="xmSpId_cliente" hidden></span>
+    <div class="row">
+        <div class="col s6">
+            <label>Cliente</label><br>
+            <span id="xmSpFantasia" class="spanAutoPreenc"></span>
+        </div>
+
+        <div class="col s6">
+            <label>CPNJ</label><br>
+            <span id="xmSpCnpj" class="spanAutoPreenc"></span>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <label>Serviços</label>
+            <select name="id_servico" style="width: 94% !important" id="slctServico"></select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s6">
+            <label>Engenheiro</label><br>
+            <input type="text" style="width: 83% !important;" id="xmInEngenheiro">
+        </div>
+
+        <div class="col s6">
+            <label>Executores</label>
+            <input type="text" style="width: 83% !important;" id="xmInEx">
+        </div>
+
+        <div class="col s6">
+            <label>Data de início</label><br>
+            <input type="text" style="width: 83% !important;" id="xmInDataI" class="date">
+        </div>
+
+        <div class="col s6">
+            <label>Data de finalização</label>
+            <input type="text" style="width: 83% !important;" id="xmInDataF" class="date">
+        </div>
+
+        <div class="col s6">
+            <label>Valor</label>
+            <input type="text" style="width: 83% !important;" id="xmInValor" class="real">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <label>OBS</label>
+            <textarea type="text" style=" width: 96% !important;" class="txtArea" id="xmInObs" rows="50"
+                placeholder="Observações"></textarea>
+        </div>
+    </div>
+
+</div>
 
 <div id="pnCodigoTela">Saída</div>

@@ -12,6 +12,7 @@ let xmEdtQtd
 let xmListaCliente;
 let xmCadServico;
 let xmEdtQtdItem;
+let xmNovoServico;
 
 let total = 0;
 let valorT = 0
@@ -36,6 +37,7 @@ $(function () {
     saida.grid();
 
     clientes.grid();
+    clientes.modalNovoServico();
 
     itens.grid();
 
@@ -98,7 +100,6 @@ $(function () {
     $('.btnDel').attr("disabled", true);
     $('.btnAF').attr("disabled", true);
     $('.btnV').attr("disabled", true);
-    $('.btnN').attr("disabled", true);
     $('.btnFS').attr("disabled", true);
     $('.btnF').attr("disabled", true);
 
@@ -140,6 +141,53 @@ const saida = (function () {
                     $('.btnAF').text('FINALIZAR')
                 }
             },
+
+            sideBySide: {
+                el: '#pnFields',
+
+                frame: {
+                    el: '#pnButtons',
+                    buttons: {
+
+                        novo: {
+                            html: "Novo Serviço",
+                            class: "btnP btnPesq",
+                            click: buscar,
+                        },
+                        fechar: {
+                            html: "Fechar Serviço",
+                            class: "btnP btnFS",
+                            click: novo,
+                        },
+                        finalizado: {
+                            html: "Serviço Finalizado",
+                            class: "btnP btnF",
+                            click: novo,
+                        },
+                        visualizar: {
+                            html: 'Visualizar',
+                            class: 'btnP btnV',
+                            click: editar,
+                        },
+                        deletar: {
+                            html: 'Deletar',
+                            class: 'btnP btnDel',
+                            state: xGridV2.state.delete,
+                            click: deletar,
+                        },
+                        // print: {
+                        //     html: 'Print',
+                        //     class: 'btnP btnPrint',
+                        // },
+                        af: {
+                            html: 'A / F',
+                            class: 'btnP btnAF',
+                            click: af
+                        },
+                    }
+                },
+            },
+
             onKeyDown: {
                 '13': (ln, e) => {
 
@@ -177,57 +225,6 @@ const saida = (function () {
                 }
             },
 
-            sideBySide: {
-                el: '#pnFields',
-
-                frame: {
-                    el: '#pnButtons',
-                    buttons: {
-                        Buscar: {
-                            html: 'Buscar Cliente',
-                            class: 'btnP btnPesq',
-                            click: buscar,
-                        },
-
-                        novo: {
-                            html: "Novo Serviço",
-                            class: "btnP btnN",
-                            click: novo,
-                        },
-                        fechar: {
-                            html: "Fechar Serviço",
-                            class: "btnP btnFS",
-                            click: novo,
-                        },
-                        finalizado: {
-                            html: "Serviço Finalizado",
-                            class: "btnP btnF",
-                            click: novo,
-                        },
-                        visualizar: {
-                            html: 'Visualizar',
-                            class: 'btnP btnV',
-                            click: editar,
-                        },
-                        deletar: {
-                            html: 'Deletar',
-                            class: 'btnP btnDel',
-                            state: xGridV2.state.delete,
-                            click: deletar,
-                        },
-                        // print: {
-                        //     html: 'Print',
-                        //     class: 'btnP btnPrint',
-                        // },
-                        af: {
-                            html: 'A / F',
-                            class: 'btnP btnAF',
-                            click: af
-                        },
-                    }
-                },
-            },
-
             query: {
                 execute: (r) => {
                     getListaServicos(r.param.search, r.offset);
@@ -250,29 +247,7 @@ const saida = (function () {
 
     }
 
-    function getListaServicos(search, offset) {
-        axios.post(url, {
-            call: 'getListaServicos',
-            param: { search, offset }
-        }).then(rs => {
-            xgSaida.querySourceAdd(rs.data);
-            $('.btnN').removeAttr("disabled");
-            if (rs.data.length > 0) {
-                $('.btnDel').removeAttr("disabled");
-                $('.btnAF').removeAttr("disabled");
-                $('.btnV').removeAttr("disabled");
-                $('.btnFS').removeAttr("disabled");
-                $('.btnF').removeAttr("disabled");
-            } else {
-                $('.btnDel').attr("disabled", true);
-                $('.btnAF').attr("disabled", true);
-                $('.btnV').attr("disabled", true);
-                $('.btnFS').attr("disabled", true);
-                $('.btnF').attr("disabled", true);
-            }
 
-        })
-    }
 
     function af() {
 
@@ -480,19 +455,25 @@ const clientes = (function () {
             onKeyDown: {
                 '13': (ln, e) => {
                     cliente = ln
-                    $("#spId_cliente").html(cliente.ID_CLIENTE);
-                    $("#spFantasia").html(cliente.FANTASIA);
-                    // $("#spRazao_social").html(cliente.RAZAO);
-                    $("#spCnpj").html(cliente.CNPJ);
-                    $("#spRepresentante").html(cliente.REPRESENTANTE);
+
+                    $("#xmSpId_cliente").html(cliente.ID_CLIENTE);
+                    $("#xmSpFantasia").html(cliente.FANTASIA);
+                    $("#xmSpCnpj").html(cliente.CNPJ);
+                    getServico();
+                    xmNovoServico.open();
+                    // $("#spId_cliente").html(cliente.ID_CLIENTE);
+                    // $("#spFantasia").html(cliente.FANTASIA);
+                    // // $("#spRazao_social").html(cliente.RAZAO);
+                    // $("#spCnpj").html(cliente.CNPJ);
+                    // $("#spRepresentante").html(cliente.REPRESENTANTE);
                     // $("#spCidade").html(cliente.CIDADE);
                     // $("#spUf").html(cliente.UF);
                     // $("#spBairro").html(cliente.BAIRRO);
                     // $("#spCep").html(cliente.CEP);
 
-                    xmListaCliente.close()
+                    // xmListaCliente.close()
 
-                    xgSaida.queryOpen({ search: cliente.ID_CLIENTE })
+                    // xgSaida.queryOpen({ search: cliente.ID_CLIENTE })
 
                 },
             },
@@ -516,12 +497,125 @@ const clientes = (function () {
             param: { search: search, offset: offset },
         })
             .then(rs => {
+
+                console.log('rs :', rs);
                 xgCliente.querySourceAdd(rs.data);
             })
     }
 
+    function getListaServicos(search, offset) {
+        axios.post(url, {
+            call: 'getListaServicos',
+            param: { search, offset }
+        }).then(rs => {
+            console.log('rs :', rs.data);
+            // $('#spId_cliente').html(rs.data[0])
+            // $('#spId_lista_servico').html(rs.data[0])
+            // $('#spFantasia').html(rs.data[0])
+            // $('#spCnpj').html(rs.data[0])
+            // $('#spEngenheiro').html(rs.data[0])
+            // $('#spServico').html(rs.data[0])
+            // $('#spExecutores').html(rs.data[0])
+            // $('#spDataI').html(rs.data[0])
+            // $('#spDataF').html(rs.data[0])
+            // $('#spStatus').html(rs.data[0])
+            // $('#spValor').html(rs.data[0])
+            xgSaida.querySourceAdd(rs.data);
+            if (rs.data.length > 0) {
+                $('.btnDel').removeAttr("disabled");
+                $('.btnAF').removeAttr("disabled");
+                $('.btnV').removeAttr("disabled");
+                $('.btnFS').removeAttr("disabled");
+                $('.btnF').removeAttr("disabled");
+            } else {
+                $('.btnDel').attr("disabled", true);
+                $('.btnAF').attr("disabled", true);
+                $('.btnV').attr("disabled", true);
+                $('.btnFS').attr("disabled", true);
+                $('.btnF').attr("disabled", true);
+            }
+
+        })
+    }
+
+    function getServico() {
+        axios.post(url, {
+            call: 'getServ',
+        })
+            .then(rs => {
+                for (let i in rs.data) {
+                    let table = `<option value="${rs.data[i].ID_SERVICO}"> ${rs.data[i].SERVICO}</option>`
+                    $('#slctServico').append(table)
+                }
+            })
+    }
+
+    function novoServico() {
+        ID_CLIENTE = $('#xmSpId_cliente').html()
+        ID_SERVICO = $('#slctServico').val()
+        ENGENHEIRO = $('#xmInEngenheiro').val()
+        EXECUTORES = $('#xmInEx').val()
+        DATA_INICIO = $('#xmInDataI').val()
+        DATA_FINAL = $('#xmInDataF').val()
+        VALOR = $('#xmInValor').val()
+        OBS = $('#xmInObs').val()
+        DIA = new Date().toLocaleDateString('pt-BR')
+        HORA = new Date().toLocaleTimeString('pt-BR')
+        axios.post(url, {
+            call: 'gerarServico',
+            param: {
+                ID_CLIENTE, ID_SERVICO,
+                ENGENHEIRO, EXECUTORES,
+                DATA_INICIO, DATA_FINAL,
+                OBS, DIA, HORA, VALOR
+            }
+        }).then(r => {
+            axios.post(url, {
+                call: 'getListaServicos',
+                param: r.data[0].ID_LISTA_SERVICO
+            }).then(rs => {
+                console.log('rs :', rs.data);
+                $('#spId_cliente').html(rs.data[0].ID_CLIENTE)
+                $('#spId_lista_servico').html(rs.data[0].ID_LISTA_SERVICO)
+                $('#spFantasia').html(rs.data[0].FANTASIA)
+                $('#spCnpj').html(rs.data[0].CNPJ)
+                $('#spEngenheiro').html(rs.data[0].ENGENHEIRO)
+                $('#spServico').html(rs.data[0].SERVICO)
+                $('#spExecutores').html(rs.data[0].EXECUTORES)
+                $('#spDataI').html(rs.data[0].DATA_INICIO)
+                $('#spDataF').html(rs.data[0].DATA_FINALIZACAO)
+                $('#spStatus').html(rs.data[0].STATUS)
+                $('#spValor').html(rs.data[0].VALOR)
+
+
+            })
+
+        })
+    }
+
+    function modalNovoServico() {
+        xmNovoServico = new xModal.create({
+            el: '#xmServico',
+            title: 'Novo Serviço',
+            height: '475',
+            width: '500',
+            buttons: {
+                btn1: {
+                    html: 'Confirma',
+                    class: 'xmQtdBtn',
+                    click: (e) => {
+                        novoServico()
+                        xmNovoServico.close()
+                        xmListaCliente.close()
+                    }
+                }
+            },
+        })
+    }
+
     return {
         grid: grid,
+        modalNovoServico: modalNovoServico,
     }
 })();
 

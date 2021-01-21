@@ -31,19 +31,24 @@ class Sqlservicos
   }
 
   function getListaServicos($param){
-    extract($param);
-    $sql = "SELECT FIRST 10 SKIP $offset
-            a.id_lista_servico, a.id_cliente,
-            a.valor, a.data, a.hora, a.status,
-            b.id_servico, b.servico 
-            FROM lista_servicos a, servicos b
-            WHERE 
+    $sql = "SELECT FIRST 10 SKIP 0
+            a.id_lista_servico, a.valor, 
+            a.data_inicio, a.hora, a.status, 
+            a.data_finalizacao, a.engenheiro,
+            a.executores, a.obs,
+            b.servico, 
+            c.id_cliente,c.fantasia, c.cnpj
+            FROM lista_servicos a, servicos b, clientes c
+            WHERE
             a.id_servico = b.id_servico
-            AND id_cliente = $search";
+            AND
+            a.id_cliente = c.id_cliente
+            AND 
+            id_lista_servico = $param";
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
+    return $query->fetchAll(); 
   }
 
   function getListaServico($param){
@@ -53,7 +58,7 @@ class Sqlservicos
 
     $query = $this->db->prepare($sql);
     $query->execute();
-    return $query->fetchAll();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function getProdutos($param){
@@ -95,17 +100,21 @@ class Sqlservicos
   }
 
   function gerarServico($param){
+    extract($param);
     $sql = "INSERT INTO lista_servicos 
             (id_cliente, id_servico, 
-            valor, data, hora, status)
+            data, hora, status, data_inicio, data_finalizacao,
+            engenheiro, executores, obs, valor)
             VALUES 
-            (:idCliente, :idServico, 
-            :valorT, :dia, :hora, 'ABERTO')
+            (:ID_CLIENTE, :ID_SERVICO, 
+            :DIA, :HORA, 'ABERTO', :DATA_INICIO, :DATA_FINAL,
+            :ENGENHEIRO, :EXECUTORES, :OBS, :VALOR)
             returning id_lista_servico";
 
     $sql = prepare::SQL($sql, $param);
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function inserirItens($param){

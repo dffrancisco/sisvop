@@ -115,8 +115,8 @@ if (!empty($_GET['p'])) {
             <li><i class="fa fa-shopping-cart"></i>Entrada de notas</li>
         </a>
 
-        <a href="?p=saida/saida">
-            <li><i class="fa fa-usd"></i>Saída</li>
+        <a href="?p=servicos/servicos">
+            <li><i class="fa fa-usd"></i>Serviços</li>
         </a>
 
         <hr />

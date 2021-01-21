@@ -138,6 +138,10 @@ body{
     border: #2E4BAB !important;   
 }
 
+.txtArea{
+    height: 100px !important;
+}
+
 .btnDel{
     
     background-color: rgb(226, 25, 25) !important;
