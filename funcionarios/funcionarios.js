@@ -5,12 +5,18 @@ $(function () {
     funcionario.getBairro();
     xgFuncionarios.queryOpen({ search: '' })
 
+    $("#edtPesquisa").keydown(function (e) {
 
+        if (e.keyCode == 13) {
+            $('.btnPesq').click()
+        }
+
+        if (e.keyCode == 38) {
+            xgFuncionarios.focus()
+        }
+    })
 
 });
-
-
-
 
 
 const funcionario = (function () {
@@ -81,8 +87,9 @@ const funcionario = (function () {
                     }
                 },
                 duplicity: {
-                    dataField: ['cpf', 'rg'],
+                    dataField: ['CPF', 'RG'],
                     execute: (r) => {
+                        console.log('r :', r);
                         axios.post(url, {
                             call: 'duplicity',
                             param: r
@@ -96,7 +103,7 @@ const funcionario = (function () {
 
                                 if (r.field == 'cpf') {
                                     let validCpf = $('#edtCpf').val()
-                                    let cpf = validCpf.replace(/[^\d]+/g,'');
+                                    let cpf = validCpf.replace(/[^\d]+/g, '');
                                     let Soma;
                                     let Resto;
                                     Soma = 0;
@@ -146,7 +153,7 @@ const funcionario = (function () {
 
         });
     }
-    
+
 
     function getFuncionarios(search, offset) {
         axios.post(url, {
@@ -173,7 +180,7 @@ const funcionario = (function () {
 
         }).then(rs => {
             for (let i in rs.data) {
-                let table = `<option value="${rs.data[i].id_bairro}"> ${rs.data[i].bairro}</option>`
+                let table = `<option value="${rs.data[i].ID_BAIRRO}"> ${rs.data[i].BAIRRO}</option>`
                 $('#slctBairro').append(table)
             }
 
@@ -194,9 +201,14 @@ const funcionario = (function () {
         $('.btnEdit').removeAttr('disabled')
         $('.btnDel').removeAttr('disabled')
         $('.container .validate').removeAttr("disabled")
+        $('#edtPesquisa').prop("disabled", true)
+        $('.btnPesq').prop("disabled", true);
         xgFuncionarios.clearElementSideBySide()
-        xgFuncionarios.focusField()
         xgFuncionarios.disable()
+
+
+
+
     }
 
     function edit() {
@@ -204,6 +216,8 @@ const funcionario = (function () {
         xgFuncionarios.focusField()
         xgFuncionarios.disable()
         $('.container .validate').removeAttr("disabled")
+        $('#edtPesquisa').prop("disabled", true)
+        $('.btnPesq').prop("disabled", true);
 
     }
 
@@ -211,26 +225,24 @@ const funcionario = (function () {
 
         let param = xgFuncionarios.getElementSideBySideJson()
 
-        param.bairro = $('#slctBairro option:selected').text()
+        param.BAIRRO = $('#slctBairro option:selected').text()
 
+        let allDuplicty = await xgFuncionarios.getDuplicityAll()
 
+        if (allDuplicty == false)
+            return false;
 
-        // let allDuplicty = await xgMarca.getDuplicityAll()
-
-        // if (allDuplicty == false)
-        //     return false;
-
-        // let valCampos = {
-        //     nome: $('#edtNome').val(),
-        //     rg: $('#edtRg').val(),
-        //     cpf: $('#edtCpf').val(),
-        //     telefone: $('#edtTel').val(),
-        //     cep: $('#edtCep').val(),
-        //     endereco: $('#edtEnd').val(),
-        //     uf: $('#edtUf').val(),
-        //     cidade: $('#edtCidade').val(),
-        //     bairro: $('#slctBairro').val(),
-        // }
+        let valCampos = {
+            nome: $('#edtNome').val(),
+            rg: $('#edtRg').val(),
+            cpf: $('#edtCpf').val(),
+            telefone: $('#edtTel').val(),
+            cep: $('#edtCep').val(),
+            endereco: $('#edtEnd').val(),
+            uf: $('#edtUf').val(),
+            cidade: $('#edtCidade').val(),
+            bairro: $('#slctBairro').val(),
+        }
 
 
         for (let i in valCampos) {
@@ -241,24 +253,31 @@ const funcionario = (function () {
         }
 
         if (controleGrid == 'edit') {
-            param.id_funcionario = xgFuncionarios.dataSource().id_funcionario;
+            param.ID_FUNCIONARIOS = xgFuncionarios.dataSource().ID_FUNCIONARIOS;
         }
 
         if (controleGrid == 'insert') {
-            param.id_funcionario = ''
+            param.ID_FUNCIONARIOS = ''
         }
+
+        console.log('PARAM :', param);
+
         axios.post(url, {
             call: 'save',
             param: param
 
         })
             .then(r => {
-                console.log(r)
-                if (r.data.id_funcionario) {
-                    param.id_funcionario = r.data.id_funcionario
+                console.log('r :', r.data);
+
+                if (r.data[0].ID_FUNCIONARIOS) {
+                    param.id_funcionario = r.data[0].ID_FUNCIONARIOS
                     xgFuncionarios.insertLine(param)
                 } else {
                     xgFuncionarios.dataSource(param)
+                    console.log(' xgFuncionarios.dataSource :', xgFuncionarios.dataSource());
+
+                    console.log('PARAM:', param);
                 }
 
             })
@@ -269,8 +288,8 @@ const funcionario = (function () {
 
     function deletar() {
         let param;
-        if (xgFuncionarios.dataSource().id_funcionario) {
-            param = xgFuncionarios.dataSource().id_funcionario
+        if (xgFuncionarios.dataSource().ID_FUNCIONARIOS) {
+            param = xgFuncionarios.dataSource().ID_FUNCIONARIOS
             confirmaCodigo({
                 msg: 'Para deletar o registro insira o código',
                 call: () => {
@@ -292,6 +311,8 @@ const funcionario = (function () {
         xgFuncionarios.clearElementSideBySide()
         xgFuncionarios.focus();
         $('.container .validate').prop("disabled", true)
+        $('#edtPesquisa').removeAttr('disabled');
+        $('.btnPesq').removeAttr('disabled');
     }
 
     return {

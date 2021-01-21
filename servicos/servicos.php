@@ -6,41 +6,48 @@
 <div class="container">
     <div class="tabela" id="pnFields">
         <div class="row">
-            <div class="col s4">
-                <span id="spId_cliente"></span>
-                <label>Razão Social</label><br>
-                <span id="spRazao_social" class="spanAutoPreenc">Razão Social<span>
+            <div class="col s5">
+                <span id="spId_cliente" hidden></span>
+                <label>Fantasia</label><br>
+                <span id="spFantasia" class="spanAutoPreenc">Fantasia<span>
+
+            </div>
+            <div class="col s3">
+                <label>Representante</label><br>
+                <span id="spRepresentante" class="spanAutoPreenc">Representante<span>
             </div>
             <div class="col s4">
                 <label>CNPJ</label><br>
                 <span id="spCnpj" class="spanAutoPreenc">CNPJ<span>
             </div>
-
-            <div class="col s4">
-                <label>Representante</label><br>
-                <span id="spRepresentante" class="spanAutoPreenc">Representante<span>
-            </div>
         </div>
 
+
+
         <div class="row">
-            <div class="col s3">
+            <!-- <div class="col s6">
+                <label>Razão Social</label><br>
+                <span id="spRazao_social" class="spanAutoPreenc">Razão Social<span>
+            </div> -->
+
+            <!-- <div class="col s3">
                 <label>Cidade</label><br>
                 <span id="spCidade" class="spanAutoPreenc">Cidade<span>
             </div>
 
-            <div class="col s3">
+            <div class="col s1">
                 <label>UF</label><br>
                 <span id=spUf class="spanAutoPreenc">UF<span>
             </div>
 
-            <div class="col s3">
+            <div class="col s2">
                 <label>Bairro</label><br>
                 <span id="spBairro" class="spanAutoPreenc">Bairo<span>
             </div>
             <div class="col s3">
                 <label>CEP</label><br>
                 <span id="spCep" class="spanAutoPreenc">CEP<span>
-            </div>
+            </div> -->
         </div>
 
         <br>
@@ -126,24 +133,28 @@
     <div class="row">
         <div class="col s10" id="pnFieldEdtQtd">
 
-            <span id="xmEdtId" hidden></span>
-            <span id="xmEdtValor" hidden></span>
+            <span id="xmSpId" hidden></span>
+            <span id="xmSpValor" hidden></span>
 
             <div class="col s10" id="pnFieldEdtQtd">
                 <label>Código</label><br>
-                <span id="xmEdtCodigo" class="spanAutoPreenc"></span>
+                <span id="xmSpCodigo" class="spanAutoPreenc"></span>
             </div>
 
             <div class="col s10" id="pnFieldEdtQtd">
                 <br><label>Produto</label><br>
-                <span id="xmEdtProd" class="spanAutoPreenc"></span>
+                <span id="xmSpProd" class="spanAutoPreenc"></span>
             </div>
 
             <div class="col s10" id="pnFieldEdtQtd">
                 <br><label>Marca</label><br>
-                <span id="xmEdtMarca" class="spanAutoPreenc"></span>
+                <span id="xmSpMarca" class="spanAutoPreenc"></span>
             </div>
 
+            <div class="col s10" id="pnFieldEdtQtd">
+                <br><label>Restante no estoque</label><br>
+                <b id="xmBQtd"></b><b> Unidades restantes</b>
+            </div>
             <div class="col s10" id="pnFieldEdtQtd">
                 <br><label>QTD</label>
                 <input type="number" id="xmEdtQtd">

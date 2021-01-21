@@ -38,19 +38,20 @@
         </div>
 
         <div class="row">
-            <div class="col s4">
-                <label>Data de cadastro</label>
-                <input type="text" id="edtData" id="editData" placeholder="" name="DATA_CADASTRO" disabled>
-            </div>
-
 
             <div class="col s8">
                 <label>Marca</label>
                 <select name="ID_MARCA" id="slctMarca"></select>
             </div>
+
+            <div class="col s4">
+                <label>Data de cadastro</label>
+                <input type="text" id="edtData" id="editData" placeholder="" name="DATA_CADASTRO" disabled>
+            </div>
+
         </div>
     </div>
- 
+
 
     <div id="xgProduto" class="list"></div>
     <div class="row">

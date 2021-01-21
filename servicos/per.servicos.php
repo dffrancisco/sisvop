@@ -17,68 +17,52 @@ class Servicos
     {
 
         //instancia da class        
-        $this->sql = new SqlSaida();
+        $this->sql = new SqlServicos();
     }
 
 
-    function getCliente($param)
-    {
+    function getCliente($param){
         $call = $this->sql->getCliente($param);
         echo json_encode($call);
     }
 
-    function getClienteAll($param)
-    {
-        $call = $this->sql->getClienteAll($param);
-        echo json_encode($call);
-    }
-
-    function getListaServicos($param)
-    {
+    function getListaServicos($param){
         $call = $this->sql->getListaServicos($param);
         echo json_encode($call);
     }
 
-    function getListaServico($param)
-    {
+    function getListaServico($param){
         $call = $this->sql->getListaServico($param);
         echo json_encode($call);
     }
 
-    function getProdutos($param)
-    {
+    function getProdutos($param){
         $call = $this->sql->getProdutos($param);
         echo json_encode($call);
     }
 
-    function getServ()
-    {
+    function getServ(){
         $call = $this->sql->getServ();
         echo json_encode($call);
     }
 
-    function atualizaStatus($param)
-    {
+    function atualizaStatus($param){
 
         $call = $this->sql->atualizaStatus($param);
         echo json_encode($call);
     }
 
-    function getProduto($param)
-    {
+    function getProduto($param){
         $call = $this->sql->getProduto($param);
         echo json_encode($call);
     }
 
-    function gerarServico($param)
-    {
-        print_r($param);
+    function gerarServico($param){
         $call = $this->sql->gerarServico($param);
         echo json_encode($call);
     }
 
-    function inserirItens($param)
-    {
+    function inserirItens($param){
         $call = $this->sql->inserirItens($param);
         echo json_encode($call);
     }

@@ -75,18 +75,20 @@ const cliente = (function () {
                     }
                 },
                 duplicity: {
-                    dataField: ['cnpj'],
+                    dataField: ['CNPJ'],
 
                     execute: (r) => {
+                        console.log('r :');
                         let param = {}
                         param.cnpj = r.value,
-                        validarCpnj(param.cnpj),
+                            validarCpnj(param.cnpj),
                             axios.post(url, {
                                 call: 'duplicity',
                                 param: param
 
                             })
                                 .then(rs => {
+                                    
                                     if (rs.data[0]) {
                                         xgCliente.showMessageDuplicity('CNPJ inválido')
                                         xgCliente.focusField(r.field);
@@ -186,15 +188,15 @@ const cliente = (function () {
             id_uf: $('#slctUf').val(),
             cidade: $('#edtCidade').val(),
             bairro: $('#edtBairro').val(),
-        }   
+        }
 
 
         for (let i in valCampos) {
             if (valCampos[i] == '' || valCampos.id_uf == null) {
-              show('Por favor preencha todos os campos')
-              return false
+                show('Por favor preencha todos os campos')
+                return false
             }
-          }
+        }
 
         if (controleGrid == 'edit') {
             param.id_cliente = xgCliente.dataSource().id_cliente;
