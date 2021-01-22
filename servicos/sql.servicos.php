@@ -30,7 +30,28 @@ class Sqlservicos
     return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
+  function getListaServicoX($param){
+    
+    $sql = "SELECT 
+      a.id_lista_servico, a.valor,
+      a.data_inicio, a.hora, a.status, 
+      a.data_finalizacao, a.engenheiro,
+      a.executores, a.obs,
+      b.servico, 
+      c.id_cliente,c.fantasia, c.cnpj
+      FROM lista_servicos a, servicos b, clientes c
+      WHERE a.id_servico = b.id_servico
+      AND a.id_cliente = c.id_cliente
+      AND id_lista_servico = :id_lista_servico";
+
+    $sql = prepare::SQL($sql, $param);
+
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
+  }
   function getListaServicos($param){
+    
     $sql = "SELECT FIRST 10 SKIP 0
             a.id_lista_servico, a.valor, 
             a.data_inicio, a.hora, a.status, 
@@ -44,7 +65,7 @@ class Sqlservicos
             AND
             a.id_cliente = c.id_cliente
             AND 
-            id_lista_servico = $param";
+            id_lista_servico = '$param'";
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
@@ -77,12 +98,10 @@ class Sqlservicos
   }
 
   function getProduto($param){
-    extract($param);
-    $sql = "SELECT a.*, b.* 
-            FROM produtos a, marca b
-            WHERE a.id_marca = b.id_marca 
-            AND id_produto LIKE '$search%'
-            LIMIT $offset, 1";
+
+    $sql = "SELECT qtd
+            FROM produtos 
+            WHERE id_produto = $param";
 
     $query = $this->db->prepare($sql);
     $query->execute();
@@ -118,23 +137,31 @@ class Sqlservicos
   }
 
   function inserirItens($param){
-    extract($param);
-    $sql = "INSERT INTO lista_itens_servico (id_lista_servico, id_produto, qtd, data)
-            VALUES ($id_servico, $idProduto,$qtdProduto, '$dia')";
-    // print_r($sql);
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
+    $sql = "INSERT INTO 
+            lista_itens_servico 
+            (id_lista_servico, id_produto, qtd, data)
+            VALUES (:ID_SERVICO, :ID_PRODUTO , :QTD_PRODUTO, :DATA)
+            returning id_produto";
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function getItens($param){
     extract($param);
-    $sql = "SELECT a.*, b.*, c.*
-            FROM produtos a, lista_itens_servico b, marca c
-            WHERE b.id_produto = a.id_produto
-            AND c.id_marca = a.id_marca
-            AND id_lista_servico = $search
-            LIMIT $offset, 10";
-
+    $sql = "SELECT FIRST 10 SKIP $offset
+    a.id_itens_servico, a.id_lista_servico,
+    a.qtd, a.data, a.origem ,
+    b.id_produto, b.descricao,
+    c.id_marca,  c.marca
+    FROM
+    lista_itens_servico a,
+    produtos b,
+    marcas c
+    WHERE a.id_produto = b.id_produto
+    AND c.id_marca = b.id_marca
+    AND id_lista_servico = $search";
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll();
@@ -144,12 +171,13 @@ class Sqlservicos
     extract($param);
 
     $sql = "UPDATE produtos 
-           SET qtd = $newEstoque
-           WHERE id_produto = $idProduto";
+           SET qtd = :newEstoque
+           WHERE id_produto = :ID_PRODUTO";
 
-    // print_r($sql);
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function deletarItem($param){

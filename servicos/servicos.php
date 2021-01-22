@@ -7,8 +7,8 @@
     <div class="tabela" id="pnFields">
         <div class="row">
             <div class="col s6">
-                <span id="spId_cliente">IDcliente</span>
-                <span id="spId_lista_servico">idServico</span>
+                <span id="spId_cliente" hidden>IDcliente</span>
+                <span id="spId_lista_servico" hidden>idServico</span>
                 <label>Fantasia</label><br>
                 <span id="spFantasia" class="spanAutoPreenc">Fantasia<span>
 
@@ -115,8 +115,20 @@
     <div id="pnGridCliente"></div>
 </div>
 
+<!-- xModal da Lista de Servicos-->
+<div id="xmServicos">
+    <div class="row">
+        <div class="col s4" id="pnFieldServico">
+            <label>Buscar Servico</label>
+            <input type="text" id="xmEdtServico">
+        </div>
+    </div>
+    <!-- xGrid de Cliente -->
+    <div id="xgServicos"></div>
+</div>
+
 <!-- xModal para cadastrar um novo serviço -->
-<div id="xmCadServico">
+<div id="xmInsProduto">
     <div class="row">
         <div class="col s4" id="pnFieldProduto">
             <label>Buscar Produto</label>
@@ -166,20 +178,6 @@
         </div>
     </div>
     <div id="xmQtdBtn"></div>
-</div>
-
-<!-- xModal para ver os itens do serviço -->
-<div id="xmItens">
-    <div class="row">
-        <input type="text" id="xmEdtItensIdServ" hidden>
-        <input type="text" id="xmEdtValorServ" hidden>
-        <div class="col s4" id="pnFieldItens">
-            <label>Buscar Produto</label>
-            <input type="text" id="xmEdtItens">
-        </div>
-    </div>
-    <!-- xGrid dos Itens -->
-    <div id="xmPnGridItens"></div><br>
 </div>
 
 <!-- MODAL DE NOVO SERVICO -->

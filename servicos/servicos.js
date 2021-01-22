@@ -1,54 +1,37 @@
 
 
 let xgSaida;
-let xgItem;
 let xgCliente;
 let xgProduto;
 let xgCarrinho;
 let xgRomaneios;
-let xgRomaneiosItens
+let xgRomaneiosItens;
+let xgServicos;
 
 let xmEdtQtd
 let xmListaCliente;
-let xmCadServico;
-let xmEdtQtdItem;
+let xmInsProduto;
 let xmNovoServico;
 
 let total = 0;
 let valorT = 0
-let idListaServico = 0
 let newEstoque = 0
 var evento
-
-let oldQtd = []
-let paramDuplicity = []
-let IDs = []
-let prod = []
-let valorP = []
-let QTDs = []
-
 
 let obProduto = {}
 
 $(function () {
     saida.modalCliente();
-    saida.modalCadServico();
-    saida.modalItens()
+    saida.modalInsProduto();
     saida.grid();
 
     clientes.grid();
     clientes.modalNovoServico();
 
-    itens.grid();
-
     produtos.grid();
     produtos.modalEdtQtd();
 
     carrinho.grid();
-
-    $('.btnDel').attr("disabled", true);
-    $('.btnAF').attr("disabled", true);
-    $('.btnV').attr("disabled", true);
 
     $('.tabs').tabs();
 
@@ -102,6 +85,7 @@ $(function () {
     $('.btnV').attr("disabled", true);
     $('.btnFS').attr("disabled", true);
     $('.btnF').attr("disabled", true);
+    $('.btnInsP').attr("disabled", true);
 
 });
 
@@ -121,13 +105,11 @@ const saida = (function () {
             heightLine: '35',
 
             columns: {
-                'Nº Serviço': { dataField: 'ID_LISTA_SERVICO' },
-                'Serviço': { dataField: 'SERVICO' },
+                Produto: { dataField: 'DESCRICAO' },
+                Marca: { dataField: 'MARCA' },
+                QTD: { dataField: 'QTD' },
                 Data: { dataField: 'DATA', center: true },
-                Hora: { dataField: 'HORA', center: true },
-                Status: { dataField: 'STATUS', center: true },
-                Valor: { dataField: 'VALOR' },
-                Tipo: { dataField: 'valor' } //(planejado, acrescimo)
+                ORIGEM: { dataField: 'ORIGEM', center: true },
             },
             onSelectLine: (r) => {
                 let status = r.status
@@ -154,6 +136,16 @@ const saida = (function () {
                             class: "btnP btnPesq",
                             click: buscar,
                         },
+                        BuscarS: {
+                            html: 'Buscar Servico',
+                            class: 'btnP btnBS',
+                            click: buscarServ,
+                        },
+                        newProduto: {
+                            html: "Inserir Produto",
+                            class: "btnP btnInsP",
+                            click: novo,
+                        },
                         fechar: {
                             html: "Fechar Serviço",
                             class: "btnP btnFS",
@@ -164,11 +156,7 @@ const saida = (function () {
                             class: "btnP btnF",
                             click: novo,
                         },
-                        visualizar: {
-                            html: 'Visualizar',
-                            class: 'btnP btnV',
-                            click: editar,
-                        },
+
                         deletar: {
                             html: 'Deletar',
                             class: 'btnP btnDel',
@@ -227,7 +215,7 @@ const saida = (function () {
 
             query: {
                 execute: (r) => {
-                    getListaServicos(r.param.search, r.offset);
+                    getItens(r.param.search, r.offset);
                 }
             }
         })
@@ -244,10 +232,28 @@ const saida = (function () {
             height: 200
         })
 
+        xgServicos = new xGridV2.create({
+            el: `#xgServicos`,
+            theme: 'x-clownV2',
+            height: 200
+        })
 
     }
 
 
+    function getItens(search, offset) {
+        axios.post(url, {
+            call: 'getItens',
+            param: { search: search, offset: offset },
+
+        }).then(rs => {
+            xgSaida.querySourceAdd(rs.data);
+        })
+    }
+
+    function buscarServ() {
+
+    }
 
     function af() {
 
@@ -287,11 +293,12 @@ const saida = (function () {
 
     function novo() {
 
-        $('#xmEdtItensIdServ').val('')
-
         xgProduto.queryOpen({ search: '' });
 
-        xmCadServico.open()
+        xmInsProduto.open()
+
+        $('.xmBtnRetirar').attr("disabled", true);
+
         $('#xmEdtProduto').focus()
     }
 
@@ -299,6 +306,7 @@ const saida = (function () {
         xgCliente.queryOpen({ search: '' });
         xmListaCliente.open();
         $('#xmEdtCliente').focus()
+
     }
 
     function editar() {
@@ -367,15 +375,16 @@ const saida = (function () {
         })
     }
 
-    function modalCadServico() {
-        xmCadServico = new xModal.create({
-            el: '#xmCadServico',
+    function modalInsProduto() {
+        xmInsProduto = new xModal.create({
+            el: '#xmInsProduto',
             title: 'Cadatrar Serviço',
             height: 1000,
 
             buttons: {
                 btn1: {
                     html: 'Retirar',
+                    class: 'xmBtnRetirar',
                     click: (e) => {
                         carrinho.salvarCarrinho()
 
@@ -408,7 +417,7 @@ const saida = (function () {
                     class: 'btnItem',
                     click: (e) => {
                         xgProduto.queryOpen({ search: '' })
-                        xmCadServico.open();
+                        xmInsProduto.open();
 
                         evento = 'Novo Item'
                     }
@@ -426,7 +435,7 @@ const saida = (function () {
     return {
         grid: grid,
         modalCliente: modalCliente,
-        modalCadServico: modalCadServico,
+        modalInsProduto: modalInsProduto,
         modalItens: modalItens,
     }
 })();
@@ -459,21 +468,10 @@ const clientes = (function () {
                     $("#xmSpId_cliente").html(cliente.ID_CLIENTE);
                     $("#xmSpFantasia").html(cliente.FANTASIA);
                     $("#xmSpCnpj").html(cliente.CNPJ);
+
                     getServico();
                     xmNovoServico.open();
-                    // $("#spId_cliente").html(cliente.ID_CLIENTE);
-                    // $("#spFantasia").html(cliente.FANTASIA);
-                    // // $("#spRazao_social").html(cliente.RAZAO);
-                    // $("#spCnpj").html(cliente.CNPJ);
-                    // $("#spRepresentante").html(cliente.REPRESENTANTE);
-                    // $("#spCidade").html(cliente.CIDADE);
-                    // $("#spUf").html(cliente.UF);
-                    // $("#spBairro").html(cliente.BAIRRO);
-                    // $("#spCep").html(cliente.CEP);
-
-                    // xmListaCliente.close()
-
-                    // xgSaida.queryOpen({ search: cliente.ID_CLIENTE })
+                    $("#xmInEngenheiro").focus()
 
                 },
             },
@@ -498,9 +496,23 @@ const clientes = (function () {
         })
             .then(rs => {
 
-                console.log('rs :', rs);
                 xgCliente.querySourceAdd(rs.data);
             })
+    }
+
+    function getListaServicoX(id_lista_servico) {
+        axios.post(url, {
+            call: 'getListaServicoX',
+            param: {
+                id_lista_servico: id_lista_servico
+            }
+        })
+            .then(rs => {
+                console.log(rs.data)
+                setServicoTela(rs.data[0])
+
+            })
+
     }
 
     function getListaServicos(search, offset) {
@@ -508,7 +520,6 @@ const clientes = (function () {
             call: 'getListaServicos',
             param: { search, offset }
         }).then(rs => {
-            console.log('rs :', rs.data);
             // $('#spId_cliente').html(rs.data[0])
             // $('#spId_lista_servico').html(rs.data[0])
             // $('#spFantasia').html(rs.data[0])
@@ -550,6 +561,20 @@ const clientes = (function () {
             })
     }
 
+    function setServicoTela(param) {
+        $('#spId_cliente').html(param.ID_CLIENTE)
+        $('#spId_lista_servico').html(param.ID_LISTA_SERVICO)
+        $('#spFantasia').html(param.FANTASIA)
+        $('#spCnpj').html(param.CNPJ)
+        $('#spEngenheiro').html(param.ENGENHEIRO)
+        $('#spServico').html(param.SERVICO)
+        $('#spExecutores').html(param.EXECUTORES)
+        $('#spDataI').html(param.DATA_INICIO)
+        $('#spDataF').html(param.DATA_FINALIZACAO)
+        $('#spStatus').html(param.STATUS)
+        $('#spValor').html(param.VALOR)
+    }
+
     function novoServico() {
         ID_CLIENTE = $('#xmSpId_cliente').html()
         ID_SERVICO = $('#slctServico').val()
@@ -569,26 +594,24 @@ const clientes = (function () {
                 DATA_INICIO, DATA_FINAL,
                 OBS, DIA, HORA, VALOR
             }
-        }).then(r => {
-            axios.post(url, {
-                call: 'getListaServicos',
-                param: r.data[0].ID_LISTA_SERVICO
-            }).then(rs => {
-                console.log('rs :', rs.data);
-                $('#spId_cliente').html(rs.data[0].ID_CLIENTE)
-                $('#spId_lista_servico').html(rs.data[0].ID_LISTA_SERVICO)
-                $('#spFantasia').html(rs.data[0].FANTASIA)
-                $('#spCnpj').html(rs.data[0].CNPJ)
-                $('#spEngenheiro').html(rs.data[0].ENGENHEIRO)
-                $('#spServico').html(rs.data[0].SERVICO)
-                $('#spExecutores').html(rs.data[0].EXECUTORES)
-                $('#spDataI').html(rs.data[0].DATA_INICIO)
-                $('#spDataF').html(rs.data[0].DATA_FINALIZACAO)
-                $('#spStatus').html(rs.data[0].STATUS)
-                $('#spValor').html(rs.data[0].VALOR)
+        }).then(rs => {
+            console.log('rs :', rs.data);
 
 
-            })
+            getListaServicoX(rs.data.ID_LISTA_SERVICO)
+            // getItensServico(rs.data.ID_LISTA_SERVICO)
+
+            // $('#spId_cliente').html(rs.data[0].ID_CLIENTE)
+            // $('#spId_lista_servico').html(rs.data[0].ID_LISTA_SERVICO)
+            // $('#spFantasia').html(rs.data[0].FANTASIA)
+            // $('#spCnpj').html(rs.data[0].CNPJ)
+            // $('#spEngenheiro').html(rs.data[0].ENGENHEIRO)
+            // $('#spServico').html(rs.data[0].SERVICO)
+            // $('#spExecutores').html(rs.data[0].EXECUTORES)
+            // $('#spDataI').html(rs.data[0].DATA_INICIO)
+            // $('#spDataF').html(rs.data[0].DATA_FINALIZACAO)
+            // $('#spStatus').html(rs.data[0].STATUS)
+            // $('#spValor').html(rs.data[0].VALOR)
 
         })
     }
@@ -597,14 +620,15 @@ const clientes = (function () {
         xmNovoServico = new xModal.create({
             el: '#xmServico',
             title: 'Novo Serviço',
-            height: '475',
+            height: '525',
             width: '500',
             buttons: {
                 btn1: {
                     html: 'Confirma',
-                    class: 'xmQtdBtn',
+                    class: 'xmBtnNovoS',
                     click: (e) => {
                         novoServico()
+                        $('.btnInsP').removeAttr("disabled");
                         xmNovoServico.close()
                         xmListaCliente.close()
                     }
@@ -616,145 +640,7 @@ const clientes = (function () {
     return {
         grid: grid,
         modalNovoServico: modalNovoServico,
-    }
-})();
-
-const itens = (function () {
-
-    let url = 'servicos/per.servicos.php';
-    let ControleGrid;
-
-    function grid() {
-
-        xgItem = new xGridV2.create({
-
-            el: '#xmPnGridItens',
-            height: '310',
-            theme: 'x-clownV2',
-            heightLine: '35',
-
-            columns: {
-                Produto: { dataField: 'descricao' },
-                Marca: { dataField: 'marca' },
-                QTD: { dataField: 'qtd' },
-                DATA: { dataField: 'data', center: true }
-            },
-            onKeyDown: {
-                '13': (ln, e) => {
-
-                    for (let i = 0; i < 16; i++) {
-                        delete ln[i]
-
-                    }
-
-                    for (let i in prod) {
-                        if (prod[i].obProduto.id_produto == ln.id_produto) {
-                            setTimeout(function () {
-                                show("Item já incluso!");
-                            }, 1)
-                            xgProduto.focus();
-                            return false
-                        }
-                    }
-
-
-                    $("#xmEdtIdItem").val(ln.id_produto)
-                    $("#xmEdtValorItem").val(ln.valor)
-                    $("#xmEdtCodigoItem").val(ln.codigo)
-                    $("#xmEdtProdItem").val(ln.descricao)
-                    $("#xmEdtMarcaItem").val(ln.marca)
-                    $("#xmEdtQtdItem").val('')
-
-                    $("#xmEdtQtdItem").focus()
-
-                },
-                '46': (ln) => {
-                    let status = xgSaida.dataSource().status
-
-                    for (let i = 0; i < 16; i++) {
-                        delete ln[i]
-                    }
-
-
-                    if (status == 'FINALIZADO') {
-                        return false
-
-                    }
-
-                    confirmaCodigo({
-                        msg: 'Digite o código de confirmação',
-                        call: () => {
-                            idListaServico = $('#xmEdtItensIdServ').val()
-
-                            axios.post(url, {
-                                call: 'getListaServico',
-                                param: idListaServico
-                            })
-                                .then(rs => {
-                                    valor = Number(rs.data[0].valor.replace(',', '.'))
-                                    valor -= Number(ln.qtd.replace(',', '.')) * Number(ln.valor.replace(',', '.'))
-
-
-                                    axios.post(url, {
-                                        call: 'deletarItem',
-                                        param: { idItemServico: ln.id_itens_servico }
-                                    })
-
-                                    axios.post(url, {
-                                        call: 'getProduto',
-                                        param: { search: ln.id_produto, offset: 0 }
-                                    })
-                                        .then(rs => {
-
-                                            newEstoque = Number(rs.data[0].qtd) + Number(ln.qtd)
-                                            axios.post(url, {
-                                                call: 'atualizaProduto',
-                                                param: {
-                                                    newEstoque: newEstoque,
-                                                    idProduto: rs.data[0].id_produto
-                                                }
-                                            })
-                                        })
-
-                                    axios.post(url, {
-                                        call: 'atualizaPreco',
-                                        param: { newValor: valor.toFixed(2).toString().replace('.', ','), id_lista_servico: idListaServico },
-                                    })
-                                    xgItem.deleteLine()
-                                    xgSaida.dataSource('valor', valor.toFixed(2).toString().replace('.', ','))
-                                    xgItem.focus();
-                                })
-
-
-
-                        }
-                    })
-
-
-                },
-            },
-
-            query: {
-                execute: (r) => {
-                    getItens(r.param.search, r.offset);
-                }
-            }
-        })
-    }
-
-    function getItens(search, offset) {
-        axios.post(url, {
-            call: 'getItens',
-            param: { search: search, offset: offset },
-        })
-            .then(rs => {
-                xgItem.querySourceAdd(rs.data);
-            })
-    }
-
-
-    return {
-        grid: grid,
+        getListaServicoX: getListaServicoX
     }
 })();
 
@@ -798,7 +684,7 @@ const produtos = (function () {
 
                     if (ln.qtd == 0) {
                         setTimeout(function () {
-                            show("Item já incluso!");
+                            show("Quantidade inválida!");
                         }, 1)
                         xgProduto.focus();
                         return false
@@ -954,17 +840,18 @@ const carrinho = (function () {
 
         if (valProduto.qtd > xgProduto.dataSource().QTD) {
             setTimeout(function () {
-                show("Item já incluso!");
+                show("Quantidade maior que em estoque!");
             }, 1)
             return false
         }
         if (valProduto.qtd == "" || valProduto.qtd == null) {
             setTimeout(function () {
-                show("Item já incluso!");
+                show("Quantidade inválida!");
             }, 1)
             return false
         }
 
+        $('.xmBtnRetirar').removeAttr("disabled");
 
         if (evento == 'Editar') {
             for (let i in obProduto) {
@@ -991,108 +878,55 @@ const carrinho = (function () {
         valorT += valProduto.valor * valProduto.qtd
 
 
-        console.log(total, 'obProduto :', obProduto);
-        console.log(total, ' valorT :', valorT);
-
         xmEdtQtd.close()
         xgProduto.focus()
 
 
     }
 
-    function salvarCarrinho() {
+    const salvarCarrinho = async () => {
 
-        let id_servico = $('#xmEdtItensIdServ').val()
+        let id_servico = $('#spId_lista_servico').html()
         let idCliente = $("#spId_cliente").text();
-        let idServico = $('#slctServico').val()
         valorT = valorT.toFixed(2).replace('.', ',')
-        let dia = new Date().toLocaleDateString('pt-BR')
-        let hora = new Date().toLocaleTimeString('pt-BR')
 
-        console.log(new Date().toLocaleTimeString('pt-BR'));
 
-        if (id_servico > 0 || id_servico != '') {
-            valorS = $("#xmEdtValorServ").val()
-            valorT = Number(valorT.replace(',', '.')) + Number(valorS.replace(',', '.'))
-            valorT = valorT.toFixed(2).replace('.', ',')
+        for (let i in obProduto) {
 
-            // for (let i = 0; i < pIDs.length; i++) {
+            param = {
+                ID_SERVICO: id_servico,
+                ID_PRODUTO: obProduto[i].ID_PRODUTO,
+                QTD_PRODUTO: obProduto[i].QTD,
+                DATA: new Date().toLocaleDateString('pt-BR')
+            }
 
-            //     newEstoque = oldQtd[i] - pQTDs[i]
-            //     param = {
-            //         dia: new Date().toLocaleDateString('pt-BR'),
-            //         id_servico: id_servico,
-            //         idProduto: pIDs[i],
-            //         qtdProduto: pQTDs[i],
-            //     }
+            await axios.post(url, {
+                call: 'inserirItens',
+                param: param,
 
-            //     axios.post(url, {
-            //         call: 'inserirItens',
-            //         param: param,
-            //     })
-
-            //     axios.post(url, {
-            //         call: 'atualizaProduto',
-            //         param: { newEstoque: newEstoque, idProduto: param.idProduto }
-            //     })
-            // }
-            // axios.post(url, {
-            //     call: 'atualizaPreco',
-            //     param: { newValor: valorT, id_lista_servico: id_servico },
-            // })
-
-            // xgItem.queryOpen({ search: id_servico })
-            // xmCadServico.close()
-
-        } else {
-            axios.post(url, {
-
-                call: 'gerarServico',
-                param: { idCliente, valorT, idServico, dia, hora }
-            })
-                .then(rs => {
-                    console.log('rs  :', rs);
-                    // if (rs.data[0]) {
-                    //     for (let i in obProduto) {
-
-                    //         newEstoque = oldQtd[i] - pQTDs[i]
-                    //         param = {
-                    //             dia: new Date().toLocaleDateString('pt-BR'),
-                    //             hora: new Date().toLocaleTimeString('pt-BR'),
-                    // idServico: rs.data,
-                    //             idProduto: pIDs[i],
-                    //             qtdProduto: pQTDs[i],
-                    //         }
-                    //         axios.post(url, {
-                    //             call: 'inserirItens',
-                    //             param: param,
-                    //         })
-
-                    //         axios.post(url, {
-                    //             call: 'atualizaProduto',
-                    //             param: { newEstoque: newEstoque, idProduto: param.idProduto }
-                    //         })
-                    //     }
-
-                    // }
-
+            }).then(rs => {
+                newEstoque = rs.data[0].QTD - param.QTD_PRODUTO;
+                axios.post(url, {
+                    call: 'atualizaProduto',
+                    param: {
+                        newEstoque: newEstoque,
+                        ID_PRODUTO: param.ID_PRODUTO
+                    }
                 })
+            })
 
-            xmCadServico.close()
+
         }
 
-        // xgSaida.queryOpen({ search: idCliente })
-        // xgCarrinho.clear()
+        xgSaida.queryOpen({ search: id_servico })
+        // return false
+        xgCarrinho.clear()
+        xmInsProduto.close()
+        valorT = 0
+        total = 0
 
-        // IDs = []
-        // QTDs = []
-        // id_servico = ''
-        // valorT = 0
-        // total = 0
+        obProduto = {}
 
-        // prod = {}
-        // obProduto = {}
-        // param = {}
 
     }
 

@@ -59,11 +59,15 @@ class Servicos
 
     function gerarServico($param){
         $call = $this->sql->gerarServico($param);
-        echo json_encode($call);
+
+        //$servico = $this->sql->getListaServicos($call[0]->ID_LISTA_SERVICO);
+        //echo json_encode($servico);
+        echo '{"ID_LISTA_SERVICO":"'.$call[0]->ID_LISTA_SERVICO.'"}';
     }
 
     function inserirItens($param){
-        $call = $this->sql->inserirItens($param);
+        $id_produto = $this->sql->inserirItens($param);
+        $call = $this->sql->getProduto($id_produto[0]->ID_PRODUTO);
         echo json_encode($call);
     }
 
@@ -73,6 +77,11 @@ class Servicos
         echo json_encode($call);
     }
 
+    function getListaServicoX($param)
+    {
+        $call = $this->sql->getListaServicoX($param);
+        echo json_encode($call);
+    }
     function atualizaProduto($param)
     {
         $call = $this->sql->atualizaProduto($param);
@@ -85,29 +94,6 @@ class Servicos
         echo json_encode($call);
     }
 
-    function deletarItens($param)
-    {
-        $call = $this->sql->deletarItens($param);
-        echo json_encode($call);
-    }
-
-    function deletarServico($param)
-    {
-        $call = $this->sql->deletarServico($param);
-        echo json_encode($call);
-    }
-
-    function buscaIds($param)
-    {
-        $call = $this->sql->buscaIds($param);
-        echo json_encode($call);
-    }
-
-    function atualizaPreco($param)
-    {
-        $call = $this->sql->atualizaPreco($param);
-        echo json_encode($call);
-    }
 }
 
 $class = new Servicos();
