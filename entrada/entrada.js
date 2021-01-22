@@ -122,7 +122,7 @@ const itens = (function () {
             columns: {
 
                 Fornecedor: {
-                    dataField: "NOME_FANTAZIA",
+                    dataField: "FANTASIA",
                     width: "35%",
                 },
                 Nº: {
@@ -160,7 +160,7 @@ const itens = (function () {
             columns: {
 
                 Nome: {
-                    dataField: "NOME_FANTAZIA",
+                    dataField: "FANTASIA",
                     width: "65%",
                 },
                 CNPJ: {
@@ -172,10 +172,10 @@ const itens = (function () {
             onKeyDown: {
                 '13': (ln, e) => {
 
-                    $('#spNomeFantasia').html(ln.nome_fantazia)
+                    $('#spNomeFantasia').html(ln.FANTASIA)
                     $('#spCnpj').html(ln.cnpj)
-                    $('#spCnpj').val(ln.id_fornecedor)
-                    id_fornecedor = ln.id_fornecedor
+                    $('#spCnpj').val(ln.ID_FORNECEDOR)
+                    id_fornecedor = ln.ID_FORNECEDOR
                     xmNovaNota.open()
                     xmFornecedor.close()
                     $('#edtNumero').focus()
@@ -321,12 +321,12 @@ const itens = (function () {
         $('#edtNumero').focus()
 
 
-        $('#edtNumero').val(editNota.numero_nota)
-        $('#edtChave').val(editNota.chave_acesso)
-        $('#edtData').val(editNota.data_emissao)
-        $('#edtSt').val(editNota.st)
-        $('#edtIcms').val(editNota.icms)
-        $('#edtValor').val(editNota.valor_total)
+        $('#edtNumero').val(editNota.NUMERO_NOTA)
+        $('#edtChave').val(editNota.CHAVE_ACESSO)
+        $('#edtData').val(editNota.DATA_EMISSAO)
+        $('#edtSt').val(editNota.ST)
+        $('#edtIcms').val(editNota.ICMS)
+        $('#edtValor').val(editNota.VALOR_TOTAL)
 
 
 
@@ -436,8 +436,8 @@ const itens = (function () {
             let valor_compra = $('#edtValorUni').val()
 
             let param = {
-                id_nota: cabecalho.id_nota,
-                id_produto: produtoSelecionado.id_produto,
+                id_nota: cabecalho.ID_NOTA,
+                id_produto: produtoSelecionado.ID_PRODUTO,
                 qtd_nota: qtd_compra,
                 valor_nota: valor_compra
             }
@@ -457,7 +457,7 @@ const itens = (function () {
                 call: 'insertProduto',
                 param: param
             }).then(r => {
-                id_itens_nota = r.data.id_itens_nota
+                id_itens_nota = r.data.ID_ITENS_NOTA
 
                 if (r.data.msg) {
                     show(r.data.msg)
@@ -465,17 +465,17 @@ const itens = (function () {
                 }
 
                 updateItens = {
-                    id_produto: produtoSelecionado.id_produto,
+                    id_produto: produtoSelecionado.ID_PRODUTO,
                     qtd_nota: qtd_compra,
                     valor_nota: valor_compra
                 }
 
                 itensGrid = {
-                    id_itens_nota: r.data.id_itens_nota,
-                    codigo: produtoSelecionado.codigo,
-                    descricao: produtoSelecionado.descricao,
-                    qtd_nota: qtd_compra,
-                    valor_nota: valor_compra
+                    id_itens_nota: r.data.ID_ITENS_NOTA,
+                    CODIGO: produtoSelecionado.CODIGO,
+                    DESCRICAO: produtoSelecionado.DESCRICAO,
+                    QTD_NOTA: qtd_compra,
+                    VALOR_NOTA: valor_compra
                 }
                 xgItens.insertLine(itensGrid)
 
@@ -502,11 +502,11 @@ const itens = (function () {
             xmEditItens.open()
             $('#edtValorUniEdit').focus()
 
-            $('#spCodigoEdit').html(xgItens.dataSource().codigo)
-            $('#spDescricaoEdit').html(xgItens.dataSource().descricao)
+            $('#spCodigoEdit').html(xgItens.dataSource().CODIGO)
+            $('#spDescricaoEdit').html(xgItens.dataSource().DESCRICAO)
 
-            $('#edtQtdEdit').val(xgItens.dataSource().qtd_nota)
-            $('#edtValorUniEdit').val(xgItens.dataSource().valor_nota)
+            $('#edtQtdEdit').val(xgItens.dataSource().QTD_NOTA)
+            $('#edtValorUniEdit').val(xgItens.dataSource().VALOR_TOTAL)
 
         })
 
@@ -520,7 +520,7 @@ const itens = (function () {
             confirma({
                 msg: 'Digite o código de confirmação',
                 call: () => {
-                    let param = xgItens.dataSource().id_itens_nota
+                    let param = xgItens.dataSource().ID_ITENS_NOTA
                     axios.post(url, {
                         call: 'deleteItens',
                         param: param
@@ -550,7 +550,6 @@ const itens = (function () {
             valor_total: $('#edtValor').val(),
 
         }
-        xmNovaNota.close()
         $('#edtCodigo').focus()
 
         let valCampos = {
@@ -568,6 +567,7 @@ const itens = (function () {
                 return false
             }
         }
+        xmNovaNota.close()
 
 
         axios.post(url, {
@@ -576,20 +576,20 @@ const itens = (function () {
         }).then(r => {
             cabecalho = r.data[0]
 
-            id_nota = r.data[0].id_nota
-            $('#spNumero').html(cabecalho.numero_nota)
-            $('#spData').html(cabecalho.data_emissao)
-            $('#spSt').html(cabecalho.st)
-            $('#spIcms').html(cabecalho.icms)
-            $('#spValor').html(cabecalho.valor_total)
-            $('#spChave').html(cabecalho.chave_acesso)
+            id_nota = r.data[0].ID_NOTA
+            $('#spNumero').html(cabecalho.NUMERO_NOTA)
+            $('#spData').html(cabecalho.DATA_EMISSAO)
+            $('#spSt').html(cabecalho.ST)
+            $('#spIcms').html(cabecalho.ICMS)
+            $('#spValor').html(cabecalho.VALOR_TOTAL)
+            $('#spChave').html(cabecalho.CHAVE_ACESSO)
 
-            $('#spNumero').val(cabecalho.numero_nota)
-            $('#spData').val(cabecalho.data_emissao)
-            $('#spSt').val(cabecalho.st)
-            $('#spIcms').val(cabecalho.icms)
-            $('#spValor').val(cabecalho.valor_total)
-            $('#spChave').val(cabecalho.chave_acesso)
+            $('#spNumero').val(cabecalho.NUMERO_NOTA)
+            $('#spData').val(cabecalho.DATA_EMISSAO)
+            $('#spSt').val(cabecalho.ST)
+            $('#spIcms').val(cabecalho.ICMS)
+            $('#spValor').val(cabecalho.VALOR_TOTAL)
+            $('#spChave').val(cabecalho.CHAVE_ACESSO)
 
             xgLocalizarNota.insertLine(r.data)
 
@@ -601,24 +601,24 @@ const itens = (function () {
         r = xgLocalizarNota.dataSource()
         axios.post(url, {
             call: 'getDataNota',
-            param: { id_nota: r.id_nota }
+            param: r.ID_NOTA
         }).then(r => {
             xgItens.clear()
             xmNota.close()
 
-            id_fornecedor = r.data[0].id_fornecedor
-            id_nota = r.data[0].id_nota
+            id_fornecedor = r.data[0].ID_FORNECEDOR
+            id_nota = r.data[0].ID_NOTA
             editNota = r.data[0]
 
 
-            $('#spNomeFantasia').html(r.data[0].nome_fantazia)
-            $('#spCnpj').html(r.data[0].cnpj)
-            $('#spNumero').html(r.data[0].numero_nota)
-            $('#spData').html(r.data[0].data_emissao)
-            $('#spSt').html(r.data[0].st)
-            $('#spIcms').html(r.data[0].icms)
-            $('#spValor').html(r.data[0].valor_total)
-            $('#spChave').html(r.data[0].chave_acesso)
+            $('#spNomeFantasia').html(r.data[0].NOME_FANTASIA)
+            $('#spCnpj').html(r.data[0].CNPJ)
+            $('#spNumero').html(r.data[0].NUMERO_NOTA)
+            $('#spData').html(r.data[0].DATA_EMISSAO)
+            $('#spSt').html(r.data[0].ST)
+            $('#spIcms').html(r.data[0].ICMS)
+            $('#spValor').html(r.data[0].VALOR_TOTAL)
+            $('#spChave').html(r.data[0].CHAVE_ACESSO)
 
             adicionais()
 
@@ -626,7 +626,7 @@ const itens = (function () {
 
         axios.post(url, {
             call: 'getItensNota',
-            param: { id_nota: r.id_nota }
+            param: r.ID_NOTA
         }).then(r => {
             xgItens.insertLine(r.data)
         })
@@ -828,14 +828,13 @@ const itens = (function () {
 
                     produtoSelecionado = r.data[0]
 
-                    $('#spDescricao').html(r.data[0].descricao)
-                    $('#spQtd').html(r.data[0].qtd)
-                    $('#spValorProduto').html(r.data[0].valor)
+                    $('#spDescricao').html(r.data[0].DESCRICAO)
+                    $('#spQtd').html(r.data[0].QTD)
+                    $('#spValorProduto').html(r.data[0].VALOR)
 
-                    $('#spDescricao').val(r.data[0].descricao)
-                    $('#spQtd').val(r.data[0].qtd)
-                    $('#spValorProduto').val(r.data[0].valor)
-                    // $('#edtIdProduto').val(r.data[0].id_produto)
+                    $('#spDescricao').val(r.data[0].DESCRICAO)
+                    $('#spQtd').val(r.data[0].QTD)
+                    $('#spValorProduto').val(r.data[0].VALOR)
                     $('#edtQtdCompra').focus()
                 } else {
                     show('Código não existe')

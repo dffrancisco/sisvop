@@ -45,7 +45,7 @@ if (!empty($_GET['p'])) {
 
     <script src="js/index.js" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="login/login.css" type="text/css" />
+    <!-- <link rel="stylesheet" href="login/login.css" type="text/css" /> -->
     <link rel="stylesheet" href="css/index.css" type="text/css" />
 
 

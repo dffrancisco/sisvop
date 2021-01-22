@@ -8,96 +8,103 @@ include_once './sql.entrada.php';
 
 extract(json_decode(file_get_contents("php://input"), TRUE));
 
-class Entrada {
+class Entrada
+{
 
     private $sql;
 
-    function __construct() {
+    function __construct()
+    {
         //instancia da class        
         $this->sql = new SqlEntrada();
     }
 
-    function getFornecedor($param){
+    function getFornecedor($param)
+    {
         $call = $this->sql->getFornecedor($param);
         echo json_encode($call);
     }
 
-    function getDataNota($param){
+    function getDataNota($param)
+    {
         $call = $this->sql->getDataNota($param);
         echo json_encode($call);
     }
 
-    function getItensNota($param){
+    function getItensNota($param)
+    {
         $call = $this->sql->getItensNota($param);
         echo json_encode($call);
     }
 
-    function getProduto($param){
+    function getProduto($param)
+    {
         $call = $this->sql->getProduto($param);
         echo json_encode($call);
     }
 
-    function getNota($param){
+    function getNota($param)
+    {
         $call = $this->sql->getNota($param);
         echo json_encode($call);
     }
 
-    function getEditItens($param){
+    function getEditItens($param)
+    {
         $call = $this->sql->getEditItens($param);
         echo json_encode($call);
     }
 
-    function deleteNota($param){
+    function deleteNota($param)
+    {
         $id_nota = $this->sql->deleteNota($param);
     }
 
-    function deleteItens($param){
+    function deleteItens($param)
+    {
         $id_itens_nota = $this->sql->deleteItens($param);
     }
 
-    function deleteItensNota($param){
+    function deleteItensNota($param)
+    {
         $id_nota = $this->sql->deleteItensNota($param);
     }
 
-    function updateProduto($param){
+    function updateProduto($param)
+    {
         $call = $this->sql->updateProduto($param);
     }
 
-    function updateItens($param){
+    function updateItens($param)
+    {
         $call = $this->sql->updateItens($param);
     }
 
-    function insertNota($param){
+    function insertNota($param)
+    {
 
-        if(empty($param['id_nota'])){
+        if (empty($param['id_nota'])) {
             $id_nota = $this->sql->insertNota($param);
-            $call = $this->sql->getCabecalho($id_nota);
+            $call = $this->sql->getCabecalho($id_nota[0]->ID_NOTA);
             echo json_encode($call);
-
-        } else{
+        } else {
             $id_nota = $this->sql->updateNota($param);
             $call = $this->sql->getCabecalho($id_nota);
             echo json_encode($call);
-
         }
-
-        
     }
 
-    function insertProduto($param){
-
+    function insertProduto($param)
+    {
         $duplicity = $this->sql->duplicityProduto($param);
-        if(!empty($duplicity)){
-         echo '{"msg":"Produto ja incluso"}';
-        return false;
+        if (!empty($duplicity)) {
+            echo '{"msg":"Produto ja incluso"}';
+            return false;
         }
         $id_itens_nota = $this->sql->insertProduto($param);
-        echo '{"id_itens_nota":"' . $id_itens_nota . '"}';
-      
-
+        // echo '{"id_itens_nota":"' . $id_itens_nota[0] . '"}';
     }
 }
 
 $class = new Entrada();
 $class->$call(@$param);
-

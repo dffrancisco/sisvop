@@ -89,7 +89,6 @@ const funcionario = (function () {
                 duplicity: {
                     dataField: ['CPF', 'RG'],
                     execute: (r) => {
-                        console.log('r :', r);
                         axios.post(url, {
                             call: 'duplicity',
                             param: r
@@ -260,7 +259,6 @@ const funcionario = (function () {
             param.ID_FUNCIONARIOS = ''
         }
 
-        console.log('PARAM :', param);
 
         axios.post(url, {
             call: 'save',
@@ -268,16 +266,13 @@ const funcionario = (function () {
 
         })
             .then(r => {
-                console.log('r :', r.data);
 
                 if (r.data[0].ID_FUNCIONARIOS) {
                     param.id_funcionario = r.data[0].ID_FUNCIONARIOS
                     xgFuncionarios.insertLine(param)
                 } else {
                     xgFuncionarios.dataSource(param)
-                    console.log(' xgFuncionarios.dataSource :', xgFuncionarios.dataSource());
 
-                    console.log('PARAM:', param);
                 }
 
             })
