@@ -63,7 +63,10 @@
         <hr>
         <br>
 
-        <div id="pnButtons" class="right-align col s12"></div>
+        <div class="btnAll" style="margin-bottom: 10px;">
+            <button class="btn-Frame btn-Frame-blue btnP btnPesq">Novo Serviço</button>
+            <button class="btn-Frame btn-Frame-blue btnP btnBS">Buscar Serviço</button>
+        </div>
 
     </div>
 
@@ -78,6 +81,7 @@
 
     <div id="tabProdutoServico" class="col s12">
         <div id="pnGridSaida" class="list"></div>
+        <div id="pnButtons" class="right-align col s12"></div>
         <div>botoes imprimir novo inser delete salvar cancelar</div>
     </div>
 
@@ -139,9 +143,6 @@
     <!-- xGrid dos Produtos -->
     <div id="xmPnGridProduto"></div><br>
 
-    <!-- xGrid do Carrinho -->
-    <label>Carrinho</label>
-    <div id="xmPnGridCarrinho"></div>
 </div>
 
 <!-- xModal editar a quantidade do produto -->

@@ -139,9 +139,9 @@ class Sqlservicos
   function inserirItens($param){
     $sql = "INSERT INTO 
             lista_itens_servico 
-            (id_lista_servico, id_produto, qtd, data)
-            VALUES (:ID_SERVICO, :ID_PRODUTO , :QTD_PRODUTO, :DATA)
-            returning id_produto";
+            (id_lista_servico, id_produto, qtd, data, origem)
+            VALUES 
+            (:ID_SERVICO, :ID_PRODUTO , :QTD_PRODUTO, :DATA, :ORIGEM)";
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
     $query->execute(); 
@@ -167,6 +167,26 @@ class Sqlservicos
     return $query->fetchAll();
   }
 
+  function getServicos($param){
+    extract($param);
+    $sql = "SELECT FIRST 10 SKIP $offset
+            a.id_lista_servico,
+            a.data_inicio, a.hora, a.status, 
+            a.data_finalizacao, a.engenheiro,
+            b.id_servico,  b.servico ,
+            c.id_cliente,c.fantasia
+            FROM lista_servicos a, servicos b, clientes c
+            WHERE a.id_servico = b.id_servico
+            AND a.id_cliente = c.id_cliente
+            AND b.servico like '$search%'";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+
+  }
+
   function atualizaProduto($param){
     extract($param);
 
@@ -181,52 +201,25 @@ class Sqlservicos
   }
 
   function deletarItem($param){
-    extract($param);
     $sql = "DELETE FROM lista_itens_servico 
-          WHERE  id_itens_servico = $idItemServico";
+          WHERE  id_itens_servico = $param";
 
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
-  }
-
-  function deletarServico($param){
-    $sql = "DELETE FROM lista_servicos
-          WHERE  id_lista_servico = $param";
-
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
-  }
-
-  function buscaIds($param){
-    $sql = "SELECT *
-            FROM lista_itens_servico
-            WHERE id_lista_servico = $param";
 
     $query = $this->db->prepare($sql);
-    $query->execute();
-    return $query->fetchAll();
-  }
-
-  function atualizaPreco($param){
-    extract($param);
-    $sql = "UPDATE lista_servicos
-            SET valor = '$newValor'
-            WHERE id_lista_servico = $id_lista_servico";
-
-    print_r($sql);
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function atualizaStatus($param){
     extract($param);
 
     $sql = "UPDATE lista_servicos
-            SET status = '$status'
-            WHERE id_lista_servico = $id_lista_servico";
+            SET status = :STATUS
+            WHERE id_lista_servico = :ID_LISTA_SERVICO";
 
-    print_r($sql);
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 }
