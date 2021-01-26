@@ -75,7 +75,7 @@ class SqlEntrada
   function getItensNota($param)
   {
 
-    $sql = "SELECT a.codigo, a.descricao, b.valor_nota, b.qtd_nota, a.id_produto, b.id_itens_nota
+    $sql = "SELECT a.codigo, a.descricao, b.valor_nota, b.qtd_nota, a.id_produto, b.id_itens_nota, b.valor_antigo
     FROM produtos a, lista_itens_nota b, nota c
     WHERE b.id_nota = c.id_nota
     AND a.id_produto = b.id_produto
@@ -130,10 +130,11 @@ class SqlEntrada
 
   function deleteItens($param)
   {
+    extract($param);
     $sql = "DELETE FROM lista_itens_nota  
-    WHERE id_itens_nota = $param";
+    WHERE id_itens_nota = $id_itens_nota";
 
-    $$query = $this->db->prepare($sql);
+    $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
@@ -145,6 +146,7 @@ class SqlEntrada
     $sql = "INSERT INTO nota (id_fornecedor, numero_nota, chave_acesso, data_emissao, icms, st, valor_total)
     VALUES('$id_fornecedor','$numero_nota', '$chave_acesso', '$data_emissao', '$icms', '$st', '$valor_total')
     returning id_nota";
+    print_r($param);
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -153,12 +155,12 @@ class SqlEntrada
   function insertProduto($param)
   {
     extract($param);
-    $sql = "INSERT INTO lista_itens_nota (id_nota, id_produto, qtd_nota, valor_nota)
-    VALUES('$id_nota','$id_produto', '$qtd_nota', '$valor_nota')
+    $sql = "INSERT INTO lista_itens_nota (id_nota, id_produto, qtd_nota, valor_nota, valor_antigo)
+    VALUES('$id_nota','$id_produto', '$qtd_nota', '$valor_nota', '$valor_antigo')
     returning id_itens_nota ";
     $query = $this->db->prepare($sql);
     $query->execute();
-    return $query->fetchAll(PDO::FETCH_OBJ);
+    return $param;
   }
 
   function updateProduto($param)
@@ -167,6 +169,20 @@ class SqlEntrada
     $sql = "UPDATE produtos 
               SET qtd = $qtd_nota + qtd, 
               valor = '$valor_nota'
+            WHERE id_produto = $id_produto 
+            returning id_produto";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function updateDelProduto($param)
+  {
+    extract($param);
+    $sql = "UPDATE produtos 
+              SET qtd = qtd - $qtd_nota, 
+              valor = '$valor_antigo'
             WHERE id_produto = $id_produto 
             returning id_produto";
 
@@ -204,7 +220,7 @@ class SqlEntrada
 
     $query = $this->db->prepare($sql);
     $query->execute();
-    return $ID_NOTA;
+    return $id_nota;
   }
 
   function duplicityProduto($param)

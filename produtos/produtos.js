@@ -153,7 +153,9 @@ const produto = (function () {
 
     const salvar = async () => {
         let param = xgProduto.getElementSideBySideJson()
-        param.data_cadastro = $('#edtData').val()
+        param.DATA_CADASTRO = $('#edtData').val()
+        console.log('param.data_cadastro :', param.data_cadastro);
+
 
         let allDuplicty = await xgProduto.getDuplicityAll()
 
@@ -185,13 +187,14 @@ const produto = (function () {
             param.id_produto = xgProduto.dataSource().ID_PRODUTO;
         }
 
+        console.log(' p', param);
         axios.post(url, {
             call: 'save',
             param: param
         })
             .then(r => {
-                if (r.data.ID_PRODUTO) {
-                    param.id_produto = r.data.ID_PRODUTO
+                if (r.data[0].ID_PRODUTO) {
+                    param.ID_PRODUTO = r.data[0].ID_PRODUTO
                     xgProduto.insertLine(param)
 
                 } else {

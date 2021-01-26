@@ -5,13 +5,14 @@ include_once '../class/prepareSql.php';
 class SqlFornecedor
 {
   public $db;
-  
+
   function __construct()
   {
     $this->db = ConexaoFirebird::getConectar();
   }
 
-  function getFornecedor($param){
+  function getFornecedor($param)
+  {
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
             a.id_fornecedor, a.cnpj, a.razao,
@@ -26,22 +27,23 @@ class SqlFornecedor
             ORDER BY fantasia ASC";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
-
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function getUf(){
+  function getUf()
+  {
     $sql = 'SELECT
             *
             FROM uf';
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function inserirFornecedor($param){
+  function inserirFornecedor($param)
+  {
     $sql = "INSERT INTO fornecedor 
             (cnpj, razao, fantasia, 
             endereco, cidade, bairro, id_uf, 
@@ -52,15 +54,15 @@ class SqlFornecedor
             :ENDERECO, :CIDADE, :BAIRRO, :ID_UF, 
             :MUNICIPIO, :CEP, :TEL_1, :TEL_2,
             :INSCRICAO, :DATA_CADASTRO)
-            returning id_fornecedor";
-            
+            returning id_fornecedor ";
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function atualizaFornecedor($param){
+  function atualizaFornecedor($param)
+  {
     $sql = "UPDATE fornecedor 
             SET 
             cnpj = :CNPJ, razao = :RAZAO, 
@@ -69,31 +71,34 @@ class SqlFornecedor
             id_uf = :ID_UF, municipio = :MUNICIPIO, 
             cep = :CEP, tel_1 = :TEL_1, 
             tel_2 = :TEL_2, inscricao = :INSCRICAO
-            WHERE 
-            id_fornecedor = :ID_FORNECEDOR";
-            
+            WHERE id_fornecedor = :ID_FORNECEDOR
+            returning id_fornecedor";
+
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
     $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function deletarFornecedor($param){
+  function deletarFornecedor($param)
+  {
     $sql = "DELETE FROM fornecedor 
             WHERE 
             id_fornecedor = $param";
-            
+
     $query = $this->db->prepare($sql);
     $query->execute();
   }
 
-  function getCnpj($param){
+  function getCnpj($param)
+  {
     extract($param);
     $sql = "SELECT cnpj
             FROM fornecedor
             WHERE cnpj = '$CNPJ'";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(); 
+    $query->execute();
+    return $query->fetchAll();
   }
 }
