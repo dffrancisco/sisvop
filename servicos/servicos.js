@@ -1,5 +1,4 @@
 
-
 let xgSaida;
 let xgCliente;
 let xgProduto;
@@ -12,6 +11,7 @@ let xmEdtQtd
 let xmListaCliente;
 let xmInsProduto;
 let xmNovoServico;
+let xmInserirRomaneio;
 
 let total = 0;
 let valorT = 0
@@ -28,6 +28,7 @@ $(function () {
     saida.modalInsProduto();
     saida.modalListaServ()
     saida.grid();
+    saida.modalInserirRomaneio();
 
     clientes.grid();
     clientes.modalNovoServico();
@@ -87,6 +88,17 @@ $(function () {
         }
     })
 
+    $("#xmEdtIRomaneio").keydown(function (e) {
+
+        if (e.keyCode == 13) {
+            search = $(this).val().trim()
+            xgProdRomaneio.queryOpen({ search: search })
+        }
+
+        if (e.keyCode == 40) {
+            xgProdRomaneio.focus()
+        }
+    })
     $(".btnPesq").click(function () {
         saida.buscar()
     })
@@ -109,6 +121,8 @@ $(function () {
     $('.btnFS').attr("disabled", true);
     $('.btnF').attr("disabled", true);
     $('.btnInsP').attr("disabled", true);
+    $('.btnNR').attr("disabled", true);
+    $('.btnPR').attr("disabled", true);
 
 });
 
@@ -130,28 +144,19 @@ const saida = (function () {
             columns: {
                 Produto: { dataField: 'DESCRICAO' },
                 Marca: { dataField: 'MARCA' },
-                QTD: { dataField: 'QTD' },
+                QTD: { dataField: 'QTD', width: '10%' },
                 Data: { dataField: 'DATA', center: true },
                 ORIGEM: { dataField: 'ORIGEM', center: true },
+
             },
 
             sideBySide: {
                 el: '#pnFields',
 
                 frame: {
-                    el: '#pnButtons',
+                    el: '#pnButtonsP',
                     buttons: {
 
-                        novo: {
-                            html: "Novo Serviço",
-                            class: "btnP btnPesq",
-                            click: buscar,
-                        },
-                        BuscarS: {
-                            html: 'Buscar Servico',
-                            class: 'btnP btnBS',
-                            click: buscarServ,
-                        },
                         newProduto: {
                             html: "Inserir Produto",
                             class: "btnP btnInsP",
@@ -205,7 +210,51 @@ const saida = (function () {
 
             query: {
                 execute: (r) => {
-                    getItens(r.param.search, r.offset);
+                    getItens1(r.param.search, r.offset);
+                }
+            }
+        })
+
+        xgProdRomaneio = new xGridV2.create({
+
+            el: '#xgProdRomaneio',
+            height: '350',
+            theme: 'x-clownV2',
+            heightLine: '35',
+
+            columns: {
+                Produto: { dataField: 'DESCRICAO' },
+                Marca: { dataField: 'MARCA' },
+                QTD: { dataField: 'QTD', width: '10%' },
+
+            },
+
+            onSelectLine: (r) => {
+                return false
+                for (let i = 0; i < 9; i++) {
+                    delete r[i]
+
+                }
+                console.log('r :', r);
+                xgRomaneiosItens.insertLine(r)
+
+            },
+
+            onKeyDown: {
+
+                '13': (ln) => {
+                    for (let i = 0; i < 9; i++) {
+                        delete ln[i]
+
+                    }
+                    xgRomaneiosItens.insertLine(ln)
+                    $('#xmEdtIRomaneio').focus()
+                }
+            },
+
+            query: {
+                execute: (r) => {
+                    getItens2(r.param.search, r.offset);
                 }
             }
         })
@@ -213,13 +262,68 @@ const saida = (function () {
         xgRomaneios = new xGridV2.create({
             el: `#xgRomaneios`,
             theme: 'x-clownV2',
-            height: 120
+            height: 120,
+            columns: {
+                'Responsável': { dataField: 'NOME' },
+                Data: { dataField: 'DATA', center: true },
+                Hora: { dataField: 'HORA', center: true },
+                Status: { dataField: 'STATUS' }
+            },
+
+            onSelectLine: (r) => {
+
+                xgRomaneiosItens.queryOpen({ search: r.ID_ROMANEIO })
+
+                $('.btnPR').removeAttr("disabled", true);
+            },
+
+            query: {
+                execute: (r) => {
+                    getRomaneio(r.param.search, r.offset)
+                }
+            }
         })
 
         xgRomaneiosItens = new xGridV2.create({
             el: `#xgRomaneiosItens`,
             theme: 'x-clownV2',
-            height: 200
+            height: 200,
+
+            columns: {
+                Produto: { dataField: 'DESCRICAO' },
+                Marca: { dataField: 'MARCA' },
+                QTD: { dataField: 'QTD', width: '10%' },
+            },
+
+            sideBySide: {
+                frame: {
+                    el: '#pnButtonsR',
+                    buttons: {
+                        Novo: {
+                            html: "Novo Romaneio",
+                            class: "btnP btnNR",
+                            click: novoRomaneio
+                        },
+
+                        Inserir: {
+                            html: "Inserir Produto",
+                            class: "btnP btnPR",
+                            click: InserirRomaneio
+                        },
+
+                        Salvar: {
+                            html: "Salvar Romaneio",
+                            class: "btnP btnSR",
+                        },
+                    },
+                }
+            },
+
+            query: {
+                execute: (r) => {
+                    getItensRomaneio(r.param.search, r.offset)
+                }
+            }
         })
 
         xgServicos = new xGridV2.create({
@@ -237,20 +341,23 @@ const saida = (function () {
             onKeyDown: {
                 '13': (ln, e) => {
                     clientes.getListaServicoX(ln.ID_LISTA_SERVICO);
-                    xgSaida.queryOpen({ search: ln.ID_LISTA_SERVICO })
-
                     ID_LISTA_SERVICO = ln.ID_LISTA_SERVICO
-
                     xmListaServ.close();
 
                     $('.btnInsP').removeAttr("disabled");
 
                     if (ln.STATUS == 'ABERTO') {
                         $('.btnFS').removeAttr('disabled');
+                        $('.btnNR').attr("disabled", true);
+
                     }
                     if (ln.STATUS == 'FINALIZADO') {
                         $('.btnFS').prop('disabled', true);
+                        $('.btnNR').removeAttr("disabled");
                     }
+
+                    xgSaida.queryOpen({ search: ln.ID_LISTA_SERVICO })
+                    xgRomaneios.queryOpen({ search: ln.ID_LISTA_SERVICO })
                 }
 
             },
@@ -264,14 +371,25 @@ const saida = (function () {
 
     }
 
+    // FUNCTION PRODUTOS SERVICO 
 
-    function getItens(search, offset) {
+    function getItens1(search, offset) {
         axios.post(url, {
             call: 'getItens',
             param: { search: search, offset: offset },
 
         }).then(rs => {
             xgSaida.querySourceAdd(rs.data);
+
+        })
+    }
+    function getItens2(search, offset) {
+        axios.post(url, {
+            call: 'getItens',
+            param: { search: search, offset: offset },
+
+        }).then(rs => {
+            xgProdRomaneio.querySourceAdd(rs.data);
         })
     }
 
@@ -291,15 +409,18 @@ const saida = (function () {
     }
 
     function fecharServ() {
+        confirmaCodigo({
+            msg: 'Digite o código abaixo caso deseja finalizar o projeto',
+            call: () => {
+                axios.post(url, {
+                    call: 'atualizaStatus',
+                    param: { ID_LISTA_SERVICO: ID_LISTA_SERVICO, STATUS: 'FINALIZADO' }
+                })
 
-        axios.post(url, {
-            call: 'atualizaStatus',
-            param: { ID_LISTA_SERVICO: ID_LISTA_SERVICO, STATUS: 'FINALIZADO' }
+                $('#spStatus').html('FINALIZADO');
+                $('.btnFS').prop('disabled', true)
+            }
         })
-
-        $('#spStatus').html('FINALIZADO');
-        $('.btnFS').prop('disabled', true)
-
     }
 
     function novo() {
@@ -348,6 +469,65 @@ const saida = (function () {
 
     }
 
+    // FUNCTIONS DO ROMANEIO
+
+    function getRomaneio(ID_LISTA_SERVICO, offset) {
+
+        axios.post(url, {
+            call: 'getRomaneio',
+            param: { ID_LISTA_SERVICO, offset },
+        }).then(rs => {
+
+            $('.btnPR').attr("disabled", true);
+            xgRomaneios.querySourceAdd(rs.data)
+        })
+    }
+
+    function InserirRomaneio() {
+        xgProdRomaneio.queryOpen({ search: ID_LISTA_SERVICO })
+        xmInserirRomaneio.open();
+        $('#xmEdtIRomaneio').focus()
+    }
+
+    function novoRomaneio() {
+        confirmaCodigo({
+            msg: 'Digite o código abaixo para criar um novo romaneio',
+            call: () => {
+
+                param = {
+                    ID_FUNCIONARIOS: usuario.ID_FUNCIONARIOS,
+                    ID_LISTA_SERVICO: ID_LISTA_SERVICO,
+                    DATA: new Date().toLocaleDateString('pt-BR'),
+                    HORA: new Date().toLocaleTimeString('pt-BR'),
+                    STATUS: 'ABERTO'
+                }
+
+                axios.post(url, {
+                    call: 'novoRomaneio',
+                    param: param,
+                }).then(rs => {
+                    $('.btnPR').attr("disabled", true);
+                    xgRomaneios.queryOpen({ search: ID_LISTA_SERVICO })
+
+                })
+
+            }
+        })
+    }
+
+    // FUNCTIONS ROMANEIO ITENS
+
+    function getItensRomaneio(ID_ROMANEIO, offset) {
+        axios.post(url, {
+            call: 'getItensRomaneio',
+            param: { ID_ROMANEIO, offset },
+        }).then(rs => {
+
+            xgRomaneiosItens.querySourceAdd(rs.data)
+        })
+    }
+
+    // MODAIS
     function modalCliente() {
         xmListaCliente = new xModal.create({
             el: '#xmListaCliente',
@@ -380,6 +560,14 @@ const saida = (function () {
         })
     }
 
+    function modalInserirRomaneio() {
+        xmInserirRomaneio = new xModal.create({
+            el: '#xmIRomaneio',
+            title: 'Novo Romaneio',
+
+        })
+    }
+
     return {
         grid: grid,
         modalCliente: modalCliente,
@@ -387,6 +575,7 @@ const saida = (function () {
         modalListaServ, modalListaServ,
         buscar: buscar,
         buscarServ: buscarServ,
+        modalInserirRomaneio: modalInserirRomaneio,
 
     }
 })();
@@ -633,8 +822,6 @@ const produtos = (function () {
     }
 
     const salvarCarrinho = async () => {
-
-
         let origem;
         let status = $('#spStatus').text();
 
@@ -725,6 +912,7 @@ const produtos = (function () {
                     class: 'xmQtdBtn',
                     click: (e) => {
                         salvarCarrinho()
+                        $('#xmEdtProduto').focus()
                     }
                 }
             },

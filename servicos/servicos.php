@@ -81,14 +81,14 @@
 
     <div id="tabProdutoServico" class="col s12">
         <div id="pnGridSaida" class="list"></div>
-        <div id="pnButtons" class="right-align col s12"></div>
-        <div>botoes imprimir novo inser delete salvar cancelar</div>
+        <div id="pnButtonsP" style="margin-left: 20px !important" class="col s12"></div>
     </div>
 
 
     <div id="tabRomaneio" class="col s12">
-        <div id="xgRomaneios"></div>
-        <div id="xgRomaneiosItens"></div>
+        <div id="xgRomaneios" class="list"></div>
+        <div id="xgRomaneiosItens" class="list"></div>
+        <div id="pnButtonsR" style="margin-left: 20px !important"></div>
 
     </div>
     <!-- <div id="tabAcrecismo" class="col s12">Test 3</div> -->
@@ -238,6 +238,17 @@
         </div>
     </div>
 
+</div>
+
+<!-- MODAL INSERIR ROMANEIO -->
+<div id="xmIRomaneio">
+    <div class="row">
+        <div class="col s4" id="pnFieldIRomabeio">
+            <label>Buscar Produto</label>
+            <input type="text" id="xmEdtIRomaneio" disabled>
+        </div>
+    </div>
+    <div id="xgProdRomaneio"></div>
 </div>
 
 <div id="pnCodigoTela">Saída</div>

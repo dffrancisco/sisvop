@@ -50,6 +50,7 @@ class Sqlservicos
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ); 
   }
+
   function getListaServicos($param){
     
     $sql = "SELECT FIRST 10 SKIP 0
@@ -112,6 +113,51 @@ class Sqlservicos
 
     $sql = "SELECT * 
             FROM servicos";
+
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
+  }
+
+  function getRomaneio($param){
+    extract($param);
+    $sql = "SELECT FIRST 10 SKIP $offset
+            a.id_romaneio, a.data, a.hora, a.status,
+            b.id_funcionarios, b.nome
+            FROM romaneio a, funcionarios b
+            WHERE a.id_funcionarios = b.id_funcionarios
+            AND id_lista_servico = $ID_LISTA_SERVICO";
+            
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ); 
+  }
+
+  function novoRomaneio($param){
+
+    $sql="INSERT INTO
+          romaneio
+          (id_funcionarios, id_lista_servico, data, hora, status)
+          VALUES
+          (:ID_FUNCIONARIOS, :ID_LISTA_SERVICO, :DATA, :HORA, :STATUS)";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);          
+  }
+
+  function getItensRomaneio($param){
+    extract($param);
+    $sql="SELECT FIRST 10 skip $offset
+          a.id_item_romaneio, a.qtd, 
+          c.id_produto, c.descricao,
+          d.marca
+          FROM itens_romaneio a, romaneio b, produtos c, marca d
+          WHERE a.id_romaneio= b.id_romaneio 
+          AND a.id_produto = c.id_produto    
+          AND d.id_marca = c.id_marca             
+          AND a.id_romaneio = $ID_ROMANEIO";
 
     $query = $this->db->prepare($sql);
     $query->execute(); 

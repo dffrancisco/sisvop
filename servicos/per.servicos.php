@@ -62,6 +62,21 @@ class Servicos
         echo json_encode($call);
     }
 
+    function getRomaneio($param){
+        $call = $this->sql->getRomaneio($param);
+        echo json_encode($call);
+    }
+    
+    function getItensRomaneio($param){
+        $call = $this->sql->getItensRomaneio($param);
+        echo json_encode($call);
+    }
+
+    function novoRomaneio($param){
+        $call = $this->sql->novoRomaneio($param);
+        echo json_encode($call);
+    }
+
     function getItens($param)
     {
         $call = $this->sql->getItens($param);
