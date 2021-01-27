@@ -20,7 +20,7 @@ class Servicos
         $this->sql = new SqlServicos();
     }
 
-
+    // GETS
     function getCliente($param){
         $call = $this->sql->getCliente($param);
         echo json_encode($call);
@@ -41,24 +41,8 @@ class Servicos
         echo json_encode($call);
     }
 
-    function atualizaStatus($param){
-
-        $call = $this->sql->atualizaStatus($param);
-        echo json_encode($call);
-    }
-
     function getProduto($param){
         $call = $this->sql->getProduto($param);
-        echo json_encode($call);
-    }
-
-    function gerarServico($param){
-        $call = $this->sql->gerarServico($param);
-        echo '{"ID_LISTA_SERVICO":"'.$call[0]->ID_LISTA_SERVICO.'"}';
-    }
-
-    function inserirItens($param){
-        $call = $this->sql->inserirItens($param);
         echo json_encode($call);
     }
 
@@ -69,11 +53,6 @@ class Servicos
     
     function getItensRomaneio($param){
         $call = $this->sql->getItensRomaneio($param);
-        echo json_encode($call);
-    }
-
-    function novoRomaneio($param){
-        $call = $this->sql->novoRomaneio($param);
         echo json_encode($call);
     }
 
@@ -94,19 +73,59 @@ class Servicos
         $call = $this->sql->getListaServicoX($param);
         echo json_encode($call);
     }
+
+    //NOVO E GERAR
+    function novoRomaneio($param){
+        $call = $this->sql->novoRomaneio($param);
+        echo json_encode($call);
+    }
     
-    function atualizaProduto($param)
-    {
+    function gerarServico($param){
+        $call = $this->sql->gerarServico($param);
+        echo '{"ID_LISTA_SERVICO":"'.$call[0]->ID_LISTA_SERVICO.'"}';
+    }
+
+    //INSERIR
+    function inserirItens($param){
+        $call = $this->sql->inserirItens($param);
+        echo json_encode($call);
+    }
+
+    function inserirItemRomaneio($param){
+        $call = $this->sql->inserirItemRomaneio($param);
+        $attServ = $this->sql->atualizaQtdItens($param);
+        echo json_encode($call);
+    }
+    
+
+    // UPDATE
+    function atualizaProduto($param){
         $call = $this->sql->atualizaProduto($param);
         echo json_encode($call);
     }
 
-    function deletarItem($param)
-    {
-        $call = $this->sql->deletarItem($param);
+    function atualizaStatus($param){
+
+        $call = $this->sql->atualizaStatus($param);
         echo json_encode($call);
     }
 
+    function finalizarRomaneio($param){
+        $call = $this->sql->finalizarRomaneio($param);
+        echo json_encode($call);
+    }
+
+    //DELETE
+    function deletarItem($param){
+        $call = $this->sql->deletarItem($param);
+        echo json_encode($call);
+    }
+    
+    function deletarItemRomaneio($param){
+        $attP = $this->sql->atualizaProduto($param);
+        $attQ = $this->sql->atualizaQtdItens($param);
+        $dltI = $this->sql->deletarItemRomaneio($param);
+    }
 }
 
 $class = new Servicos();

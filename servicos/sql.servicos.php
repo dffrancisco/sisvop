@@ -11,6 +11,7 @@ class Sqlservicos
     $this->db = ConexaoFirebird::getConectar();
   }
 
+  // GET
   function getCliente($param){
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset 
@@ -132,73 +133,32 @@ class Sqlservicos
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ); 
   }
-
-  function novoRomaneio($param){
-
-    $sql="INSERT INTO
-          romaneio
-          (id_funcionarios, id_lista_servico, data, hora, status)
-          VALUES
-          (:ID_FUNCIONARIOS, :ID_LISTA_SERVICO, :DATA, :HORA, :STATUS)";
-
-    $sql = prepare::SQL($sql, $param);
-    $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ);          
-  }
-
+ 
   function getItensRomaneio($param){
     extract($param);
     $sql="SELECT FIRST 10 skip $offset
-          a.id_item_romaneio, a.qtd, 
-          c.id_produto, c.descricao,
-          d.marca
-          FROM itens_romaneio a, romaneio b, produtos c, marca d
-          WHERE a.id_romaneio= b.id_romaneio 
-          AND a.id_produto = c.id_produto    
-          AND d.id_marca = c.id_marca             
-          AND a.id_romaneio = $ID_ROMANEIO";
+          a.id_item_romaneio, a.qtd, a.id_itens_servico,
+          b.id_produto, b.descricao,
+          c.marca,
+          d.origem
+          FROM itens_romaneio a,
+          produtos b, marcas c,
+          lista_itens_servico d
+          WHERE a.id_produto = b.id_produto
+          AND c.id_marca = b.id_marca
+          AND a.id_itens_servico = d.id_itens_servico
+          AND id_romaneio = $ID_ROMANEIO";
 
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ); 
   }
 
-  function gerarServico($param){
-    extract($param);
-    $sql = "INSERT INTO lista_servicos 
-            (id_cliente, id_servico, 
-            data, hora, status, data_inicio, data_finalizacao,
-            engenheiro, executores, obs, valor)
-            VALUES 
-            (:ID_CLIENTE, :ID_SERVICO, 
-            :DIA, :HORA, 'ABERTO', :DATA_INICIO, :DATA_FINAL,
-            :ENGENHEIRO, :EXECUTORES, :OBS, :VALOR)
-            returning id_lista_servico";
-
-    $sql = prepare::SQL($sql, $param);
-    $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ);
-  }
-
-  function inserirItens($param){
-    $sql = "INSERT INTO 
-            lista_itens_servico 
-            (id_lista_servico, id_produto, qtd, data, origem)
-            VALUES 
-            (:ID_SERVICO, :ID_PRODUTO , :QTD_PRODUTO, :DATA, :ORIGEM)";
-    $sql = prepare::SQL($sql, $param);
-    $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ);
-  }
-
   function getItens($param){
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
     a.id_itens_servico, a.id_lista_servico,
-    a.qtd, a.data, a.origem ,
+    a.qtd, a.data, a.origem , a.qtd_retirada,
     b.id_produto, b.descricao,
     c.id_marca,  c.marca
     FROM
@@ -210,7 +170,7 @@ class Sqlservicos
     AND id_lista_servico = $search";
     $query = $this->db->prepare($sql);
     $query->execute();
-    return $query->fetchAll();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function getServicos($param){
@@ -233,12 +193,26 @@ class Sqlservicos
 
   }
 
-  function atualizaProduto($param){
-    extract($param);
+  // INSERT
+  function inserirItens($param){
+    $sql = "INSERT INTO 
+            lista_itens_servico 
+            (id_lista_servico, id_produto, qtd, data, origem, qtd_retirada)
+            VALUES 
+            (:ID_SERVICO, :ID_PRODUTO , :QTD_PRODUTO, :DATA, :ORIGEM, :QTD_RETIRADA)";
+    $sql = prepare::SQL($sql, $param);
+    print_r($sql);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
 
-    $sql = "UPDATE produtos 
-           SET qtd = :newEstoque
-           WHERE id_produto = :ID_PRODUTO";
+  function inserirItemRomaneio($param){
+
+    $sql="INSERT INTO itens_romaneio
+          (id_romaneio, id_produto, qtd, id_itens_servico)
+          VALUES
+          (:ID_ROMANEIO, :ID_PRODUTO, :QTD, :ID_ITENS_SERVICO)";
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
@@ -246,11 +220,47 @@ class Sqlservicos
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function deletarItem($param){
-    $sql = "DELETE FROM lista_itens_servico 
-          WHERE  id_itens_servico = $param";
+  //NOVO E GERAR
+  function novoRomaneio($param){
 
+    $sql="INSERT INTO
+          romaneio
+          (id_funcionarios, id_lista_servico, data, hora, status)
+          VALUES
+          (:ID_FUNCIONARIOS, :ID_LISTA_SERVICO, :DATA, :HORA, :STATUS)";
 
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);          
+  }
+
+  function gerarServico($param){
+    extract($param);
+    $sql = "INSERT INTO lista_servicos 
+            (id_cliente, id_servico, 
+            data, hora, status, data_inicio, data_finalizacao,
+            engenheiro, executores, obs, valor)
+            VALUES 
+            (:ID_CLIENTE, :ID_SERVICO, 
+            :DIA, :HORA, 'ABERTO', :DATA_INICIO, :DATA_FINAL,
+            :ENGENHEIRO, :EXECUTORES, :OBS, :VALOR)
+            returning id_lista_servico";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+  
+  // UPDATE
+  function atualizaProduto($param){
+
+    $sql = "UPDATE produtos 
+           SET qtd = :newEstoque
+           WHERE id_produto = :ID_PRODUTO";
+
+    $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -268,4 +278,52 @@ class Sqlservicos
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
+
+  function atualizaQtdItens($param){
+
+    $sql="UPDATE lista_itens_servico
+          SET qtd_retirada = :QTD_RETIRADA
+          WHERE id_itens_servico = :ID_ITENS_SERVICO";
+
+    $sql = prepare::SQL($sql, $param);
+    print_r($sql);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+  
+  function finalizarRomaneio($param){
+    $sql="UPDATE romaneio
+          SET status = :STATUS
+          WHERE id_romaneio = :ID_ROMANEIO";
+
+    $sql = prepare::SQL($sql, $param);
+    print_r($sql);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  //DELETE
+  function deletarItem($param){
+    $sql = "DELETE FROM lista_itens_servico 
+          WHERE  id_itens_servico = $param";
+
+
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function deletarItemRomaneio($param){
+    $sql = "DELETE FROM itens_romaneio
+            WHERE id_item_romaneio = :ID_ITEM_ROMANEIO";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+
 }

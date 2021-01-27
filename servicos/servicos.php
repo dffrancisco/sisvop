@@ -169,7 +169,7 @@
             </div>
 
             <div class="col s10" id="pnFieldEdtQtd">
-                <br><label>Restante no estoque</label><br>
+                <br><label>Quantidade existente</label><br>
                 <b id="xmBQtd"></b><b> Unidades restantes</b>
             </div>
             <div class="col s10" id="pnFieldEdtQtd">
@@ -242,12 +242,6 @@
 
 <!-- MODAL INSERIR ROMANEIO -->
 <div id="xmIRomaneio">
-    <div class="row">
-        <div class="col s4" id="pnFieldIRomabeio">
-            <label>Buscar Produto</label>
-            <input type="text" id="xmEdtIRomaneio" disabled>
-        </div>
-    </div>
     <div id="xgProdRomaneio"></div>
 </div>
 

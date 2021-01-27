@@ -5,6 +5,7 @@ let xgProduto;
 let xgRomaneios;
 let xgRomaneiosItens;
 let xgServicos;
+let xgProdRomaneio
 
 let xmListaServ;
 let xmEdtQtd
@@ -100,6 +101,7 @@ $(function () {
         }
     })
     $(".btnPesq").click(function () {
+        $('.btnNR').attr("disabled", true);
         saida.buscar()
     })
 
@@ -123,6 +125,7 @@ $(function () {
     $('.btnInsP').attr("disabled", true);
     $('.btnNR').attr("disabled", true);
     $('.btnPR').attr("disabled", true);
+    $('.btnSR').attr("disabled", true);
 
 });
 
@@ -145,6 +148,7 @@ const saida = (function () {
                 Produto: { dataField: 'DESCRICAO' },
                 Marca: { dataField: 'MARCA' },
                 QTD: { dataField: 'QTD', width: '10%' },
+                'QTD(R)': { dataField: 'QTD_RETIRADA', width: '10%' },
                 Data: { dataField: 'DATA', center: true },
                 ORIGEM: { dataField: 'ORIGEM', center: true },
 
@@ -218,37 +222,54 @@ const saida = (function () {
         xgProdRomaneio = new xGridV2.create({
 
             el: '#xgProdRomaneio',
-            height: '350',
+            height: '420',
             theme: 'x-clownV2',
             heightLine: '35',
 
             columns: {
                 Produto: { dataField: 'DESCRICAO' },
                 Marca: { dataField: 'MARCA' },
+                Origem: { dataField: 'ORIGEM', width: '20%' },
                 QTD: { dataField: 'QTD', width: '10%' },
-
-            },
-
-            onSelectLine: (r) => {
-                return false
-                for (let i = 0; i < 9; i++) {
-                    delete r[i]
-
-                }
-                console.log('r :', r);
-                xgRomaneiosItens.insertLine(r)
+                'QTD(R)': { dataField: 'QTD_RETIRADA', width: '10%' },
 
             },
 
             onKeyDown: {
 
                 '13': (ln) => {
+
                     for (let i = 0; i < 9; i++) {
                         delete ln[i]
 
                     }
-                    xgRomaneiosItens.insertLine(ln)
-                    $('#xmEdtIRomaneio').focus()
+
+                    for (let i in xgRomaneiosItens.data()) {
+
+                        if (xgRomaneiosItens.data()[i].ID_ITENS_SERVICO == ln.ID_ITENS_SERVICO) {
+                            setTimeout(function () {
+                                show("Item já incluso!");
+                            }, 1)
+                            return false
+                        }
+                    }
+                    let disponivel = ln.QTD - ln.QTD_RETIRADA
+                    if (disponivel == 0) {
+                        setTimeout(function () {
+                            show("Item esgotado!");
+                        }, 1)
+                        return false
+                    }
+                    $("#xmBQtd").html(disponivel);
+                    $("#xmSpId").html(ln.ID_PRODUTO);
+                    $("#xmSpCodigo").html(ln.CODIGO);
+                    $("#xmSpProd").html(ln.DESCRICAO);
+                    $("#xmSpMarca").html(ln.MARCA);
+                    $("#xmSpValor").html(ln.VALOR);
+
+                    xmEdtQtd.open()
+
+                    $('#xmEdtQtd').focus()
                 }
             },
 
@@ -263,6 +284,7 @@ const saida = (function () {
             el: `#xgRomaneios`,
             theme: 'x-clownV2',
             height: 120,
+
             columns: {
                 'Responsável': { dataField: 'NOME' },
                 Data: { dataField: 'DATA', center: true },
@@ -274,7 +296,18 @@ const saida = (function () {
 
                 xgRomaneiosItens.queryOpen({ search: r.ID_ROMANEIO })
 
-                $('.btnPR').removeAttr("disabled", true);
+                if (r.STATUS == "ABERTO") {
+
+                    $('.btnPR').removeAttr("disabled");
+                    $('.btnSR').removeAttr("disabled");
+                }
+                if (r.STATUS == "FINALIZADO") {
+
+                    $('.btnPR').attr("disabled", true);
+                    $('.btnSR').attr("disabled", true);
+                }
+
+
             },
 
             query: {
@@ -292,6 +325,7 @@ const saida = (function () {
             columns: {
                 Produto: { dataField: 'DESCRICAO' },
                 Marca: { dataField: 'MARCA' },
+                Ori: { dataField: 'ORIGEM' },
                 QTD: { dataField: 'QTD', width: '10%' },
             },
 
@@ -312,13 +346,16 @@ const saida = (function () {
                         },
 
                         Salvar: {
-                            html: "Salvar Romaneio",
+                            html: "Finalizar Romaneio",
                             class: "btnP btnSR",
+                            click: finalizarRomaneio
                         },
                     },
                 }
             },
+            onSelectLine: (r) => {
 
+            },
             query: {
                 execute: (r) => {
                     getItensRomaneio(r.param.search, r.offset)
@@ -349,6 +386,7 @@ const saida = (function () {
                     if (ln.STATUS == 'ABERTO') {
                         $('.btnFS').removeAttr('disabled');
                         $('.btnNR').attr("disabled", true);
+
 
                     }
                     if (ln.STATUS == 'FINALIZADO') {
@@ -390,6 +428,7 @@ const saida = (function () {
 
         }).then(rs => {
             xgProdRomaneio.querySourceAdd(rs.data);
+            xgProdRomaneio.focus()
         })
     }
 
@@ -419,6 +458,7 @@ const saida = (function () {
 
                 $('#spStatus').html('FINALIZADO');
                 $('.btnFS').prop('disabled', true)
+                $('.btnNR').removeAttr("disabled");
             }
         })
     }
@@ -452,7 +492,6 @@ const saida = (function () {
                         param: ln.ID_ITENS_SERVICO,
                     })
 
-                    console.log('lines :', xgSaida.data().length);
                     if (xgSaida.data().length - 1 <= 0) {
                         $('.btnDel').prop('disabled', true)
                     } else {
@@ -483,10 +522,27 @@ const saida = (function () {
         })
     }
 
+    function finalizarRomaneio() {
+        let romaneio = xgRomaneios.dataSource()
+        romaneio.STATUS = 'FINALIZADO'
+
+        axios.post(url, {
+            call: 'finalizarRomaneio',
+            param: romaneio
+        })
+
+        xgRomaneios.dataSource('STATUS', romaneio.STATUS)
+
+        $('.btnPR').attr("disabled", true);
+        $('.btnSR').attr("disabled", true);
+
+    }
+
     function InserirRomaneio() {
+        evento = 'Inserir Romaneio'
         xgProdRomaneio.queryOpen({ search: ID_LISTA_SERVICO })
         xmInserirRomaneio.open();
-        $('#xmEdtIRomaneio').focus()
+
     }
 
     function novoRomaneio() {
@@ -563,8 +619,10 @@ const saida = (function () {
     function modalInserirRomaneio() {
         xmInserirRomaneio = new xModal.create({
             el: '#xmIRomaneio',
-            title: 'Novo Romaneio',
-
+            title: 'Produtos',
+            onClose: () => {
+                $('#xmEdtIRomaneio').val('')
+            }
         })
     }
 
@@ -840,7 +898,7 @@ const produtos = (function () {
 
         if (valProduto.QTD > xgProduto.dataSource().QTD) {
             setTimeout(function () {
-                show("Quantidade maior que em estoque!");
+                show("Quantidade maior que a existente!");
             }, 1)
             return false
         }
@@ -867,7 +925,8 @@ const produtos = (function () {
             ID_PRODUTO: valProduto.ID_PRODUTO,
             QTD_PRODUTO: valProduto.QTD,
             DATA: new Date().toLocaleDateString('pt-BR'),
-            ORIGEM: origem
+            ORIGEM: origem,
+            QTD_RETIRADA: 0
         }
 
         await axios.post(url, {
@@ -887,7 +946,6 @@ const produtos = (function () {
         obProduto = {}
     }
 
-
     function getServico() {
         axios.post(url, {
             call: 'getServ',
@@ -898,6 +956,66 @@ const produtos = (function () {
                     $('#slctServico').append(table)
                 }
             })
+    }
+
+    async function InserirItemRomaneio() {
+
+        let qtdServico = Number($('#xmBQtd').html())
+
+        item = {
+            ID_ITENS_SERVICO: xgProdRomaneio.dataSource().ID_ITENS_SERVICO,
+            DESCRICAO: $("#xmSpProd").text(),
+            ID_PRODUTO: $("#xmSpId").text(),
+            MARCA: $("#xmSpMarca").text(),
+            QTD: Number($("#xmEdtQtd").val().trim()),
+            ORIGEM: xgProdRomaneio.dataSource().ORIGEM,
+            ID_ROMANEIO: xgRomaneios.dataSource().ID_ROMANEIO
+        }
+
+        if (item.QTD > qtdServico) {
+            setTimeout(function () {
+                show("Quantidade maior que a existente!");
+            }, 1)
+            return false
+        }
+
+        if (item.QTD == null || item.QTD == "") {
+            setTimeout(function () {
+                show("Quantidade inválida!");
+            }, 1)
+            return false
+        }
+
+        xmEdtQtd.close()
+        xgRomaneiosItens.insertLine(item)
+
+        qtdServico = xgProdRomaneio.dataSource().QTD_RETIRADA
+        item.QTD_RETIRADA = qtdServico + item.QTD
+
+
+        await axios.post(url, {
+            call: 'inserirItemRomaneio',
+            param: item
+        })
+
+        axios.post(url, {
+            call: 'getProduto',
+            param: item.ID_PRODUTO
+        }).then(rs => {
+            let newEstoque = rs.data[0].QTD - item.QTD
+
+            axios.post(url, {
+                call: 'atualizaProduto',
+                param: { ID_PRODUTO: item.ID_PRODUTO, newEstoque: newEstoque }
+            })
+
+        })
+
+        xgProdRomaneio.dataSource('QTD_RETIRADA', item.QTD_RETIRADA)
+
+        xgSaida.queryOpen({ search: ID_LISTA_SERVICO })
+
+
     }
 
     function modalEdtQtd() {
@@ -911,8 +1029,15 @@ const produtos = (function () {
                     html: 'Confirma',
                     class: 'xmQtdBtn',
                     click: (e) => {
-                        salvarCarrinho()
-                        $('#xmEdtProduto').focus()
+
+                        if (evento == "Inserir") {
+                            salvarCarrinho()
+                            $('#xmEdtProduto').focus()
+                        }
+                        if (evento == "Inserir Romaneio") {
+                            InserirItemRomaneio()
+
+                        }
                     }
                 }
             },
