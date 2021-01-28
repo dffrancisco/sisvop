@@ -62,6 +62,12 @@ class Servicos
         echo json_encode($call);
     }
 
+    function getItens2($param)
+    {
+        $call = $this->sql->getItens2($param);
+        echo json_encode($call);
+    }
+
     function getServicos($param){
         
         $call = $this->sql->getServicos($param);
@@ -94,6 +100,11 @@ class Servicos
     function inserirItemRomaneio($param){
         $call = $this->sql->inserirItemRomaneio($param);
         $attServ = $this->sql->atualizaQtdItens($param);
+        echo json_encode($call);
+    }
+
+    function inserirDevolucao($param){
+        $call = $this->sql->inserirDevolucao($param);
         echo json_encode($call);
     }
     

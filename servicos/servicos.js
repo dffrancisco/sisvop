@@ -6,6 +6,9 @@ let xgRomaneios;
 let xgRomaneiosItens;
 let xgServicos;
 let xgProdRomaneio
+let xgDevolucao;
+let xgRomaneiosItensD;
+let xmModalPDevolucao
 
 let xmListaServ;
 let xmEdtQtd
@@ -22,7 +25,6 @@ var evento
 let ID_LISTA_SERVICO;
 let ID_CLIENTE;
 
-let obProduto = {}
 
 $(function () {
     saida.modalCliente();
@@ -30,6 +32,9 @@ $(function () {
     saida.modalListaServ()
     saida.grid();
     saida.modalInserirRomaneio();
+
+    devolucao.grid();
+    devolucao.modalPDevolucao();
 
     clientes.grid();
     clientes.modalNovoServico();
@@ -39,6 +44,16 @@ $(function () {
 
 
     $('.tabs').tabs();
+
+    $('.btnDel').attr("disabled", true);
+    $('.btnAF').attr("disabled", true);
+    $('.btnV').attr("disabled", true);
+    $('.btnFS').attr("disabled", true);
+    $('.btnF').attr("disabled", true);
+    $('.btnInsP').attr("disabled", true);
+    $('.btnNR').attr("disabled", true);
+    $('.btnPR').attr("disabled", true);
+    $('.btnSR').attr("disabled", true);
 
     $("#xmEdtCliente").keydown(function (e) {
         if (e.keyCode == 13) {
@@ -100,6 +115,7 @@ $(function () {
             xgProdRomaneio.focus()
         }
     })
+
     $(".btnPesq").click(function () {
         $('.btnNR').attr("disabled", true);
         saida.buscar()
@@ -117,16 +133,6 @@ $(function () {
 
     })
 
-    $('.btnDel').attr("disabled", true);
-    $('.btnAF').attr("disabled", true);
-    $('.btnV').attr("disabled", true);
-    $('.btnFS').attr("disabled", true);
-    $('.btnF').attr("disabled", true);
-    $('.btnInsP').attr("disabled", true);
-    $('.btnNR').attr("disabled", true);
-    $('.btnPR').attr("disabled", true);
-    $('.btnSR').attr("disabled", true);
-
 });
 
 
@@ -137,10 +143,11 @@ const saida = (function () {
 
     function grid() {
 
+        // GRID LISTA DE ITENS
         xgSaida = new xGridV2.create({
 
             el: '#pnGridSaida',
-            height: '200',
+            height: '180',
             theme: 'x-clownV2',
             heightLine: '35',
 
@@ -148,7 +155,7 @@ const saida = (function () {
                 Produto: { dataField: 'DESCRICAO' },
                 Marca: { dataField: 'MARCA' },
                 QTD: { dataField: 'QTD', width: '10%' },
-                'QTD(R)': { dataField: 'QTD_RETIRADA', width: '10%' },
+                'QTD(RO)': { dataField: 'QTD_RETIRADA', width: '10%' },
                 Data: { dataField: 'DATA', center: true },
                 ORIGEM: { dataField: 'ORIGEM', center: true },
 
@@ -219,6 +226,7 @@ const saida = (function () {
             }
         })
 
+        // GRID LISTA DE ITENS PARA IR PARA O ROMANEIO
         xgProdRomaneio = new xGridV2.create({
 
             el: '#xgProdRomaneio',
@@ -229,9 +237,10 @@ const saida = (function () {
             columns: {
                 Produto: { dataField: 'DESCRICAO' },
                 Marca: { dataField: 'MARCA' },
-                Origem: { dataField: 'ORIGEM', width: '20%' },
-                QTD: { dataField: 'QTD', width: '10%' },
-                'QTD(R)': { dataField: 'QTD_RETIRADA', width: '10%' },
+                Origem: { dataField: 'ORIGEM' },
+                'QTD(TO)': { dataField: 'QTD', width: '13%' },
+                'QTD(PR)': { dataField: 'QTD_P', width: '13%' },
+                'QTD(RO)': { dataField: 'QTD_RETIRADA', width: '13%' },
 
             },
 
@@ -253,14 +262,15 @@ const saida = (function () {
                             return false
                         }
                     }
-                    let disponivel = ln.QTD - ln.QTD_RETIRADA
-                    if (disponivel == 0) {
+
+                    if (ln.QTD == 0) {
                         setTimeout(function () {
                             show("Item esgotado!");
                         }, 1)
                         return false
                     }
-                    $("#xmBQtd").html(disponivel);
+
+                    $("#xmBQtd").html(ln.QTD);
                     $("#xmSpId").html(ln.ID_PRODUTO);
                     $("#xmSpCodigo").html(ln.CODIGO);
                     $("#xmSpProd").html(ln.DESCRICAO);
@@ -280,12 +290,14 @@ const saida = (function () {
             }
         })
 
+        // GRID ROMANEIO
         xgRomaneios = new xGridV2.create({
             el: `#xgRomaneios`,
             theme: 'x-clownV2',
             height: 120,
 
             columns: {
+                'ID': { dataField: 'ID_ROMANEIO', width: '10%' },
                 'Responsável': { dataField: 'NOME' },
                 Data: { dataField: 'DATA', center: true },
                 Hora: { dataField: 'HORA', center: true },
@@ -317,6 +329,7 @@ const saida = (function () {
             }
         })
 
+        // GRID ITENS DO ROMANEIOS
         xgRomaneiosItens = new xGridV2.create({
             el: `#xgRomaneiosItens`,
             theme: 'x-clownV2',
@@ -325,7 +338,7 @@ const saida = (function () {
             columns: {
                 Produto: { dataField: 'DESCRICAO' },
                 Marca: { dataField: 'MARCA' },
-                Ori: { dataField: 'ORIGEM' },
+                Origem: { dataField: 'ORIGEM' },
                 QTD: { dataField: 'QTD', width: '10%' },
             },
 
@@ -353,9 +366,64 @@ const saida = (function () {
                     },
                 }
             },
-            onSelectLine: (r) => {
 
+            onKeyDown: {
+                '46': (r) => {
+
+                    return false
+                    let status = xgRomaneios.dataSource().STATUS
+
+                    if (status == "ABERTO") {
+
+                        confirmaCodigo({
+                            msg: "Digite o código abaixo para deletar o item",
+                            call: () => {
+                                axios.post(url, {
+                                    call: 'getProduto',
+                                    param: r.ID_PRODUTO
+                                })
+                                    .then(rs => {
+
+                                        for (let i in xgSaida.data()) {
+
+                                            if (xgSaida.data()[i].ID_ITENS_SERVICO == r.ID_ITENS_SERVICO) {
+
+                                                let QTD_RETIRADA = xgSaida.data()[i].QTD_RETIRADA
+                                                let NOVA_QTD_DISPO = QTD_RETIRADA - r.QTD
+                                                console.log('r.QTD :', r.QTD);
+                                                console.log('QTD_RETIRADA :', QTD_RETIRADA);
+                                                console.log('NOVA_QTD_DISPO :', NOVA_QTD_DISPO);
+
+                                                let newEstoque = rs.data[0].QTD + r.QTD
+
+                                                let param = {
+                                                    ID_PRODUTO: r.ID_PRODUTO,
+                                                    newEstoque: newEstoque,
+                                                    QTD_RETIRADA: NOVA_QTD_DISPO,
+                                                    ID_ITEM_ROMANEIO: r.ID_ITEM_ROMANEIO,
+                                                    ID_ITENS_SERVICO: xgSaida.data()[0].ID_ITENS_SERVICO
+                                                }
+
+                                                console.log('param :', param);
+
+                                                axios.post(url, {
+                                                    call: 'deletarItemRomaneio',
+                                                    param: param
+                                                })
+                                            }
+
+                                        }
+                                    })
+                            }
+                        })
+
+                    } else {
+                        return false
+
+                    }
+                }
             },
+
             query: {
                 execute: (r) => {
                     getItensRomaneio(r.param.search, r.offset)
@@ -363,6 +431,7 @@ const saida = (function () {
             }
         })
 
+        // GRID SERVICOS
         xgServicos = new xGridV2.create({
             el: `#xgServicos`,
             theme: 'x-clownV2',
@@ -375,10 +444,14 @@ const saida = (function () {
                 STATUS: { dataField: 'STATUS' },
 
             },
+
             onKeyDown: {
                 '13': (ln, e) => {
+
                     clientes.getListaServicoX(ln.ID_LISTA_SERVICO);
+
                     ID_LISTA_SERVICO = ln.ID_LISTA_SERVICO
+
                     xmListaServ.close();
 
                     $('.btnInsP').removeAttr("disabled");
@@ -412,6 +485,7 @@ const saida = (function () {
     // FUNCTION PRODUTOS SERVICO 
 
     function getItens1(search, offset) {
+
         axios.post(url, {
             call: 'getItens',
             param: { search: search, offset: offset },
@@ -421,9 +495,11 @@ const saida = (function () {
 
         })
     }
+
     function getItens2(search, offset) {
+
         axios.post(url, {
-            call: 'getItens',
+            call: 'getItens2',
             param: { search: search, offset: offset },
 
         }).then(rs => {
@@ -433,6 +509,7 @@ const saida = (function () {
     }
 
     function getServicos(search, offset) {
+
         axios.post(url, {
             call: 'getServicos',
             param: { search: search, offset: offset }
@@ -442,15 +519,20 @@ const saida = (function () {
     }
 
     function buscarServ() {
+
         xmListaServ.open();
+
         xgServicos.queryOpen({ search: '' })
+
         $('#xmEdtServico').focus()
     }
 
     function fecharServ() {
+
         confirmaCodigo({
             msg: 'Digite o código abaixo caso deseja finalizar o projeto',
             call: () => {
+
                 axios.post(url, {
                     call: 'atualizaStatus',
                     param: { ID_LISTA_SERVICO: ID_LISTA_SERVICO, STATUS: 'FINALIZADO' }
@@ -475,14 +557,19 @@ const saida = (function () {
     }
 
     function buscar() {
+
         xgCliente.queryOpen({ search: '' });
+
         xmListaCliente.open();
+
         $('#xmEdtCliente').focus()
 
     }
 
     function deletar(ln) {
+
         if (xgSaida.data().length > 0) {
+
             confirmaCodigo({
                 msg: 'Digite o código de confirmação!',
                 call: () => {
@@ -493,8 +580,11 @@ const saida = (function () {
                     })
 
                     if (xgSaida.data().length - 1 <= 0) {
+
                         $('.btnDel').prop('disabled', true)
+
                     } else {
+
                         $('.btnDel').removeAttr('disabled')
                     }
                     xgSaida.deleteLine()
@@ -513,8 +603,10 @@ const saida = (function () {
     function getRomaneio(ID_LISTA_SERVICO, offset) {
 
         axios.post(url, {
+
             call: 'getRomaneio',
             param: { ID_LISTA_SERVICO, offset },
+
         }).then(rs => {
 
             $('.btnPR').attr("disabled", true);
@@ -523,7 +615,9 @@ const saida = (function () {
     }
 
     function finalizarRomaneio() {
+
         let romaneio = xgRomaneios.dataSource()
+
         romaneio.STATUS = 'FINALIZADO'
 
         axios.post(url, {
@@ -539,14 +633,19 @@ const saida = (function () {
     }
 
     function InserirRomaneio() {
+
         evento = 'Inserir Romaneio'
+
         xgProdRomaneio.queryOpen({ search: ID_LISTA_SERVICO })
+
         xmInserirRomaneio.open();
 
     }
 
     function novoRomaneio() {
+
         confirmaCodigo({
+
             msg: 'Digite o código abaixo para criar um novo romaneio',
             call: () => {
 
@@ -559,9 +658,12 @@ const saida = (function () {
                 }
 
                 axios.post(url, {
+
                     call: 'novoRomaneio',
                     param: param,
+
                 }).then(rs => {
+
                     $('.btnPR').attr("disabled", true);
                     xgRomaneios.queryOpen({ search: ID_LISTA_SERVICO })
 
@@ -572,11 +674,13 @@ const saida = (function () {
     }
 
     // FUNCTIONS ROMANEIO ITENS
-
     function getItensRomaneio(ID_ROMANEIO, offset) {
+
         axios.post(url, {
+
             call: 'getItensRomaneio',
             param: { ID_ROMANEIO, offset },
+
         }).then(rs => {
 
             xgRomaneiosItens.querySourceAdd(rs.data)
@@ -585,6 +689,7 @@ const saida = (function () {
 
     // MODAIS
     function modalCliente() {
+
         xmListaCliente = new xModal.create({
             el: '#xmListaCliente',
             title: 'Clientes',
@@ -593,6 +698,7 @@ const saida = (function () {
     }
 
     function modalInsProduto() {
+
         xmInsProduto = new xModal.create({
             el: '#xmInsProduto',
             title: 'Produtos',
@@ -609,6 +715,7 @@ const saida = (function () {
     }
 
     function modalListaServ() {
+
         xmListaServ = new xModal.create({
             el: '#xmServicos',
             title: 'Servicos',
@@ -617,9 +724,12 @@ const saida = (function () {
     }
 
     function modalInserirRomaneio() {
+
         xmInserirRomaneio = new xModal.create({
+
             el: '#xmIRomaneio',
             title: 'Produtos',
+
             onClose: () => {
                 $('#xmEdtIRomaneio').val('')
             }
@@ -653,6 +763,7 @@ const clientes = (function () {
             heightLine: '35',
 
             columns: {
+
                 'Razão Social': { dataField: 'FANTASIA' },
                 CNPJ: { dataField: 'CNPJ', center: true },
                 UF: { dataField: 'UF', center: true },
@@ -661,13 +772,17 @@ const clientes = (function () {
 
             onKeyDown: {
                 '13': (ln, e) => {
+
                     cliente = ln
                     ID_CLIENTE = cliente.ID_CLIENTE
+
                     $("#xmSpFantasia").html(cliente.FANTASIA);
                     $("#xmSpCnpj").html(cliente.CNPJ);
 
                     getServico();
+
                     xmNovoServico.open();
+
                     $("#xmInEngenheiro").focus()
 
                 },
@@ -687,9 +802,12 @@ const clientes = (function () {
     }
 
     function getCliente(search, offset) {
+
         axios.post(url, {
+
             call: 'getCliente',
             param: { search: search, offset: offset },
+
         })
             .then(rs => {
 
@@ -697,23 +815,26 @@ const clientes = (function () {
             })
     }
 
-
-
     function getServico() {
-        $('#slctServico').html('')
-        axios.post(url, {
-            call: 'getServ',
-        })
-            .then(rs => {
 
-                for (let i in rs.data) {
-                    let table = `<option value="${rs.data[i].ID_SERVICO}"> ${rs.data[i].SERVICO}</option>`
-                    $('#slctServico').append(table)
-                }
-            })
+        $('#slctServico').html('')
+
+        axios.post(url, {
+
+            call: 'getServ',
+
+        }).then(rs => {
+
+            for (let i in rs.data) {
+
+                let table = `<option value="${rs.data[i].ID_SERVICO}"> ${rs.data[i].SERVICO}</option>`
+                $('#slctServico').append(table)
+            }
+        })
     }
 
     function novoServico() {
+
         ID_SERVICO = $('#slctServico').val()
         ENGENHEIRO = $('#xmInEngenheiro').val()
         EXECUTORES = $('#xmInEx').val()
@@ -725,6 +846,7 @@ const clientes = (function () {
         HORA = new Date().toLocaleTimeString('pt-BR')
 
         axios.post(url, {
+
             call: 'gerarServico',
             param: {
                 ID_CLIENTE, ID_SERVICO,
@@ -744,13 +866,15 @@ const clientes = (function () {
     }
 
     function getListaServicoX(id_lista_servico) {
+
         axios.post(url, {
+
             call: 'getListaServicoX',
-            param: {
-                id_lista_servico: id_lista_servico
-            }
+            param: { id_lista_servico: id_lista_servico }
+
         })
             .then(rs => {
+
                 setServicoTela(rs.data[0])
 
             })
@@ -758,6 +882,7 @@ const clientes = (function () {
     }
 
     function setServicoTela(param) {
+
         $('#spId_lista_servico').html(param.ID_LISTA_SERVICO)
         $('#spFantasia').html(param.FANTASIA)
         $('#spCnpj').html(param.CNPJ)
@@ -771,6 +896,7 @@ const clientes = (function () {
     }
 
     function modalNovoServico() {
+
         xmNovoServico = new xModal.create({
             el: '#xmServico',
             title: 'Novo Serviço',
@@ -778,12 +904,16 @@ const clientes = (function () {
             width: '500',
             buttons: {
                 btn1: {
+
                     html: 'Confirma',
                     class: 'xmBtnNovoS',
                     click: (e) => {
+
                         novoServico()
+
                         $('.btnInsP').removeAttr("disabled");
                         $('.btnFS').prop('disabled', true);
+
                         xmNovoServico.close()
                         xmListaCliente.close()
                     }
@@ -827,21 +957,30 @@ const produtos = (function () {
                         delete ln[i]
                     }
 
-                    for (let i in obProduto) {
-                        if (obProduto[i].ID_PRODUTO == ln.ID_PRODUTO) {
+                    for (let i in xgSaida.data()) {
+
+                        if (xgSaida.data()[i].ID_PRODUTO == ln.ID_PRODUTO) {
+
                             setTimeout(function () {
+
                                 show("Item já incluso!");
                             }, 1)
+
                             xgProduto.focus();
+
                             return false
                         }
                     }
 
                     if (ln.qtd == 0) {
+
                         setTimeout(function () {
+
                             show("Quantidade inválida!");
                         }, 1)
+
                         xgProduto.focus();
+
                         return false
                     }
 
@@ -855,6 +994,7 @@ const produtos = (function () {
                     xmEdtQtd.open()
 
                     evento = 'Inserir'
+
                     $("#xmEdtQtd").focus();
                 },
             },
@@ -868,18 +1008,22 @@ const produtos = (function () {
     }
 
     function getProdutos(search, offset) {
+
         axios.post(url, {
+
             call: 'getProdutos',
             param: { search: search, offset: offset },
+
+        }).then(rs => {
+
+            xgProduto.querySourceAdd(rs.data);
         })
-            .then(rs => {
-                xgProduto.querySourceAdd(rs.data);
-            })
 
         getServico()
     }
 
     const salvarCarrinho = async () => {
+
         let origem;
         let status = $('#spStatus').text();
 
@@ -897,25 +1041,32 @@ const produtos = (function () {
         valorT = valorT.toFixed(2).replace('.', ',')
 
         if (valProduto.QTD > xgProduto.dataSource().QTD) {
+
             setTimeout(function () {
+
                 show("Quantidade maior que a existente!");
             }, 1)
             return false
         }
         if (valProduto.QTD == "" || valProduto.QTD == null) {
+
             setTimeout(function () {
+
                 show("Quantidade inválida!");
             }, 1)
             return false
         }
 
         if (status == 'ABERTO') {
+
             $('.btnFS').removeAttr('disabled');
+
             origem = 'PROJETO'
         }
         else if (status == 'FINALIZADO') {
 
             $('.btnFS').prop('disabled', true);
+
             origem = 'ADICIONAL'
         }
 
@@ -930,6 +1081,7 @@ const produtos = (function () {
         }
 
         await axios.post(url, {
+
             call: 'inserirItens',
             param: param,
 
@@ -947,11 +1099,16 @@ const produtos = (function () {
     }
 
     function getServico() {
+
         axios.post(url, {
+
             call: 'getServ',
+
         })
             .then(rs => {
+
                 for (let i in rs.data) {
+
                     let table = `<option value="${rs.data[i].ID_SERVICO}"> ${rs.data[i].SERVICO}</option>`
                     $('#slctServico').append(table)
                 }
@@ -973,52 +1130,72 @@ const produtos = (function () {
         }
 
         if (item.QTD > qtdServico) {
+
             setTimeout(function () {
+
                 show("Quantidade maior que a existente!");
             }, 1)
             return false
         }
 
         if (item.QTD == null || item.QTD == "") {
+
             setTimeout(function () {
+
                 show("Quantidade inválida!");
             }, 1)
             return false
         }
 
         xmEdtQtd.close()
+
         xgRomaneiosItens.insertLine(item)
+
+        xgProdRomaneio.dataSource('QTD', qtdServico - item.QTD)
 
         qtdServico = xgProdRomaneio.dataSource().QTD_RETIRADA
         item.QTD_RETIRADA = qtdServico + item.QTD
 
 
         await axios.post(url, {
+
             call: 'inserirItemRomaneio',
             param: item
+
         })
 
         axios.post(url, {
+
             call: 'getProduto',
             param: item.ID_PRODUTO
+
         }).then(rs => {
+
             let newEstoque = rs.data[0].QTD - item.QTD
 
-            axios.post(url, {
-                call: 'atualizaProduto',
-                param: { ID_PRODUTO: item.ID_PRODUTO, newEstoque: newEstoque }
-            })
+            atualizaProduto(item.ID_PRODUTO, newEstoque)
 
         })
 
         xgProdRomaneio.dataSource('QTD_RETIRADA', item.QTD_RETIRADA)
 
-        xgSaida.queryOpen({ search: ID_LISTA_SERVICO })
 
+        xgSaida.queryOpen({ search: ID_LISTA_SERVICO })
 
     }
 
+    function atualizaProduto(ID_PRODUTO, newEstoque) {
+
+        axios.post(url, {
+
+            call: 'atualizaProduto',
+            param: { ID_PRODUTO: ID_PRODUTO, newEstoque: newEstoque }
+
+        })
+    }
+
     function modalEdtQtd() {
+
         xmEdtQtd = new xModal.create({
             el: '#xmQtd',
             title: 'Produto',
@@ -1031,17 +1208,25 @@ const produtos = (function () {
                     click: (e) => {
 
                         if (evento == "Inserir") {
+
                             salvarCarrinho()
+
                             $('#xmEdtProduto').focus()
                         }
                         if (evento == "Inserir Romaneio") {
+
                             InserirItemRomaneio()
 
+                        }
+
+                        if (evento == "DEVOLVER") {
+                            devolucao.devolverItem()
                         }
                     }
                 }
             },
             onClose: () => {
+
                 $("#xmEdtQtd").val('');
             }
         })
@@ -1050,5 +1235,168 @@ const produtos = (function () {
     return {
         grid: grid,
         modalEdtQtd: modalEdtQtd,
+        atualizaProduto: atualizaProduto
+    }
+})();
+
+const devolucao = (function () {
+
+    let url = 'servicos/per.servicos.php';
+    let ControleGrid;
+
+    function grid() {
+
+        xgDevolucao = new xGridV2.create({
+
+            el: '#xgDevolucao',
+            height: '180',
+            theme: 'x-clownV2',
+            heightLine: '35',
+
+            columns: {
+
+                Produto: { dataField: 'DESCRICAO' },
+                'QTD(D)': { dataField: 'QTD_DEVOLUCAO' },
+                Origem: { dataField: 'ORIGEM' },
+                Data: { dataField: 'DATA' },
+                Hora: { dataField: 'HORA' }
+
+            },
+
+            sideBySide: {
+
+                frame: {
+
+                    el: '#pnButtonD',
+
+                    buttons: {
+
+                        devolucao: {
+
+                            html: "Devolver Item",
+                            class: "btnP btnDI",
+                            click: () => {
+                                getModalPDevolucao()
+                            }
+                        },
+                    },
+                }
+            },
+
+            query: {
+                execute: (r) => {
+                }
+            }
+        })
+
+        xgRomaneiosItensD = new xGridV2.create({
+
+            el: '#xgRomaneioItensD',
+            height: '420',
+            theme: 'x-clownV2',
+            heightLine: '35',
+
+            columns: {
+                Produto: { dataField: 'DESCRICAO' },
+                Marca: { dataField: 'MARCA' },
+                Origem: { dataField: 'ORIGEM' },
+                'QTD(RE)': { dataField: 'QTD_RETIRADA' },
+
+            },
+
+            onKeyDown: {
+
+                '13': (ln) => {
+                    console.log('ln :', ln);
+
+                    if (ln.QTD_RETIRADA == 0) {
+                        setTimeout(function () {
+                            show("Item sem devolução disponível!");
+                        }, 1)
+                        return false
+                    }
+
+                    $("#xmBQtd").html(ln.QTD_RETIRADA);
+                    $("#xmSpId").html(ln.ID_PRODUTO);
+                    $("#xmSpCodigo").html(ln.CODIGO);
+                    $("#xmSpProd").html(ln.DESCRICAO);
+                    $("#xmSpMarca").html(ln.MARCA);
+                    $("#xmSpValor").html(ln.VALOR);
+
+                    xmEdtQtd.open()
+
+                    $('#xmEdtQtd').focus()
+
+                    evento = "DEVOLVER"
+                }
+            },
+
+            query: {
+                execute: (r) => {
+                    getItens2(r.param.search, r.offset);
+
+                }
+            }
+        })
+    }
+
+    function getItens2(search, offset) {
+
+        axios.post(url, {
+            call: 'getItens2',
+            param: { search: search, offset: offset },
+
+        }).then(rs => {
+            xgRomaneiosItensD.querySourceAdd(rs.data);
+            xgRomaneiosItensD.focus()
+        })
+    }
+
+    function getModalPDevolucao() {
+
+        xmModalPDevolucao.open()
+
+        xgRomaneiosItensD.queryOpen({ search: ID_LISTA_SERVICO })
+
+    }
+
+    function devolverItem() {
+
+        let qtdServico = Number($('#xmBQtd').html())
+
+        item = {
+            ID_PRODUTO: $("#xmSpId").text(),
+            QTD: Number($("#xmEdtQtd").val().trim()),
+            ID_LISTA_SERVICO: ID_LISTA_SERVICO,
+            DATA: new Date().toLocaleDateString('pt-BR'),
+            HORA: new Date().toLocaleTimeString('pt-BR'),
+        }
+
+        let newEstoque = qtdServico + item.QTD
+
+        produtos.atualizaProduto(item.ID_PRODUTO, newEstoque);
+
+        axios.post(url, {
+            call: 'inserirDevolucao',
+            param: item
+        })
+
+        xgDevolucao.insertLine(item);
+    }
+
+    // MODAL 
+
+    function modalPDevolucao() {
+        xmModalPDevolucao = new xModal.create({
+            el: '#xmModalPDevolucao',
+            title: 'Itens Romaneio',
+            width: '700',
+        })
+    }
+
+    return {
+        grid: grid,
+        modalPDevolucao: modalPDevolucao,
+        devolverItem: devolverItem
     }
 })();

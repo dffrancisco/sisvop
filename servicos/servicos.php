@@ -73,10 +73,10 @@
 
 
     <ul class="tabs" style="margin-left: 5px">
-        <li class="tab col s3"><a class="active" href="#tabProdutoServico">Produto do Serviço</a></li>
-        <li class="tab col s3"><a href="#tabRomaneio">Romaneio</a></li>
+        <li class="tab col s4"><a class="active" href="#tabProdutoServico">Produto do Serviço</a></li>
+        <li class="tab col s4"><a href="#tabRomaneio">Romaneio</a></li>
         <!-- <li class="tab col s3"><a href="#tabAcrecismo">Acréscimo</a></li> -->
-        <li class="tab col s3"><a href="#tabDevolucao">Devolução</a></li>
+        <li class="tab col s4"><a href="#tabDevolucao">Devolução</a></li>
     </ul>
 
     <div id="tabProdutoServico" class="col s12">
@@ -92,7 +92,10 @@
 
     </div>
     <!-- <div id="tabAcrecismo" class="col s12">Test 3</div> -->
-    <div id="tabDevolucao" class="col s12">Test 4</div>
+    <div id="tabDevolucao" class="col s12">
+        <div id="xgDevolucao" class="list"></div>
+        <div id="pnButtonD" style="margin-left: 20px !important"></div>
+    </div>
 
 
 
@@ -243,6 +246,11 @@
 <!-- MODAL INSERIR ROMANEIO -->
 <div id="xmIRomaneio">
     <div id="xgProdRomaneio"></div>
+</div>
+
+<!-- MODAL DOS ITENS DO ROMANEIO -->
+<div id="xmModalPDevolucao">
+    <div id="xgRomaneioItensD"></div>
 </div>
 
 <div id="pnCodigoTela">Saída</div>

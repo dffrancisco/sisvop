@@ -173,6 +173,26 @@ class Sqlservicos
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function getItens2($param){
+    extract($param);
+    $sql = "SELECT FIRST 10 SKIP $offset
+    a.id_itens_servico, a.id_lista_servico, a.qtd as qtd_p,
+    a.data, a.origem , a.qtd_retirada,
+    b.id_produto, b.descricao, b.qtd,
+    c.id_marca,  c.marca
+    FROM
+    lista_itens_servico a,
+    produtos b,
+    marcas c
+    WHERE a.id_produto = b.id_produto
+    AND c.id_marca = b.id_marca
+    AND id_lista_servico = $search";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+
   function getServicos($param){
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
@@ -220,6 +240,19 @@ class Sqlservicos
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function inserirDevolucao($param){
+    $sql="INSERT INTO devolucao
+          (id_lista_servico, id_produto, qtd, data, hora)
+          VALUES
+          (:ID_LISTA_SERVICO, :ID_PRODUTO, :QTD, :DATA, :HORA)";
+
+    $sql = prepare::SQL($sql, $param);
+    print_r($sql);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
   //NOVO E GERAR
   function novoRomaneio($param){
 
@@ -261,6 +294,8 @@ class Sqlservicos
            WHERE id_produto = :ID_PRODUTO";
 
     $sql = prepare::SQL($sql, $param);
+    print_r($sql);
+
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -320,6 +355,7 @@ class Sqlservicos
             WHERE id_item_romaneio = :ID_ITEM_ROMANEIO";
 
     $sql = prepare::SQL($sql, $param);
+    print_r($sql);
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ);
