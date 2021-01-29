@@ -37,7 +37,7 @@ class Sqlservicos
       a.id_lista_servico, a.valor,
       a.data_inicio, a.hora, a.status, 
       a.data_finalizacao, a.engenheiro,
-      a.executores, a.obs,
+      a.executores, a.finalizadores, a.obs,
       b.servico, 
       c.id_cliente,c.fantasia, c.cnpj
       FROM lista_servicos a, servicos b, clientes c
@@ -159,7 +159,7 @@ class Sqlservicos
     $sql = "SELECT FIRST 10 SKIP $offset
     a.id_itens_servico, a.id_lista_servico,
     a.qtd, a.data, a.origem , a.qtd_retirada,
-    b.id_produto, b.descricao,
+    b.id_produto, b.descricao, b.codigo,
     c.id_marca,  c.marca
     FROM
     lista_itens_servico a,
@@ -178,7 +178,7 @@ class Sqlservicos
     $sql = "SELECT FIRST 10 SKIP $offset
     a.id_itens_servico, a.id_lista_servico, a.qtd as qtd_p,
     a.data, a.origem , a.qtd_retirada,
-    b.id_produto, b.descricao, b.qtd,
+    b.id_produto, b.descricao, b.qtd, b.codigo,
     c.id_marca,  c.marca
     FROM
     lista_itens_servico a,
@@ -191,7 +191,6 @@ class Sqlservicos
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
-
 
   function getServicos($param){
     extract($param);
@@ -211,6 +210,22 @@ class Sqlservicos
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ);
 
+  }
+
+  function getDevolucao($param){
+    extract($param);
+    $sql="SELECT FIRST 10 SKIP $offset
+      a.id_devolucao, a.qtd, a.data, a.hora,
+      b.id_produto, b.descricao,
+      c.marca
+      FROM devolucao a, produtos b, marcas c
+      WHERE b.id_produto = a.id_produto 
+      AND b.id_marca =  c.id_marca 
+      AND a.id_lista_servico = $search";
+
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   // INSERT
@@ -273,11 +288,11 @@ class Sqlservicos
     $sql = "INSERT INTO lista_servicos 
             (id_cliente, id_servico, 
             data, hora, status, data_inicio, data_finalizacao,
-            engenheiro, executores, obs, valor)
+            engenheiro, executores, obs, valor, finalizadores)
             VALUES 
             (:ID_CLIENTE, :ID_SERVICO, 
             :DIA, :HORA, 'ABERTO', :DATA_INICIO, :DATA_FINAL,
-            :ENGENHEIRO, :EXECUTORES, :OBS, :VALOR)
+            :ENGENHEIRO, :EXECUTORES, :OBS, :VALOR, :FINALIZADORES)
             returning id_lista_servico";
 
     $sql = prepare::SQL($sql, $param);

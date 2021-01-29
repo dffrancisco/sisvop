@@ -54,6 +54,7 @@ $(function () {
     $('.btnNR').attr("disabled", true);
     $('.btnPR').attr("disabled", true);
     $('.btnSR').attr("disabled", true);
+    $('.btnPDF').attr("disabled", true);
 
     $("#xmEdtCliente").keydown(function (e) {
         if (e.keyCode == 13) {
@@ -312,11 +313,13 @@ const saida = (function () {
 
                     $('.btnPR').removeAttr("disabled");
                     $('.btnSR').removeAttr("disabled");
+                    $('.btnPDF').attr("disabled", true);
                 }
                 if (r.STATUS == "FINALIZADO") {
 
                     $('.btnPR').attr("disabled", true);
                     $('.btnSR').attr("disabled", true);
+                    $('.btnPDF').removeAttr("disabled");
                 }
 
 
@@ -362,6 +365,11 @@ const saida = (function () {
                             html: "Finalizar Romaneio",
                             class: "btnP btnSR",
                             click: finalizarRomaneio
+                        },
+                        PDF: {
+                            html: "Gerar PDF",
+                            class: "btnP btnPDF",
+                            click: gerarPDF
                         },
                     },
                 }
@@ -469,6 +477,8 @@ const saida = (function () {
 
                     xgSaida.queryOpen({ search: ln.ID_LISTA_SERVICO })
                     xgRomaneios.queryOpen({ search: ln.ID_LISTA_SERVICO })
+                    xgDevolucao.queryOpen({ search: ln.ID_LISTA_SERVICO })
+
                 }
 
             },
@@ -673,6 +683,11 @@ const saida = (function () {
         })
     }
 
+    function gerarPDF() {
+        xgRomaneiosItens.print()
+    }
+
+
     // FUNCTIONS ROMANEIO ITENS
     function getItensRomaneio(ID_ROMANEIO, offset) {
 
@@ -838,6 +853,7 @@ const clientes = (function () {
         ID_SERVICO = $('#slctServico').val()
         ENGENHEIRO = $('#xmInEngenheiro').val()
         EXECUTORES = $('#xmInEx').val()
+        FINALIZADORES = $('#xmInFinalizadores').val()
         DATA_INICIO = $('#xmInDataI').val()
         DATA_FINAL = $('#xmInDataF').val()
         VALOR = $('#xmInValor').val()
@@ -852,7 +868,7 @@ const clientes = (function () {
                 ID_CLIENTE, ID_SERVICO,
                 ENGENHEIRO, EXECUTORES,
                 DATA_INICIO, DATA_FINAL,
-                OBS, DIA, HORA, VALOR
+                OBS, DIA, HORA, VALOR, FINALIZADORES
             }
 
         }).then(rs => {
@@ -893,6 +909,7 @@ const clientes = (function () {
         $('#spDataF').html(param.DATA_FINALIZACAO)
         $('#spStatus').html(param.STATUS)
         $('#spValor').html(param.VALOR)
+        $('#spFinalizadores').html(param.FINALIZADORES)
     }
 
     function modalNovoServico() {
@@ -905,7 +922,7 @@ const clientes = (function () {
             buttons: {
                 btn1: {
 
-                    html: 'Confirma',
+                    html: 'Confirmar',
                     class: 'xmBtnNovoS',
                     click: (e) => {
 
@@ -919,6 +936,16 @@ const clientes = (function () {
                     }
                 }
             },
+
+            onClose: () => {
+                $('#xmInEngenheiro').val('')
+                $('#xmInEx').val('')
+                $('#xmInDataI').val('')
+                $('#xmInDataF').val('')
+                $('#xmInValor').val('')
+                $('#xmInObs').val('')
+                $('#spFinalizadores').val('')
+            }
         })
     }
 
@@ -1036,9 +1063,7 @@ const produtos = (function () {
             VALOR: Number($("#xmSpValor").text().replace(',', '.'))
         }
 
-        valorT += valProduto.VALOR * valProduto.QTDs
 
-        valorT = valorT.toFixed(2).replace('.', ',')
 
         if (valProduto.QTD > xgProduto.dataSource().QTD) {
 
@@ -1070,6 +1095,9 @@ const produtos = (function () {
             origem = 'ADICIONAL'
         }
 
+        valorT += valProduto.VALOR * valProduto.QTDs
+
+        valorT = valorT.toFixed(2).replace('.', ',')
 
         param = {
             ID_SERVICO: ID_LISTA_SERVICO,
@@ -1138,7 +1166,7 @@ const produtos = (function () {
             return false
         }
 
-        if (item.QTD == null || item.QTD == "") {
+        if (item.QTD == null || item.QTD == "" || item.QTD <= 0) {
 
             setTimeout(function () {
 
@@ -1256,10 +1284,10 @@ const devolucao = (function () {
             columns: {
 
                 Produto: { dataField: 'DESCRICAO' },
-                'QTD(D)': { dataField: 'QTD_DEVOLUCAO' },
-                Origem: { dataField: 'ORIGEM' },
-                Data: { dataField: 'DATA' },
-                Hora: { dataField: 'HORA' }
+                Marca: { dataField: 'MARCA' },
+                'QTD(D)': { dataField: 'QTD' },
+                Data: { dataField: 'DATA', center: true },
+                Hora: { dataField: 'HORA', center: true }
 
             },
 
@@ -1285,6 +1313,7 @@ const devolucao = (function () {
 
             query: {
                 execute: (r) => {
+                    getDevolucao(r.param.search, r.offset)
                 }
             }
         })
@@ -1307,16 +1336,32 @@ const devolucao = (function () {
             onKeyDown: {
 
                 '13': (ln) => {
-                    console.log('ln :', ln);
 
-                    if (ln.QTD_RETIRADA == 0) {
+                    if (ln.QTD_RETIRADA <= 0) {
                         setTimeout(function () {
                             show("Item sem devolução disponível!");
                         }, 1)
                         return false
                     }
 
-                    $("#xmBQtd").html(ln.QTD_RETIRADA);
+                    let count = 0
+                    for (let i in xgDevolucao.data()) {
+
+                        if (xgDevolucao.data()[i].ID_PRODUTO == ln.ID_PRODUTO) {
+                            count += xgDevolucao.data()[i].QTD
+                        }
+                    }
+
+                    let dispo = ln.QTD_RETIRADA - count
+                    if (dispo <= 0) {
+                        setTimeout(function () {
+                            show("Item sem devolução disponível!");
+                        }, 1)
+                        return false
+                    }
+
+
+                    $("#xmBQtd").html(dispo);
                     $("#xmSpId").html(ln.ID_PRODUTO);
                     $("#xmSpCodigo").html(ln.CODIGO);
                     $("#xmSpProd").html(ln.DESCRICAO);
@@ -1333,14 +1378,27 @@ const devolucao = (function () {
 
             query: {
                 execute: (r) => {
-                    getItens2(r.param.search, r.offset);
+                    getItens(r.param.search, r.offset);
 
                 }
             }
         })
     }
 
-    function getItens2(search, offset) {
+    function getDevolucao(search, offset) {
+
+        axios.post(url, {
+            call: 'getDevolucao',
+            param: { search: search, offset: offset }
+        }).then(rs => {
+            xgDevolucao.querySourceAdd(rs.data)
+        })
+    }
+
+    function getItens(search, offset) {
+        if (search == undefined) {
+            return false
+        }
 
         axios.post(url, {
             call: 'getItens2',
@@ -1367,14 +1425,42 @@ const devolucao = (function () {
         item = {
             ID_PRODUTO: $("#xmSpId").text(),
             QTD: Number($("#xmEdtQtd").val().trim()),
+            DESCRICAO: $('#xmSpProd').text(),
+            MARCA: $('#xmSpMarca').text(),
             ID_LISTA_SERVICO: ID_LISTA_SERVICO,
             DATA: new Date().toLocaleDateString('pt-BR'),
             HORA: new Date().toLocaleTimeString('pt-BR'),
         }
 
-        let newEstoque = qtdServico + item.QTD
+        if (item.QTD > qtdServico) {
 
-        produtos.atualizaProduto(item.ID_PRODUTO, newEstoque);
+            setTimeout(function () {
+
+                show("Quantidade maior que a existente!");
+            }, 1)
+            return false
+        }
+
+        if (item.QTD == null || item.QTD == "" || item.QTD <= 0) {
+
+            setTimeout(function () {
+
+                show("Quantidade inválida!");
+            }, 1)
+            return false
+        }
+
+        axios.post(url, {
+
+            call: 'getProduto',
+            param: item.ID_PRODUTO
+
+        }).then(rs => {
+
+            let newEstoque = rs.data[0].QTD + item.QTD
+
+            produtos.atualizaProduto(item.ID_PRODUTO, newEstoque);
+        })
 
         axios.post(url, {
             call: 'inserirDevolucao',
@@ -1382,6 +1468,7 @@ const devolucao = (function () {
         })
 
         xgDevolucao.insertLine(item);
+        xmEdtQtd.close()
     }
 
     // MODAL 

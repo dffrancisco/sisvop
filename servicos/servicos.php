@@ -21,19 +21,24 @@
         </div>
 
         <div class="row">
-            <div class="col s4">
+            <div class="col s3">
                 <label>Engenheiro</label><br>
                 <span id="spEngenheiro" class="spanAutoPreenc">Engenheiro</span>
             </div>
 
-            <div class="col s4">
+            <div class="col s2">
                 <label>Serviço</label><br>
                 <span id="spServico" class="spanAutoPreenc">Serviço</span>
             </div>
 
-            <div class="col s4">
+            <div class="col s3">
                 <label>Executores</label><br>
                 <span id="spExecutores" class="spanAutoPreenc">Executores</span>
+            </div>
+
+            <div class="col s4">
+                <label>Finalizadores</label><br>
+                <span id="spFinalizadores" class="spanAutoPreenc">Finalizadores</span>
             </div>
         </div>
 
@@ -218,6 +223,16 @@
         </div>
 
         <div class="col s6">
+            <label>Valor</label>
+            <input type="text" style="width: 83% !important;" id="xmInValor" class="real">
+        </div>
+
+        <div class="col s6">
+            <label>Finalizadores</label>
+            <input type="text" style="width: 83% !important;" id="xmInFinalizadores">
+        </div>
+
+        <div class="col s6">
             <label>Data de início</label><br>
             <input type="text" style="width: 83% !important;" id="xmInDataI" class="date">
         </div>
@@ -227,10 +242,7 @@
             <input type="text" style="width: 83% !important;" id="xmInDataF" class="date">
         </div>
 
-        <div class="col s6">
-            <label>Valor</label>
-            <input type="text" style="width: 83% !important;" id="xmInValor" class="real">
-        </div>
+
     </div>
 
     <div class="row">

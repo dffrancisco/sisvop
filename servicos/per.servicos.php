@@ -80,6 +80,11 @@ class Servicos
         echo json_encode($call);
     }
 
+    function getDevolucao($param){
+        $call = $this->sql->getDevolucao($param);
+        echo json_encode($call);
+    }
+
     //NOVO E GERAR
     function novoRomaneio($param){
         $call = $this->sql->novoRomaneio($param);
