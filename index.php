@@ -61,7 +61,7 @@ if (!empty($_GET['p'])) {
                 <ul id="nav-mobile" class="left">
                     <li><a onclick="pnMenuToggle()" href="#!"><i class="fa fa-bars fa-2x"></i></a></li>
 
-                    <li><a href="index.php" class="" style="font-size: 20px">Sisvop</a>
+                    <li><a href="index.php?p=home" class="" style="font-size: 20px">Sisvop</a>
                     <li>
 
                 </ul>
