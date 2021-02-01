@@ -66,7 +66,7 @@ if (!empty($_GET['p'])) {
 
                 </ul>
 
-                <a href="#" class="brand-logo center truncate" style="font-size: 18px" id="pnTitulo">Modelo</a>
+                <a href="#" class="brand-logo center truncate" style="font-size: 18px" id="pnTitulo">HOME</a>
 
                 <ul id="nav-mobile" class="right e">
 
@@ -115,18 +115,18 @@ if (!empty($_GET['p'])) {
             <li><i class="fa fa-shopping-cart"></i>Notas</li>
         </a>
 
-        <a href="?p=saida/saida">
-            <li><i class="fa fa-usd"></i>Saída</li>
+        <a href="?p=servicos/servicos">
+            <li><i class="fa fa-usd"></i>Serviços</li>
         </a>
 
         <hr />
         <li>Sair</li>
     </div>
 
-
     <div id="pnPrincipal">
         <?php require_once($p); ?>
     </div>
+
 
 </body>
 

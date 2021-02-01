@@ -4,6 +4,8 @@ const login = new Login();
 
 $(function () {
 
+    getFrase()
+
     calc = new xCalkModal()
 
     $('.real').maskMoney({ thousands: '.', decimal: ',', allowZero: true });
@@ -104,4 +106,28 @@ function Login() {
 }
 
 login.session();
+
+function getFrase() {
+    let num = (Math.random(1, 50) * 10).toFixed()
+    let hour = new Date().getHours()
+
+    axios.post('frases/per.frases.php', {
+        call: 'getFrase',
+        param: num
+    }).then(rs => {
+        $('#frase').html(rs.data[0].FRASE)
+
+    })
+
+    if (hour >= 5 && hour < 12) {
+        $('#saudacao').html('BOM DIA!')
+    }
+
+    if (hour >= 12 && hour < 18) {
+        $('#saudacao').html('BOA TARDE!')
+    }
+    if (hour >= 18 && hour < 23) {
+        $('#saudacao').html('BOA TARDE!')
+    }
+}
 
