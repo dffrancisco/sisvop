@@ -45,7 +45,7 @@ if (!empty($_GET['p'])) {
 
     <script src="js/index.js" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="login/login.css" type="text/css" />
+    <!-- <link rel="stylesheet" href="login/login.css" type="text/css" /> -->
     <link rel="stylesheet" href="css/index.css" type="text/css" />
 
 
@@ -61,7 +61,7 @@ if (!empty($_GET['p'])) {
                 <ul id="nav-mobile" class="left">
                     <li><a onclick="pnMenuToggle()" href="#!"><i class="fa fa-bars fa-2x"></i></a></li>
 
-                    <li><a href="#" class="" style="font-size: 20px">Sisvop</a>
+                    <li><a href="index.php?p=home" class="" style="font-size: 20px">Sisvop</a>
                     <li>
 
                 </ul>
@@ -106,13 +106,13 @@ if (!empty($_GET['p'])) {
             <li><i class="fa fa-address-book"></i>Cargo</li>
         </a> -->
         <a href="?p=empresa/empresa">
-            <li><i class="fa fa-building"></i>Empresas</li>
+            <li><i class="fa fa-building"></i>Empresa</li>
         </a>
         <a href="?p=funcionarios/funcionarios">
             <li><i class="fa fa-user-plus"></i>Funcionários</li>
         </a>
         <a href="?p=entrada/entrada">
-            <li><i class="fa fa-shopping-cart"></i>Entrada de notas</li>
+            <li><i class="fa fa-shopping-cart"></i>Notas</li>
         </a>
 
         <a href="?p=saida/saida">

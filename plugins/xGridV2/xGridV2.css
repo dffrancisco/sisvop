@@ -888,7 +888,7 @@
   border: 1px solid #55828B;
   font-size: 17px;
   /*font-family: Verdana, Arial, sans-serif;*/
-  background: #55828B;
+  /* background: #55828B; */
   margin-top: 10px;
 }
 
@@ -897,6 +897,7 @@
   color: #FFFFFF;
   background: #4679ad;
   cursor: pointer;
+  height: 29px;
 }
 
 .x-clownV2 .xGridV2-title .xGridV2-col {

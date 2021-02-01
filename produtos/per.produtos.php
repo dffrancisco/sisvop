@@ -1,8 +1,8 @@
 <?php
 
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 include_once './sql.produtos.php';
 
@@ -17,38 +17,41 @@ class Produtos
         $this->sql = new SqlProdutos();
     }
 
-    function getProdutos($param){
+    function getProdutos($param)
+    {
         $call = $this->sql->getProdutos($param);
         echo json_encode($call);
     }
 
-    function save($param){
+    function save($param)
+    {
 
-        if(empty($param['id_produto'])){
+        if (empty($param['ID_PRODUTO'])) {
             $id_produto = $this->sql->insert($param);
-            echo '{"id_produto":"' . $id_produto . '"}';
+            echo json_encode($id_produto);
         } else {
             $call = $this->sql->update($param);
-
         }
-       
-
     }
 
-    function delete($param){
+    function delete($param)
+    {
         $id_produto = $this->sql->delete($param);
     }
 
-    function searchConf($param){
-        $id_produto = $this->sql->searchConf($param);
-    }
+    // function searchConf($param)
+    // {
+    //     $id_produto = $this->sql->searchConf($param);
+    // }
 
-    function getMarca(){
+    function getMarca()
+    {
         $call = $this->sql->getMarca();
         echo json_encode($call);
     }
 
-    function getCodigo($param){
+    function getCodigo($param)
+    {
         $codigo = $this->sql->getCodigo($param);
         echo json_encode($codigo);
     }
