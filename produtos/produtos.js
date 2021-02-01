@@ -175,7 +175,7 @@ const produto = (function () {
         for (let i in valCampos) {
             if (valCampos[i] == '' || valCampos.valor == 0) {
                 show('Por favor preencha todos os campos')
-                return false
+                return false;
             }
         }
 
