@@ -7,60 +7,60 @@
     <div class="tabela" id="pnFields">
         <div class="row">
             <div class="col s6">
-                <span id="spId_cliente" hidden>IDcliente</span>
-                <span id="spId_lista_servico" hidden>idServico</span>
+                <span id="spId_cliente" hidden></span>
+                <span id="spId_lista_servico" hidden></span>
                 <label>Fantasia</label><br>
-                <span id="spFantasia" class="spanAutoPreenc">Fantasia<span>
+                <span id="spFantasia" class="spanAutoPreenc"><span>
 
             </div>
 
             <div class="col s6">
                 <label>CNPJ</label><br>
-                <span id="spCnpj" class="spanAutoPreenc">CNPJ<span>
+                <span id="spCnpj" class="spanAutoPreenc"><span>
             </div>
         </div>
 
         <div class="row">
             <div class="col s3">
                 <label>Engenheiro</label><br>
-                <span id="spEngenheiro" class="spanAutoPreenc">Engenheiro</span>
+                <span id="spEngenheiro" class="spanAutoPreenc"></span>
             </div>
 
             <div class="col s2">
                 <label>Serviço</label><br>
-                <span id="spServico" class="spanAutoPreenc">Serviço</span>
+                <span id="spServico" class="spanAutoPreenc"></span>
             </div>
 
             <div class="col s3">
                 <label>Executores</label><br>
-                <span id="spExecutores" class="spanAutoPreenc">Executores</span>
+                <span id="spExecutores" class="spanAutoPreenc"></span>
             </div>
 
             <div class="col s4">
                 <label>Finalizadores</label><br>
-                <span id="spFinalizadores" class="spanAutoPreenc">Finalizadores</span>
+                <span id="spFinalizadores" class="spanAutoPreenc"></span>
             </div>
         </div>
 
         <div class="row">
             <div class="col s3">
                 <label>Data de início</label><br>
-                <span id="spDataI" class="spanAutoPreenc">Data início</span>
+                <span id="spDataI" class="spanAutoPreenc"></span>
             </div>
 
             <div class="col s3">
                 <label>Data de finalização</label><br>
-                <span id="spDataF" class="spanAutoPreenc">Data finalização</span>
+                <span id="spDataF" class="spanAutoPreenc"></span>
             </div>
 
             <div class="col s3">
                 <label>Status</label><br>
-                <span id="spStatus" class="spanAutoPreenc">Status</span>
+                <span id="spStatus" class="spanAutoPreenc"></span>
             </div>
 
             <div class="col s3">
                 <label>Valor</label><br>
-                <span id="spValor" class="spanAutoPreenc">Valor</span>
+                <span id="spValor" class="spanAutoPreenc"></span>
             </div>
         </div>
 
@@ -68,7 +68,7 @@
         <hr>
         <br>
 
-        <div class="btnAll" style="margin-bottom: 10px;">
+        <div class="btnAll" style="margin-bottom: 7px; margin-top:-16px;">
             <button class="btn-Frame btn-Frame-blue btnP btnPesq">Novo Serviço</button>
             <button class="btn-Frame btn-Frame-blue btnP btnBS">Buscar Serviço</button>
         </div>

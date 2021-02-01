@@ -137,10 +137,10 @@ class Sqlservicos
   function getItensRomaneio($param){
     extract($param);
     $sql="SELECT FIRST 10 skip $offset
-          a.id_item_romaneio, a.qtd, a.id_itens_servico,
+          a.id_item_romaneio, a.qtd,
           b.id_produto, b.descricao,
           c.marca,
-          d.origem
+          d.origem, d.id_itens_servico
           FROM itens_romaneio a,
           produtos b, marcas c,
           lista_itens_servico d
@@ -236,7 +236,6 @@ class Sqlservicos
             VALUES 
             (:ID_SERVICO, :ID_PRODUTO , :QTD_PRODUTO, :DATA, :ORIGEM, :QTD_RETIRADA)";
     $sql = prepare::SQL($sql, $param);
-    print_r($sql);
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -247,7 +246,8 @@ class Sqlservicos
     $sql="INSERT INTO itens_romaneio
           (id_romaneio, id_produto, qtd, id_itens_servico)
           VALUES
-          (:ID_ROMANEIO, :ID_PRODUTO, :QTD, :ID_ITENS_SERVICO)";
+          (:ID_ROMANEIO, :ID_PRODUTO, :QTD, :ID_ITENS_SERVICO)
+          returning id_item_romaneio";
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
@@ -262,7 +262,6 @@ class Sqlservicos
           (:ID_LISTA_SERVICO, :ID_PRODUTO, :QTD, :DATA, :HORA)";
 
     $sql = prepare::SQL($sql, $param);
-    print_r($sql);
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -309,8 +308,6 @@ class Sqlservicos
            WHERE id_produto = :ID_PRODUTO";
 
     $sql = prepare::SQL($sql, $param);
-    print_r($sql);
-
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -336,7 +333,6 @@ class Sqlservicos
           WHERE id_itens_servico = :ID_ITENS_SERVICO";
 
     $sql = prepare::SQL($sql, $param);
-    print_r($sql);
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -348,7 +344,6 @@ class Sqlservicos
           WHERE id_romaneio = :ID_ROMANEIO";
 
     $sql = prepare::SQL($sql, $param);
-    print_r($sql);
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -370,7 +365,6 @@ class Sqlservicos
             WHERE id_item_romaneio = :ID_ITEM_ROMANEIO";
 
     $sql = prepare::SQL($sql, $param);
-    print_r($sql);
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ);

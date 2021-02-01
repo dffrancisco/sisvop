@@ -36,11 +36,9 @@ const login = (function () {
                     $('#edtLogin').focus()
                     return false
                 }
-                console.log('eae')
                 usuario = r.data
-                console.log('r.data :', r.data);
 
-                window.location = "/sisvop/index.php";
+                window.location = "/sisvop/index.php?p=home";
 
                 $('#spUser').html(r.data.NOME.split(' ')[0])
 

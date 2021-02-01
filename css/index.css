@@ -311,4 +311,8 @@ input:focus, select:focus, textarea:focus{
     
 }
 
+.tabs .tab a:focus, .tabs .tab a:focus.active {
+    background-color: #4679AD;
+    outline: none;
+}
 /*materialize* fim *********************************/

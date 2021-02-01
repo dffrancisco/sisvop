@@ -53,8 +53,9 @@ $(function () {
     $('.btnInsP').attr("disabled", true);
     $('.btnNR').attr("disabled", true);
     $('.btnPR').attr("disabled", true);
-    $('.btnSR').attr("disabled", true);
+    $('.btnFR').attr("disabled", true);
     $('.btnPDF').attr("disabled", true);
+    $('.btnDI').attr("disabled", true);
 
     $("#xmEdtCliente").keydown(function (e) {
         if (e.keyCode == 13) {
@@ -156,7 +157,7 @@ const saida = (function () {
                 Produto: { dataField: 'DESCRICAO' },
                 Marca: { dataField: 'MARCA' },
                 QTD: { dataField: 'QTD', width: '10%' },
-                'QTD(RO)': { dataField: 'QTD_RETIRADA', width: '10%' },
+                'QTD(R)': { dataField: 'QTD_RETIRADA', width: '10%' },
                 Data: { dataField: 'DATA', center: true },
                 ORIGEM: { dataField: 'ORIGEM', center: true },
 
@@ -239,9 +240,9 @@ const saida = (function () {
                 Produto: { dataField: 'DESCRICAO' },
                 Marca: { dataField: 'MARCA' },
                 Origem: { dataField: 'ORIGEM' },
-                'QTD(TO)': { dataField: 'QTD', width: '13%' },
-                'QTD(PR)': { dataField: 'QTD_P', width: '13%' },
-                'QTD(RO)': { dataField: 'QTD_RETIRADA', width: '13%' },
+                'QTD(E)': { dataField: 'QTD', width: '13%' },
+                'QTD(P)': { dataField: 'QTD_P', width: '13%' },
+                'QTD(R)': { dataField: 'QTD_RETIRADA', width: '13%' },
 
             },
 
@@ -299,10 +300,10 @@ const saida = (function () {
 
             columns: {
                 'ID': { dataField: 'ID_ROMANEIO', width: '10%' },
-                'Responsável': { dataField: 'NOME' },
-                Data: { dataField: 'DATA', center: true },
-                Hora: { dataField: 'HORA', center: true },
-                Status: { dataField: 'STATUS' }
+                'Responsável': { dataField: 'NOME', width: '40%' },
+                Data: { dataField: 'DATA', center: true, width: '15%' },
+                Hora: { dataField: 'HORA', center: true, width: '15%' },
+                Status: { dataField: 'STATUS', width: '20%' }
             },
 
             onSelectLine: (r) => {
@@ -312,13 +313,15 @@ const saida = (function () {
                 if (r.STATUS == "ABERTO") {
 
                     $('.btnPR').removeAttr("disabled");
-                    $('.btnSR').removeAttr("disabled");
                     $('.btnPDF').attr("disabled", true);
+                    $('.btnFR').removeAttr("disabled");
+
+
                 }
                 if (r.STATUS == "FINALIZADO") {
 
                     $('.btnPR').attr("disabled", true);
-                    $('.btnSR').attr("disabled", true);
+                    $('.btnFR').attr("disabled", true);
                     $('.btnPDF').removeAttr("disabled");
                 }
 
@@ -336,7 +339,7 @@ const saida = (function () {
         xgRomaneiosItens = new xGridV2.create({
             el: `#xgRomaneiosItens`,
             theme: 'x-clownV2',
-            height: 200,
+            height: 150,
 
             columns: {
                 Produto: { dataField: 'DESCRICAO' },
@@ -363,7 +366,7 @@ const saida = (function () {
 
                         Salvar: {
                             html: "Finalizar Romaneio",
-                            class: "btnP btnSR",
+                            class: "btnP btnFR",
                             click: finalizarRomaneio
                         },
                         PDF: {
@@ -377,61 +380,15 @@ const saida = (function () {
 
             onKeyDown: {
                 '46': (r) => {
+                    deletarItemRomaneio(r)
 
-                    return false
-                    let status = xgRomaneios.dataSource().STATUS
-
-                    if (status == "ABERTO") {
-
-                        confirmaCodigo({
-                            msg: "Digite o código abaixo para deletar o item",
-                            call: () => {
-                                axios.post(url, {
-                                    call: 'getProduto',
-                                    param: r.ID_PRODUTO
-                                })
-                                    .then(rs => {
-
-                                        for (let i in xgSaida.data()) {
-
-                                            if (xgSaida.data()[i].ID_ITENS_SERVICO == r.ID_ITENS_SERVICO) {
-
-                                                let QTD_RETIRADA = xgSaida.data()[i].QTD_RETIRADA
-                                                let NOVA_QTD_DISPO = QTD_RETIRADA - r.QTD
-                                                console.log('r.QTD :', r.QTD);
-                                                console.log('QTD_RETIRADA :', QTD_RETIRADA);
-                                                console.log('NOVA_QTD_DISPO :', NOVA_QTD_DISPO);
-
-                                                let newEstoque = rs.data[0].QTD + r.QTD
-
-                                                let param = {
-                                                    ID_PRODUTO: r.ID_PRODUTO,
-                                                    newEstoque: newEstoque,
-                                                    QTD_RETIRADA: NOVA_QTD_DISPO,
-                                                    ID_ITEM_ROMANEIO: r.ID_ITEM_ROMANEIO,
-                                                    ID_ITENS_SERVICO: xgSaida.data()[0].ID_ITENS_SERVICO
-                                                }
-
-                                                console.log('param :', param);
-
-                                                axios.post(url, {
-                                                    call: 'deletarItemRomaneio',
-                                                    param: param
-                                                })
-                                            }
-
-                                        }
-                                    })
-                            }
-                        })
-
-                    } else {
-                        return false
-
-                    }
                 }
             },
 
+            onSelectLine: (l) => {
+                console.log('l :', l);
+
+            },
             query: {
                 execute: (r) => {
                     getItensRomaneio(r.param.search, r.offset)
@@ -446,9 +403,10 @@ const saida = (function () {
             height: 320,
             columns: {
 
-                SERVICO: { dataField: 'SERVICO' },
+                'SERVIÇO': { dataField: 'SERVICO' },
                 FANTASIA: { dataField: 'FANTASIA' },
-                'DATA INCIO': { dataField: 'DATA_INICIO', center: true },
+                'DATA INÍCIO': { dataField: 'DATA_INICIO', center: true },
+                'DATA FINAL': { dataField: 'DATA_FINALIZACAO', center: true },
                 STATUS: { dataField: 'STATUS' },
 
             },
@@ -540,7 +498,8 @@ const saida = (function () {
     function fecharServ() {
 
         confirmaCodigo({
-            msg: 'Digite o código abaixo caso deseja finalizar o projeto',
+            msg: 'Digite o código abaixo caso deseja finalizar o projeto<br>' +
+                '(APÓS ISSO, O PROJETO NÃO PODERÁ SER FINALIZADO NOVAMENTE)',
             call: () => {
 
                 axios.post(url, {
@@ -551,6 +510,7 @@ const saida = (function () {
                 $('#spStatus').html('FINALIZADO');
                 $('.btnFS').prop('disabled', true)
                 $('.btnNR').removeAttr("disabled");
+                $('.btnDI').removeAttr("disabled");
             }
         })
     }
@@ -626,19 +586,27 @@ const saida = (function () {
 
     function finalizarRomaneio() {
 
-        let romaneio = xgRomaneios.dataSource()
+        confirmaCodigo({
+            msg: 'Digite o código abaixo caso deseja finalizar o romaneio <br>' +
+                '(APÓS ISSO, O ROMANEIO NÃO PODERÁ SER FINALIZADO NOVAMENTE)',
+            call: () => {
+                let romaneio = xgRomaneios.dataSource()
 
-        romaneio.STATUS = 'FINALIZADO'
+                romaneio.STATUS = 'FINALIZADO'
 
-        axios.post(url, {
-            call: 'finalizarRomaneio',
-            param: romaneio
+                axios.post(url, {
+                    call: 'finalizarRomaneio',
+                    param: romaneio
+                })
+
+                xgRomaneios.dataSource('STATUS', romaneio.STATUS)
+
+                $('.btnPR').attr("disabled", true);
+                $('.btnFR').attr("disabled", true);
+            }
         })
 
-        xgRomaneios.dataSource('STATUS', romaneio.STATUS)
 
-        $('.btnPR').attr("disabled", true);
-        $('.btnSR').attr("disabled", true);
 
     }
 
@@ -687,6 +655,63 @@ const saida = (function () {
         xgRomaneiosItens.print()
     }
 
+    async function deletarItemRomaneio(r) {
+        console.log('r :', r);
+
+        console.log('ID_LISTA_SERVICO', ID_LISTA_SERVICO);
+        let status = xgRomaneios.dataSource().STATUS
+
+        if (status == "ABERTO") {
+
+            await confirmaCodigo({
+                msg: "Digite o código abaixo para deletar o item",
+                call: () => {
+                    axios.post(url, {
+                        call: 'getProduto',
+                        param: r.ID_PRODUTO
+                    })
+                        .then(rs => {
+                            for (let i in xgSaida.data()) {
+
+                                if (xgSaida.data()[i].ID_ITENS_SERVICO == r.ID_ITENS_SERVICO) {
+
+                                    let QTD_RETIRADA = xgSaida.data()[i].QTD_RETIRADA
+                                    console.log('QTD_RETIRADA :', QTD_RETIRADA);
+                                    let NOVA_QTD_DISPO = QTD_RETIRADA - r.QTD
+                                    console.log('NOVA_QTD_DISPO :', NOVA_QTD_DISPO);
+                                    let newEstoque = rs.data[0].QTD + r.QTD
+                                    console.log('newEstoque :', newEstoque);
+
+                                    let param = {
+                                        ID_PRODUTO: r.ID_PRODUTO,
+                                        newEstoque: newEstoque,
+                                        QTD_RETIRADA: NOVA_QTD_DISPO,
+                                        ID_ITEM_ROMANEIO: r.ID_ITEM_ROMANEIO,
+                                        ID_ITENS_SERVICO: r.ID_ITENS_SERVICO
+                                    }
+                                    console.log('param :', param);
+                                    axios.post(url, {
+                                        call: 'deletarItemRomaneio',
+                                        param: param
+                                    })
+
+                                    xgRomaneiosItens.deleteLine()
+                                }
+
+                            }
+                        })
+
+                }
+            })
+
+
+
+        } else {
+            return false
+
+        }
+
+    }
 
     // FUNCTIONS ROMANEIO ITENS
     function getItensRomaneio(ID_ROMANEIO, offset) {
@@ -893,6 +918,12 @@ const clientes = (function () {
 
                 setServicoTela(rs.data[0])
 
+                if (rs.data[0].STATUS == "ABERTO")
+                    $('.btnDI').attr("disabled", true)
+
+                if (rs.data[0].STATUS == "FINALIZADO")
+                    $('.btnDI').removeAttr("disabled")
+
             })
 
     }
@@ -910,6 +941,8 @@ const clientes = (function () {
         $('#spStatus').html(param.STATUS)
         $('#spValor').html(param.VALOR)
         $('#spFinalizadores').html(param.FINALIZADORES)
+
+
     }
 
     function modalNovoServico() {
@@ -1190,6 +1223,9 @@ const produtos = (function () {
             call: 'inserirItemRomaneio',
             param: item
 
+        }).then(rs => {
+            item.ID_ITEM_ROMANEIO = rs.data[0].ID_ITEM_ROMANEIO
+
         })
 
         axios.post(url, {
@@ -1329,7 +1365,7 @@ const devolucao = (function () {
                 Produto: { dataField: 'DESCRICAO' },
                 Marca: { dataField: 'MARCA' },
                 Origem: { dataField: 'ORIGEM' },
-                'QTD(RE)': { dataField: 'QTD_RETIRADA' },
+                'QTD(R)': { dataField: 'QTD_RETIRADA' },
 
             },
 
