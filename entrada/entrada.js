@@ -21,8 +21,9 @@ $(function () {
     itens.editarItens()
     itens.deleteItens()
 
-
-
+    $('#btnPrint').click(function () {
+        $('#pnFields').xPrint();
+    })
 
 });
 

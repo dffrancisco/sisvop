@@ -30,6 +30,10 @@ body{
     padding-bottom: 30px;
 }
 
+.cabecalho{
+    display: none;
+}
+
 .obr{
     border-left: 3px solid red !important;
 }
