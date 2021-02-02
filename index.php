@@ -34,6 +34,8 @@ if (!empty($_GET['p'])) {
     <script src="plugins/modais.js" type="text/javascript"></script>
     <script src="plugins/util.js" type="text/javascript"></script>
 
+    <script src="plugins/xPrint/xPrint.js" type="text/javascript"></script>
+
     <script src="plugins/axios.min.js" type="text/javascript"></script>
 
     <script src="plugins/jquery.maskMoney.js" type="text/javascript"></script>
@@ -45,7 +47,7 @@ if (!empty($_GET['p'])) {
 
     <script src="js/index.js" type="text/javascript"></script>
 
-    <link rel="stylesheet" href="login/login.css" type="text/css" />
+    <!-- <link rel="stylesheet" href="login/login.css" type="text/css" /> -->
     <link rel="stylesheet" href="css/index.css" type="text/css" />
 
 
@@ -54,6 +56,40 @@ if (!empty($_GET['p'])) {
 </head>
 
 <body>
+
+
+    <div class="cabecalho">
+        <table width="100%" class="tbTitulo">
+            <tr>
+                <td rowspan="4" style="width: 150px;"><img src="img/bg2.jpg" width="155" alt="" /></td>
+                <td colspan="3" style="font-weight: bold" name="razao"></td>
+                <td style="width: 150px;"><span class="spData"></span> <span class="spHora"></span></td>
+            </tr>
+            <tr>
+                <td colspan="3" name="endereco"></td>
+                <td name="cnpj"></td>
+            </tr>
+            <tr>
+                <td>Cidade.: <span name="cidade"></span> </td>
+                <td>Bairro.: <span name="bairro"></span> </td>
+                <td>CEP.: <span name="cep"></span> </td>
+                <td> <span name="inscricao"></span> </td>
+            </tr>
+            <tr>
+                <td colspan="2">Telefone.: <span name="fone"></span> </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <!-- <tr>
+                <td colspan="5">
+                    <div style="border-top: 1px solid #666666; border-bottom: 1px solid #666666; margin-top: 3px; text-align: center" class="pnTituloCabecalho"></div>
+                </td>
+            </tr> -->
+        </table>
+    </div>
+
+
+
     <div class="navbar-fixed">
         <nav>
             <div class="nav-wrapper nav-blue">
@@ -61,7 +97,7 @@ if (!empty($_GET['p'])) {
                 <ul id="nav-mobile" class="left">
                     <li><a onclick="pnMenuToggle()" href="#!"><i class="fa fa-bars fa-2x"></i></a></li>
 
-                    <li><a href="#" class="" style="font-size: 20px">Sisvop</a>
+                    <li><a href="index.php?p=home" class="" style="font-size: 20px">Sisvop</a>
                     <li>
 
                 </ul>
@@ -70,8 +106,7 @@ if (!empty($_GET['p'])) {
 
                 <ul id="nav-mobile" class="right e">
 
-                    <li><a onclick="pnUserToggle()" href="#!"><span id="spUser"></span> <i
-                                class="fa fa-user-circle"></i></a></li>
+                    <li><a onclick="pnUserToggle()" href="#!"><span id="spUser"></span> <i class="fa fa-user-circle"></i></a></li>
                 </ul>
             </div>
         </nav>
@@ -106,13 +141,13 @@ if (!empty($_GET['p'])) {
             <li><i class="fa fa-address-book"></i>Cargo</li>
         </a> -->
         <a href="?p=empresa/empresa">
-            <li><i class="fa fa-building"></i>Empresas</li>
+            <li><i class="fa fa-building"></i>Empresa</li>
         </a>
         <a href="?p=funcionarios/funcionarios">
             <li><i class="fa fa-user-plus"></i>Funcionários</li>
         </a>
         <a href="?p=entrada/entrada">
-            <li><i class="fa fa-shopping-cart"></i>Entrada de notas</li>
+            <li><i class="fa fa-shopping-cart"></i>Notas</li>
         </a>
 
         <a href="?p=servicos/servicos">

@@ -20,16 +20,29 @@ class Usuario
         $this->sql = new SqlUsuario();
     }
 
-    function getFuncionarios($param)
+    function getSenhaFuncionarios($param)
     {
-        $call = $this->sql->getFuncionarios($param);
+        $call = $this->sql->getSenhaFuncionarios($param);
+        echo json_encode($call);
+    }
+
+    function getFuncionarios()
+    {
+        $call = $this->sql->getFuncionarios();
         echo json_encode($call);
     }
 
     function insertSenha($param)
     {
         $call = $this->sql->insertSenha($param);
+        $update = $this->sql->updateSemSenha($param);
         echo json_encode($call);
+    }
+
+    function delete($param)
+    {
+        $call = $this->sql->delete($param);
+        $update = $this->sql->deleteSemSenha($param);
     }
 }
 

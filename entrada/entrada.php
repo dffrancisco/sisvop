@@ -47,6 +47,8 @@
         </div>
     </div>
 
+
+
     <div class="container" id="edtAdicionar" hidden>
         <div class="row">
             <div class="col s2">
@@ -82,18 +84,15 @@
             </div>
 
             <div class="col s1">
-                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnFinalizar"><i
-                        class="fa fa-check"></i></button>
+                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnFinalizar"><i class="fa fa-check"></i></button>
             </div>
 
             <div class="col s1">
-                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnEditar" disabled><i
-                        class="fa fa-pencil"></i></button>
+                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnEditar" disabled><i class="fa fa-pencil"></i></button>
             </div>
 
             <div class="col s1">
-                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnDeletar" disabled><i
-                        class="fa fa-times"></i></button>
+                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnDeletar" disabled><i class="fa fa-times"></i></button>
             </div>
         </div>
     </div>
@@ -101,6 +100,8 @@
     <div id="xgItens" class="list"></div>
 
     <div id="pnButtons" class="center-align"></div>
+
+    <button class="btn-Frame btn-Frame-blue btnP" id="btnPrint">Print</button>
 
 
 </div>

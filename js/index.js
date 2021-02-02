@@ -44,9 +44,10 @@ $(function () {
     $('#pnTitulo').html($('#pnPrincipal title').html());
 
 
+    $('#btnSair').click(function () {
+        login.sair()
+    })
 
-    login.sair();
-    login.session();
 
 });
 
@@ -71,7 +72,7 @@ function pnViewPhoto() {
 
 function Login() {
 
-    this.session = async function () {
+    this.session = function () {
 
         axios.post('login/login.php', {
             call: 'session',
@@ -91,19 +92,20 @@ function Login() {
     }
 
     this.sair = function () {
-        $('#btnSair').click(function () {
-            axios.post(`login/login.php`, {
-                call: 'sair',
 
-            }).then(r => {
-                login.session()
+        axios.post(`login/login.php`, {
+            call: 'sair',
 
-            })
+        }).then(r => {
+            login.session()
+
         })
+
     };
 
 }
 
+login.session();
 
 function getFrase() {
     let num = (Math.random(1, 50) * 10).toFixed()

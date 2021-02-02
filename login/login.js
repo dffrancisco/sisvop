@@ -1,6 +1,7 @@
 // const login = new Login();
 $(function () {
     login.logar()
+    $('#edtLogin').focus()
 
     $('#edtLogin').keydown(function (e) {
         if (e.keyCode == 13) {
@@ -33,7 +34,6 @@ const login = (function () {
             }).then(r => {
                 if (r.data.msg) {
                     show(r.data.msg)
-                    $('#edtLogin').focus()
                     return false
                 }
                 usuario = r.data

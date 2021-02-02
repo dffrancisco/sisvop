@@ -43,7 +43,6 @@ const fornecedor = (function () {
                 Fantasia: { dataField: 'FANTASIA' },
             },
             onSelectLine: (ln) => {
-                console.log('ln :', ln);
 
             },
 
@@ -102,7 +101,6 @@ const fornecedor = (function () {
                             param: param,
                         })
                             .then(rs => {
-                                console.log('rs :', rs.data);
 
                                 if (rs.data[0]) {
                                     xgFornecedor.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!');
@@ -223,6 +221,8 @@ const fornecedor = (function () {
         //Cria um atributo de data e capta o valor do input
         //identificado pelo ID
         param.DATA_CADASTRO = $('#edtDataCadastro').val();
+        param.TEL_2 = $('#edtTel2').val()
+        param.INSCRICAO = $('#edtInscricaoEstadual').val()
 
         let allDuplicty = await xgFornecedor.getDuplicityAll();
 
@@ -281,7 +281,7 @@ const fornecedor = (function () {
             param: param
         })
             .then(rs => {
-                console.log('rs  :', rs.data);
+                console.log('rs :', rs);
 
                 if (rs.data[0].ID_FORNECEDOR) {
                     param.ID_FORNECEDOR = rs.data[0].ID_FORNECEDOR;
@@ -312,7 +312,6 @@ const fornecedor = (function () {
     }
 
     function validarCpnj(cnpj) {
-        console.log('cnpj :', cnpj);
 
         cnpj = cnpj.replace(/[^\d]+/g, '');
 
@@ -608,7 +607,6 @@ const fornecedor = (function () {
                 break;
 
             case "DF":
-                console.log('entrou DF')
                 if (ie.length != 13) {
                     xgFornecedor.showMessageDuplicity(`Inscrição Estadual inválido`);
                     return false;
