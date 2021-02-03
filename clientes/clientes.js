@@ -78,7 +78,6 @@ const cliente = (function () {
                     dataField: ['CNPJ'],
 
                     execute: (r) => {
-                        console.log('r :');
                         let param = {}
                         param.cnpj = r.value,
                             validarCpnj(param.cnpj),
@@ -88,7 +87,7 @@ const cliente = (function () {
 
                             })
                                 .then(rs => {
-                                    
+
                                     if (rs.data[0]) {
                                         xgCliente.showMessageDuplicity('CNPJ inválido')
                                         xgCliente.focusField(r.field);
@@ -115,7 +114,6 @@ const cliente = (function () {
         })
             .then(rs => {
 
-                console.log('rs :', rs.data);
 
                 xgCliente.querySourceAdd(rs.data);
                 if (rs.data[0]) xgCliente.focus();
@@ -174,7 +172,6 @@ const cliente = (function () {
 
         // let allDuplicty = await xgCliente.getDuplicityAll()
         // if (allDuplicty == false) {
-        //     console.log('travei')
         //     return false;
         // }
 

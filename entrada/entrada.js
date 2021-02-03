@@ -22,7 +22,7 @@ $(function () {
     itens.deleteItens()
 
     $('#btnPrint').click(function () {
-        $('#pnFields').xPrint();
+        $('#lorem').xPrint();
     })
 
 });
@@ -483,7 +483,6 @@ const itens = (function () {
                     VALOR_ANTIGO: produtoSelecionado.VALOR
                 }
                 xgItens.insertLine(itensGrid)
-                console.log(xgItens.dataSource())
 
                 $('#edtCodigo').focus()
                 $('#spDescricao').val('')
@@ -832,7 +831,6 @@ const itens = (function () {
                 if (r.data[0]) {
 
                     produtoSelecionado = r.data[0]
-                    console.log('r.data[0] :', r.data[0]);
 
                     $('#spDescricao').html(r.data[0].DESCRICAO)
                     $('#spQtd').html(r.data[0].QTD)

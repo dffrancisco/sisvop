@@ -60,7 +60,7 @@ $(function () {
     $("#xmEdtCliente").keydown(function (e) {
         if (e.keyCode == 13) {
             search = $(this).val().trim()
-            xgCliente.queryOpen({ search: search })
+            xgCliente.queryOpen({ search: search.toUpperCase() })
         }
 
         if (e.keyCode == 40) {
@@ -73,7 +73,7 @@ $(function () {
 
         if (e.keyCode == 13) {
             search = $(this).val().trim()
-            xgProduto.queryOpen({ search: search })
+            xgProduto.queryOpen({ search: search.toUpperCase() })
         }
 
         if (e.keyCode == 40) {
@@ -82,23 +82,11 @@ $(function () {
         }
     })
 
-    $("#xmEdtItens").keydown(function (e) {
-
-        if (e.keyCode == 13) {
-            search = $(this).val().trim()
-            xgItem.queryOpen({ search: search })
-        }
-
-        if (e.keyCode == 40) {
-            xgItem.focus()
-        }
-    })
-
     $("#xmEdtServico").keydown(function (e) {
 
         if (e.keyCode == 13) {
             search = $(this).val().trim()
-            xgServicos.queryOpen({ search: search })
+            xgServicos.queryOpen({ search: search.toUpperCase() })
         }
 
         if (e.keyCode == 40) {
@@ -110,7 +98,7 @@ $(function () {
 
         if (e.keyCode == 13) {
             search = $(this).val().trim()
-            xgProdRomaneio.queryOpen({ search: search })
+            xgProdRomaneio.queryOpen({ search: search.toUpperCase() })
         }
 
         if (e.keyCode == 40) {
@@ -386,7 +374,6 @@ const saida = (function () {
             },
 
             onSelectLine: (l) => {
-                console.log('l :', l);
 
             },
             query: {
@@ -652,13 +639,55 @@ const saida = (function () {
     }
 
     function gerarPDF() {
-        xgRomaneiosItens.print()
+        let dt = xgRomaneiosItens.data()
+
+        let dados_servico = {
+            FANTASIA: $('#spFantasia').html(),
+            CNPJ: $('#spCnpj').html(),
+            ENGENHEIRO: $('#spEngenheiro').html(),
+            SERVICO: $('#spServico').html(),
+            EXECUTORES: $('#spExecutores').html(),
+            DATA_INICIO: $('#spDataI').html(),
+            DATA_FINALIZACAO: $('#spDataF').html(),
+            FINALIZADORES: $('#spFinalizadores').html(),
+        }
+
+        $('#rl_representante').html(xgRomaneios.dataSource().NOME)
+        $('#rlFantasia').html(dados_servico.FANTASIA)
+        $('#rlCnpj').html(dados_servico.CNPJ)
+        $('#rlEngenheiro').html(dados_servico.ENGENHEIRO)
+        $('#rlServico').html(dados_servico.SERVICO)
+        $('#rlExecutores').html(dados_servico.EXECUTORES)
+        $('#rlDataI').html(dados_servico.DATA_INICIO)
+        $('#rlDataF').html(dados_servico.DATA_FINALIZACAO)
+        $('#rlFinalizadores').html(dados_servico.FINALIZADORES)
+
+
+        for (let i in dt) {
+
+            let tb_produto = `<tr>
+                                    <td>
+                                    ${dt[i].DESCRICAO}
+                                    </td>
+                                    <td>
+                                    ${dt[i].MARCA}
+                                    </td>
+                                    <td>
+                                    ${dt[i].QTD}
+                                    </td>
+                               </tr>`
+
+            $('.tb_produto').append(tb_produto)
+        }
+
+        $('.rlRomaneio').xPrint()
+
+        $('.tb_produto').html('')
+        // xgRomaneiosItens.print($('.cabecalho').html() + $('.assinatura').html())
     }
 
     async function deletarItemRomaneio(r) {
-        console.log('r :', r);
 
-        console.log('ID_LISTA_SERVICO', ID_LISTA_SERVICO);
         let status = xgRomaneios.dataSource().STATUS
 
         if (status == "ABERTO") {
@@ -676,11 +705,8 @@ const saida = (function () {
                                 if (xgSaida.data()[i].ID_ITENS_SERVICO == r.ID_ITENS_SERVICO) {
 
                                     let QTD_RETIRADA = xgSaida.data()[i].QTD_RETIRADA
-                                    console.log('QTD_RETIRADA :', QTD_RETIRADA);
                                     let NOVA_QTD_DISPO = QTD_RETIRADA - r.QTD
-                                    console.log('NOVA_QTD_DISPO :', NOVA_QTD_DISPO);
                                     let newEstoque = rs.data[0].QTD + r.QTD
-                                    console.log('newEstoque :', newEstoque);
 
                                     let param = {
                                         ID_PRODUTO: r.ID_PRODUTO,
@@ -689,7 +715,6 @@ const saida = (function () {
                                         ID_ITEM_ROMANEIO: r.ID_ITEM_ROMANEIO,
                                         ID_ITENS_SERVICO: r.ID_ITENS_SERVICO
                                     }
-                                    console.log('param :', param);
                                     axios.post(url, {
                                         call: 'deletarItemRomaneio',
                                         param: param
@@ -901,6 +926,9 @@ const clientes = (function () {
             ID_LISTA_SERVICO = rs.data.ID_LISTA_SERVICO
             getListaServicoX(ID_LISTA_SERVICO)
             xgSaida.clear()
+            xgRomaneios.clear()
+            xgRomaneiosItens.clear()
+            xgDevolucao.clear()
 
 
         })
@@ -945,6 +973,30 @@ const clientes = (function () {
 
     }
 
+    function zerarGrids() {
+
+        for (let i in xgSaida.data()) {
+            delete xgSaida.data()[i]
+        }
+
+        for (let i in xgRomaneios.data()) {
+            delete xgRomaneios.data()[i]
+        }
+
+        for (let i in xgRomaneiosItens.data()) {
+            delete xgRomaneios.data()[i]
+        }
+
+        for (let i in xgRomaneiosItensD.data()) {
+            delete xgRomaneiosItensD.data()[i]
+        }
+
+        xgSaida.clear()
+        xgRomaneios.clear()
+        xgRomaneiosItens.clear()
+        xgRomaneiosItensD.clear()
+    }
+
     function modalNovoServico() {
 
         xmNovoServico = new xModal.create({
@@ -959,10 +1011,12 @@ const clientes = (function () {
                     class: 'xmBtnNovoS',
                     click: (e) => {
 
+                        zerarGrids()
                         novoServico()
 
                         $('.btnInsP').removeAttr("disabled");
                         $('.btnFS').prop('disabled', true);
+                        $('.btnPDF').prop('disabled', true);
 
                         xmNovoServico.close()
                         xmListaCliente.close()

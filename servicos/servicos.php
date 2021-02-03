@@ -255,6 +255,84 @@
 
 </div>
 
+<div class="rlRomaneio" style="display: none;">
+
+    <br>
+
+    <div class="tabela" id="rlFields">
+        <div class="row">
+            <div class="col s6">
+                <label>Fantasia</label><br>
+                <span id="rlFantasia" class="spanAutoPreenc"><span>
+
+            </div>
+
+            <div class="col s6">
+                <label>CNPJ</label><br>
+                <span id="rlCnpj" class="spanAutoPreenc"><span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s3">
+                <label>Engenheiro</label><br>
+                <span id="rlEngenheiro" class="spanAutoPreenc"></span>
+            </div>
+
+            <div class="col s2">
+                <label>Serviço</label><br>
+                <span id="rlServico" class="spanAutoPreenc"></span>
+            </div>
+
+            <div class="col s3">
+                <label>Executores</label><br>
+                <span id="rlExecutores" class="spanAutoPreenc"></span>
+            </div>
+
+            <div class="col s4">
+                <label>Finalizadores</label><br>
+                <span id="rlFinalizadores" class="spanAutoPreenc"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s3">
+                <label>Data de início</label><br>
+                <span id="rlDataI" class="spanAutoPreenc"></span>
+            </div>
+
+            <div class="col s3">
+                <label>Data de finalização</label><br>
+                <span id="rlDataF" class="spanAutoPreenc"></span>
+            </div>
+        </div>
+    </div>
+
+    <table class="tb_produto">
+        <thead>
+            <th>PRODUTO</th>
+            <th>MARCA</th>
+            <th>QTD</th>
+        </thead>
+    </table>
+
+    <br>
+    <br>
+
+    <div style="text-align: center;">
+        <div class="row assRl" style="font-size: 15px;">
+            <div class="col s4 push-s1">
+                __________________________<br>
+                Ass. Destinatário
+            </div>
+            <div class="col s4 push-s3">
+                __________________________<br>
+                <span id="rl_representante"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL INSERIR ROMANEIO -->
 <div id="xmIRomaneio">
     <div id="xgProdRomaneio"></div>

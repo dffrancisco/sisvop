@@ -100,9 +100,6 @@ const Empresa = (function () {
         })
 
             .then(r => {
-                console.log('r  :', r.data[0]);
-
-
 
                 if (r.data[0]) {
                     $('#id_empresa').val(r.data[0].ID_EMPRESA)
