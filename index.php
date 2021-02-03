@@ -61,22 +61,23 @@ if (!empty($_GET['p'])) {
     <div class="cabecalho">
         <table width="100%" class="tbTitulo">
             <tr>
-                <td rowspan="4" style="width: 150px;"><img src="img/bg2.jpg" width="155" alt="" /></td>
-                <td colspan="3" style="font-weight: bold" name="razao"></td>
+                <td rowspan="4" style="width: 150px;"><img src="img/LOGO AZUL WEB.png" width="155" alt="" /></td>
+                <td colspan="3" style="font-weight: bold" id="printRazao"></td>
                 <td style="width: 150px;"><span class="spData"></span> <span class="spHora"></span></td>
+
             </tr>
             <tr>
-                <td colspan="3" name="endereco"></td>
-                <td name="cnpj"></td>
+                <td colspan="2" id="printEndereco"></td>
+                <td colspan="2" style="font-weight: bold" id="printCnpj"></td>
             </tr>
             <tr>
-                <td>Cidade.: <span name="cidade"></span> </td>
-                <td>Bairro.: <span name="bairro"></span> </td>
-                <td>CEP.: <span name="cep"></span> </td>
-                <td> <span name="inscricao"></span> </td>
+                <td>Cidade.: <span id="printCidade"></span> </td>
+                <td>Bairro.: <span id="printBairro"></span> </td>
+                <td>CEP.: <span id="printCep"></span> </td>
             </tr>
             <tr>
-                <td colspan="2">Telefone.: <span name="fone"></span> </td>
+                <td>Inscrição.: <span id="printInscricao"></span> </td>
+                <td>Telefone.: <br> <span id="printFixo"></span> </td>
                 <td></td>
                 <td></td>
             </tr>
@@ -106,15 +107,16 @@ if (!empty($_GET['p'])) {
 
                 <ul id="nav-mobile" class="right e">
 
-                    <li><a onclick="pnUserToggle()" href="#!"><span id="spUser"></span> <i class="fa fa-user-circle"></i></a></li>
+                    <li><a onclick="pnUserToggle()" href="#!"><span id="spUser"></span> <i
+                                class="fa fa-user-circle"></i></a></li>
                 </ul>
             </div>
         </nav>
 
     </div>
 
-    <div class="pnUser">
-        <span id="btnSair" style="font-size: 15px;">SAIR</span>
+    <div class="pnUser btnSair">
+        <span style="font-size: 15px;">SAIR</span>
     </div>
 
     <div class="pnMenu">
@@ -147,7 +149,7 @@ if (!empty($_GET['p'])) {
             <li><i class="fa fa-user-plus"></i>Funcionários</li>
         </a>
         <a href="?p=entrada/entrada">
-            <li><i class="fa fa-shopping-cart"></i>Notas</li>
+            <li><i class="fa fa-shopping-cart"></i>Entrada</li>
         </a>
 
         <a href="?p=servicos/servicos">
@@ -155,7 +157,7 @@ if (!empty($_GET['p'])) {
         </a>
 
         <hr />
-        <li>Sair</li>
+        <li class="btnSair">Sair</li>
     </div>
 
     <div id="pnPrincipal">
