@@ -21,7 +21,7 @@ class Empresa
     {
 
         if (empty($param['id_empresa'])) {
-           echo $this->sql->insert($param);
+            echo $this->sql->insert($param);
         } else {
             $this->sql->update($param);
         }
@@ -30,6 +30,12 @@ class Empresa
     function getEmpresa($param)
     {
         $call = $this->sql->getEmpresa($param);
+        echo json_encode($call);
+    }
+
+    function getDataEmpresa()
+    {
+        $call = $this->sql->getDataEmpresa();
         echo json_encode($call);
     }
 }

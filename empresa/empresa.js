@@ -97,39 +97,37 @@ const Empresa = (function () {
         axios.post(url, {
             call: 'getEmpresa',
             param: param
+        }).then(r => {
+
+            if (r.data[0]) {
+                $('#id_empresa').val(r.data[0].ID_EMPRESA)
+                $('#edtCnpj').val(r.data[0].CNPJ)
+                $('#edtRazao').val(r.data[0].RAZAO)
+                $('#edtFantasia').val(r.data[0].FANTASIA)
+                $('#edtFixo').val(r.data[0].FIXO)
+                $('#edtCelular').val(r.data[0].CELULAR)
+                $('#edtIscricao').val(r.data[0].INSCRICAO)
+                $('#edtEnd').val(r.data[0].ENDERECO)
+                $('#edtCep').val(r.data[0].CEP)
+                $('#edtCidade').val(r.data[0].CIDADE)
+                $('#edtBairro').val(r.data[0].BAIRRO)
+                $('#edtUf').val(r.data[0].UF)
+
+            }
+            else {
+                confirma({
+                    msg: 'Não existe empresa cadastrada!',
+
+                })
+            }
+
+            if ($('#id_empresa').val() == '') {
+                $('#btnNovo').removeAttr("disabled")
+                $('#btnEditar').prop("disabled", true)
+
+            }
+
         })
-
-            .then(r => {
-
-                if (r.data[0]) {
-                    $('#id_empresa').val(r.data[0].ID_EMPRESA)
-                    $('#edtCnpj').val(r.data[0].CNPJ)
-                    $('#edtRazao').val(r.data[0].RAZAO)
-                    $('#edtFantasia').val(r.data[0].FANTASIA)
-                    $('#edtFixo').val(r.data[0].FIXO)
-                    $('#edtCelular').val(r.data[0].CELULAR)
-                    $('#edtIscricao').val(r.data[0].INSCRICAO)
-                    $('#edtEnd').val(r.data[0].ENDERECO)
-                    $('#edtCep').val(r.data[0].CEP)
-                    $('#edtCidade').val(r.data[0].CIDADE)
-                    $('#edtBairro').val(r.data[0].BAIRRO)
-                    $('#edtUf').val(r.data[0].UF)
-
-                }
-                else {
-                    confirma({
-                        msg: 'Não existe empresa cadastrada!',
-
-                    })
-                }
-
-                if ($('#id_empresa').val() == '') {
-                    $('#btnNovo').removeAttr("disabled")
-                    $('#btnEditar').prop("disabled", true)
-
-                }
-
-            })
 
 
     }

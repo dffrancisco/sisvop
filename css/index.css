@@ -105,11 +105,11 @@ body{
     border-radius: 5px;
 }
 
-#btnSair{
+.btnSair{
     cursor:pointer
 }
 
-#btnSair:hover{
+.btnSair:hover{
     color: #c4c4c4;
 }
 

@@ -21,11 +21,11 @@ $(function () {
     itens.editarItens()
     itens.deleteItens()
 
+
     $('#btnPrint').click(function () {
         $('#lorem').xPrint();
     })
 
-});
 
 
 const itens = (function () {
@@ -82,6 +82,11 @@ const itens = (function () {
                             html: "Localizar Nota (F2)",
                             class: "btnP btnPesq",
                             click: localizar
+                        },
+                        print: {
+                            html: "Imprimir",
+                            class: "btnP btnPrint",
+                            click: print
                         },
                         novo: {
                             html: "Novo (F8)",
@@ -271,6 +276,10 @@ const itens = (function () {
         $('#edtPesquisaNota').focus()
 
 
+    }
+
+    function print() {
+        xgItens.print($('.cabecalho').html() + $('#pnFields').html())
     }
 
     function novo() {
