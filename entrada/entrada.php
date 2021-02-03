@@ -84,15 +84,18 @@
             </div>
 
             <div class="col s1">
-                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnFinalizar"><i class="fa fa-check"></i></button>
+                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnFinalizar"><i
+                        class="fa fa-check"></i></button>
             </div>
 
             <div class="col s1">
-                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnEditar" disabled><i class="fa fa-pencil"></i></button>
+                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnEditar" disabled><i
+                        class="fa fa-pencil"></i></button>
             </div>
 
             <div class="col s1">
-                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnDeletar" disabled><i class="fa fa-times"></i></button>
+                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnDeletar" disabled><i
+                        class="fa fa-times"></i></button>
             </div>
         </div>
     </div>
@@ -199,5 +202,4 @@
     </div>
 
 </div>
-
 <div id="pnCodigoTela">entrada</div>

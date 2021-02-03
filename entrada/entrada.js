@@ -22,7 +22,8 @@ $(function () {
     itens.deleteItens()
 
     $('#btnPrint').click(function () {
-        $('#pnFields').xPrint();
+        // $('#pnFields').xPrint();
+        xgItens.print($('.cabecalho').html() + $('#pnFields').html())
     })
 
 });
