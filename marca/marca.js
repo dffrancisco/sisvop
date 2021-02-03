@@ -20,7 +20,6 @@ const marca = (function () {
                 Marca: { dataField: 'MARCA' },
             },
             onSelectLine: (r) => {
-                console.log('r :', r);
             },
             sideBySide: {
                 el: "#pnFields",
@@ -100,7 +99,6 @@ const marca = (function () {
             param: { search: search, offset: offset }
 
         }).then(rs => {
-            console.log('rs :', rs);
             xgMarca.querySourceAdd(rs.data);
 
             if (rs.data[0])
@@ -193,7 +191,6 @@ const marca = (function () {
 
             }).then(rs => {
 
-                console.log('param :', param);
                 if (rs.data[0].ID_MARCA) {
 
                     param.ID_MARCA = rs.data.ID_MARCA;
@@ -207,7 +204,6 @@ const marca = (function () {
             });
         } else {
             xgMarca.showMessageDuplicity('O campo está com valor duplicado ou vazio!')
-            console.log('as')
         }
     }
 

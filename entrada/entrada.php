@@ -104,9 +104,6 @@
 
     <div id="pnButtons" class="center-align"></div>
 
-    <!-- <button class="btn-Frame btn-Frame-blue btnP" id="btnPrint">Imprimir</button> -->
-
-
 </div>
 
 <div id="modalFornecedor">

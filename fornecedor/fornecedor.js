@@ -275,13 +275,11 @@ const fornecedor = (function () {
             return false
         }
 
-        console.log('param :', param);
         axios.post(url, {
             call: 'salvar',
             param: param
         })
             .then(rs => {
-                console.log('rs :', rs);
 
                 if (rs.data[0].ID_FORNECEDOR) {
                     param.ID_FORNECEDOR = rs.data[0].ID_FORNECEDOR;
