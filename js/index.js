@@ -5,6 +5,7 @@ const login = new Login();
 $(function () {
 
     getFrase()
+    getDataEmpresa()
 
     calc = new xCalkModal()
 
@@ -44,7 +45,7 @@ $(function () {
     $('#pnTitulo').html($('#pnPrincipal title').html());
 
 
-    $('#btnSair').click(function () {
+    $('.btnSair').click(function () {
         login.sair()
     })
 
@@ -130,4 +131,22 @@ function getFrase() {
         $('#saudacao').html('BOA TARDE!')
     }
 }
+function getDataEmpresa() {
+    axios.post(`empresa/per.empresa.php`, {
+        call: 'getDataEmpresa'
+    }).then(r => {
+        $('#printRazao').html(r.data[0].RAZAO)
+        $('#printEndereco').html(r.data[0].ENDERECO)
+        $('#printCnpj').html(r.data[0].CNPJ)
+        $('#printCidade').html(r.data[0].CIDADE)
+        $('#printBairro').html(r.data[0].BAIRRO)
+        $('#printCep').html(r.data[0].CEP)
+        $('#printInscricao').html(r.data[0].INSCRICAO)
+        $('#printFixo').html(r.data[0].FIXO)
+    })
+}
+
+
+
+
 

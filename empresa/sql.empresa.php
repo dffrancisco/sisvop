@@ -22,6 +22,16 @@ class SqlEmpresa
     return $query->fetchAll();
   }
 
+  function getDataEmpresa()
+  {
+
+    $sql = "SELECT razao, endereco, cidade, bairro,
+    cep, inscricao, fixo, cnpj FROM empresa";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
 
   function insert($param)
   {
@@ -37,13 +47,14 @@ class SqlEmpresa
             :uf)";
 
 
-      $sql = prepare::SQL($sql, $param);
-      $query = $this->db->prepare($sql);
-      $query->execute(); 
-      return $query->fetchAll(PDO::FETCH_OBJ);
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function update($param){
+  function update($param)
+  {
     $sql = "UPDATE empresa 
             SET cnpj = :cnpj, razao = :razao, 
             fantasia = :fantasia, fixo = :fixo, 
@@ -51,11 +62,11 @@ class SqlEmpresa
             cep = :cep,  inscricao = :inscricao, 
             cidade = :cidade, bairro = :bairro, uf = :uf ";
 
-    
+
     $sql = prepare::SQL($sql, $param);
     print_r($sql);
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 }
