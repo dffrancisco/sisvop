@@ -39,6 +39,7 @@ class clientes
             echo '{"ID_CLIENTE":"' . $id_cliente . '"}';
         } else {
             $call = $this->sql->update($param);
+            echo 'edit';
         }
     }
 

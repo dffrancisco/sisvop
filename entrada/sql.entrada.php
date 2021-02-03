@@ -75,7 +75,8 @@ class SqlEntrada
   function getItensNota($param)
   {
 
-    $sql = "SELECT a.codigo, a.descricao, b.valor_nota, b.qtd_nota, a.id_produto, b.id_itens_nota, b.valor_antigo
+    $sql = "SELECT a.codigo, a.descricao, b.valor_nota,
+    b.qtd_nota, a.id_produto, b.id_itens_nota, b.valor_antigo
     FROM produtos a, lista_itens_nota b, nota c
     WHERE b.id_nota = c.id_nota
     AND a.id_produto = b.id_produto
@@ -118,22 +119,10 @@ class SqlEntrada
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function deleteItensNota($param)
+  function deleteItens($param)
   {
     $sql = "DELETE FROM lista_itens_nota  
     WHERE id_nota = $param";
-
-    $query = $this->db->prepare($sql);
-    $query->execute();
-    return $query->fetchAll(PDO::FETCH_OBJ);
-  }
-
-  function deleteItens($param)
-  {
-    extract($param);
-    $sql = "DELETE FROM lista_itens_nota  
-    WHERE id_itens_nota = $id_itens_nota";
-
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -146,7 +135,6 @@ class SqlEntrada
     $sql = "INSERT INTO nota (id_fornecedor, numero_nota, chave_acesso, data_emissao, icms, st, valor_total)
     VALUES('$id_fornecedor','$numero_nota', '$chave_acesso', '$data_emissao', '$icms', '$st', '$valor_total')
     returning id_nota";
-    print_r($param);
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -177,15 +165,30 @@ class SqlEntrada
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function updateProdutoEdit($param)
+  {
+    extract($param);
+    $sql = "UPDATE produtos 
+              SET qtd = $qtd + qtd, 
+              valor = '$valor_nota'
+            WHERE id_produto = $id_produto 
+            returning id_produto";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+
   function updateDelProduto($param)
   {
     extract($param);
     $sql = "UPDATE produtos 
               SET qtd = qtd - $qtd_nota, 
-              valor = '$valor_antigo'
+              valor = '$valor_nota'
             WHERE id_produto = $id_produto 
             returning id_produto";
-
+  print_r($sql);
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -195,7 +198,7 @@ class SqlEntrada
   {
     extract($param);
     $sql = "UPDATE lista_itens_nota 
-    SET qtd_nota = '$qtd_nota', 
+    SET qtd_nota = '$qtd', 
     valor_nota = '$valor_nota'
     WHERE id_itens_nota = $id_itens_nota
     returning id_itens_nota";

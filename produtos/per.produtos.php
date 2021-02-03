@@ -25,12 +25,13 @@ class Produtos
 
     function save($param)
     {
-
+        
         if (empty($param['ID_PRODUTO'])) {
             $id_produto = $this->sql->insert($param);
             echo json_encode($id_produto);
         } else {
             $call = $this->sql->update($param);
+            echo json_encode('edit');
         }
     }
 
