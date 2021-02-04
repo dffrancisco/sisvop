@@ -661,7 +661,6 @@ const itens = (function () {
 
 
 
-
     }
 
     function btnFechar() {
