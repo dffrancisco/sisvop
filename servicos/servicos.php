@@ -262,7 +262,7 @@
     <div class="tabela" id="rlFields">
         <div class="row">
             <div class="col s6">
-                <label>Fantasia</label><br>
+                <label>Cliente</label><br>
                 <span id="rlFantasia" class="spanAutoPreenc"><span>
 
             </div>
@@ -297,12 +297,12 @@
 
         <div class="row">
             <div class="col s3">
-                <label>Data de início</label><br>
+                <label>Data prevista de início</label><br>
                 <span id="rlDataI" class="spanAutoPreenc"></span>
             </div>
 
-            <div class="col s3">
-                <label>Data de finalização</label><br>
+            <div class="col s4">
+                <label>Data prevista de finalização</label><br>
                 <span id="rlDataF" class="spanAutoPreenc"></span>
             </div>
         </div>

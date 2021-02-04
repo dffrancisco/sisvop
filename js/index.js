@@ -5,7 +5,7 @@ const login = new Login();
 $(function () {
 
     getFrase()
-    getDataEmpresa()
+
 
     calc = new xCalkModal()
 

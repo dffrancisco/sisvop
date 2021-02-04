@@ -274,7 +274,10 @@ const itens = (function () {
     }
 
     function print() {
-        xgItens.print($('.cabecalho').html() + $('#pnFields').html())
+        getDataEmpresa()
+        setTimeout(function () {
+            xgItens.print($('.cabecalho').html() + $('#pnFields').html())
+        }, 300)
     }
 
     function novo() {
@@ -622,12 +625,11 @@ const itens = (function () {
     }
 
     function btnSelectNota() {
-        r = xgLocalizarNota.dataSource()
+        param = xgLocalizarNota.dataSource()
         axios.post(url, {
             call: 'getDataNota',
-            param: r.ID_NOTA
+            param: param.ID_NOTA
         }).then(r => {
-            xgItens.clear()
             xmNota.close()
 
             id_fornecedor = r.data[0].ID_FORNECEDOR
@@ -645,20 +647,17 @@ const itens = (function () {
             $('#spChave').html(r.data[0].CHAVE_ACESSO)
 
             adicionais()
+            axios.post(url, {
+                call: 'getItensNota',
+                param: param.ID_NOTA
+            }).then(rs => {
+                xgItens.querySourceAdd(rs.data)
 
+
+            })
         })
 
-        axios.post(url, {
-            call: 'getItensNota',
-            param: r.ID_NOTA
-        }).then(r => {
 
-            xgItens.clear
-            setTimeout(function () {
-                xgItens.insertLine(r.data)
-            }, 1)
-
-        })
 
 
     }

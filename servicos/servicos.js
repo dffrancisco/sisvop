@@ -42,6 +42,7 @@ $(function () {
     produtos.grid();
     produtos.modalEdtQtd();
 
+    getDataEmpresa()
 
     $('.tabs').tabs();
 
@@ -123,6 +124,9 @@ $(function () {
 
     })
 
+    xgServicos.queryOpen({ search: '' })
+    xmListaServ.open()
+    $('#xmEdtServico').focus()
 });
 
 
@@ -145,7 +149,7 @@ const saida = (function () {
                 Produto: { dataField: 'DESCRICAO' },
                 Marca: { dataField: 'MARCA' },
                 QTD: { dataField: 'QTD', width: '10%' },
-                'QTD(R)': { dataField: 'QTD_RETIRADA', width: '10%' },
+                Retirado: { dataField: 'QTD_RETIRADA', width: '10%' },
                 Data: { dataField: 'DATA', center: true },
                 ORIGEM: { dataField: 'ORIGEM', center: true },
 
@@ -187,7 +191,7 @@ const saida = (function () {
                 let origem = r.ORIGEM
                 let status = $('#spStatus').html()
 
-                if (origem == 'PROJETO' && status == 'FINALIZADO') {
+                if (origem == 'PROJETO' && status == 'ANDAMENTO') {
                     $('.btnDel').attr("disabled", true);
 
                 } else {
@@ -201,7 +205,7 @@ const saida = (function () {
                     let ORIGEM = xgSaida.dataSource().ORIGEM
                     let status = $('#spStatus').html()
 
-                    if (ORIGEM == 'PROJETO' && status == 'FINALIZADO') {
+                    if (ORIGEM == 'PROJETO' && status == 'ANDAMENTO') {
                         return false
                     }
 
@@ -228,9 +232,9 @@ const saida = (function () {
                 Produto: { dataField: 'DESCRICAO' },
                 Marca: { dataField: 'MARCA' },
                 Origem: { dataField: 'ORIGEM' },
-                'QTD(E)': { dataField: 'QTD', width: '13%' },
-                'QTD(P)': { dataField: 'QTD_P', width: '13%' },
-                'QTD(R)': { dataField: 'QTD_RETIRADA', width: '13%' },
+                ESTOQUE: { dataField: 'QTD', width: '13%' },
+                PROJETADO: { dataField: 'QTD_P', width: '13%' },
+                RETIRADO: { dataField: 'QTD_RETIRADA', width: '13%' },
 
             },
 
@@ -273,6 +277,38 @@ const saida = (function () {
                 }
             },
 
+            dblClick: (ln) => {
+
+                for (let i in xgRomaneiosItens.data()) {
+
+                    if (xgRomaneiosItens.data()[i].ID_ITENS_SERVICO == ln.ID_ITENS_SERVICO) {
+                        setTimeout(function () {
+                            show("Item já incluso!");
+                        }, 1)
+                        return false
+                    }
+                }
+
+                if (ln.QTD == 0) {
+                    setTimeout(function () {
+                        show("Item esgotado!");
+                    }, 1)
+                    return false
+                }
+
+                $("#xmBQtd").html(ln.QTD);
+                $("#xmSpId").html(ln.ID_PRODUTO);
+                $("#xmSpCodigo").html(ln.CODIGO);
+                $("#xmSpProd").html(ln.DESCRICAO);
+                $("#xmSpMarca").html(ln.MARCA);
+                $("#xmSpValor").html(ln.VALOR);
+
+                xmEdtQtd.open()
+
+                $('#xmEdtQtd').focus()
+
+            },
+
             query: {
                 execute: (r) => {
                     getItens2(r.param.search, r.offset);
@@ -298,7 +334,7 @@ const saida = (function () {
 
                 xgRomaneiosItens.queryOpen({ search: r.ID_ROMANEIO })
 
-                if (r.STATUS == "ABERTO") {
+                if (r.STATUS == "PREPARO") {
 
                     $('.btnPR').removeAttr("disabled");
                     $('.btnPDF').attr("disabled", true);
@@ -306,7 +342,7 @@ const saida = (function () {
 
 
                 }
-                if (r.STATUS == "FINALIZADO") {
+                if (r.STATUS == "PRONTO") {
 
                     $('.btnPR').attr("disabled", true);
                     $('.btnFR').attr("disabled", true);
@@ -400,6 +436,7 @@ const saida = (function () {
 
             onKeyDown: {
                 '13': (ln, e) => {
+                    console.log('ln :', ln.STATUS);
 
                     clientes.getListaServicoX(ln.ID_LISTA_SERVICO);
 
@@ -409,15 +446,15 @@ const saida = (function () {
 
                     $('.btnInsP').removeAttr("disabled");
 
-                    if (ln.STATUS == 'ABERTO') {
-                        $('.btnFS').removeAttr('disabled');
-                        $('.btnNR').attr("disabled", true);
-
+                    if (ln.STATUS == 'ANDAMENTO') {
+                        $('.btnFS').attr('disabled', true);
+                        $('.btnNR').removeAttr("disabled");
 
                     }
-                    if (ln.STATUS == 'FINALIZADO') {
-                        $('.btnFS').prop('disabled', true);
-                        $('.btnNR').removeAttr("disabled");
+                    if (ln.STATUS == 'PROJETO') {
+                        $('.btnNR').attr("disabled", true);
+                        $('.btnFS').removeAttr('disabled');
+
                     }
 
                     xgSaida.queryOpen({ search: ln.ID_LISTA_SERVICO })
@@ -427,6 +464,35 @@ const saida = (function () {
                 }
 
             },
+
+            dblClick: (ln,) => {
+                console.log('ln :', ln);
+
+                clientes.getListaServicoX(ln.ID_LISTA_SERVICO);
+
+                ID_LISTA_SERVICO = ln.ID_LISTA_SERVICO
+
+                xmListaServ.close();
+
+                $('.btnInsP').removeAttr("disabled");
+
+                if (ln.STATUS == 'ANDAMENTO') {
+                    $('.btnFS').attr('disabled', true);
+                    $('.btnNR').removeAttr("disabled");
+
+                }
+                if (ln.STATUS == 'PROJETO') {
+                    $('.btnNR').attr("disabled", true);
+                    $('.btnFS').removeAttr('disabled');
+
+                }
+
+                xgSaida.queryOpen({ search: ln.ID_LISTA_SERVICO })
+                xgRomaneios.queryOpen({ search: ln.ID_LISTA_SERVICO })
+                xgDevolucao.queryOpen({ search: ln.ID_LISTA_SERVICO })
+
+            },
+
             query: {
                 execute: (r) => {
                     getServicos(r.param.search, r.offset);
@@ -491,10 +557,10 @@ const saida = (function () {
 
                 axios.post(url, {
                     call: 'atualizaStatus',
-                    param: { ID_LISTA_SERVICO: ID_LISTA_SERVICO, STATUS: 'FINALIZADO' }
+                    param: { ID_LISTA_SERVICO: ID_LISTA_SERVICO, STATUS: 'ANDAMENTO' }
                 })
 
-                $('#spStatus').html('FINALIZADO');
+                $('#spStatus').html('ANDAMENTO');
                 $('.btnFS').prop('disabled', true)
                 $('.btnNR').removeAttr("disabled");
                 $('.btnDI').removeAttr("disabled");
@@ -579,7 +645,7 @@ const saida = (function () {
             call: () => {
                 let romaneio = xgRomaneios.dataSource()
 
-                romaneio.STATUS = 'FINALIZADO'
+                romaneio.STATUS = 'PRONTO'
 
                 axios.post(url, {
                     call: 'finalizarRomaneio',
@@ -619,7 +685,7 @@ const saida = (function () {
                     ID_LISTA_SERVICO: ID_LISTA_SERVICO,
                     DATA: new Date().toLocaleDateString('pt-BR'),
                     HORA: new Date().toLocaleTimeString('pt-BR'),
-                    STATUS: 'ABERTO'
+                    STATUS: 'PREPARO'
                 }
 
                 axios.post(url, {
@@ -665,7 +731,7 @@ const saida = (function () {
 
         for (let i in dt) {
 
-            let tb_produto = `<tr>
+            let tb_produto = `<tr class="tb_dados">
                                     <td>
                                     ${dt[i].DESCRICAO}
                                     </td>
@@ -682,15 +748,14 @@ const saida = (function () {
 
         $('.rlRomaneio').xPrint()
 
-        $('.tb_produto').html('')
-        // xgRomaneiosItens.print($('.cabecalho').html() + $('.assinatura').html())
+        $('.tb_dados').html('')
     }
 
     async function deletarItemRomaneio(r) {
 
         let status = xgRomaneios.dataSource().STATUS
 
-        if (status == "ABERTO") {
+        if (status == "PREPARO") {
 
             await confirmaCodigo({
                 msg: "Digite o código abaixo para deletar o item",
@@ -784,6 +849,7 @@ const saida = (function () {
         xmListaServ = new xModal.create({
             el: '#xmServicos',
             title: 'Servicos',
+            width: '900',
 
         })
     }
@@ -794,6 +860,7 @@ const saida = (function () {
 
             el: '#xmIRomaneio',
             title: 'Produtos',
+            width: '1000',
 
             onClose: () => {
                 $('#xmEdtIRomaneio').val('')
@@ -851,6 +918,22 @@ const clientes = (function () {
                     $("#xmInEngenheiro").focus()
 
                 },
+            },
+
+            dblClick: (ln) => {
+
+                cliente = ln
+                ID_CLIENTE = cliente.ID_CLIENTE
+
+                $("#xmSpFantasia").html(cliente.FANTASIA);
+                $("#xmSpCnpj").html(cliente.CNPJ);
+
+                getServico();
+
+                xmNovoServico.open();
+
+                $("#xmInEngenheiro").focus()
+
             },
 
             sideBySide: {
@@ -946,10 +1029,10 @@ const clientes = (function () {
 
                 setServicoTela(rs.data[0])
 
-                if (rs.data[0].STATUS == "ABERTO")
+                if (rs.data[0].STATUS == "PROJETO")
                     $('.btnDI').attr("disabled", true)
 
-                if (rs.data[0].STATUS == "FINALIZADO")
+                if (rs.data[0].STATUS == "ANDAMENTO")
                     $('.btnDI').removeAttr("disabled")
 
             })
@@ -975,26 +1058,11 @@ const clientes = (function () {
 
     function zerarGrids() {
 
-        for (let i in xgSaida.data()) {
-            delete xgSaida.data()[i]
-        }
+        xgSaida.source([])
+        xgRomaneios.source([])
+        xgRomaneiosItens.source([])
+        xgRomaneiosItensD.source([])
 
-        for (let i in xgRomaneios.data()) {
-            delete xgRomaneios.data()[i]
-        }
-
-        for (let i in xgRomaneiosItens.data()) {
-            delete xgRomaneios.data()[i]
-        }
-
-        for (let i in xgRomaneiosItensD.data()) {
-            delete xgRomaneiosItensD.data()[i]
-        }
-
-        xgSaida.clear()
-        xgRomaneios.clear()
-        xgRomaneiosItens.clear()
-        xgRomaneiosItensD.clear()
     }
 
     function modalNovoServico() {
@@ -1112,6 +1180,52 @@ const produtos = (function () {
                     $("#xmEdtQtd").focus();
                 },
             },
+
+            dblClick: (ln) => {
+                for (let i = 0; i < 11; i++) {
+                    delete ln[i]
+                }
+
+                for (let i in xgSaida.data()) {
+
+                    if (xgSaida.data()[i].ID_PRODUTO == ln.ID_PRODUTO) {
+
+                        setTimeout(function () {
+
+                            show("Item já incluso!");
+                        }, 1)
+
+                        xgProduto.focus();
+
+                        return false
+                    }
+                }
+
+                if (ln.qtd == 0) {
+
+                    setTimeout(function () {
+
+                        show("Quantidade inválida!");
+                    }, 1)
+
+                    xgProduto.focus();
+
+                    return false
+                }
+
+                $("#xmBQtd").html(ln.QTD);
+                $("#xmSpId").html(ln.ID_PRODUTO);
+                $("#xmSpCodigo").html(ln.CODIGO);
+                $("#xmSpProd").html(ln.DESCRICAO);
+                $("#xmSpMarca").html(ln.MARCA);
+                $("#xmSpValor").html(ln.VALOR);
+
+                xmEdtQtd.open()
+
+                evento = 'Inserir'
+
+                $("#xmEdtQtd").focus();
+            },
             query: {
                 execute: (r) => {
                     getProdutos(r.param.search, r.offset);
@@ -1138,8 +1252,10 @@ const produtos = (function () {
 
     const salvarCarrinho = async () => {
 
+
         let origem;
         let status = $('#spStatus').text();
+        console.log('status :', status);
 
         valProduto = {
             CODIGO: $("#xmSpCodigo").text(),
@@ -1151,15 +1267,6 @@ const produtos = (function () {
         }
 
 
-
-        if (valProduto.QTD > xgProduto.dataSource().QTD) {
-
-            setTimeout(function () {
-
-                show("Quantidade maior que a existente!");
-            }, 1)
-            return false
-        }
         if (valProduto.QTD == "" || valProduto.QTD == null) {
 
             setTimeout(function () {
@@ -1169,17 +1276,15 @@ const produtos = (function () {
             return false
         }
 
-        if (status == 'ABERTO') {
-
-            $('.btnFS').removeAttr('disabled');
-
-            origem = 'PROJETO'
-        }
-        else if (status == 'FINALIZADO') {
-
+        if (status == 'ANDAMENTO') {
             $('.btnFS').prop('disabled', true);
 
             origem = 'ADICIONAL'
+        }
+        if (status == 'PROJETO') {
+            $('.btnFS').removeAttr('disabled');
+
+            origem = 'PROJETO'
         }
 
         valorT += valProduto.VALOR * valProduto.QTDs
@@ -1194,6 +1299,8 @@ const produtos = (function () {
             ORIGEM: origem,
             QTD_RETIRADA: 0
         }
+
+        console.log('param.ORIGEM :', param.ORIGEM);
 
         await axios.post(url, {
 
@@ -1210,7 +1317,10 @@ const produtos = (function () {
         valorT = 0
         total = 0
 
-        obProduto = {}
+        $('.btnFS').removeAttr('disabled')
+
+
+
     }
 
     function getServico() {
@@ -1297,7 +1407,6 @@ const produtos = (function () {
 
         xgProdRomaneio.dataSource('QTD_RETIRADA', item.QTD_RETIRADA)
 
-
         xgSaida.queryOpen({ search: ID_LISTA_SERVICO })
 
     }
@@ -1325,11 +1434,27 @@ const produtos = (function () {
                     class: 'xmQtdBtn',
                     click: (e) => {
 
+
                         if (evento == "Inserir") {
 
-                            salvarCarrinho()
+                            if ($('#xmEdtQtd').val() > xgProduto.dataSource().QTD) {
+
+                                confirma({
+                                    msg: "Quantidade maior que a existente, deseja inserir?!",
+                                    call: () => {
+                                        salvarCarrinho()
+
+                                    }
+                                });
+
+                            } else {
+
+                                salvarCarrinho()
+
+                            }
 
                             $('#xmEdtProduto').focus()
+
                         }
                         if (evento == "Inserir Romaneio") {
 
@@ -1375,7 +1500,7 @@ const devolucao = (function () {
 
                 Produto: { dataField: 'DESCRICAO' },
                 Marca: { dataField: 'MARCA' },
-                'QTD(D)': { dataField: 'QTD' },
+                Devolvido: { dataField: 'QTD' },
                 Data: { dataField: 'DATA', center: true },
                 Hora: { dataField: 'HORA', center: true }
 
@@ -1396,6 +1521,12 @@ const devolucao = (function () {
                             click: () => {
                                 getModalPDevolucao()
                             }
+                        },
+
+                        finalizarObra: {
+
+                            html: "Finalizar Serviço",
+                            class: "btnP btnF",
                         },
                     },
                 }
@@ -1419,7 +1550,7 @@ const devolucao = (function () {
                 Produto: { dataField: 'DESCRICAO' },
                 Marca: { dataField: 'MARCA' },
                 Origem: { dataField: 'ORIGEM' },
-                'QTD(R)': { dataField: 'QTD_RETIRADA' },
+                Retirado: { dataField: 'QTD_RETIRADA' },
 
             },
 
@@ -1464,6 +1595,46 @@ const devolucao = (function () {
 
                     evento = "DEVOLVER"
                 }
+            },
+
+            dblClick: (ln) => {
+
+                if (ln.QTD_RETIRADA <= 0) {
+                    setTimeout(function () {
+                        show("Item sem devolução disponível!");
+                    }, 1)
+                    return false
+                }
+
+                let count = 0
+                for (let i in xgDevolucao.data()) {
+
+                    if (xgDevolucao.data()[i].ID_PRODUTO == ln.ID_PRODUTO) {
+                        count += xgDevolucao.data()[i].QTD
+                    }
+                }
+
+                let dispo = ln.QTD_RETIRADA - count
+                if (dispo <= 0) {
+                    setTimeout(function () {
+                        show("Item sem devolução disponível!");
+                    }, 1)
+                    return false
+                }
+
+
+                $("#xmBQtd").html(dispo);
+                $("#xmSpId").html(ln.ID_PRODUTO);
+                $("#xmSpCodigo").html(ln.CODIGO);
+                $("#xmSpProd").html(ln.DESCRICAO);
+                $("#xmSpMarca").html(ln.MARCA);
+                $("#xmSpValor").html(ln.VALOR);
+
+                xmEdtQtd.open()
+
+                $('#xmEdtQtd').focus()
+
+                evento = "DEVOLVER"
             },
 
             query: {

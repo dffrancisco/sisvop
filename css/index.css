@@ -303,6 +303,7 @@ input:focus, select:focus, textarea:focus{
 
 .tabs .tab a {
     color: rgb(49, 49, 49);
+    background-color: #A4BDCD;
 }
 
 .tabs .indicator {

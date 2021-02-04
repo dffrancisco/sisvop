@@ -290,7 +290,7 @@ class Sqlservicos
             engenheiro, executores, obs, valor, finalizadores)
             VALUES 
             (:ID_CLIENTE, :ID_SERVICO, 
-            :DIA, :HORA, 'ABERTO', :DATA_INICIO, :DATA_FINAL,
+            :DIA, :HORA, 'PROJETO', :DATA_INICIO, :DATA_FINAL,
             :ENGENHEIRO, :EXECUTORES, :OBS, :VALOR, :FINALIZADORES)
             returning id_lista_servico";
 

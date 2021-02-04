@@ -19,7 +19,8 @@ class SqlUsuario
   function getSenhaFuncionarios($param)
   {
     extract($param);
-    $sql = "SELECT a.id_funcionarios, a.nome, a.cpf, b.id_usuario 
+    $sql = "SELECT FIRST 10 SKIP 0
+            a.id_funcionarios, a.nome, a.cpf, b.id_usuario 
             FROM funcionarios a, usuarios b
             WHERE a.id_funcionarios = b.id_funcionarios
             AND nome like '$search%'";
