@@ -23,6 +23,7 @@ $(function () {
 
     getDataEmpresa()
 
+
 })
 
 const itens = (function () {
@@ -647,6 +648,7 @@ const itens = (function () {
                 xgItens.source(rs.data)
             })
         })
+
 
 
 
