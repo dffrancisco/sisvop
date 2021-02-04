@@ -31,7 +31,7 @@ class SqlMarca
     extract($param);
 
     $sql = "select id_marca from marcas
-            WHERE marca like '%$MARCA%'";
+            WHERE marca like '$MARCA'";
 
     $query = $this->db->prepare($sql);
     $query->execute();
