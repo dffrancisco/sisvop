@@ -20,13 +20,9 @@ $(function () {
     itens.finalizar()
     itens.editarItens()
     itens.deleteItens()
+    getDataEmpresa()
 
-
-    $('#btnPrint').click(function () {
-        $('#lorem').xPrint();
-    })
-
-
+})
 
 const itens = (function () {
 
@@ -144,6 +140,9 @@ const itens = (function () {
                     center: true,
                     width: "20%",
                 },
+            },
+            dblClick: () => {
+                btnSelectNota()
             },
             query: {
                 execute: (r) => {
@@ -280,6 +279,7 @@ const itens = (function () {
 
     function print() {
         xgItens.print($('.cabecalho').html() + $('#pnFields').html())
+
     }
 
     function novo() {
@@ -350,44 +350,54 @@ const itens = (function () {
 
     function deletar() {
 
+
         confirmaCodigo({
             msg: 'Digite o código de confirmação',
             call: () => {
+                for (let i in xgItens.data()) {
+                    let param = {
+                        qtd_nota: Number(xgItens.data()[i].QTD_NOTA),
+                        valor_nota: xgItens.data()[i].VALOR_ANTIGO,
+                        id_produto: xgItens.data()[i].ID_PRODUTO,
+                    }
+                    console.log('param :', param);
+                    axios.post(url, {
+                        call: 'updateDelProduto',
+                        param: param
+                    })
+                }
+
                 axios.post(url, {
                     call: 'deleteNota',
                     param: id_nota
+                }).then(r => {
+                    $('#spNomeFantasia').html('')
+                    $('#spCnpj').html('')
+                    $('#spNumero').html('')
+                    $('#spData').html('')
+                    $('#spSt').html('')
+                    $('#spIcms').html('')
+                    $('#spValor').html('')
+                    $('#spChave').html('')
+
+                    $('#spNomeFantasia').val('')
+                    $('#spCnpj').val('')
+                    $('#spNumero').val('')
+                    $('#spData').val('')
+                    $('#spSt').val('')
+                    $('#spIcms').val('')
+                    $('#spValor').val('')
+                    $('#spChave').val('')
+                    xgItens.clear()
+                    id_fornecedor = ''
+                    id_nota = ''
+                    $('.btnEdit').prop("disabled", true)
+                    $('.btnDel').prop("disabled", true)
+                    show('Nota deletada')
+
                 })
-                    .then(r => {
-                        $('#spNomeFantasia').html('')
-                        $('#spCnpj').html('')
-                        $('#spNumero').html('')
-                        $('#spData').html('')
-                        $('#spSt').html('')
-                        $('#spIcms').html('')
-                        $('#spValor').html('')
-                        $('#spChave').html('')
 
-                        $('#spNomeFantasia').val('')
-                        $('#spCnpj').val('')
-                        $('#spNumero').val('')
-                        $('#spData').val('')
-                        $('#spSt').val('')
-                        $('#spIcms').val('')
-                        $('#spValor').val('')
-                        $('#spChave').val('')
-                        xgItens.clear()
-                        id_fornecedor = ''
-                        id_nota = ''
-                        $('.btnEdit').prop("disabled", true)
-                        $('.btnDel').prop("disabled", true)
-                        show('Nota deletada')
 
-                    })
-
-                axios.post(url, {
-                    call: 'deleteItens',
-                    param: id_nota
-                })
             }
         })
 
@@ -537,11 +547,11 @@ const itens = (function () {
                     let param = {
                         id_itens_nota: xgItens.dataSource().ID_ITENS_NOTA,
                         qtd_nota: xgItens.dataSource().QTD_NOTA,
-                        valor_antigo: xgItens.dataSource().VALOR_ANTIGO,
+                        valor_nota: xgItens.dataSource().VALOR_ANTIGO,
                         id_produto: xgItens.dataSource().ID_PRODUTO,
                     }
                     axios.post(url, {
-                        call: 'deleteItens',
+                        call: 'deleteItensUni',
                         param: param
                     }).then(r => {
                         xgItens.deleteLine()
@@ -617,12 +627,11 @@ const itens = (function () {
     }
 
     function btnSelectNota() {
-        r = xgLocalizarNota.dataSource()
+        param = xgLocalizarNota.dataSource()
         axios.post(url, {
             call: 'getDataNota',
-            param: r.ID_NOTA
+            param: param.ID_NOTA
         }).then(r => {
-            xgItens.clear()
             xmNota.close()
 
             id_fornecedor = r.data[0].ID_FORNECEDOR
@@ -640,37 +649,37 @@ const itens = (function () {
             $('#spChave').html(r.data[0].CHAVE_ACESSO)
 
             adicionais()
+            axios.post(url, {
+                call: 'getItensNota',
+                param: param.ID_NOTA
+            }).then(rs => {
+                xgItens.querySourceAdd(rs.data)
 
+
+            })
         })
 
-        axios.post(url, {
-            call: 'getItensNota',
-            param: r.ID_NOTA
-        }).then(r => {
 
-            xgItens.clear
-            setTimeout(function () {
-                xgItens.insertLine(r.data)
-            }, 10)
-
-        })
 
 
     }
 
     function btnFechar() {
         let param = {
-            qtd_nota: $('#edtQtdEdit').val(),
-            valor_nota: $('#edtValorUniEdit').val()
+            qtd_nota: xgItens.dataSource().ID_PRODUTO,
+            qtd: Number($('#edtQtdEdit').val()),
+            valor_nota: $('#edtValorUniEdit').val(),
+            id_produto: xgItens.dataSource().ID_PRODUTO,
+            id_itens_nota: xgItens.dataSource().ID_ITENS_NOTA
         }
+        console.log('param :', param);
+        axios.post(url, {
+            call: 'editItens',
+            param: param
+        })
 
-        updateItens = {
-            id_produto: xgItens.dataSource().id_produto,
-            qtd_nota: $('#edtQtdEdit').val(),
-            valor_nota: $('#edtValorUniEdit').val()
-        }
-
-        xgItens.dataSource(param)
+        xgItens.dataSource('QTD_NOTA', param.qtd)
+        xgItens.dataSource('VALOR_NOTA', param.valor_nota)
 
         xmEditItens.close()
     }
