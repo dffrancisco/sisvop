@@ -3,6 +3,9 @@
 <title>Entrada</title>
 
 <div class="container">
+
+
+
     <div class="tabela margintop" id="pnFields">
         <div class="row">
             <div class=" col s7">
@@ -46,8 +49,20 @@
             </div>
         </div>
     </div>
+    <hr>
+    <div class="row">
 
+        <div class="col s3">
+            <label>Pesquisa Nº</label>
+            <input type="text" placeholder="Numero da nota" class="margintop numeroNota" id="edtPesquisaNotaNumero">
+        </div>
+        <div class="col s4">
+            <label>Pesquisa Nome</label>
+            <input type="text" placeholder="Nome fantasia" class="margintop" id="edtPesquisaNota">
+        </div>
+    </div>
 
+    <div id=xgLocalizarNota class="list"></div>
 
     <div class="container" id="edtAdicionar" hidden>
         <div class="row">
@@ -104,6 +119,8 @@
 
     <div id="pnButtons" class="center-align"></div>
 
+
+
 </div>
 
 <div id="modalFornecedor">
@@ -113,6 +130,10 @@
         </div>
     </div>
     <div id="xgFornecedor"></div>
+    <button class="btn-Frame btn-Frame-blue btnP" id="btnCadFornecedor" style="margin-left: 10px;"><i class="fa fa-plus"
+            aria-hidden="true"></i>
+        Novo fornecedor</button>
+
 </div>
 
 <div id="modalNovaNota">
@@ -157,19 +178,6 @@
 
 </div>
 
-
-<div id="modalNota">
-    <div class="row">
-        <div class="col s4">
-            <input type="text" placeholder="Nome fantasia" class="margintop" id="edtPesquisaNota">
-        </div>
-        <div class="col s3">
-            <input type="text" placeholder="Numero da nota" class="margintop numeroNota" id="edtPesquisaNotaNumero">
-        </div>
-    </div>
-    <div id=xgLocalizarNota></div>
-</div>
-
 <div id="editItens">
     <div class="row">
         <div class="col s11">
@@ -199,4 +207,5 @@
     </div>
 
 </div>
+
 <div id="pnCodigoTela">entrada</div>

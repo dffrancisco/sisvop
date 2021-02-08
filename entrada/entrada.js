@@ -2,7 +2,6 @@ let xgItens;
 let xgFornecedor;
 let xgLocalizarNota;
 let xmFornecedor;
-let xmNota;
 let xmNovaNota;
 let cabecalho;
 
@@ -14,12 +13,16 @@ $(function () {
     itens.xmNovaNota()
     itens.xmFornecedor()
     itens.xmEditItens()
-    itens.xmNota()
     itens.keydown()
     itens.adicionais()
     itens.finalizar()
     itens.editarItens()
     itens.deleteItens()
+    itens.btnCadFornecedor()
+    xgLocalizarNota.queryOpen({ searchNota: '' })
+
+    getDataEmpresa()
+
 
 })
 
@@ -41,7 +44,7 @@ const itens = (function () {
     function xgridItens() {
         xgItens = new xGridV2.create({
             el: "#xgItens",
-            height: 210,
+            height: 170,
             heightLine: 35,
             theme: "x-clownV2",
 
@@ -68,16 +71,12 @@ const itens = (function () {
 
 
             },
+
             sideBySide: {
                 el: "#pnFields",
                 frame: {
                     el: "#pnButtons",
                     buttons: {
-                        localizar: {
-                            html: "Localizar Nota (F2)",
-                            class: "btnP btnPesq",
-                            click: localizar
-                        },
                         print: {
                             html: "Imprimir",
                             class: "btnP btnPrint",
@@ -114,20 +113,18 @@ const itens = (function () {
     function xgridLocalizarNota() {
         xgLocalizarNota = new xGridV2.create({
             el: "#xgLocalizarNota",
-            height: 210,
+            height: 190,
             heightLine: 35,
             theme: "x-clownV2",
 
             columns: {
-
-                Fornecedor: {
-                    dataField: "FANTASIA",
-                    width: "35%",
-                },
                 Nº: {
                     dataField: "NUMERO_NOTA",
-                    center: true,
-                    width: "25%",
+                    width: "20%",
+                },
+                Fornecedor: {
+                    dataField: "FANTASIA",
+                    width: "40%",
                 },
                 Data: {
                     dataField: "DATA_EMISSAO",
@@ -139,6 +136,9 @@ const itens = (function () {
                     center: true,
                     width: "20%",
                 },
+            },
+            onSelectLine: () => {
+                btnSelectNota()
             },
             query: {
                 execute: (r) => {
@@ -180,6 +180,15 @@ const itens = (function () {
                     $('#edtNumero').focus()
                 }
             },
+            dblClick: (ln) => {
+                $('#spNomeFantasia').html(ln.FANTASIA)
+                $('#spCnpj').html(ln.CNPJ)
+                $('#spCnpj').val(ln.ID_FORNECEDOR)
+                id_fornecedor = ln.ID_FORNECEDOR
+                xmNovaNota.open()
+                xmFornecedor.close()
+                $('#edtNumero').focus()
+            },
             query: {
                 execute: (r) => {
                     getFornecedor(r.param.search, r.offset)
@@ -191,16 +200,7 @@ const itens = (function () {
 
 
 
-    //xModal
-    function xmNota() {
-        xmNota = new xModal.create({
-            el: '#modalNota',
-            title: "Notas",
-            width: 900,
-            height: 400,
-        })
 
-    }
 
     function xmFornecedor() {
         xmFornecedor = new xModal.create({
@@ -263,28 +263,18 @@ const itens = (function () {
 
 
     //Função buttons xGrid
-    function localizar() {
-        searchNota = $('#edtPesquisaNota').val().trim()
-        searchNota = $('#edtPesquisaNotaNumero').val().trim()
-        xgLocalizarNota.queryOpen({ searchNota: '' })
-        xmNota.open()
-        $('#edtPesquisaNota').focus()
-
-
-    }
 
     function print() {
-        getDataEmpresa()
-        setTimeout(function () {
-            xgItens.print($('.cabecalho').html() + $('#pnFields').html())
-        }, 300)
+        xgItens.print($('.cabecalho').html() + $('#pnFields').html())
+
     }
 
     function novo() {
         search = $('#edtPesquisaFornecedor').val().trim()
         xgFornecedor.queryOpen({ search: '' })
-
         controleGrid = 'new';
+        id_nota = ''
+        xgItens.focus()
         $('#edtAdicionar').removeAttr('hidden')
         $('#spNomeFantasia').html('')
         $('#spCnpj').html('')
@@ -314,7 +304,9 @@ const itens = (function () {
         $('#edtValor').val('')
         $('#edtChave').val('')
 
-        xgItens.clear()
+        xgLocalizarNota.disable()
+        xgItens.source([])
+
         $('.btnPesq').prop("disabled", true)
         $('.btnDel').prop("disabled", true)
         $('#btnBuscarFornecedor').removeAttr("disabled")
@@ -329,11 +321,11 @@ const itens = (function () {
 
     function editar() {
         controleGrid = 'edit';
+        xgLocalizarNota.disable()
+        xgItens.focus()
         $('#edtAdicionar').removeAttr('hidden')
         $('.btnSave').removeAttr("disabled")
         xmNovaNota.open()
-        $('#edtNumero').focus()
-
 
         $('#edtNumero').val(editNota.NUMERO_NOTA)
         $('#edtChave').val(editNota.CHAVE_ACESSO)
@@ -341,8 +333,6 @@ const itens = (function () {
         $('#edtSt').val(editNota.ST)
         $('#edtIcms').val(editNota.ICMS)
         $('#edtValor').val(editNota.VALOR_TOTAL)
-
-
 
     }
 
@@ -358,7 +348,6 @@ const itens = (function () {
                         valor_nota: xgItens.data()[i].VALOR_ANTIGO,
                         id_produto: xgItens.data()[i].ID_PRODUTO,
                     }
-                    console.log('param :', param);
                     axios.post(url, {
                         call: 'updateDelProduto',
                         param: param
@@ -410,6 +399,10 @@ const itens = (function () {
         $('.btnSave').prop('disabled', true)
 
         $('#edtAdicionar').prop('hidden', true)
+        xgLocalizarNota.enable()
+        xgLocalizarNota.focus()
+
+
     }
 
     function cancelar() {
@@ -545,11 +538,11 @@ const itens = (function () {
                     let param = {
                         id_itens_nota: xgItens.dataSource().ID_ITENS_NOTA,
                         qtd_nota: xgItens.dataSource().QTD_NOTA,
-                        valor_antigo: xgItens.dataSource().VALOR_ANTIGO,
+                        valor_nota: xgItens.dataSource().VALOR_ANTIGO,
                         id_produto: xgItens.dataSource().ID_PRODUTO,
                     }
                     axios.post(url, {
-                        call: 'deleteItens',
+                        call: 'deleteItensUni',
                         param: param
                     }).then(r => {
                         xgItens.deleteLine()
@@ -618,7 +611,15 @@ const itens = (function () {
             $('#spValor').val(cabecalho.VALOR_TOTAL)
             $('#spChave').val(cabecalho.CHAVE_ACESSO)
 
-            xgLocalizarNota.insertLine(r.data)
+
+            if (controleGrid == 'edit') {
+                xgLocalizarNota.dataSource(r.data)
+
+            }
+            if (controleGrid == 'new') {
+                xgLocalizarNota.insertLine(r.data)
+
+            }
 
         })
 
@@ -630,7 +631,6 @@ const itens = (function () {
             call: 'getDataNota',
             param: param.ID_NOTA
         }).then(r => {
-            xmNota.close()
 
             id_fornecedor = r.data[0].ID_FORNECEDOR
             id_nota = r.data[0].ID_NOTA
@@ -651,11 +651,10 @@ const itens = (function () {
                 call: 'getItensNota',
                 param: param.ID_NOTA
             }).then(rs => {
-                xgItens.querySourceAdd(rs.data)
-
-
+                xgItens.source(rs.data)
             })
         })
+
 
 
 
@@ -670,7 +669,6 @@ const itens = (function () {
             id_produto: xgItens.dataSource().ID_PRODUTO,
             id_itens_nota: xgItens.dataSource().ID_ITENS_NOTA
         }
-        console.log('param :', param);
         axios.post(url, {
             call: 'editItens',
             param: param
@@ -682,6 +680,12 @@ const itens = (function () {
         xmEditItens.close()
     }
 
+    function btnCadFornecedor() {
+        $('#btnCadFornecedor').click(function () {
+            window.location = "/sisvop/index.php?p=fornecedor/fornecedor";
+
+        })
+    }
 
 
 
@@ -736,7 +740,6 @@ const itens = (function () {
                     cancelar()
                 } if (controleGrid == 'edit') {
                     xmNovaNota.close()
-                    xmFornecedor.open()
                 }
 
             }
@@ -885,7 +888,6 @@ const itens = (function () {
         xgridFornecedor: xgridFornecedor,
         xmFornecedor: xmFornecedor,
         xmNovaNota: xmNovaNota,
-        xmNota: xmNota,
         xmEditItens: xmEditItens,
         finalizar: finalizar,
         deleteItens: deleteItens,
@@ -894,6 +896,7 @@ const itens = (function () {
         keydown: keydown,
         adicionais: adicionais,
         editarItens: editarItens,
+        btnCadFornecedor: btnCadFornecedor
     }
 })();
 

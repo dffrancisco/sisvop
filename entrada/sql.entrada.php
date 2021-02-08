@@ -120,9 +120,21 @@ class SqlEntrada
   }
 
   function deleteItens($param)
+
   {
     $sql = "DELETE FROM lista_itens_nota  
     WHERE id_nota = $param";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function deleteItensUni($param)
+
+  {
+    extract($param);
+    $sql = "DELETE FROM lista_itens_nota  
+    WHERE id_itens_nota = $id_itens_nota";
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -188,7 +200,7 @@ class SqlEntrada
               valor = '$valor_nota'
             WHERE id_produto = $id_produto 
             returning id_produto";
-  print_r($sql);
+
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);

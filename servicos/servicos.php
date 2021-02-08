@@ -3,7 +3,25 @@
 
 <title>Serviços</title>
 
-<div class="container">
+
+<!-- xModal da Lista de Servicos-->
+<div id="Servicos" class="container">
+    <div class="row">
+        <div class="col s4" id="pnFieldServico">
+            <label>Buscar Servico</label>
+            <input type="text" id="xmEdtServico">
+        </div>
+    </div>
+
+    <!-- xGrid de lista servicos -->
+    <div id="xgServicos" class="list"></div>
+
+    <div class="row"><button class="btn-Frame btn-Frame-blue btnP btnPesq">Novo Serviço</button></div>
+
+
+</div>
+
+<div class="container" id="dados_cliente" hidden>
     <div class="tabela" id="pnFields">
         <div class="row">
             <div class="col s6">
@@ -26,7 +44,7 @@
                 <span id="spEngenheiro" class="spanAutoPreenc"></span>
             </div>
 
-            <div class="col s2">
+            <div class="col s3">
                 <label>Serviço</label><br>
                 <span id="spServico" class="spanAutoPreenc"></span>
             </div>
@@ -36,9 +54,9 @@
                 <span id="spExecutores" class="spanAutoPreenc"></span>
             </div>
 
-            <div class="col s4">
-                <label>Finalizadores</label><br>
-                <span id="spFinalizadores" class="spanAutoPreenc"></span>
+            <div class="col s3">
+                <label>Status</label><br>
+                <span id="spStatus" class="spanAutoPreenc"></span>
             </div>
         </div>
 
@@ -54,11 +72,6 @@
             </div>
 
             <div class="col s3">
-                <label>Status</label><br>
-                <span id="spStatus" class="spanAutoPreenc"></span>
-            </div>
-
-            <div class="col s3">
                 <label>Valor</label><br>
                 <span id="spValor" class="spanAutoPreenc"></span>
             </div>
@@ -71,8 +84,9 @@
         <div class="btnAll" style="margin-bottom: 7px; margin-top:-16px;">
             <button class="btn-Frame btn-Frame-blue btnP btnPesq">Novo Serviço</button>
             <button class="btn-Frame btn-Frame-blue btnP btnBS">Buscar Serviço</button>
+            <button class="btn-Frame btn-Frame-blue btnP btnRG">Relatório Geral</button>
+            <button class="btn-Frame btn-Frame-blue btnP btnFS">Finalizar Serviço</button>
         </div>
-
     </div>
 
 
@@ -102,16 +116,12 @@
         <div id="pnButtonD" style="margin-left: 20px !important"></div>
     </div>
 
-
-
     <div class="tabela" id="pnFieldsItem"></div>
 
     <div id="pnGridItens" class="list" hidden></div>
 
     <div id="pnButtonsItens" class="right-align col s9"></div>
 
-    <div id="" class="center-align margintop col s9">
-    </div>
 
 </div>
 
@@ -127,16 +137,65 @@
     <div id="pnGridCliente"></div>
 </div>
 
-<!-- xModal da Lista de Servicos-->
-<div id="xmServicos">
+<!-- MODAL DE NOVO SERVICO -->
+<div id="xmServico">
+    <span id="xmSpId_cliente" hidden></span>
     <div class="row">
-        <div class="col s4" id="pnFieldServico">
-            <label>Buscar Servico</label>
-            <input type="text" id="xmEdtServico">
+        <div class="col s6">
+            <label>Cliente</label><br>
+            <span id="xmSpFantasia" class="spanAutoPreenc"></span>
+        </div>
+
+        <div class="col s6">
+            <label>CPNJ</label><br>
+            <span id="xmSpCnpj" class="spanAutoPreenc"></span>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <label>Serviços</label>
+            <select name="id_servico" style="width: 94% !important" id="slctServico"></select>
         </div>
     </div>
-    <!-- xGrid de Cliente -->
-    <div id="xgServicos"></div>
+
+    <div class="row">
+        <div class="col s6">
+            <label>Engenheiro</label><br>
+            <input type="text" style="width: 83% !important;" id="xmInEngenheiro">
+        </div>
+
+        <div class="col s6">
+            <label>Executores</label>
+            <input type="text" style="width: 83% !important;" id="xmInEx">
+        </div>
+
+        <div class="col s6">
+            <label>Valor</label>
+            <input type="text" style="width: 83% !important;" id="xmInValor" class="real">
+        </div>
+
+        <div class="col s6">
+            <label>Data de início</label><br>
+            <input type="text" style="width: 83% !important;" id="xmInDataI" class="date">
+        </div>
+
+        <div class="col s6">
+            <label>Data de finalização</label>
+            <input type="text" style="width: 83% !important;" id="xmInDataF" class="date">
+        </div>
+
+
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <label>OBS</label>
+            <textarea type="text" style=" width: 96% !important;" class="txtArea" id="xmInObs" rows="50"
+                placeholder="Observações"></textarea>
+        </div>
+    </div>
+
 </div>
 
 <!-- xModal para cadastrar um novo serviço -->
@@ -189,72 +248,17 @@
     <div id="xmQtdBtn"></div>
 </div>
 
-<!-- MODAL DE NOVO SERVICO -->
-<div id="xmServico">
-    <span id="xmSpId_cliente" hidden></span>
-    <div class="row">
-        <div class="col s6">
-            <label>Cliente</label><br>
-            <span id="xmSpFantasia" class="spanAutoPreenc"></span>
-        </div>
-
-        <div class="col s6">
-            <label>CPNJ</label><br>
-            <span id="xmSpCnpj" class="spanAutoPreenc"></span>
-        </div>
-
-    </div>
-    <div class="row">
-        <div class="col s12">
-            <label>Serviços</label>
-            <select name="id_servico" style="width: 94% !important" id="slctServico"></select>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col s6">
-            <label>Engenheiro</label><br>
-            <input type="text" style="width: 83% !important;" id="xmInEngenheiro">
-        </div>
-
-        <div class="col s6">
-            <label>Executores</label>
-            <input type="text" style="width: 83% !important;" id="xmInEx">
-        </div>
-
-        <div class="col s6">
-            <label>Valor</label>
-            <input type="text" style="width: 83% !important;" id="xmInValor" class="real">
-        </div>
-
-        <div class="col s6">
-            <label>Finalizadores</label>
-            <input type="text" style="width: 83% !important;" id="xmInFinalizadores">
-        </div>
-
-        <div class="col s6">
-            <label>Data de início</label><br>
-            <input type="text" style="width: 83% !important;" id="xmInDataI" class="date">
-        </div>
-
-        <div class="col s6">
-            <label>Data de finalização</label>
-            <input type="text" style="width: 83% !important;" id="xmInDataF" class="date">
-        </div>
-
-
-    </div>
-
-    <div class="row">
-        <div class="col s12">
-            <label>OBS</label>
-            <textarea type="text" style=" width: 96% !important;" class="txtArea" id="xmInObs" rows="50"
-                placeholder="Observações"></textarea>
-        </div>
-    </div>
-
+<!-- MODAL INSERIR ROMANEIO -->
+<div id="xmIRomaneio">
+    <div id="xgProdRomaneio"></div>
 </div>
 
+<!-- MODAL DOS ITENS DO ROMANEIO -->
+<div id="xmModalPDevolucao">
+    <div id="xgRomaneioItensD"></div>
+</div>
+
+<!-- RELATÓRIO -->
 <div class="rlRomaneio" style="display: none;">
 
     <br>
@@ -287,11 +291,6 @@
             <div class="col s3">
                 <label>Executores</label><br>
                 <span id="rlExecutores" class="spanAutoPreenc"></span>
-            </div>
-
-            <div class="col s4">
-                <label>Finalizadores</label><br>
-                <span id="rlFinalizadores" class="spanAutoPreenc"></span>
             </div>
         </div>
 
@@ -331,16 +330,6 @@
             </div>
         </div>
     </div>
-</div>
-
-<!-- MODAL INSERIR ROMANEIO -->
-<div id="xmIRomaneio">
-    <div id="xgProdRomaneio"></div>
-</div>
-
-<!-- MODAL DOS ITENS DO ROMANEIO -->
-<div id="xmModalPDevolucao">
-    <div id="xgRomaneioItensD"></div>
 </div>
 
 <div id="pnCodigoTela">Saída</div>

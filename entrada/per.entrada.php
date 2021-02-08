@@ -59,7 +59,12 @@ class Entrada
     {
         $id_nota = $this->sql->deleteNota($param);
         $id_itens_nota = $this->sql->deleteItens($param);
+    }
 
+    function deleteItensUni($param)
+    {
+        $id_itens_nota = $this->sql->deleteItensUni($param);
+        $call = $this->sql->updateDelProduto($param);
     }
 
     function updateDelProduto($param)

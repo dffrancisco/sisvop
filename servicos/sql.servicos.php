@@ -37,7 +37,7 @@ class Sqlservicos
       a.id_lista_servico, a.valor,
       a.data_inicio, a.hora, a.status, 
       a.data_finalizacao, a.engenheiro,
-      a.executores, a.finalizadores, a.obs,
+      a.executores, a.obs,
       b.servico, 
       c.id_cliente,c.fantasia, c.cnpj
       FROM lista_servicos a, servicos b, clientes c
@@ -228,6 +228,15 @@ class Sqlservicos
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function getUf(){
+
+    $sql = "SELECT * FROM uf";
+    
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+  
   // INSERT
   function inserirItens($param){
     $sql = "INSERT INTO 
@@ -267,6 +276,21 @@ class Sqlservicos
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function insert($param){
+    extract($param);
+
+    $sql = "INSERT INTO clientes 
+            (cnpj, razao, fantasia, email, inscricao, fixo, tel, representante, data_cadastro, cep, endereco, id_uf, cidade, bairro)
+            VALUES
+            (:CNPJ, :RAZAO, :EMAIL,:FANTASIA, :INSCRICAO, :FIXO, :TEL, :REPRESENTANTE, :DATA_CADASTRO, :CEP, :ENDERECO, :ID_UF, :CIDADE, :BAIRRO)
+            RETURNING ID_CLIENTE";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
   //NOVO E GERAR
   function novoRomaneio($param){
 
@@ -287,11 +311,11 @@ class Sqlservicos
     $sql = "INSERT INTO lista_servicos 
             (id_cliente, id_servico, 
             data, hora, status, data_inicio, data_finalizacao,
-            engenheiro, executores, obs, valor, finalizadores)
+            engenheiro, executores, obs, valor)
             VALUES 
             (:ID_CLIENTE, :ID_SERVICO, 
             :DIA, :HORA, 'PROJETO', :DATA_INICIO, :DATA_FINAL,
-            :ENGENHEIRO, :EXECUTORES, :OBS, :VALOR, :FINALIZADORES)
+            :ENGENHEIRO, :EXECUTORES, :OBS, :VALOR)
             returning id_lista_servico";
 
     $sql = prepare::SQL($sql, $param);

@@ -85,6 +85,11 @@ class Servicos
         echo json_encode($call);
     }
 
+    function getUf()
+    {
+        $call = $this->sql->getUf();
+        echo json_encode($call);
+    }
     //NOVO E GERAR
     function novoRomaneio($param){
         $call = $this->sql->novoRomaneio($param);
@@ -94,6 +99,13 @@ class Servicos
     function gerarServico($param){
         $call = $this->sql->gerarServico($param);
         echo '{"ID_LISTA_SERVICO":"'.$call[0]->ID_LISTA_SERVICO.'"}';
+    }
+
+    function saveCliente($param){
+
+        $id_cliente = $this->sql->insert($param);
+        echo '{"ID_CLIENTE":"' . $id_cliente[0]->ID_CLIENTE . '"}';
+       
     }
 
     //INSERIR

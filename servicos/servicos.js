@@ -8,14 +8,13 @@ let xgServicos;
 let xgProdRomaneio
 let xgDevolucao;
 let xgRomaneiosItensD;
-let xmModalPDevolucao
 
-let xmListaServ;
 let xmEdtQtd
 let xmListaCliente;
 let xmInsProduto;
 let xmNovoServico;
 let xmInserirRomaneio;
+let xmModalPDevolucao
 
 let total = 0;
 let valorT = 0
@@ -29,7 +28,6 @@ let ID_CLIENTE;
 $(function () {
     saida.modalCliente();
     saida.modalInsProduto();
-    saida.modalListaServ()
     saida.grid();
     saida.modalInserirRomaneio();
 
@@ -49,14 +47,15 @@ $(function () {
     $('.btnDel').attr("disabled", true);
     $('.btnAF').attr("disabled", true);
     $('.btnV').attr("disabled", true);
+    $('.btnFP').attr("disabled", true);
     $('.btnFS').attr("disabled", true);
-    $('.btnF').attr("disabled", true);
     $('.btnInsP').attr("disabled", true);
     $('.btnNR').attr("disabled", true);
     $('.btnPR').attr("disabled", true);
     $('.btnFR').attr("disabled", true);
     $('.btnPDF').attr("disabled", true);
     $('.btnDI').attr("disabled", true);
+    $('.btnRG').attr("disabled", true);
 
     $("#xmEdtCliente").keydown(function (e) {
         if (e.keyCode == 13) {
@@ -112,8 +111,13 @@ $(function () {
         saida.buscar()
     })
 
+    $(".btnFS").click(function () {
+        saida.finalizarObra()
+    })
+
     $(".btnBS").click(function () {
         saida.buscarServ()
+
     })
 
     $("#xmQtd").keydown(function (e) {
@@ -124,8 +128,19 @@ $(function () {
 
     })
 
+    $("#edtCnpj").focusout(function (e) {
+        CNPJ = $(this).val().trim()
+        if (clientes.validarCpnj(CNPJ) == false)
+            show({
+                msg: 'CNPJ inválido',
+                onClose: () => {
+                    $("#edtCnpj").select().focus()
+                }
+            })
+
+    })
+
     xgServicos.queryOpen({ search: '' })
-    xmListaServ.open()
     $('#xmEdtServico').focus()
 });
 
@@ -136,6 +151,45 @@ const saida = (function () {
     let ControleGrid;
 
     function grid() {
+
+        // GRID SERVICOS
+        xgServicos = new xGridV2.create({
+            el: `#xgServicos`,
+            theme: 'x-clownV2',
+            height: '320',
+            columns: {
+
+                'SERVIÇO': { dataField: 'SERVICO' },
+                FANTASIA: { dataField: 'FANTASIA' },
+                'DATA INÍCIO': { dataField: 'DATA_INICIO', center: true },
+                'DATA FINAL': { dataField: 'DATA_FINALIZACAO', center: true },
+                STATUS: { dataField: 'STATUS' },
+
+            },
+
+            onKeyDown: {
+                '13': (ln, e) => {
+
+                    getDadosServ(ln)
+                }
+
+            },
+
+            dblClick: (ln,) => {
+                if (ln == false)
+                    return false
+
+                getDadosServ(ln)
+
+            },
+
+            query: {
+                execute: (r) => {
+                    getServicos(r.param.search, r.offset);
+                }
+            }
+
+        })
 
         // GRID LISTA DE ITENS
         xgSaida = new xGridV2.create({
@@ -168,9 +222,9 @@ const saida = (function () {
                             click: novo,
                         },
                         fechar: {
-                            html: "Fechar Serviço",
-                            class: "btnP btnFS",
-                            click: fecharServ,
+                            html: "Finalizar Projeto",
+                            class: "btnP btnFP",
+                            click: fecharProj,
                         },
 
                         deletar: {
@@ -188,13 +242,27 @@ const saida = (function () {
             },
 
             onSelectLine: (r) => {
+
                 let origem = r.ORIGEM
-                let status = $('#spStatus').html()
+                let status = xgServicos.dataSource().STATUS
+
+                if (origem == 'PROJETO' && status == 'PROJETO') {
+                    $('.btnDel').removeAttr('disabled', true)
+                }
 
                 if (origem == 'PROJETO' && status == 'ANDAMENTO') {
                     $('.btnDel').attr("disabled", true);
+                }
 
-                } else {
+                if (origem == 'PROJETO' && status == 'FINALIZADO') {
+                    $('.btnDel').attr("disabled", true);
+                }
+
+                if (origem == 'ADICIONAL' && status == 'FINALIZADO') {
+                    $('.btnDel').attr("disabled", true);
+                }
+
+                if (origem == 'ADICIONAL' && status == 'ANDAMENTO') {
                     $('.btnDel').removeAttr('disabled', true)
                 }
             },
@@ -203,9 +271,17 @@ const saida = (function () {
 
                 '46': (ln) => {
                     let ORIGEM = xgSaida.dataSource().ORIGEM
-                    let status = $('#spStatus').html()
+                    let status = xgServicos.dataSource().STATUS
 
                     if (ORIGEM == 'PROJETO' && status == 'ANDAMENTO') {
+                        return false
+                    }
+
+                    if (ORIGEM == 'PROJETO' && status == 'FINALIZADO') {
+                        return false
+                    }
+
+                    if (ORIGEM == 'ADICIONAL' && status == 'FINALIZADO') {
                         return false
                     }
 
@@ -320,7 +396,7 @@ const saida = (function () {
         xgRomaneios = new xGridV2.create({
             el: `#xgRomaneios`,
             theme: 'x-clownV2',
-            height: 120,
+            height: '120',
 
             columns: {
                 'ID': { dataField: 'ID_ROMANEIO', width: '10%' },
@@ -333,6 +409,8 @@ const saida = (function () {
             onSelectLine: (r) => {
 
                 xgRomaneiosItens.queryOpen({ search: r.ID_ROMANEIO })
+
+
 
                 if (r.STATUS == "PREPARO") {
 
@@ -349,6 +427,11 @@ const saida = (function () {
                     $('.btnPDF').removeAttr("disabled");
                 }
 
+                if (xgServicos.dataSource().STATUS == 'FINALIZADO') {
+                    $('.btnPDF').attr("disabled", true);
+
+                }
+
 
             },
 
@@ -363,7 +446,7 @@ const saida = (function () {
         xgRomaneiosItens = new xGridV2.create({
             el: `#xgRomaneiosItens`,
             theme: 'x-clownV2',
-            height: 150,
+            height: '150',
 
             columns: {
                 Produto: { dataField: 'DESCRICAO' },
@@ -409,9 +492,6 @@ const saida = (function () {
                 }
             },
 
-            onSelectLine: (l) => {
-
-            },
             query: {
                 execute: (r) => {
                     getItensRomaneio(r.param.search, r.offset)
@@ -419,88 +499,86 @@ const saida = (function () {
             }
         })
 
-        // GRID SERVICOS
-        xgServicos = new xGridV2.create({
-            el: `#xgServicos`,
-            theme: 'x-clownV2',
-            height: 320,
-            columns: {
 
-                'SERVIÇO': { dataField: 'SERVICO' },
-                FANTASIA: { dataField: 'FANTASIA' },
-                'DATA INÍCIO': { dataField: 'DATA_INICIO', center: true },
-                'DATA FINAL': { dataField: 'DATA_FINALIZACAO', center: true },
-                STATUS: { dataField: 'STATUS' },
 
-            },
+    }
 
-            onKeyDown: {
-                '13': (ln, e) => {
-                    console.log('ln :', ln.STATUS);
+    function finalizarObra() {
 
-                    clientes.getListaServicoX(ln.ID_LISTA_SERVICO);
 
-                    ID_LISTA_SERVICO = ln.ID_LISTA_SERVICO
+        confirmaCodigo({
+            msg: 'Digite o código abaixo caso deseja finalizar o projeto<br>' +
+                '(APÓS ISSO, O PROJETO NÃO PODERÁ SER FINALIZADO NOVAMENTE)',
+            call: () => {
 
-                    xmListaServ.close();
+                axios.post(url, {
+                    call: 'atualizaStatus',
+                    param: { ID_LISTA_SERVICO: ID_LISTA_SERVICO, STATUS: 'FINALIZADO' }
+                })
 
-                    $('.btnInsP').removeAttr("disabled");
+                $('#spStatus').html('FINALIZADO');
 
-                    if (ln.STATUS == 'ANDAMENTO') {
-                        $('.btnFS').attr('disabled', true);
-                        $('.btnNR').removeAttr("disabled");
+                $('.btnInsP').prop('disabled', true)
+                $('.btnFP').prop('disabled', true)
+                $('.btnDel').prop('disabled', true)
+                $('.btnNR').prop('disabled', true)
+                $('.btnPR').prop('disabled', true)
+                $('.btnFR').prop('disabled', true)
+                $('.btnPDF').prop('disabled', true)
+                $('.btnDI').prop('disabled', true)
+                $('.btnFS').prop('disabled', true)
+                $('.btnRG').removeAttr('disabled')
 
-                    }
-                    if (ln.STATUS == 'PROJETO') {
-                        $('.btnNR').attr("disabled", true);
-                        $('.btnFS').removeAttr('disabled');
-
-                    }
-
-                    xgSaida.queryOpen({ search: ln.ID_LISTA_SERVICO })
-                    xgRomaneios.queryOpen({ search: ln.ID_LISTA_SERVICO })
-                    xgDevolucao.queryOpen({ search: ln.ID_LISTA_SERVICO })
-
-                }
-
-            },
-
-            dblClick: (ln,) => {
-                console.log('ln :', ln);
-
-                clientes.getListaServicoX(ln.ID_LISTA_SERVICO);
-
-                ID_LISTA_SERVICO = ln.ID_LISTA_SERVICO
-
-                xmListaServ.close();
-
-                $('.btnInsP').removeAttr("disabled");
-
-                if (ln.STATUS == 'ANDAMENTO') {
-                    $('.btnFS').attr('disabled', true);
-                    $('.btnNR').removeAttr("disabled");
-
-                }
-                if (ln.STATUS == 'PROJETO') {
-                    $('.btnNR').attr("disabled", true);
-                    $('.btnFS').removeAttr('disabled');
-
-                }
-
-                xgSaida.queryOpen({ search: ln.ID_LISTA_SERVICO })
-                xgRomaneios.queryOpen({ search: ln.ID_LISTA_SERVICO })
-                xgDevolucao.queryOpen({ search: ln.ID_LISTA_SERVICO })
-
-            },
-
-            query: {
-                execute: (r) => {
-                    getServicos(r.param.search, r.offset);
-                }
             }
-
         })
+    }
 
+    // FUNCTION SERVICOS
+
+    function getDadosServ(ln) {
+
+        clientes.getListaServicoX(ln.ID_LISTA_SERVICO);
+
+        ID_LISTA_SERVICO = ln.ID_LISTA_SERVICO
+
+        $('.btnInsP').removeAttr("disabled");
+
+        if (ln.STATUS == 'ANDAMENTO') {
+            $('.btnFP').attr('disabled', true);
+            $('.btnNR').removeAttr("disabled");
+            $('.btnFS').removeAttr("disabled");
+            $('.btnRG').prop('disabled', true)
+
+
+        }
+        if (ln.STATUS == 'PROJETO') {
+            $('.btnNR').attr("disabled", true);
+            $('.btnFP').removeAttr('disabled');
+            $('.btnFS').attr("disabled", true);
+            $('.btnRG').prop('disabled', true)
+
+
+        }
+
+        if (ln.STATUS == 'FINALIZADO') {
+            $('.btnInsP').prop('disabled', true)
+            $('.btnFP').prop('disabled', true)
+            $('.btnDel').prop('disabled', true)
+            $('.btnNR').prop('disabled', true)
+            $('.btnPR').prop('disabled', true)
+            $('.btnFR').prop('disabled', true)
+            $('.btnPDF').prop('disabled', true)
+            $('.btnDI').prop('disabled', true)
+            $('.btnFS').prop('disabled', true)
+            $('.btnRG').removeAttr('disabled', true)
+        }
+
+        xgSaida.queryOpen({ search: ln.ID_LISTA_SERVICO })
+        xgRomaneios.queryOpen({ search: ln.ID_LISTA_SERVICO })
+        xgDevolucao.queryOpen({ search: ln.ID_LISTA_SERVICO })
+
+        $('#Servicos').hide()
+        $('#dados_cliente').show()
     }
 
     // FUNCTION PRODUTOS SERVICO 
@@ -539,16 +617,16 @@ const saida = (function () {
         })
     }
 
-    function buscarServ() {
+    async function buscarServ() {
 
-        xmListaServ.open();
-
-        xgServicos.queryOpen({ search: '' })
+        await xgServicos.queryOpen({ search: '' })
 
         $('#xmEdtServico').focus()
+        $('#dados_cliente').hide()
+        $('#Servicos').show()
     }
 
-    function fecharServ() {
+    function fecharProj() {
 
         confirmaCodigo({
             msg: 'Digite o código abaixo caso deseja finalizar o projeto<br>' +
@@ -561,7 +639,7 @@ const saida = (function () {
                 })
 
                 $('#spStatus').html('ANDAMENTO');
-                $('.btnFS').prop('disabled', true)
+                $('.btnFP').prop('disabled', true)
                 $('.btnNR').removeAttr("disabled");
                 $('.btnDI').removeAttr("disabled");
             }
@@ -715,7 +793,6 @@ const saida = (function () {
             EXECUTORES: $('#spExecutores').html(),
             DATA_INICIO: $('#spDataI').html(),
             DATA_FINALIZACAO: $('#spDataF').html(),
-            FINALIZADORES: $('#spFinalizadores').html(),
         }
 
         $('#rl_representante').html(xgRomaneios.dataSource().NOME)
@@ -726,7 +803,6 @@ const saida = (function () {
         $('#rlExecutores').html(dados_servico.EXECUTORES)
         $('#rlDataI').html(dados_servico.DATA_INICIO)
         $('#rlDataF').html(dados_servico.DATA_FINALIZACAO)
-        $('#rlFinalizadores').html(dados_servico.FINALIZADORES)
 
 
         for (let i in dt) {
@@ -844,16 +920,6 @@ const saida = (function () {
         })
     }
 
-    function modalListaServ() {
-
-        xmListaServ = new xModal.create({
-            el: '#xmServicos',
-            title: 'Servicos',
-            width: '900',
-
-        })
-    }
-
     function modalInserirRomaneio() {
 
         xmInserirRomaneio = new xModal.create({
@@ -872,10 +938,10 @@ const saida = (function () {
         grid: grid,
         modalCliente: modalCliente,
         modalInsProduto: modalInsProduto,
-        modalListaServ, modalListaServ,
         buscar: buscar,
         buscarServ: buscarServ,
         modalInserirRomaneio: modalInserirRomaneio,
+        finalizarObra: finalizarObra
 
     }
 })();
@@ -890,7 +956,7 @@ const clientes = (function () {
         xgCliente = new xGridV2.create({
 
             el: '#pnGridCliente',
-            height: '350',
+            height: '330',
             theme: 'x-clownV2',
             heightLine: '35',
 
@@ -934,10 +1000,6 @@ const clientes = (function () {
 
                 $("#xmInEngenheiro").focus()
 
-            },
-
-            sideBySide: {
-                el: '#pnFieldCliente',
             },
 
             query: {
@@ -986,7 +1048,6 @@ const clientes = (function () {
         ID_SERVICO = $('#slctServico').val()
         ENGENHEIRO = $('#xmInEngenheiro').val()
         EXECUTORES = $('#xmInEx').val()
-        FINALIZADORES = $('#xmInFinalizadores').val()
         DATA_INICIO = $('#xmInDataI').val()
         DATA_FINAL = $('#xmInDataF').val()
         VALOR = $('#xmInValor').val()
@@ -1001,7 +1062,7 @@ const clientes = (function () {
                 ID_CLIENTE, ID_SERVICO,
                 ENGENHEIRO, EXECUTORES,
                 DATA_INICIO, DATA_FINAL,
-                OBS, DIA, HORA, VALOR, FINALIZADORES
+                OBS, DIA, HORA, VALOR
             }
 
         }).then(rs => {
@@ -1051,8 +1112,6 @@ const clientes = (function () {
         $('#spDataF').html(param.DATA_FINALIZACAO)
         $('#spStatus').html(param.STATUS)
         $('#spValor').html(param.VALOR)
-        $('#spFinalizadores').html(param.FINALIZADORES)
-
 
     }
 
@@ -1065,6 +1124,7 @@ const clientes = (function () {
 
     }
 
+    //  MODAIS
     function modalNovoServico() {
 
         xmNovoServico = new xModal.create({
@@ -1078,16 +1138,8 @@ const clientes = (function () {
                     html: 'Confirmar',
                     class: 'xmBtnNovoS',
                     click: (e) => {
-
-                        zerarGrids()
                         novoServico()
-
-                        $('.btnInsP').removeAttr("disabled");
-                        $('.btnFS').prop('disabled', true);
-                        $('.btnPDF').prop('disabled', true);
-
-                        xmNovoServico.close()
-                        xmListaCliente.close()
+                        zerarGrids()
                     }
                 }
             },
@@ -1099,7 +1151,6 @@ const clientes = (function () {
                 $('#xmInDataF').val('')
                 $('#xmInValor').val('')
                 $('#xmInObs').val('')
-                $('#spFinalizadores').val('')
             }
         })
     }
@@ -1107,7 +1158,7 @@ const clientes = (function () {
     return {
         grid: grid,
         modalNovoServico: modalNovoServico,
-        getListaServicoX: getListaServicoX
+        getListaServicoX: getListaServicoX,
     }
 })();
 
@@ -1255,7 +1306,6 @@ const produtos = (function () {
 
         let origem;
         let status = $('#spStatus').text();
-        console.log('status :', status);
 
         valProduto = {
             CODIGO: $("#xmSpCodigo").text(),
@@ -1277,12 +1327,12 @@ const produtos = (function () {
         }
 
         if (status == 'ANDAMENTO') {
-            $('.btnFS').prop('disabled', true);
+            $('.btnFP').prop('disabled', true);
 
             origem = 'ADICIONAL'
         }
         if (status == 'PROJETO') {
-            $('.btnFS').removeAttr('disabled');
+            $('.btnFP').removeAttr('disabled');
 
             origem = 'PROJETO'
         }
@@ -1300,7 +1350,6 @@ const produtos = (function () {
             QTD_RETIRADA: 0
         }
 
-        console.log('param.ORIGEM :', param.ORIGEM);
 
         await axios.post(url, {
 
@@ -1317,7 +1366,7 @@ const produtos = (function () {
         valorT = 0
         total = 0
 
-        $('.btnFS').removeAttr('disabled')
+        $('.btnFP').removeAttr('disabled')
 
 
 
@@ -1522,12 +1571,6 @@ const devolucao = (function () {
                                 getModalPDevolucao()
                             }
                         },
-
-                        finalizarObra: {
-
-                            html: "Finalizar Serviço",
-                            class: "btnP btnF",
-                        },
                     },
                 }
             },
@@ -1731,6 +1774,7 @@ const devolucao = (function () {
         xgDevolucao.insertLine(item);
         xmEdtQtd.close()
     }
+
 
     // MODAL 
 
