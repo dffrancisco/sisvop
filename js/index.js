@@ -4,7 +4,6 @@ const login = new Login();
 
 $(function () {
 
-
     calc = new xCalkModal()
 
     $('.real').maskMoney({ thousands: '.', decimal: ',', allowZero: true });
