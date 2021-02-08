@@ -43,7 +43,6 @@ $(function () {
     getDataEmpresa()
 
     $('.tabs').tabs();
-    $('#xmInDataI').datepicker();
 
     $('.btnDel').attr("disabled", true);
     $('.btnAF').attr("disabled", true);
@@ -712,6 +711,8 @@ const saida = (function () {
 
                 $('.btnPR').attr("disabled", true);
                 $('.btnFR').attr("disabled", true);
+                $('.btnFS').removeAttr("disabled");
+
             }
         })
 
@@ -1119,6 +1120,7 @@ const clientes = (function () {
         $('#spDataF').html(param.DATA_FINALIZACAO)
         $('#spStatus').html(param.STATUS)
         $('#spValor').html(param.VALOR)
+        $('#spObs').html(param.OBS)
 
 
 

@@ -62,6 +62,10 @@
 
         <div class="row">
             <div class="col s3">
+                <label>OBS</label><br>
+                <span id="spObs" class="spanAutoPreenc"></span>
+            </div>
+            <div class="col s3">
                 <label>Data de início</label><br>
                 <span id="spDataI" class="spanAutoPreenc"></span>
             </div>
