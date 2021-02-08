@@ -83,7 +83,7 @@ const senha = (function () {
 
             query: {
                 execute: (r) => {
-                    getSenhaFuncionarios(r.param.search);
+                    getSenhaFuncionarios(r.param.search, r.offset);
                 }
             }
         })
@@ -316,10 +316,10 @@ const senha = (function () {
 
 
     //rotas
-    function getSenhaFuncionarios(search) {
+    function getSenhaFuncionarios(search, offset) {
         axios.post(url, {
             call: 'getSenhaFuncionarios',
-            param: { search: search }
+            param: { search: search, offset: offset }
         })
             .then(rs => {
                 xgUsuario.querySourceAdd(rs.data);

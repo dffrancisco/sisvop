@@ -75,12 +75,6 @@
                 <input type="text" id="edtDataCadastro" name="DATA_CADASTRO" disabled>
             </div>
         </div>
-        <!-- <div class="row">
-            <div class="col s3">
-                <label></label>
-                <input type="text" id="edt" name="">
-            </div>
-        </div> -->
 
     </div>
 
