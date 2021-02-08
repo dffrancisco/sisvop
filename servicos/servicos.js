@@ -248,23 +248,23 @@ const saida = (function () {
                 let origem = r.ORIGEM
                 let status = xgServicos.dataSource().STATUS
 
-                if (origem == 'PROJETO' && status == 'PROJETO') {
+                if (origem == 'PROJETO' && $('#spStatus').html() == 'PROJETO') {
                     $('.btnDel').removeAttr('disabled', true)
                 }
 
-                if (origem == 'PROJETO' && status == 'ANDAMENTO') {
+                if (origem == 'PROJETO' && $('#spStatus').html() == 'ANDAMENTO') {
                     $('.btnDel').attr("disabled", true);
                 }
 
-                if (origem == 'PROJETO' && status == 'FINALIZADO') {
+                if (origem == 'PROJETO' && $('#spStatus').html() == 'FINALIZADO') {
                     $('.btnDel').attr("disabled", true);
                 }
 
-                if (origem == 'ADICIONAL' && status == 'FINALIZADO') {
+                if (origem == 'ADICIONAL' && $('#spStatus').html() == 'FINALIZADO') {
                     $('.btnDel').attr("disabled", true);
                 }
 
-                if (origem == 'ADICIONAL' && status == 'ANDAMENTO') {
+                if (origem == 'ADICIONAL' && $('#spStatus').html() == 'ANDAMENTO') {
                     $('.btnDel').removeAttr('disabled', true)
                 }
             },
@@ -1044,10 +1044,14 @@ const clientes = (function () {
 
         if (param.DATA_INICIO.length != 10) {
             show("Data de início inválida")
+            return false
+
         }
 
         if (param.DATA_INICIO.length != 10) {
             show("Data de finalização inválida")
+            return false
+
         }
 
         param.OBS = $('#xmInObs').val()
@@ -1068,6 +1072,12 @@ const clientes = (function () {
 
 
         })
+
+        $('#dados_cliente').show()
+        $('#Servicos').hide()
+        xmNovoServico.close()
+        xmListaCliente.close()
+
     }
 
     function getListaServicoX(id_lista_servico) {
@@ -1082,8 +1092,13 @@ const clientes = (function () {
 
                 setServicoTela(rs.data[0])
 
-                if (rs.data[0].STATUS == "PROJETO")
+                if (rs.data[0].STATUS == "PROJETO") {
                     $('.btnDI').attr("disabled", true)
+                    $('.btnPDF').attr('disabled', true)
+                    $('.btnFS').attr('disabled', true)
+                    $('.btnInsP').removeAttr("disabled")
+
+                }
 
                 if (rs.data[0].STATUS == "ANDAMENTO")
                     $('.btnDI').removeAttr("disabled")
@@ -1104,12 +1119,6 @@ const clientes = (function () {
         $('#spDataF').html(param.DATA_FINALIZACAO)
         $('#spStatus').html(param.STATUS)
         $('#spValor').html(param.VALOR)
-
-        $('.btnPDF').attr('disabled', true)
-        $('.btnFS').attr('disabled', true)
-
-        $('#dados_cliente').show()
-        $('#Servicos').hide()
 
 
 
@@ -1140,8 +1149,7 @@ const clientes = (function () {
                     click: (e) => {
                         novoServico()
                         zerarGrids()
-                        xmNovoServico.close()
-                        xmListaCliente.close()
+
                     }
                 }
             },
@@ -1230,6 +1238,8 @@ const produtos = (function () {
                     evento = 'Inserir'
 
                     $("#xmEdtQtd").focus();
+
+                    $('#pnFieldQtdRetirado').hide()
                 },
             },
 
@@ -1367,7 +1377,9 @@ const produtos = (function () {
         valorT = 0
         total = 0
 
-        $('.btnFP').removeAttr('disabled')
+        if (xgSaida.length == 0 && $('#spStatus').html() == 'PROJETO') {
+            $('.btnFP').removeAttr('disabled')
+        }
 
 
 
@@ -1730,9 +1742,8 @@ const devolucao = (function () {
             return false
         }
 
-        $('#pnFieldQtdRetirado').show()
+        $('#pnFieldQtdRetirado').hide()
 
-        $('#xmBQtdRetirado').html(ln.QTD_RETIRADA)
         $("#xmBQtd").html(dispo);
         $("#xmSpId").html(ln.ID_PRODUTO);
         $("#xmSpCodigo").html(ln.CODIGO);
