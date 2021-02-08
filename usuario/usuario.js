@@ -424,7 +424,6 @@ const senha = (function () {
             SENHA: senha,
             ID_FUNCIONARIOS: $("#slctFuncionario option:selected").val()
         }
-        let search = ''
         let funcionario = $("#slctFuncionario option:selected").html()
         setTimeout(function () {
             confirma({
@@ -436,8 +435,7 @@ const senha = (function () {
                     }).then(r => {
                         $('#edtNovoSenha').val('')
                         $('#edtNovoConfSenha').val('')
-                        xgUsuario.clear()
-                        getSenhaFuncionarios(search)
+                        xgUsuario.queryOpen({ search: '' })
 
                         xmNovaSenha.close()
                         show('A senha foi cadastrada')
