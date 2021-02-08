@@ -71,10 +71,6 @@
                 <span id="spDataF" class="spanAutoPreenc"></span>
             </div>
 
-            <div class="col s3">
-                <label>Valor</label><br>
-                <span id="spValor" class="spanAutoPreenc"></span>
-            </div>
         </div>
 
         <br>
@@ -171,11 +167,6 @@
         </div>
 
         <div class="col s6">
-            <label>Valor</label>
-            <input type="text" style="width: 83% !important;" id="xmInValor" class="real">
-        </div>
-
-        <div class="col s6">
             <label>Data de início</label><br>
             <input type="text" style="width: 83% !important;" id="xmInDataI" class="date">
         </div>
@@ -235,9 +226,12 @@
                 <span id="xmSpMarca" class="spanAutoPreenc"></span>
             </div>
 
-            <div class="col s10" id="pnFieldEdtQtd">
+            <div class="col s10">
                 <br><label>Quantidade existente</label><br>
                 <b id="xmBQtd"></b><b> Unidades restantes</b>
+            </div>
+            <div class="col s10" id="pnFieldQtdRetirado" hidden>
+                <b id="xmBQtdRetirado"></b><b> Unidades retiradas</b>
             </div>
             <div class="col s10" id="pnFieldEdtQtd">
                 <br><label>QTD</label>

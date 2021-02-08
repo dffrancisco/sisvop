@@ -311,11 +311,11 @@ class Sqlservicos
     $sql = "INSERT INTO lista_servicos 
             (id_cliente, id_servico, 
             data, hora, status, data_inicio, data_finalizacao,
-            engenheiro, executores, obs, valor)
+            engenheiro, executores, obs)
             VALUES 
             (:ID_CLIENTE, :ID_SERVICO, 
-            :DIA, :HORA, 'PROJETO', :DATA_INICIO, :DATA_FINAL,
-            :ENGENHEIRO, :EXECUTORES, :OBS, :VALOR)
+            :DATA, :HORA, 'PROJETO', :DATA_INICIO, :DATA_FINAL,
+            :ENGENHEIRO, :EXECUTORES, :OBS)
             returning id_lista_servico";
 
     $sql = prepare::SQL($sql, $param);

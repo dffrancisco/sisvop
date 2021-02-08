@@ -43,6 +43,7 @@ $(function () {
     getDataEmpresa()
 
     $('.tabs').tabs();
+    $('#xmInDataI').datepicker();
 
     $('.btnDel').attr("disabled", true);
     $('.btnAF').attr("disabled", true);
@@ -143,6 +144,7 @@ $(function () {
     xgServicos.queryOpen({ search: '' })
     $('#xmEdtServico').focus()
 });
+
 
 
 const saida = (function () {
@@ -318,70 +320,13 @@ const saida = (function () {
 
                 '13': (ln) => {
 
-                    for (let i = 0; i < 9; i++) {
-                        delete ln[i]
+                    edtQtd(ln)
 
-                    }
-
-                    for (let i in xgRomaneiosItens.data()) {
-
-                        if (xgRomaneiosItens.data()[i].ID_ITENS_SERVICO == ln.ID_ITENS_SERVICO) {
-                            setTimeout(function () {
-                                show("Item já incluso!");
-                            }, 1)
-                            return false
-                        }
-                    }
-
-                    if (ln.QTD == 0) {
-                        setTimeout(function () {
-                            show("Item esgotado!");
-                        }, 1)
-                        return false
-                    }
-
-                    $("#xmBQtd").html(ln.QTD);
-                    $("#xmSpId").html(ln.ID_PRODUTO);
-                    $("#xmSpCodigo").html(ln.CODIGO);
-                    $("#xmSpProd").html(ln.DESCRICAO);
-                    $("#xmSpMarca").html(ln.MARCA);
-                    $("#xmSpValor").html(ln.VALOR);
-
-                    xmEdtQtd.open()
-
-                    $('#xmEdtQtd').focus()
                 }
             },
 
             dblClick: (ln) => {
-
-                for (let i in xgRomaneiosItens.data()) {
-
-                    if (xgRomaneiosItens.data()[i].ID_ITENS_SERVICO == ln.ID_ITENS_SERVICO) {
-                        setTimeout(function () {
-                            show("Item já incluso!");
-                        }, 1)
-                        return false
-                    }
-                }
-
-                if (ln.QTD == 0) {
-                    setTimeout(function () {
-                        show("Item esgotado!");
-                    }, 1)
-                    return false
-                }
-
-                $("#xmBQtd").html(ln.QTD);
-                $("#xmSpId").html(ln.ID_PRODUTO);
-                $("#xmSpCodigo").html(ln.CODIGO);
-                $("#xmSpProd").html(ln.DESCRICAO);
-                $("#xmSpMarca").html(ln.MARCA);
-                $("#xmSpValor").html(ln.VALOR);
-
-                xmEdtQtd.open()
-
-                $('#xmEdtQtd').focus()
+                edtQtd(ln)
 
             },
 
@@ -697,6 +642,39 @@ const saida = (function () {
 
         }
 
+    }
+
+    function edtQtd(ln) {
+        for (let i in xgRomaneiosItens.data()) {
+
+            if (xgRomaneiosItens.data()[i].ID_ITENS_SERVICO == ln.ID_ITENS_SERVICO) {
+                setTimeout(function () {
+                    show("Item já incluso!");
+                }, 1)
+                return false
+            }
+        }
+
+        if (ln.QTD == 0) {
+            setTimeout(function () {
+                show("Item esgotado!");
+            }, 1)
+            return false
+        }
+
+        $('#pnFieldQtdRetirado').show()
+
+        $('#xmBQtdRetirado').html(ln.QTD_RETIRADA)
+        $("#xmBQtd").html(ln.QTD);
+        $("#xmSpId").html(ln.ID_PRODUTO);
+        $("#xmSpCodigo").html(ln.CODIGO);
+        $("#xmSpProd").html(ln.DESCRICAO);
+        $("#xmSpMarca").html(ln.MARCA);
+        $("#xmSpValor").html(ln.VALOR);
+
+        xmEdtQtd.open()
+
+        $('#xmEdtQtd').focus()
     }
 
     // FUNCTIONS DO ROMANEIO
@@ -1045,25 +1023,39 @@ const clientes = (function () {
 
     function novoServico() {
 
-        ID_SERVICO = $('#slctServico').val()
-        ENGENHEIRO = $('#xmInEngenheiro').val()
-        EXECUTORES = $('#xmInEx').val()
-        DATA_INICIO = $('#xmInDataI').val()
-        DATA_FINAL = $('#xmInDataF').val()
-        VALOR = $('#xmInValor').val()
-        OBS = $('#xmInObs').val()
-        DIA = new Date().toLocaleDateString('pt-BR')
-        HORA = new Date().toLocaleTimeString('pt-BR')
+        let param = {
+            ID_CLIENTE: xgCliente.dataSource().ID_CLIENTE,
+            ID_SERVICO: $('#slctServico').val(),
+            ENGENHEIRO: $('#xmInEngenheiro').val(),
+            EXECUTORES: $('#xmInEx').val(),
+            DATA_INICIO: $('#xmInDataI').val(),
+            DATA_FINAL: $('#xmInDataF').val(),
+            DATA: new Date().toLocaleDateString('pt-BR'),
+            HORA: new Date().toLocaleTimeString('pt-BR'),
+
+        }
+
+        for (let i in param) {
+            if (param[i] == "" || param[i] == null || param == undefined) {
+                show("Preencha corretamente todos os campos!")
+                return false
+            }
+        }
+
+        if (param.DATA_INICIO.length != 10) {
+            show("Data de início inválida")
+        }
+
+        if (param.DATA_INICIO.length != 10) {
+            show("Data de finalização inválida")
+        }
+
+        param.OBS = $('#xmInObs').val()
 
         axios.post(url, {
 
             call: 'gerarServico',
-            param: {
-                ID_CLIENTE, ID_SERVICO,
-                ENGENHEIRO, EXECUTORES,
-                DATA_INICIO, DATA_FINAL,
-                OBS, DIA, HORA, VALOR
-            }
+            param: param
 
         }).then(rs => {
 
@@ -1113,6 +1105,14 @@ const clientes = (function () {
         $('#spStatus').html(param.STATUS)
         $('#spValor').html(param.VALOR)
 
+        $('.btnPDF').attr('disabled', true)
+        $('.btnFS').attr('disabled', true)
+
+        $('#dados_cliente').show()
+        $('#Servicos').hide()
+
+
+
     }
 
     function zerarGrids() {
@@ -1140,6 +1140,8 @@ const clientes = (function () {
                     click: (e) => {
                         novoServico()
                         zerarGrids()
+                        xmNovoServico.close()
+                        xmListaCliente.close()
                     }
                 }
             },
@@ -1149,7 +1151,6 @@ const clientes = (function () {
                 $('#xmInEx').val('')
                 $('#xmInDataI').val('')
                 $('#xmInDataF').val('')
-                $('#xmInValor').val('')
                 $('#xmInObs').val('')
             }
         })
@@ -1600,84 +1601,13 @@ const devolucao = (function () {
             onKeyDown: {
 
                 '13': (ln) => {
-
-                    if (ln.QTD_RETIRADA <= 0) {
-                        setTimeout(function () {
-                            show("Item sem devolução disponível!");
-                        }, 1)
-                        return false
-                    }
-
-                    let count = 0
-                    for (let i in xgDevolucao.data()) {
-
-                        if (xgDevolucao.data()[i].ID_PRODUTO == ln.ID_PRODUTO) {
-                            count += xgDevolucao.data()[i].QTD
-                        }
-                    }
-
-                    let dispo = ln.QTD_RETIRADA - count
-                    if (dispo <= 0) {
-                        setTimeout(function () {
-                            show("Item sem devolução disponível!");
-                        }, 1)
-                        return false
-                    }
-
-
-                    $("#xmBQtd").html(dispo);
-                    $("#xmSpId").html(ln.ID_PRODUTO);
-                    $("#xmSpCodigo").html(ln.CODIGO);
-                    $("#xmSpProd").html(ln.DESCRICAO);
-                    $("#xmSpMarca").html(ln.MARCA);
-                    $("#xmSpValor").html(ln.VALOR);
-
-                    xmEdtQtd.open()
-
-                    $('#xmEdtQtd').focus()
-
-                    evento = "DEVOLVER"
+                    edtQtd(ln)
                 }
             },
 
             dblClick: (ln) => {
 
-                if (ln.QTD_RETIRADA <= 0) {
-                    setTimeout(function () {
-                        show("Item sem devolução disponível!");
-                    }, 1)
-                    return false
-                }
-
-                let count = 0
-                for (let i in xgDevolucao.data()) {
-
-                    if (xgDevolucao.data()[i].ID_PRODUTO == ln.ID_PRODUTO) {
-                        count += xgDevolucao.data()[i].QTD
-                    }
-                }
-
-                let dispo = ln.QTD_RETIRADA - count
-                if (dispo <= 0) {
-                    setTimeout(function () {
-                        show("Item sem devolução disponível!");
-                    }, 1)
-                    return false
-                }
-
-
-                $("#xmBQtd").html(dispo);
-                $("#xmSpId").html(ln.ID_PRODUTO);
-                $("#xmSpCodigo").html(ln.CODIGO);
-                $("#xmSpProd").html(ln.DESCRICAO);
-                $("#xmSpMarca").html(ln.MARCA);
-                $("#xmSpValor").html(ln.VALOR);
-
-                xmEdtQtd.open()
-
-                $('#xmEdtQtd').focus()
-
-                evento = "DEVOLVER"
+                edtQtd(ln)
             },
 
             query: {
@@ -1773,6 +1703,48 @@ const devolucao = (function () {
 
         xgDevolucao.insertLine(item);
         xmEdtQtd.close()
+    }
+
+    function edtQtd(ln) {
+
+        if (ln.QTD_RETIRADA <= 0) {
+            setTimeout(function () {
+                show("Item sem devolução disponível!");
+            }, 1)
+            return false
+        }
+
+        let count = 0
+        for (let i in xgDevolucao.data()) {
+
+            if (xgDevolucao.data()[i].ID_PRODUTO == ln.ID_PRODUTO) {
+                count += xgDevolucao.data()[i].QTD
+            }
+        }
+
+        let dispo = ln.QTD_RETIRADA - count
+        if (dispo <= 0) {
+            setTimeout(function () {
+                show("Item sem devolução disponível!");
+            }, 1)
+            return false
+        }
+
+        $('#pnFieldQtdRetirado').show()
+
+        $('#xmBQtdRetirado').html(ln.QTD_RETIRADA)
+        $("#xmBQtd").html(dispo);
+        $("#xmSpId").html(ln.ID_PRODUTO);
+        $("#xmSpCodigo").html(ln.CODIGO);
+        $("#xmSpProd").html(ln.DESCRICAO);
+        $("#xmSpMarca").html(ln.MARCA);
+        $("#xmSpValor").html(ln.VALOR);
+
+        xmEdtQtd.open()
+
+        $('#xmEdtQtd').focus()
+
+        evento = "DEVOLVER"
     }
 
 
