@@ -346,8 +346,9 @@ const itens = (function () {
     }
 
 
-    //Função buttons xGrid
 
+
+    //Função buttons xGrid
     function print() {
         xgItens.print($('.cabecalho').html() + $('#pnFields').html())
 

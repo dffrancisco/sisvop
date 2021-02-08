@@ -59,12 +59,11 @@ if (!empty($_GET['p'])) {
 
 
     <div class="cabecalho">
-        <table width="100%" class="tbTitulo">
+        <table width="100%" class="tbTitulo" style="font-size:15px ;">
             <tr>
                 <td rowspan="4" style="width: 150px;"><img src="img/LOGO AZUL WEB.png" width="155" alt="" /></td>
                 <td colspan="3" style="font-weight: bold" id="printRazao"></td>
                 <td style="width: 150px;"><span class="spData"></span> <span class="spHora"></span></td>
-
             </tr>
             <tr>
                 <td colspan="2" id="printEndereco"></td>
