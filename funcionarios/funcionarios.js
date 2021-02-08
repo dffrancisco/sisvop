@@ -31,7 +31,7 @@ const funcionario = (function () {
             columns: {
                 Nome: {
                     dataField: "NOME",
-                    width: "60%",
+                    width: "70%",
                 },
                 CPF: {
                     dataField: "CPF",

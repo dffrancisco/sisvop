@@ -1,8 +1,11 @@
 let xgItens;
 let xgFornecedor;
 let xgLocalizarNota;
+let xgridLupaProduto;
 let xmFornecedor;
 let xmNovaNota;
+let xmLupaProduto;
+let xmLocalizarNota
 let cabecalho;
 
 
@@ -10,19 +13,19 @@ $(function () {
     itens.xgridItens()
     itens.xgridLocalizarNota()
     itens.xgridFornecedor();
+    itens.xgridLupaProduto()
     itens.xmNovaNota()
     itens.xmFornecedor()
     itens.xmEditItens()
+    itens.xmLupaProduto()
+    itens.xmLocalizarNota()
     itens.keydown()
     itens.adicionais()
     itens.finalizar()
     itens.editarItens()
     itens.deleteItens()
-    itens.btnCadFornecedor()
-    xgLocalizarNota.queryOpen({ searchNota: '' })
 
     getDataEmpresa()
-
 
 })
 
@@ -77,6 +80,11 @@ const itens = (function () {
                 frame: {
                     el: "#pnButtons",
                     buttons: {
+                        localizar: {
+                            html: "Localizar nota",
+                            class: "btnP",
+                            click: localizar
+                        },
                         print: {
                             html: "Imprimir",
                             class: "btnP btnPrint",
@@ -137,7 +145,12 @@ const itens = (function () {
                     width: "20%",
                 },
             },
-            onSelectLine: () => {
+            onKeyDown: {
+                '13': (ln) => {
+                    btnSelectNota()
+                }
+            },
+            dblClick: (ln) => {
                 btnSelectNota()
             },
             query: {
@@ -198,6 +211,60 @@ const itens = (function () {
         })
     }
 
+    function xgridLupaProduto() {
+        xgLupaProduto = new xGridV2.create({
+            el: "#xgLupaProduto",
+            height: 190,
+            heightLine: 35,
+            theme: "x-clownV2",
+
+            columns: {
+                Código: {
+                    dataField: "CODIGO",
+                    width: "20%",
+                },
+                Descrição: {
+                    dataField: "DESCRICAO",
+                    width: "80%",
+                },
+
+            },
+            onKeyDown: {
+                '13': (ln) => {
+                    produtoSelecionado = ln
+                    xmLupaProduto.close()
+                    $('#spDescricao').html(ln.DESCRICAO)
+                    $('#spQtd').html(ln.QTD)
+                    $('#spValorProduto').html(ln.VALOR)
+                    $('#edtCodigo').val(ln.CODIGO)
+                    $('#spDescricao').val(ln.DESCRICAO)
+                    $('#spQtd').val(ln.QTD)
+                    $('#spValorProduto').val(ln.VALOR)
+                    $('#edtQtdCompra').focus()
+                }
+            },
+            dblClick: (ln) => {
+
+                produtoSelecionado = ln
+                xmLupaProduto.close()
+
+                $('#spDescricao').html(ln.DESCRICAO)
+                $('#spQtd').html(ln.QTD)
+                $('#spValorProduto').html(ln.VALOR)
+                $('#edtCodigo').val(ln.CODIGO)
+                $('#spDescricao').val(ln.DESCRICAO)
+                $('#spQtd').val(ln.QTD)
+                $('#spValorProduto').val(ln.VALOR)
+                $('#edtQtdCompra').focus()
+            },
+            query: {
+                execute: (r) => {
+                    lupaProduto(r.param.searchProduto, r.offset)
+
+                },
+            }
+        })
+    }
 
 
 
@@ -260,6 +327,23 @@ const itens = (function () {
 
     }
 
+    function xmLupaProduto() {
+        xmLupaProduto = new xModal.create({
+            el: '#modalLupaProduto',
+            title: "Produto",
+            width: 600,
+            height: 400,
+        })
+    }
+
+    function xmLocalizarNota() {
+        xmLocalizarNota = new xModal.create({
+            el: '#modalLocalizarNota',
+            title: "Localizar nota",
+            width: 700,
+            height: 400,
+        })
+    }
 
 
     //Função buttons xGrid
@@ -276,6 +360,7 @@ const itens = (function () {
         id_nota = ''
         xgItens.focus()
         $('#edtAdicionar').removeAttr('hidden')
+        $('#xgLocalizarNota').prop('hidden', true)
         $('#spNomeFantasia').html('')
         $('#spCnpj').html('')
         $('#spNumero').html('')
@@ -303,10 +388,7 @@ const itens = (function () {
         $('#edtIcms').val('')
         $('#edtValor').val('')
         $('#edtChave').val('')
-
-        xgLocalizarNota.disable()
         xgItens.source([])
-
         $('.btnPesq').prop("disabled", true)
         $('.btnDel').prop("disabled", true)
         $('#btnBuscarFornecedor').removeAttr("disabled")
@@ -321,20 +403,17 @@ const itens = (function () {
 
     function editar() {
         controleGrid = 'edit';
+        xgLocalizarNota.disable()
         $('#edtAdicionar').removeAttr('hidden')
+        $('#xgLocalizarNota').prop('hidden', true)
         $('.btnSave').removeAttr("disabled")
         xmNovaNota.open()
-        $('#edtNumero').focus()
-
-
         $('#edtNumero').val(editNota.NUMERO_NOTA)
         $('#edtChave').val(editNota.CHAVE_ACESSO)
         $('#edtData').val(editNota.DATA_EMISSAO)
         $('#edtSt').val(editNota.ST)
         $('#edtIcms').val(editNota.ICMS)
         $('#edtValor').val(editNota.VALOR_TOTAL)
-
-
 
     }
 
@@ -401,6 +480,7 @@ const itens = (function () {
         $('.btnSave').prop('disabled', true)
 
         $('#edtAdicionar').prop('hidden', true)
+        $('#xgLocalizarNota').removeAttr('hidden')
         xgLocalizarNota.enable()
         xgLocalizarNota.focus()
 
@@ -409,11 +489,13 @@ const itens = (function () {
 
     function cancelar() {
         $('#edtAdicionar').prop('hidden', true)
+        $('#xgLocalizarNota').removeAttr('hidden')
         $('.btnEdit').prop('disabled', true)
         $('.btnSave').prop('disabled', true)
         $('.btnDel').prop('disabled', true)
         $('.btnPesq').removeAttr("disabled")
         $('.btnNovo').removeAttr("disabled")
+        xgLocalizarNota.focus()
 
         $('#spNomeFantasia').html('')
         $('#spCnpj').html('')
@@ -440,6 +522,10 @@ const itens = (function () {
 
     }
 
+    function localizar() {
+        xmLocalizarNota.open()
+        xgLocalizarNota.queryOpen({ searchNota: '' })
+    }
 
 
 
@@ -556,6 +642,15 @@ const itens = (function () {
 
     }
 
+    function lupaProduto(searchProduto, offsetProduto) {
+        axios.post(url, {
+            call: 'getViewProdutos',
+            param: { searchProduto: searchProduto, offsetProduto: offsetProduto }
+        }).then(r => {
+            xgLupaProduto.querySourceAdd(r.data)
+            xgLupaProduto.focus()
+        })
+    }
 
 
 
@@ -613,7 +708,15 @@ const itens = (function () {
             $('#spValor').val(cabecalho.VALOR_TOTAL)
             $('#spChave').val(cabecalho.CHAVE_ACESSO)
 
-            xgLocalizarNota.insertLine(r.data)
+
+            if (controleGrid == 'edit') {
+                xgLocalizarNota.dataSource(r.data)
+
+            }
+            if (controleGrid == 'new') {
+                xgLocalizarNota.insertLine(r.data)
+
+            }
 
         })
 
@@ -646,6 +749,7 @@ const itens = (function () {
                 param: param.ID_NOTA
             }).then(rs => {
                 xgItens.source(rs.data)
+                xmLocalizarNota.close()
             })
         })
 
@@ -673,15 +777,6 @@ const itens = (function () {
 
         xmEditItens.close()
     }
-
-    function btnCadFornecedor() {
-        $('#btnCadFornecedor').click(function () {
-            window.location = "/sisvop/index.php?p=fornecedor/fornecedor";
-
-        })
-    }
-
-
 
 
 
@@ -762,11 +857,27 @@ const itens = (function () {
             if (e.keyCode == 40) {
                 xgItens.focus()
             }
+
+            if (e.keyCode == 70) {
+                lupaProduto()
+            }
         })
 
         $('#editItens').keydown(function (e) {
             if (e.keyCode == 13) {
                 btnFechar()
+            }
+        })
+
+        $('.btnLupaProduto').click(function () {
+            xmLupaProduto.open()
+            xgLupaProduto.queryOpen({ searchProduto: '' })
+        })
+
+        $('#edtPesquisaProduto').keydown(function (e) {
+            if (e.keyCode == 13) {
+                searchProduto = $(this).val().trim()
+                xgLupaProduto.queryOpen({ searchProduto: searchProduto })
             }
         })
 
@@ -803,11 +914,13 @@ const itens = (function () {
             $('.btnEdit').prop("disabled", true)
             $('.btnDel').prop("disabled", true)
             $('.btnSave').prop("disabled", true)
+            $('.btnPrint').prop("disabled", true)
             $('#btnEditar').prop("disabled", true)
             $('#btnDeletar').prop("disabled", true)
 
 
         } else {
+            $('.btnPrint').removeAttr("disabled")
             $('.btnEdit').removeAttr("disabled")
             $('.btnDel').removeAttr("disabled")
             $('#btnEditar').removeAttr("disabled")
@@ -876,13 +989,17 @@ const itens = (function () {
     }
 
 
+
     return {
         xgridItens: xgridItens,
         xgridLocalizarNota: xgridLocalizarNota,
         xgridFornecedor: xgridFornecedor,
+        xgridLupaProduto: xgridLupaProduto,
         xmFornecedor: xmFornecedor,
         xmNovaNota: xmNovaNota,
         xmEditItens: xmEditItens,
+        xmLupaProduto: xmLupaProduto,
+        xmLocalizarNota: xmLocalizarNota,
         finalizar: finalizar,
         deleteItens: deleteItens,
         btnXmSalvar: btnXmSalvar,
@@ -890,7 +1007,6 @@ const itens = (function () {
         keydown: keydown,
         adicionais: adicionais,
         editarItens: editarItens,
-        btnCadFornecedor: btnCadFornecedor
     }
 })();
 
