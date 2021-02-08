@@ -28,8 +28,19 @@ class SqlEntrada
   {
     extract($param);
 
-    $sql = "SELECT descricao, qtd, valor, id_produto, codigo FROM produtos WHERE codigo = '$codigo' ";
+    $sql = "SELECT  descricao, qtd, valor, id_produto, codigo FROM produtos WHERE codigo = '$codigo' ";
 
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function getViewProdutos($param)
+  {
+    extract($param);
+    $sql = "SELECT first 10 skip $offsetProduto descricao, qtd, valor, id_produto, codigo 
+    FROM produtos
+    WHERE descricao like '$searchProduto%'";
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -71,6 +82,7 @@ class SqlEntrada
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
+
 
   function getItensNota($param)
   {
@@ -162,6 +174,7 @@ class SqlEntrada
     $query->execute();
     return $param;
   }
+
 
   function updateProduto($param)
   {

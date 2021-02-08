@@ -49,27 +49,15 @@
             </div>
         </div>
     </div>
-    <hr>
-    <div class="row">
-
-        <div class="col s3">
-            <label>Pesquisa Nº</label>
-            <input type="text" placeholder="Numero da nota" class="margintop numeroNota" id="edtPesquisaNotaNumero">
-        </div>
-        <div class="col s4">
-            <label>Pesquisa Nome</label>
-            <input type="text" placeholder="Nome fantasia" class="margintop" id="edtPesquisaNota">
-        </div>
-    </div>
-
-    <div id=xgLocalizarNota class="list"></div>
 
     <div class="container" id="edtAdicionar" hidden>
         <div class="row">
-            <div class="col s2">
-                <label>Código do produto</label>
-                <input type="text" placeholder="" class="validate" id="edtCodigo">
-
+            <div class="col s1">
+                <label>Código</label>
+                <input type="number" placeholder="" class="validate" id="edtCodigo">
+            </div>
+            <div class="col s1">
+                <i class="fa fa-search btnLupaProduto" aria-hidden="true"></i>
             </div>
             <div class="col s4">
                 <label>Descrição</label> <br>
@@ -120,8 +108,26 @@
     <div id="pnButtons" class="center-align"></div>
 
 
+</div>
+
+<div id="modalLocalizarNota">
+
+    <div class="row">
+
+        <div class="col s3">
+            <label>Pesquisa Nº</label>
+            <input type="text" placeholder="Numero da nota" class="margintop numeroNota" id="edtPesquisaNotaNumero">
+        </div>
+        <div class="col s4">
+            <label>Pesquisa Nome</label>
+            <input type="text" placeholder="Nome fantasia" class="margintop" id="edtPesquisaNota">
+        </div>
+    </div>
+
+    <div id=xgLocalizarNota class="list"></div>
 
 </div>
+
 
 <div id="modalFornecedor">
     <div class="row">
@@ -130,9 +136,7 @@
         </div>
     </div>
     <div id="xgFornecedor"></div>
-    <button class="btn-Frame btn-Frame-blue btnP" id="btnCadFornecedor" style="margin-left: 10px;"><i class="fa fa-plus"
-            aria-hidden="true"></i>
-        Novo fornecedor</button>
+
 
 </div>
 
@@ -177,6 +181,16 @@
     </div>
 
 </div>
+
+<div id="modalLupaProduto">
+    <div class="row">
+        <div class="col s5">
+            <input type="text" placeholder="Pesquisar" class="margintop" id="edtPesquisaProduto">
+        </div>
+    </div>
+    <div id="xgLupaProduto"></div>
+</div>
+
 
 <div id="editItens">
     <div class="row">
