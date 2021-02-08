@@ -99,7 +99,6 @@ const Empresa = (function () {
             param: param
         }).then(r => {
 
-
             if (r.data[0]) {
                 $('#id_empresa').val(r.data[0].ID_EMPRESA)
                 $('#edtCnpj').val(r.data[0].CNPJ)

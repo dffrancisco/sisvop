@@ -88,26 +88,26 @@ const produto = (function () {
 
                     },
                 },
-                duplicity: {
-                    dataField: ['CODIGO'],
+                // duplicity: {
+                //     dataField: ['CODIGO'],
 
-                    execute: (r) => {
-                        let param = {}
-                        param.codigo = r.value,
-                            axios.post(url, {
-                                call: 'getCodigo',
-                                param: param
+                //     execute: (r) => {
+                //         let param = {}
+                //         param.codigo = r.value,
+                //             axios.post(url, {
+                //                 call: 'getCodigo',
+                //                 param: param
 
-                            })
-                                .then(rs => {
-                                    if (rs.data[0]) {
-                                        xgProduto.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
-                                        xgProduto.focusField(r.field);
-                                        return false
-                                    }
-                                })
-                    }
-                },
+                //             })
+                //                 .then(rs => {
+                //                     if (rs.data[0]) {
+                //                         xgProduto.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
+                //                         xgProduto.focusField(r.field);
+                //                         return false
+                //                     }
+                //                 })
+                //     }
+                // },
             },
 
             query: {
@@ -154,13 +154,11 @@ const produto = (function () {
     const salvar = async () => {
         let param = xgProduto.getElementSideBySideJson()
         param.DATA_CADASTRO = $('#edtData').val()
-        console.log('param.data_cadastro :', param.data_cadastro);
 
+        // let allDuplicty = await xgProduto.getDuplicityAll()
 
-        let allDuplicty = await xgProduto.getDuplicityAll()
-
-        if (allDuplicty == false)
-            return false;
+        // if (allDuplicty == false)
+        //     return false;
 
         let valCampos = {
             codigo: $('#editCodigo').val(),
@@ -180,26 +178,33 @@ const produto = (function () {
         }
 
         if (controleGrid == 'insert') {
-            param.id_produto = ''
+            param.ID_PRODUTO = ''
         }
 
         if (controleGrid == 'edit') {
-            param.id_produto = xgProduto.dataSource().ID_PRODUTO;
+            param.ID_PRODUTO = xgProduto.dataSource().ID_PRODUTO;
         }
 
-        console.log(' p', param);
+
         axios.post(url, {
             call: 'save',
             param: param
         })
             .then(r => {
-                if (r.data[0].ID_PRODUTO) {
-                    param.ID_PRODUTO = r.data[0].ID_PRODUTO
-                    xgProduto.insertLine(param)
 
-                } else {
+                if (r.data == 'edit') {
 
                     xgProduto.dataSource(param)
+                }
+
+                if (r.data[0].ID_PRODUTO) {
+                    param.ID_PRODUTO = r.data[0]
+                    xgProduto.insertLine(param)
+
+                }
+
+                else {
+                    show('ERRO INTERNO')
                 }
 
             })
@@ -227,6 +232,7 @@ const produto = (function () {
 
     function editar() {
         controleGrid = 'edit';
+        xgProduto.disable()
         $('#edtPesquisa').prop("disabled", true)
         $('.btnPesq').prop("disabled", true)
 

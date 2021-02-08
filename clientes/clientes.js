@@ -78,19 +78,19 @@ const cliente = (function () {
                     dataField: ['CNPJ'],
 
                     execute: (r) => {
-                        console.log('r :');
                         let param = {}
-                        param.cnpj = r.value,
-                            validarCpnj(param.cnpj),
+                        param.CNPJ = r.value,
+                            validarCpnj(param.CNPJ),
                             axios.post(url, {
                                 call: 'duplicity',
                                 param: param
 
                             })
                                 .then(rs => {
-                                    
+                                    console.log('rs :', rs);
+
                                     if (rs.data[0]) {
-                                        xgCliente.showMessageDuplicity('CNPJ inválido')
+                                        xgCliente.showMessageDuplicity('CNPJ inválido DUP')
                                         xgCliente.focusField(r.field);
                                     }
                                 })
@@ -115,7 +115,6 @@ const cliente = (function () {
         })
             .then(rs => {
 
-                console.log('rs :', rs.data);
 
                 xgCliente.querySourceAdd(rs.data);
                 if (rs.data[0]) xgCliente.focus();
@@ -174,7 +173,6 @@ const cliente = (function () {
 
         // let allDuplicty = await xgCliente.getDuplicityAll()
         // if (allDuplicty == false) {
-        //     console.log('travei')
         //     return false;
         // }
 
@@ -217,11 +215,16 @@ const cliente = (function () {
 
         })
             .then(r => {
-                if (r.data.ID_CLIENTE[0]) {
+                console.log('r :', r.data);
+                if (r.data == 'edit') {
+                    xgCliente.dataSource(param)
+
+                }
+                if (r.data[0].ID_CLIENTE) {
                     param.ID_CLIENTE = r.data.ID_CLIENTE
                     xgCliente.insertLine(param)
                 } else {
-                    xgCliente.dataSource(param)
+                    show('ERRO INTERNO')
                 }
 
             })
@@ -258,8 +261,8 @@ const cliente = (function () {
 
         if (cnpj == '') return false;
 
-        if (cnpj.length != 14) if (cnpj.length < 14) {
-            xgCliente.showMessageDuplicity(`CNPJ inválido`);
+        if (cnpj.length != 14) {
+            xgCliente.showMessageDuplicity(`Digite um CNPJ com tamanho válido`);
             xgCliente.focusField();
             return false;
         }

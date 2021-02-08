@@ -18,7 +18,7 @@ class SqlProdutos
   function getProdutos($param)
   {
     extract($param);
-    $sql = "select first 10 skip $offset a.id_produto, a.qtd, a.descricao, a.valor, a.codigo, 
+    $sql = "SELECT first 10 skip $offset a.id_produto, a.qtd, a.descricao, a.valor, a.codigo, 
             a.id_marca, a.data_cadastro, a.endereco, b.marca, b.id_marca 
             from produtos a, marcas b
             where b.id_marca = a.id_marca

@@ -4,9 +4,6 @@ const login = new Login();
 
 $(function () {
 
-    getFrase()
-    getDataEmpresa()
-
     calc = new xCalkModal()
 
     $('.real').maskMoney({ thousands: '.', decimal: ',', allowZero: true });

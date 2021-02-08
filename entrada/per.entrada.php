@@ -1,8 +1,8 @@
 <?php
 
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 include_once './sql.entrada.php';
 
@@ -24,6 +24,7 @@ class Entrada
         $call = $this->sql->getFornecedor($param);
         echo json_encode($call);
     }
+
 
     function getDataNota($param)
     {
@@ -55,24 +56,38 @@ class Entrada
         echo json_encode($call);
     }
 
+    function getViewProdutos($param)
+    {
+        $call = $this->sql->getViewProdutos($param);
+        echo json_encode($call);
+    }
+
     function deleteNota($param)
     {
         $id_nota = $this->sql->deleteNota($param);
+        $id_itens_nota = $this->sql->deleteItens($param);
     }
 
-    function deleteItens($param)
+    function deleteItensUni($param)
     {
-        $id_itens_nota = $this->sql->deleteItens($param);
+        $id_itens_nota = $this->sql->deleteItensUni($param);
         $call = $this->sql->updateDelProduto($param);
     }
 
-    function updateProduto($param)
+    function updateDelProduto($param)
     {
-        $call = $this->sql->updateProduto($param);
+        $call = $this->sql->updateDelProduto($param);
     }
 
     function updateItens($param)
     {
+        $call = $this->sql->updateItens($param);
+    }
+
+    function editItens($param)
+    {
+        $call = $this->sql->updateDelProduto($param);
+        $call = $this->sql->updateProdutoEdit($param);
         $call = $this->sql->updateItens($param);
     }
 
@@ -88,6 +103,7 @@ class Entrada
             echo json_encode($call);
         }
     }
+
 
     function insertProduto($param)
     {
