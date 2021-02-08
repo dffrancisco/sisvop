@@ -221,6 +221,8 @@ const produto = (function () {
         $('#edtData').val(date)
         $('#edtPesquisa').prop("disabled", true)
         $('.btnPesq').prop("disabled", true)
+
+        $('#editCodigo').val()
     }
 
     function editar() {
