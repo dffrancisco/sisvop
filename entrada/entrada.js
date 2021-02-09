@@ -82,7 +82,7 @@ const itens = (function () {
                     buttons: {
                         localizar: {
                             html: "Localizar nota",
-                            class: "btnP",
+                            class: "btnP btnPesq",
                             click: localizar
                         },
                         print: {
@@ -405,6 +405,13 @@ const itens = (function () {
     function editar() {
         controleGrid = 'edit';
         xgLocalizarNota.disable()
+        $('.btnPesq').prop("disabled", true)
+        $('.btnDel').prop("disabled", true)
+        $('.btnNovo').prop("disabled", true)
+        $('.btnEdit').prop("disabled", true)
+        $('.btnPrint').prop("disabled", true)
+        $('.btnSave').prop("disabled", true)
+        $('.btnPesq').prop("disabled", true)
         $('#edtAdicionar').removeAttr('hidden')
         $('#xgLocalizarNota').prop('hidden', true)
         $('.btnSave').removeAttr("disabled")
@@ -478,6 +485,8 @@ const itens = (function () {
         $('.btnPesq').removeAttr("disabled")
         $('.btnEdit').removeAttr("disabled")
         $('.btnDel').removeAttr("disabled")
+        $('.btnPrint').removeAttr("disabled")
+        $('.btnNovo').removeAttr("disabled")
         $('.btnSave').prop('disabled', true)
 
         $('#edtAdicionar').prop('hidden', true)
@@ -789,7 +798,7 @@ const itens = (function () {
 
             if (e.keyCode == 13) {
                 search = $(this).val().trim()
-                xgFornecedor.queryOpen({ search: search })
+                xgFornecedor.queryOpen({ search: search.toUpperCase() })
             }
         })
 
@@ -797,7 +806,7 @@ const itens = (function () {
 
             if (e.keyCode == 13) {
                 searchNota = $(this).val().trim()
-                xgLocalizarNota.queryOpen({ searchNota: searchNota })
+                xgLocalizarNota.queryOpen({ searchNota: searchNota.toUpperCase() })
             }
 
             if (e.keyCode == 40) {
@@ -809,7 +818,7 @@ const itens = (function () {
 
             if (e.keyCode == 13) {
                 searchNota = $(this).val().trim()
-                xgLocalizarNota.queryOpen({ searchNota: searchNota })
+                xgLocalizarNota.queryOpen({ searchNota: searchNota.toUpperCase() })
             }
         })
 
@@ -878,7 +887,7 @@ const itens = (function () {
         $('#edtPesquisaProduto').keydown(function (e) {
             if (e.keyCode == 13) {
                 searchProduto = $(this).val().trim()
-                xgLupaProduto.queryOpen({ searchProduto: searchProduto })
+                xgLupaProduto.queryOpen({ searchProduto: searchProduto.toUpperCase() })
             }
         })
 
@@ -981,10 +990,10 @@ const itens = (function () {
         let serchNumero = $('#edtPesquisaNotaNumero').val()
         axios.post(url, {
             call: 'getNota',
-            param: { offsetNota: offsetNota, serchNumero: serchNumero, serchNome: serchNome }
+            param: { offsetNota: offsetNota, serchNumero: serchNumero, serchNome: serchNome.toUpperCase() }
         }).then(r => {
             xgLocalizarNota.querySourceAdd(r.data);
-            if (r.data[0]) xgLocalizarNota.focus();
+
             id_nota = r.id_nota
         })
     }

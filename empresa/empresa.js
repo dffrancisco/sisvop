@@ -51,18 +51,17 @@ const Empresa = (function () {
     function salvar() {
         let param = {
             cnpj: $('#edtCnpj').val(),
-            razao: $('#edtRazao').val(),
-            fantasia: $('#edtFantasia').val(),
+            razao: $('#edtRazao').val().toUpperCase(),
+            fantasia: $('#edtFantasia').val().toUpperCase(),
             inscricao: $('#edtIscricao').val(),
             fixo: $('#edtFixo').val(),
             celular: $('#edtCelular').val(),
             cep: $('#edtCep').val(),
-            endereco: $('#edtEnd').val(),
+            endereco: $('#edtEnd').val().toUpperCase(),
             uf: $('#edtUf').val(),
-            cidade: $('#edtCidade').val(),
-            bairro: $('#edtBairro').val(),
+            cidade: $('#edtCidade').val().toUpperCase(),
+            bairro: $('#edtBairro').val().toUpperCase(),
         }
-
 
 
         for (let i in param) {
