@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col s4" id="pnFieldServico">
             <label>Buscar Servico</label>
-            <input type="text" id="xmEdtServico">
+            <input type="text" id="xmEdtServico" class="validate">
         </div>
     </div>
 
@@ -62,6 +62,10 @@
 
         <div class="row">
             <div class="col s3">
+                <label>OBS</label><br>
+                <span id="spObs" class="spanAutoPreenc">VER OBSERVAÇÃO...</span>
+            </div>
+            <div class=" col s3">
                 <label>Data de início</label><br>
                 <span id="spDataI" class="spanAutoPreenc"></span>
             </div>
@@ -70,6 +74,14 @@
                 <label>Data de finalização</label><br>
                 <span id="spDataF" class="spanAutoPreenc"></span>
             </div>
+
+
+        </div>
+
+        <br>
+
+        <div id="obsText">
+            <span id="spObsText"></span>
 
         </div>
 
@@ -126,7 +138,7 @@
     <div class="row">
         <div class="col s4" id="pnFieldCliente">
             <label>Buscar Cliente</label>
-            <input type="text" id="xmEdtCliente">
+            <input type="text" id="xmEdtCliente" class="validate">
         </div>
     </div>
     <!-- xGrid de Cliente -->
@@ -194,7 +206,7 @@
     <div class="row">
         <div class="col s4" id="pnFieldProduto">
             <label>Buscar Produto</label>
-            <input type="text" id="xmEdtProduto">
+            <input type="text" id="xmEdtProduto" class="validate">
         </div>
 
     </div>
@@ -256,74 +268,125 @@
 <div class="rlRomaneio" style="display: none;">
 
     <br>
+    <div style="font-size: 9px !important;">
+        <div class="tabela" id="rlFields">
+            <div class="row">
+                <div class="col s6">
+                    <label>Cliente</label><br>
+                    <span id="rlFantasia"><span>
 
-    <div class="tabela" id="rlFields">
-        <div class="row">
-            <div class="col s6">
-                <label>Cliente</label><br>
-                <span id="rlFantasia" class="spanAutoPreenc"><span>
+                </div>
 
+                <div class="col s6">
+                    <label>CNPJ</label><br>
+                    <span id="rlCnpj"><span>
+                </div>
             </div>
 
-            <div class="col s6">
-                <label>CNPJ</label><br>
-                <span id="rlCnpj" class="spanAutoPreenc"><span>
+            <div class="row">
+                <div class="col s3">
+                    <label>Engenheiro</label><br>
+                    <span id="rlEngenheiro"></span>
+                </div>
+
+                <div class="col s2">
+                    <label>Serviço</label><br>
+                    <span id="rlServico"></span>
+                </div>
+
+                <div class="col s7">
+                    <label>Executores</label><br>
+                    <span id="rlExecutores"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s3">
+                    <label>Data prevista de início</label><br>
+                    <span id="rlDataI"></span>
+                </div>
+
+                <div class="col s4">
+                    <label>Data prevista de finalização</label><br>
+                    <span id="rlDataF"></span>
+                </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col s3">
-                <label>Engenheiro</label><br>
-                <span id="rlEngenheiro" class="spanAutoPreenc"></span>
-            </div>
+        <table class="tb_produto" style="font-size: 9px;">
+            <thead>
+                <th>PRODUTO</th>
+                <th>MARCA</th>
+                <th>QTD</th>
+            </thead>
+        </table>
 
-            <div class="col s2">
-                <label>Serviço</label><br>
-                <span id="rlServico" class="spanAutoPreenc"></span>
-            </div>
+        <br>
+        <br>
 
-            <div class="col s3">
-                <label>Executores</label><br>
-                <span id="rlExecutores" class="spanAutoPreenc"></span>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col s3">
-                <label>Data prevista de início</label><br>
-                <span id="rlDataI" class="spanAutoPreenc"></span>
-            </div>
-
-            <div class="col s4">
-                <label>Data prevista de finalização</label><br>
-                <span id="rlDataF" class="spanAutoPreenc"></span>
-            </div>
-        </div>
-    </div>
-
-    <table class="tb_produto">
-        <thead>
-            <th>PRODUTO</th>
-            <th>MARCA</th>
-            <th>QTD</th>
-        </thead>
-    </table>
-
-    <br>
-    <br>
-
-    <div style="text-align: center;">
-        <div class="row assRl" style="font-size: 15px;">
-            <div class="col s4 push-s1">
-                __________________________<br>
-                Ass. Destinatário
-            </div>
-            <div class="col s4 push-s3">
-                __________________________<br>
-                <span id="rl_representante"></span>
+        <div style="text-align: center; font-size: 12px">
+            <div class="row assRl">
+                <div class="col s4 push-s1">
+                    __________________________<br>
+                    Ass. Destinatário
+                </div>
+                <div class="col s4 push-s3">
+                    __________________________<br>
+                    <span id="rl_representante"></span>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+<div class="rl_geral" style="display: none;">
+    <div style="font-size: 9px !important;">
+        <div class="tabela" id="rl_geralFields">
+            <div class="row">
+                <div class="col s6">
+                    <label>Cliente</label><br>
+                    <span id="rl_geralFantasia"><span>
+
+                </div>
+
+                <div class="col s6">
+                    <label>CNPJ</label><br>
+                    <span id="rl_geralCnpj"><span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s3">
+                    <label>Engenheiro</label><br>
+                    <span id="rl_geralEngenheiro"></span>
+                </div>
+
+                <div class="col s2">
+                    <label>Serviço</label><br>
+                    <span id="rl_geralServico"></span>
+                </div>
+
+                <div class="col s7">
+                    <label>Executores</label><br>
+                    <span id="rl_geralExecutores"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s3">
+                    <label>Data prevista de início</label><br>
+                    <span id="rl_geralDataI"></span>
+                </div>
+
+                <div class="col s4">
+                    <label>Data prevista de finalização</label><br>
+                    <span id="rl_geralDataF"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
 <div id="pnCodigoTela">Saída</div>

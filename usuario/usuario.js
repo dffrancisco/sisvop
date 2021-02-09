@@ -158,7 +158,7 @@ const senha = (function () {
 
     //Btn
     function pesquisar() {
-        let search = $('#edtPesquisa').val().trim();
+        let search = $('#edtPesquisa').val().trim().toUpperCase();
         xgUsuario.queryOpen({ search });
         xgUsuario.focus();
     }
@@ -300,7 +300,7 @@ const senha = (function () {
         $("#edtPesquisa").keydown(function (e) {
 
             if (e.keyCode == 13) {
-                search = $(this).val().trim()
+                search = $(this).val().trim().toUpperCase()
                 xgUsuario.queryOpen({ search: search })
                 xgUsuario.focus();
             }
