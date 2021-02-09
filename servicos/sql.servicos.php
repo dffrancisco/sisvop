@@ -136,8 +136,9 @@ class Sqlservicos
  
   function getItensRomaneio($param){
     extract($param);
-    $sql="SELECT FIRST 10 skip $offset
-          a.id_item_romaneio, a.qtd,
+
+    $sql="SELECT FIRST 100 skip $offset
+          a.id_item_romaneio, a.qtd, a.id_romaneio,
           b.id_produto, b.descricao,
           c.marca,
           d.origem, d.id_itens_servico

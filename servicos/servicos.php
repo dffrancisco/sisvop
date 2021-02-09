@@ -339,6 +339,7 @@
     </div>
 </div>
 
+<!-- RELATORIO GERAL -->
 <div class="rl_geral" style="display: none;">
     <div style="font-size: 9px !important;">
         <div class="tabela" id="rl_geralFields">
@@ -386,7 +387,40 @@
         </div>
     </div>
 
+    <center>
+        <b>ITENS PROJETADOS</b>
+    </center>
+    <table class="tb_produto_saida" style="font-size: 9px;">
+        <thead style="text-align: center;">
+            <th>PRODUTO</th>
+            <th>MARCA</th>
+            <th>QTD PLANEJADO</th>
+            <th>QTD RETIRADA</th>
+            <th>DATA</th>
+            <th>ORIGEM</th>
+        </thead>
+    </table>
 
+    <br>
+
+    <center><b>ROMANEIO / ITENS DO ROMANEIO</b></center>
+    <div class="romaneio_itens_romaneio"></div>
+
+    <br>
+
+    <center>
+        <b>DEVOLUÇÕES</b>
+    </center>
+    <table class="tb_devolucao" style="font-size: 9px;">
+        <thead style="text-align: center;">
+            <th>PRODUTO</th>
+            <th>MARCA</th>
+            <th>DEVOLVIDO</th>
+            <th>DATA</th>
+            <th>HORA</th>
+        </thead>
+    </table>
+</div>
 
 </div>
 <div id="pnCodigoTela">Saída</div>

@@ -162,7 +162,7 @@ $(function () {
 
     $('.btnRG').click(function (e) {
 
-        console.log('relatorio');
+        saida.relatorioGeral()
     })
 
     xgServicos.queryOpen({ search: '' })
@@ -900,6 +900,191 @@ const saida = (function () {
         })
     }
 
+    // RELATORIOS 
+
+
+
+    async function relatorioGeral() {
+
+        let dados_servico = {
+            FANTASIA: $('#spFantasia').html(),
+            CNPJ: $('#spCnpj').html(),
+            ENGENHEIRO: $('#spEngenheiro').html(),
+            SERVICO: $('#spServico').html(),
+            EXECUTORES: $('#spExecutores').html(),
+            DATA_INICIO: $('#spDataI').html(),
+            DATA_FINALIZACAO: $('#spDataF').html(),
+        }
+
+        $('#rl_geralFantasia').html(dados_servico.FANTASIA)
+        $('#rl_geralCnpj').html(dados_servico.CNPJ)
+        $('#rl_geralEngenheiro').html(dados_servico.ENGENHEIRO)
+        $('#rl_geralServico').html(dados_servico.SERVICO)
+        $('#rl_geralExecutores').html(dados_servico.EXECUTORES)
+        $('#rl_geralDataI').html(dados_servico.DATA_INICIO)
+        $('#rl_geralDataF').html(dados_servico.DATA_FINALIZACAO)
+
+        for (let i in xgSaida.data()) {
+            let tb_produto = `<tr class="tb_dados_saida">
+                                    <td>
+                                    ${xgSaida.data()[i].DESCRICAO}
+                                    </td>
+                                    <td>
+                                    ${xgSaida.data()[i].MARCA}
+                                    </td>
+                                    <td>
+                                    ${xgSaida.data()[i].QTD}
+                                    </td>
+                                    <td>
+                                    ${xgSaida.data()[i].QTD_RETIRADA}
+                                    </td>
+                                    <td style= "text-align:left !important;">
+                                    ${xgSaida.data()[i].DATA}
+                                    </td>
+                                    <td>
+                                    ${xgSaida.data()[i].ORIGEM}
+                                    </td>
+                            </tr>`
+
+            $('.tb_produto_saida').append(tb_produto)
+        }
+
+        await getRomaneioEItens()
+
+        $('.rl_geral').xPrint()
+
+        console.log('1');
+    }
+
+    function getRomaneioEItens() {
+
+        axios.post(url, {
+            call: 'getRomaneioRela',
+            param: {
+                ID_LISTA_SERVICO,
+                offset: 0
+            },
+        }).then(rs => {
+
+            for (let i in rs.data) {
+
+                // CABECALHO ROMANEIO
+                let tableRomaneio = $('<table>')
+                let tr = $('<tr>', { style: "text-align: center;" })
+
+                tr.append($('<td>', { html: 'ID' }))
+                tr.append($('<td>', { html: 'RESPONSÁVEL' }))
+                tr.append($('<td>', { html: 'DATA' }))
+                tr.append($('<td>', { html: 'HORA' }))
+
+                tableRomaneio.append(tr)
+
+                // DADOS ROMANEIO
+                tr = $('<tr>');
+                tr.append($('<td>', { html: rs.data[i].ID_ROMANEIO }))
+                tr.append($('<td>', { html: rs.data[i].NOME }))
+                tr.append($('<td>', { html: rs.data[i].DATA }))
+                tr.append($('<td>', { html: rs.data[i].HORA }))
+
+                tableRomaneio.append(tr)
+
+                /* cabeçalho dos itens*/
+                let tableRomaneioItens = $('<table>', { class: "tbl_itens_romaneio" })
+                tr = $('<tr>', { style: "text-align: center;" })
+
+                tr.append($('<td>', { html: 'PRODUTO' }))
+                tr.append($('<td>', { html: 'MARCA' }))
+                tr.append($('<td>', { html: 'QTD' }))
+                tr.append($('<td>', { html: 'ORIGEM' }))
+
+                tableRomaneioItens.append(tr)
+
+                /* DADOS ITENS DO ROMANEIO */
+                for (let a in rs.data[i].ITENS) {
+                    tr = $('<tr>');
+                    tr.append($('<td>', { html: rs.data[i].ITENS[a].DESCRICAO }))
+                    tr.append($('<td>', { html: rs.data[i].ITENS[a].MARCA }))
+                    tr.append($('<td>', { html: rs.data[i].ITENS[a].QTD }))
+                    tr.append($('<td>', { html: rs.data[i].ITENS[a].ORIGEM }))
+                    tableRomaneioItens.append(tr)
+                }
+
+                $('.romaneio_itens_romaneio').append(tableRomaneio)
+                $('.romaneio_itens_romaneio').append(tableRomaneioItens)
+                $('.romaneio_itens_romaneio').append('<br/>')
+            }
+        })
+
+    }
+
+    // function xico() {
+    //     axios.post(url, {
+    //         call: 'getRomaneioRela',
+    //         param: {
+    //             ID_LISTA_SERVICO,
+    //             offset: 0
+    //         },
+    //     }).then(rs => {
+
+
+    //         for (let i in rs.data) {
+
+    //             // CABECALHO ROMANEIO
+    //             let tableRomaneio = $('<table>')
+    //             let tr = $('<tr>', { style: "text-align: center;" })
+
+    //             tr.append($('<td>', { html: 'ID' }))
+    //             tr.append($('<td>', { html: 'RESPONSÁVEL' }))
+    //             tr.append($('<td>', { html: 'DATA' }))
+    //             tr.append($('<td>', { html: 'HORA' }))
+
+    //             tableRomaneio.append(tr)
+    //             // DADOS ROMANEIO
+    //             tr = $('<tr>');
+    //             tr.append($('<td>', { html: rs.data[i].ID_ROMANEIO }))
+    //             tr.append($('<td>', { html: rs.data[i].NOME }))
+    //             tr.append($('<td>', { html: rs.data[i].DATA }))
+    //             tr.append($('<td>', { html: rs.data[i].HORA }))
+
+    //             tableRomaneio.append(tr)
+
+
+    //             /* cabeçalho dos itens*/
+    //             let tableRomaneioItens = $('<table>', { class: "tbl_itens_romaneio" })
+    //             tr = $('<tr>', { style: "text-align: center;" })
+
+    //             tr.append($('<td>', { html: 'PRODUTO' }))
+    //             tr.append($('<td>', { html: 'MARCA' }))
+    //             tr.append($('<td>', { html: 'QTD' }))
+    //             tr.append($('<td>', { html: 'ORIGEM' }))
+
+    //             tableRomaneioItens.append(tr)
+
+
+    //             /***** itens */
+    //             for (let a in rs.data[i].ITENS) {
+    //                 tr = $('<tr>');
+    //                 tr.append($('<td>', { html: rs.data[i].ITENS[a].DESCRICAO }))
+    //                 tr.append($('<td>', { html: rs.data[i].ITENS[a].MARCA }))
+    //                 tr.append($('<td>', { html: rs.data[i].ITENS[a].QTD }))
+    //                 tr.append($('<td>', { html: rs.data[i].ITENS[a].ORIGEM }))
+    //                 tableRomaneioItens.append(tr)
+    //             }
+
+    //             $('.alves').append(tableRomaneio)
+    //             $('.alves').append(tableRomaneioItens)
+    //             $('.alves').append('<br/>')
+
+
+    //         }
+
+
+
+    //     })
+
+    // }
+
+
     // MODAIS
     function modalCliente() {
 
@@ -909,6 +1094,8 @@ const saida = (function () {
             width: '700',
         })
     }
+
+
 
     function modalInsProduto() {
 
@@ -948,7 +1135,8 @@ const saida = (function () {
         buscar: buscar,
         buscarServ: buscarServ,
         modalInserirRomaneio: modalInserirRomaneio,
-        finalizarObra: finalizarObra
+        finalizarObra: finalizarObra,
+        relatorioGeral: relatorioGeral,
 
     }
 })();
