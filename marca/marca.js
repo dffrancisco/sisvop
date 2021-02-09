@@ -107,7 +107,7 @@ const marca = (function () {
     }
 
     function pesquisar() {
-        let search = $('#edtPesquisa').val().trim();
+        let search = $('#edtPesquisa').val().trim().toUpperCase();
         xgMarca.queryOpen({ search })
         xgMarca.focus();
     }
@@ -184,6 +184,8 @@ const marca = (function () {
             if (controleGrid == 'new') {
                 param.ID_MARCA = ''
             }
+
+            param.MARCA = param.MARCA.toUpperCase()
 
             axios.post(url, {
                 call: 'salvar',

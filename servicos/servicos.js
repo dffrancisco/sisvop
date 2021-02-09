@@ -20,6 +20,8 @@ let total = 0;
 let valorT = 0
 let newEstoque = 0
 var evento
+let OBS
+let view = 0
 
 let ID_LISTA_SERVICO;
 let ID_CLIENTE;
@@ -138,6 +140,29 @@ $(function () {
                 }
             })
 
+    })
+
+    $("#spObs").click(function (e) {
+
+        if (view == 0) {
+            $("#obsText").show()
+            $("#spObsText").html(OBS)
+            view = 1
+        }
+        else if (view == 1) {
+            $("#obsText").hide()
+            $("#spObsText").html('')
+            view = 0
+        }
+        else {
+            console.log('ERRO')
+        }
+
+    })
+
+    $('.btnRG').click(function (e) {
+
+        console.log('relatorio');
     })
 
     xgServicos.queryOpen({ search: '' })
@@ -493,7 +518,6 @@ const saida = (function () {
             $('.btnFS').removeAttr("disabled");
             $('.btnRG').prop('disabled', true)
 
-
         }
         if (ln.STATUS == 'PROJETO') {
             $('.btnNR').attr("disabled", true);
@@ -761,7 +785,7 @@ const saida = (function () {
         })
     }
 
-    function gerarPDF() {
+    async function gerarPDF() {
         let dt = xgRomaneiosItens.data()
 
         let dados_servico = {
@@ -784,6 +808,15 @@ const saida = (function () {
         $('#rlDataF').html(dados_servico.DATA_FINALIZACAO)
 
 
+        await setTable(dt)
+
+
+        $('.rlRomaneio').xPrint()
+
+        $('.tb_dados').html('')
+    }
+
+    function setTable(dt) {
         for (let i in dt) {
 
             let tb_produto = `<tr class="tb_dados">
@@ -800,12 +833,7 @@ const saida = (function () {
 
             $('.tb_produto').append(tb_produto)
         }
-
-        $('.rlRomaneio').xPrint()
-
-        $('.tb_dados').html('')
     }
-
     async function deletarItemRomaneio(r) {
 
         let status = xgRomaneios.dataSource().STATUS
@@ -1120,9 +1148,8 @@ const clientes = (function () {
         $('#spDataF').html(param.DATA_FINALIZACAO)
         $('#spStatus').html(param.STATUS)
         $('#spValor').html(param.VALOR)
-        $('#spObs').html(param.OBS)
 
-
+        OBS = param.OBS
 
     }
 

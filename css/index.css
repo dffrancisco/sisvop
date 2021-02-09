@@ -150,6 +150,16 @@ body{
     margin-top: 5px;
 }
 
+#spObs:hover{
+    cursor: pointer; 
+    color:blue;
+
+}
+
+.validate{
+    text-transform: uppercase;
+}
+
 .btnP{    
     background-color: #2E4BAB !important;
     font-size: 14px !important;

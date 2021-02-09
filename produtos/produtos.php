@@ -9,12 +9,12 @@
         <div class="row">
             <div class="col s3">
                 <label>Codigo</label>
-                <input type="number" id="editCodigo" placeholder="" name="CODIGO">
+                <input type="number" id="editCodigo" class="validate" placeholder="" name="CODIGO">
 
             </div>
             <div class="col s9">
                 <label>Descrição</label>
-                <input type="text" id="editDescricao" placeholder="" name="DESCRICAO">
+                <input type="text" id="editDescricao" class="validate" placeholder="" name="DESCRICAO">
 
             </div>
 
@@ -23,16 +23,16 @@
         <div class="row">
             <div class="col s4">
                 <label>Valor</label>
-                <input type="text" class="real" id="editValor" placeholder="" name="VALOR">
+                <input type="text" class="real validate" id="editValor" placeholder="" name="VALOR">
             </div>
             <div class="col s4">
                 <label>Endereço</label>
-                <input type="text" class="" id="editEndereco" placeholder="" name="ENDERECO">
+                <input type="text" id="editEndereco" class="validate" placeholder="" name="ENDERECO">
             </div>
 
             <div class="col s4">
                 <label>Quantidade</label>
-                <input type="text" placeholder="" id="editQtd" name="QTD">
+                <input type="number" placeholder="" id="editQtd" name="QTD">
 
             </div>
         </div>
@@ -56,7 +56,7 @@
     <div id="xgProduto" class="list"></div>
     <div class="row">
         <div class="col s3">
-            <input type="text" class="margintop " placeholder="Pesquisar" id="edtPesquisa">
+            <input type="text" class="margintop validate" placeholder="Pesquisar" id="edtPesquisa">
         </div>
         <div id="pnButtons" class="right-align col s9"></div>
     </div>

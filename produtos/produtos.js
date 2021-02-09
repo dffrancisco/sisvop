@@ -169,6 +169,7 @@ const produto = (function () {
             marca: $('#editMarca').val(),
         }
         valCampos.valor = valCampos.valor.replace(',', '');
+        console.log('valCampos :', valCampos);
 
         for (let i in valCampos) {
             if (valCampos[i] == '' || valCampos.valor == 0) {
@@ -185,6 +186,8 @@ const produto = (function () {
             param.ID_PRODUTO = xgProduto.dataSource().ID_PRODUTO;
         }
 
+        param.DESCRICAO = param.DESCRICAO.toUpperCase()
+        param.ENDERECO = param.ENDERECO.toUpperCase()
 
         axios.post(url, {
             call: 'save',
