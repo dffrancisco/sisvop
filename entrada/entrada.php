@@ -116,11 +116,12 @@
 
         <div class="col s3">
             <label>Pesquisa Nº</label>
-            <input type="text" placeholder="Numero da nota" class="margintop numeroNota" id="edtPesquisaNotaNumero">
+            <input type="text" placeholder="Numero da nota" class="validate margintop numeroNota"
+                id="edtPesquisaNotaNumero">
         </div>
         <div class="col s4">
             <label>Pesquisa Nome</label>
-            <input type="text" placeholder="Nome fantasia" class="margintop" id="edtPesquisaNota">
+            <input type="text" placeholder="Nome fantasia" class="validate margintop" id="edtPesquisaNota">
         </div>
     </div>
 
@@ -132,7 +133,7 @@
 <div id="modalFornecedor">
     <div class="row">
         <div class="col s5">
-            <input type="text" placeholder="Pesquisar" class="margintop" id="edtPesquisaFornecedor">
+            <input type="text" placeholder="Pesquisar" class="validate margintop" id="edtPesquisaFornecedor">
         </div>
     </div>
     <div id="xgFornecedor"></div>
@@ -185,7 +186,7 @@
 <div id="modalLupaProduto">
     <div class="row">
         <div class="col s5">
-            <input type="text" placeholder="Pesquisar" class="margintop" id="edtPesquisaProduto">
+            <input type="text" placeholder="Pesquisar" class="validate margintop" id="edtPesquisaProduto">
         </div>
     </div>
     <div id="xgLupaProduto"></div>

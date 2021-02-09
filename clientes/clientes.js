@@ -87,7 +87,6 @@ const cliente = (function () {
 
                             })
                                 .then(rs => {
-                                    console.log('rs :', rs);
 
                                     if (rs.data[0]) {
                                         xgCliente.showMessageDuplicity('CNPJ inválido DUP')
@@ -111,7 +110,7 @@ const cliente = (function () {
 
         axios.post(url, {
             call: 'getCliente',
-            param: { search: search, offset: offset }
+            param: { search: search.toUpperCase(), offset: offset }
         })
             .then(rs => {
 
@@ -125,7 +124,7 @@ const cliente = (function () {
 
     function pesquisar() {
         let search = $('#edtPesquisa').val().trim();
-        xgCliente.queryOpen({ search })
+        xgCliente.queryOpen({ search: search })
     }
 
     function novo() {
@@ -192,6 +191,16 @@ const cliente = (function () {
             cidade: $('#edtCidade').val(),
             bairro: $('#edtBairro').val(),
         }
+
+        param.RAZAO = param.RAZAO.toUpperCase()
+        param.FANTASIA = param.FANTASIA.toUpperCase()
+        param.EMAIL = param.EMAIL.toUpperCase()
+        param.REPRESENTANTE = param.REPRESENTANTE.toUpperCase()
+        param.ENDERECO = param.ENDERECO.toUpperCase()
+        param.CIDADE = param.CIDADE.toUpperCase()
+        param.BAIRRO = param.BAIRRO.toUpperCase()
+
+
 
 
         for (let i in valCampos) {

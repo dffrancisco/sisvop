@@ -41,6 +41,13 @@ body{
     font-size: 18px;
 }
 
+.notify:hover{
+    color: #b3b3b3;
+}
+
+.notify{
+    cursor: pointer;
+}
 .cabecalho{
     display: none;
 }
