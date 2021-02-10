@@ -89,8 +89,34 @@ class Servicos
 
     function getServicos($param){
         
-        $call = $this->sql->getServicos($param);
-        echo json_encode($call);
+        $dados = [];
+        
+        if($param['andamento']== 'ANDAMENTO'){
+
+            $andamento = $this->sql->getServicosAnd($param);
+
+            $dados = array_merge($andamento, $dados);
+        }
+        
+        if($param['projeto']== 'PROJETO'){
+
+            $projeto = $this->sql->getServicosPro($param);
+            $dados = array_merge($projeto, $dados);
+
+        }
+        
+        if($param['finalizado']== 'FINALIZADO'){
+
+            $finalizado = $this->sql->getServicosFin($param);
+            $dados = array_merge($finalizado, $dados);
+
+        }
+        if($param['finalizado'] == '' && $param['projeto'] == '' && $param['andamento'] == ''){
+            $todos = $this->sql->getServicos($param);  
+            $dados = array_merge($todos, $dados); 
+        }
+
+        echo json_encode($dados);
     }
 
     function getListaServicoX($param)

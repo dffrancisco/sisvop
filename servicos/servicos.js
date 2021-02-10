@@ -22,6 +22,9 @@ let newEstoque = 0
 var evento
 let OBS
 let view = 0
+let andamento = ''
+let projeto = ''
+let finalizado = ''
 
 let ID_LISTA_SERVICO;
 let ID_CLIENTE;
@@ -165,8 +168,33 @@ $(function () {
         saida.relatorioGeral()
     })
 
+    $('#checkAndamento').click(function (e) {
+        let search = $('#xmEdtServico').val().trim().toUpperCase()
+
+        xgServicos.queryOpen({ search: search })
+        $('#xmEdtServico').focus()
+
+    })
+
+    $('#checkProjeto').click(function (e) {
+        let search = $('#xmEdtServico').val().trim().toUpperCase()
+
+        xgServicos.queryOpen({ search: search })
+        $('#xmEdtServico').focus()
+
+    })
+
+    $('#checkFinalizado').click(function (e) {
+        let search = $('#xmEdtServico').val().trim().toUpperCase()
+
+        xgServicos.queryOpen({ search: search })
+        $('#xmEdtServico').focus()
+
+    })
+
     xgServicos.queryOpen({ search: '' })
     $('#xmEdtServico').focus()
+
 });
 
 
@@ -463,7 +491,7 @@ const saida = (function () {
 
             query: {
                 execute: (r) => {
-                    getItensRomaneio(r.param.search, r.offset)
+                    getItensRomaneio(r.param.search)
                 }
             }
         })
@@ -525,7 +553,6 @@ const saida = (function () {
             $('.btnFS').attr("disabled", true);
             $('.btnRG').prop('disabled', true)
 
-
         }
 
         if (ln.STATUS == 'FINALIZADO') {
@@ -577,9 +604,37 @@ const saida = (function () {
 
     function getServicos(search, offset) {
 
+        if ($('#checkAndamento').is(':checked') == true) {
+            andamento = 'ANDAMENTO'
+        }
+
+        if ($('#checkProjeto').is(':checked') == true) {
+            projeto = 'PROJETO'
+        }
+
+        if ($('#checkFinalizado').is(':checked') == true) {
+            finalizado = 'FINALIZADO'
+        }
+
+        if ($('#checkFinalizado').is(':checked') == false) {
+            finalizado = ''
+        }
+        if ($('#checkProjeto').is(':checked') == false) {
+            projeto = ''
+        }
+        if ($('#checkAndamento').is(':checked') == false) {
+            andamento = ''
+        }
+
         axios.post(url, {
             call: 'getServicos',
-            param: { search: search, offset: offset }
+            param: {
+                search: search,
+                offset: offset,
+                andamento: andamento,
+                projeto: projeto,
+                finalizado: finalizado
+            }
         }).then(rs => {
             xgServicos.querySourceAdd(rs.data);
         })
@@ -924,41 +979,35 @@ const saida = (function () {
         $('#rl_geralDataI').html(dados_servico.DATA_INICIO)
         $('#rl_geralDataF').html(dados_servico.DATA_FINALIZACAO)
 
+        // CABECALHO ITENS PROJETADO
+        let tb_produto = $('<table>', { class: "tbl_produtos_projetado" })
+        let trS = $('<thead>', { style: " font-size: 9px !important;" })
+
+        trS.append($('<th>', { html: 'PRODUTO' }))
+        trS.append($('<th>', { html: 'MARCA' }))
+        trS.append($('<th>', { html: 'QTD PLANEJADO' }))
+        trS.append($('<th>', { html: 'QTD RETIRADA' }))
+        trS.append($('<th>', { html: 'DATA' }))
+        trS.append($('<th>', { html: 'ORIGEM' }))
+
+        tb_produto.append(trS)
+
         for (let i in xgSaida.data()) {
-            let tb_produto = `<tr class="tb_dados_saida">
-                                    <td>
-                                    ${xgSaida.data()[i].DESCRICAO}
-                                    </td>
-                                    <td>
-                                    ${xgSaida.data()[i].MARCA}
-                                    </td>
-                                    <td>
-                                    ${xgSaida.data()[i].QTD}
-                                    </td>
-                                    <td>
-                                    ${xgSaida.data()[i].QTD_RETIRADA}
-                                    </td>
-                                    <td style= "text-align:left !important;">
-                                    ${xgSaida.data()[i].DATA}
-                                    </td>
-                                    <td>
-                                    ${xgSaida.data()[i].ORIGEM}
-                                    </td>
-                            </tr>`
+            // DADOS DOS ITENS PROJETADOS
+            trS = $('<tr>', { style: "font-size: 9px !important;" });
+            trS.append($('<td>', { html: xgSaida.data()[i].DESCRICAO }))
+            trS.append($('<td>', { html: xgSaida.data()[i].MARCA }))
+            trS.append($('<td>', { html: xgSaida.data()[i].QTD }))
+            trS.append($('<td>', { html: xgSaida.data()[i].QTD_RETIRADA }))
+            trS.append($('<td>', { html: xgSaida.data()[i].DATA }))
+            trS.append($('<td>', { html: xgSaida.data()[i].ORIGEM }))
+
+            tb_produto.append(trS)
 
             $('.tb_produto_saida').append(tb_produto)
         }
 
-        await getRomaneioEItens()
-
-        $('.rl_geral').xPrint()
-
-        console.log('1');
-    }
-
-    function getRomaneioEItens() {
-
-        axios.post(url, {
+        await axios.post(url, {
             call: 'getRomaneioRela',
             param: {
                 ID_LISTA_SERVICO,
@@ -969,18 +1018,17 @@ const saida = (function () {
             for (let i in rs.data) {
 
                 // CABECALHO ROMANEIO
-                let tableRomaneio = $('<table>')
-                let tr = $('<tr>', { style: "text-align: center;" })
-
-                tr.append($('<td>', { html: 'ID' }))
-                tr.append($('<td>', { html: 'RESPONSÁVEL' }))
-                tr.append($('<td>', { html: 'DATA' }))
-                tr.append($('<td>', { html: 'HORA' }))
+                let tableRomaneio = $('<table>', { class: "tbl_romaneio" })
+                let tr = $('<thead>', { style: " font-size: 9px !important;" })
+                tr.append($('<th>', { html: 'ID' }))
+                tr.append($('<th>', { html: 'RESPONSÁVEL' }))
+                tr.append($('<th>', { html: 'DATA' }))
+                tr.append($('<th>', { html: 'HORA' }))
 
                 tableRomaneio.append(tr)
 
                 // DADOS ROMANEIO
-                tr = $('<tr>');
+                tr = $('<tr>', { style: "font-size: 9px !important;" });
                 tr.append($('<td>', { html: rs.data[i].ID_ROMANEIO }))
                 tr.append($('<td>', { html: rs.data[i].NOME }))
                 tr.append($('<td>', { html: rs.data[i].DATA }))
@@ -990,18 +1038,18 @@ const saida = (function () {
 
                 /* cabeçalho dos itens*/
                 let tableRomaneioItens = $('<table>', { class: "tbl_itens_romaneio" })
-                tr = $('<tr>', { style: "text-align: center;" })
+                tr = $('<thead>', { style: "font-size: 9px !important;" })
 
-                tr.append($('<td>', { html: 'PRODUTO' }))
-                tr.append($('<td>', { html: 'MARCA' }))
-                tr.append($('<td>', { html: 'QTD' }))
-                tr.append($('<td>', { html: 'ORIGEM' }))
+                tr.append($('<th>', { html: 'PRODUTO' }))
+                tr.append($('<th>', { html: 'MARCA' }))
+                tr.append($('<th>', { html: 'QTD' }))
+                tr.append($('<th>', { html: 'ORIGEM' }))
 
                 tableRomaneioItens.append(tr)
 
                 /* DADOS ITENS DO ROMANEIO */
                 for (let a in rs.data[i].ITENS) {
-                    tr = $('<tr>');
+                    tr = $('<tr>', { style: "font-size: 9px !important;" });
                     tr.append($('<td>', { html: rs.data[i].ITENS[a].DESCRICAO }))
                     tr.append($('<td>', { html: rs.data[i].ITENS[a].MARCA }))
                     tr.append($('<td>', { html: rs.data[i].ITENS[a].QTD }))
@@ -1015,75 +1063,39 @@ const saida = (function () {
             }
         })
 
+        // CABECALHO DEVOLUCAO
+        let tb_devolucao = $('<table>', { class: "tbl_produtos_projetado" })
+        let trD = $('<thead>', { style: " font-size: 9px !important;" })
+
+        trD.append($('<th>', { html: 'PRODUTO' }))
+        trD.append($('<th>', { html: 'MARCA' }))
+        trD.append($('<th>', { html: 'DEVOLVIDO' }))
+        trD.append($('<th>', { html: 'DATA' }))
+        trD.append($('<th>', { html: 'HORA' }))
+
+        tb_devolucao.append(trD)
+
+        for (let i in xgDevolucao.data()) {
+
+            trD = $('<tr>', { style: "font-size: 9px !important;" });
+            trD.append($('<td>', { html: xgDevolucao.data()[i].DESCRICAO }))
+            trD.append($('<td>', { html: xgDevolucao.data()[i].MARCA }))
+            trD.append($('<td>', { html: xgDevolucao.data()[i].QTD }))
+            trD.append($('<td>', { html: xgDevolucao.data()[i].DATA }))
+            trD.append($('<td>', { html: xgDevolucao.data()[i].HORA }))
+
+            tb_devolucao.append(trD)
+
+            $('.tb_devolucao').append(tb_devolucao)
+        }
+
+        $('.rl_geral').xPrint()
+
+        $('.tbl_produtos_projetado').html('')
+        $('.romaneio_itens_romaneio').html('')
+        $('.tb_devolucao').html('')
+
     }
-
-    // function xico() {
-    //     axios.post(url, {
-    //         call: 'getRomaneioRela',
-    //         param: {
-    //             ID_LISTA_SERVICO,
-    //             offset: 0
-    //         },
-    //     }).then(rs => {
-
-
-    //         for (let i in rs.data) {
-
-    //             // CABECALHO ROMANEIO
-    //             let tableRomaneio = $('<table>')
-    //             let tr = $('<tr>', { style: "text-align: center;" })
-
-    //             tr.append($('<td>', { html: 'ID' }))
-    //             tr.append($('<td>', { html: 'RESPONSÁVEL' }))
-    //             tr.append($('<td>', { html: 'DATA' }))
-    //             tr.append($('<td>', { html: 'HORA' }))
-
-    //             tableRomaneio.append(tr)
-    //             // DADOS ROMANEIO
-    //             tr = $('<tr>');
-    //             tr.append($('<td>', { html: rs.data[i].ID_ROMANEIO }))
-    //             tr.append($('<td>', { html: rs.data[i].NOME }))
-    //             tr.append($('<td>', { html: rs.data[i].DATA }))
-    //             tr.append($('<td>', { html: rs.data[i].HORA }))
-
-    //             tableRomaneio.append(tr)
-
-
-    //             /* cabeçalho dos itens*/
-    //             let tableRomaneioItens = $('<table>', { class: "tbl_itens_romaneio" })
-    //             tr = $('<tr>', { style: "text-align: center;" })
-
-    //             tr.append($('<td>', { html: 'PRODUTO' }))
-    //             tr.append($('<td>', { html: 'MARCA' }))
-    //             tr.append($('<td>', { html: 'QTD' }))
-    //             tr.append($('<td>', { html: 'ORIGEM' }))
-
-    //             tableRomaneioItens.append(tr)
-
-
-    //             /***** itens */
-    //             for (let a in rs.data[i].ITENS) {
-    //                 tr = $('<tr>');
-    //                 tr.append($('<td>', { html: rs.data[i].ITENS[a].DESCRICAO }))
-    //                 tr.append($('<td>', { html: rs.data[i].ITENS[a].MARCA }))
-    //                 tr.append($('<td>', { html: rs.data[i].ITENS[a].QTD }))
-    //                 tr.append($('<td>', { html: rs.data[i].ITENS[a].ORIGEM }))
-    //                 tableRomaneioItens.append(tr)
-    //             }
-
-    //             $('.alves').append(tableRomaneio)
-    //             $('.alves').append(tableRomaneioItens)
-    //             $('.alves').append('<br/>')
-
-
-    //         }
-
-
-
-    //     })
-
-    // }
-
 
     // MODAIS
     function modalCliente() {
@@ -1094,8 +1106,6 @@ const saida = (function () {
             width: '700',
         })
     }
-
-
 
     function modalInsProduto() {
 
@@ -1251,6 +1261,7 @@ const clientes = (function () {
             HORA: new Date().toLocaleTimeString('pt-BR'),
 
         }
+
 
         for (let i in param) {
             if (param[i] == "" || param[i] == null || param == undefined) {

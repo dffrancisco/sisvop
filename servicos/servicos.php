@@ -11,6 +11,24 @@
             <label>Buscar Servico</label>
             <input type="text" id="xmEdtServico" class="validate">
         </div>
+        <div class="col s2 push-s1" style="margin-top: 18px;">
+            <label>
+                <input type="checkbox" id="checkAndamento" class="filled-in" name="filtro" checked="checked">
+                <span>ANDAMENTO</span>
+            </label>
+        </div>
+        <div class="col s2 push-s1" style="margin-top: 18px;">
+            <label>
+                <input type="checkbox" id="checkProjeto" name="filtro" class="filled-in">
+                <span>PROJETO</span>
+            </label>
+        </div>
+        <div class="col s2 push-s1" style="margin-top: 18px;">
+            <label>
+                <input type="checkbox" id="checkFinalizado" name="filtro" class="filled-in">
+                <span>FINALIZADO</span>
+            </label>
+        </div>
     </div>
 
     <!-- xGrid de lista servicos -->
@@ -163,19 +181,19 @@
     <div class="row">
         <div class="col s12">
             <label>Serviços</label>
-            <select name="id_servico" style="width: 94% !important" id="slctServico"></select>
+            <select name="id_servico" class="validate" style="width: 94% !important" id="slctServico"></select>
         </div>
     </div>
 
     <div class="row">
         <div class="col s6">
             <label>Engenheiro</label><br>
-            <input type="text" style="width: 83% !important;" id="xmInEngenheiro">
+            <input type="text" class="validate" style="width: 83% !important;" id="xmInEngenheiro">
         </div>
 
         <div class="col s6">
             <label>Executores</label>
-            <input type="text" style="width: 83% !important;" id="xmInEx">
+            <input type="text" class="validate" style="width: 83% !important;" id="xmInEx">
         </div>
 
         <div class="col s6">
@@ -194,7 +212,7 @@
     <div class="row">
         <div class="col s12">
             <label>OBS</label>
-            <textarea type="text" style=" width: 96% !important;" class="txtArea" id="xmInObs" rows="50"
+            <textarea type="text" style=" width: 96% !important;" class="txtArea validate" id="xmInObs" rows="50"
                 placeholder="Observações"></textarea>
         </div>
     </div>
@@ -339,7 +357,7 @@
     </div>
 </div>
 
-<!-- RELATORIO GERAL -->
+<!-- RELATORIO GERAL  style="display: none;"-->
 <div class="rl_geral" style="display: none;">
     <div style="font-size: 9px !important;">
         <div class="tabela" id="rl_geralFields">
@@ -390,16 +408,7 @@
     <center>
         <b>ITENS PROJETADOS</b>
     </center>
-    <table class="tb_produto_saida" style="font-size: 9px;">
-        <thead style="text-align: center;">
-            <th>PRODUTO</th>
-            <th>MARCA</th>
-            <th>QTD PLANEJADO</th>
-            <th>QTD RETIRADA</th>
-            <th>DATA</th>
-            <th>ORIGEM</th>
-        </thead>
-    </table>
+    <div class="tb_produto_saida"></div>
 
     <br>
 
@@ -411,15 +420,7 @@
     <center>
         <b>DEVOLUÇÕES</b>
     </center>
-    <table class="tb_devolucao" style="font-size: 9px;">
-        <thead style="text-align: center;">
-            <th>PRODUTO</th>
-            <th>MARCA</th>
-            <th>DEVOLVIDO</th>
-            <th>DATA</th>
-            <th>HORA</th>
-        </thead>
-    </table>
+    <div class="tb_devolucao"></div>
 </div>
 
 </div>

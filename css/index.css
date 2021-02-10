@@ -102,6 +102,10 @@ body{
     margin-bottom: -8px !important;
 }
 
+table, th, td {
+    /* border: none; */
+    padding: 2px !important;
+}
 .pnUser {
     z-index: 100;
     color:#e0f2f1;
@@ -163,6 +167,7 @@ body{
 
 }
 
+
 .validate{
     text-transform: uppercase;
 }
@@ -176,6 +181,8 @@ body{
 .txtArea{
     height: 100px !important;
 }
+
+
 
 .btnDel{
     
