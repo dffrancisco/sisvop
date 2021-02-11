@@ -61,9 +61,9 @@ if (!empty($_GET['p'])) {
 
 
     <div class="cabecalho">
-        <table width="100%" class="tbTitulo" style="font-size:15px ;">
+        <table width="100%" class="tbTitulo" style="font-size:13px ;">
             <tr>
-                <td rowspan="4" style="width: 150px;"><img src="img/LOGO AZUL WEB.png" width="155" alt="" /></td>
+                <td rowspan="4" style="width: 130px;"><img src="img/LOGO AZUL WEB.png" width="130" alt="" /></td>
                 <td colspan="3" style="font-weight: bold" id="printRazao"></td>
                 <td style="width: 150px;"><span class="spData"></span> <span class="spHora"></span></td>
             </tr>
@@ -78,7 +78,7 @@ if (!empty($_GET['p'])) {
             </tr>
             <tr>
                 <td>Inscrição.: <span id="printInscricao"></span> </td>
-                <td>Telefone.: <br> <span id="printFixo"></span> </td>
+                <td>Telefone.: <span id="printFixo"></span> </td>
                 <td></td>
                 <td></td>
             </tr>
@@ -158,6 +158,10 @@ if (!empty($_GET['p'])) {
 
         <a href="?p=servicos/servicos">
             <li><i class="fa fa-usd"></i>Serviços</li>
+        </a>
+
+        <a href="?p=contas/contas">
+            <li><i class="fa fa-money"></i>Contas a pagar</li>
         </a>
 
         <hr />

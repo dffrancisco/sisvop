@@ -98,6 +98,18 @@ class SqlEntrada
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function getPagamentos($param)
+  {
+
+    $sql = "SELECT b.id_pagamento, b.data_vencimento, b.valor_parcela, b.data_pago, b.valor_pago
+    FROM nota a, pagamentos b
+    WHERE a.id_nota = b.id_nota
+    AND a.id_nota = $param";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
   function getCabecalho($id_nota)
   {
     $sql = "SELECT a.id_nota, a.id_fornecedor, a.numero_nota, a.chave_acesso,
@@ -142,11 +154,19 @@ class SqlEntrada
   }
 
   function deleteItensUni($param)
-
   {
     extract($param);
     $sql = "DELETE FROM lista_itens_nota  
     WHERE id_itens_nota = $id_itens_nota";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function deletePagamento($param)
+  {
+    $sql = "DELETE FROM pagamentos
+    WHERE id_pagamento = $param";
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -175,6 +195,16 @@ class SqlEntrada
     return $param;
   }
 
+  function insertPagamento($param)
+  {
+    extract($param);
+    $sql = "INSERT INTO pagamentos (ID_NOTA, DATA_VENCIMENTO, VALOR_PARCELA )
+    VALUES($ID_NOTA,'$DATA_VENCIMENTO', '$VALOR_PARCELA')
+    returning id_pagamento, data_vencimento, valor_parcela ";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
 
   function updateProduto($param)
   {
@@ -185,6 +215,19 @@ class SqlEntrada
             WHERE id_produto = $id_produto 
             returning id_produto";
 
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function updatePagamento($param)
+  {
+    extract($param);
+    $sql = "UPDATE pagamentos 
+              SET DATA_VENCIMENTO = '$DATA_VENCIMENTO', 
+              VALOR_PARCELA = '$VALOR_PARCELA'
+            WHERE ID_PAGAMENTO = $ID_PAGAMENTO 
+            returning ID_PAGAMENTO";
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);

@@ -103,12 +103,43 @@
         </div>
     </div>
 
-    <div id="xgItens" class="list"></div>
+    <ul class="tabs" style="margin-left: 5px">
+        <li class="tab"><a id="abaItens" class="active" href="#tabItens">Itens</a></li>
+        <li class="tab"><a id="abaPagamento" href="#tabPagamento">Pagamento</a></li>
+    </ul>
 
-    <div id="pnButtons" class="center-align"></div>
+    <div id="tabItens" class="col s12">
+        <div id="xgItens" class="list"></div>
+
+        <div id="pnButtons" class="center-align"></div>
+    </div>
+
+    <div id="tabPagamento">
+        <div class="row">
+            <div class="col s4">
+                <label>Data de vencimento</label>
+                <input type="text" class="date" id="edtDataVencimento">
+            </div>
+
+            <div class="col s4">
+                <label>Valor</label>
+                <input type="text" class="real" id="edtValorPagar">
+
+            </div>
+            <div class="col s4">
+                <button class="btn-Frame btn-Frame-blue btnP" style="margin-top:14px ;"
+                    id="btnCadParcela">Cadastrar</button>
+            </div>
+        </div>
+        <div id="xgPagamento" class="list"></div>
+        <div id="pnButtonPagamento" class="center-align"></div>
+    </div>
 
 
 </div>
+
+
+
 
 <div id="modalLocalizarNota">
 
@@ -176,7 +207,7 @@
 
         <div class="col s11">
             <label>Chave de acesso</label>
-            <input type="text" placeholder="" class="validate" id="edtChave">
+            <input type="text" placeholder="" class="validate chave" id="edtChave">
 
         </div>
     </div>
