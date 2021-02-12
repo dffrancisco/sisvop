@@ -18,9 +18,10 @@ class SqlContas
   {
     extract($param);
     $sql = "SELECT a.numero_nota, b.id_pagamento, b.data_vencimento, b.valor_parcela, 
-    b.data_pago, b.valor_pago, b.id_pagamento
-    FROM nota a, pagamentos b
-    WHERE a.id_nota = b.id_nota ";
+    b.data_pago, b.valor_pago, b.id_pagamento, c.razao
+    FROM nota a, pagamentos b, fornecedor c
+    WHERE a.id_nota = b.id_nota
+    AND a.id_fornecedor = c.id_fornecedor ";
 
     if ($DATA_LIMITE != "") {
       $sql = $sql . "AND b.data_vencimento BETWEEN '$DATA_VENCIMENTO' AND '$DATA_LIMITE'";

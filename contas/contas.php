@@ -22,6 +22,8 @@
     <div id="xgContas" class="list"></div>
     <div class="right-align">
         <button class="btn-Frame btn-Frame-blue btnP" style="margin-top:14px ;" id="btnPagar" disabled>Pagar</button>
+        <button class="btn-Frame btn-Frame-blue btnP" style="margin-top:14px ;" id="btnImprimir"
+            disabled>Imprimi</button>
     </div>
 </div>
 <div id="modalPagar">

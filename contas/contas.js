@@ -5,11 +5,15 @@ $(function () {
     contas.xgridContas()
     contas.xmPagar()
     contas.adicionais()
+    getDataEmpresa()
     $('#btnBuscarData').click(function () {
         contas.getContas()
     })
     $('#btnPagar').click(function () {
         contas.btnPagar()
+    })
+    $('#btnImprimir').click(function () {
+        contas.btnImprimir()
     })
 });
 
@@ -24,6 +28,7 @@ const contas = (function () {
             heightLine: 35,
             theme: "x-clownV2",
             onSelectLine: (ln) => {
+                $('#btnImprimir').removeAttr("disabled")
                 if (xgContas.dataSource().DATA_PAGO == null) {
                     $('#btnPagar').removeAttr("disabled")
 
@@ -34,29 +39,33 @@ const contas = (function () {
             columns: {
                 'Nº Nota': {
                     dataField: "NUMERO_NOTA",
-                    width: "20%",
+                    width: "11%",
 
                 },
-                'Data de vencimento': {
+                'Fornecedor': {
+                    dataField: "RAZAO",
+
+                },
+                'Data vencimento': {
                     dataField: "DATA_VENCIMENTO",
-                    width: "23%",
+                    width: "17%",
                     render: util.dataBrasil
 
                 },
                 'Valor parcela': {
                     dataField: "VALOR_PARCELA",
                     render: addReal,
-                    width: "19%",
+                    width: "15%",
                 },
                 'Data pago': {
                     dataField: "DATA_PAGO",
-                    width: "19%",
+                    width: "17%",
                     render: util.dataBrasil
 
                 },
                 'Valor pago': {
                     dataField: "VALOR_PAGO",
-                    width: "19%",
+                    width: "15%",
                 }
             },
 
@@ -114,6 +123,10 @@ const contas = (function () {
         $('#valorPago').val(xgContas.dataSource().VALOR_PARCELA)
     }
 
+    function btnImprimir() {
+        xgContas.print($('.cabecalho').html())
+    }
+
     function getContas() {
         if ($('#data_vencimento').val() == '') {
             show('Por favor preencha uma data')
@@ -143,7 +156,6 @@ const contas = (function () {
     function adicionais() {
         if (xgContas.dataSource().DATA_PAGO = ! '') {
             $('#btnPagar').prop("disabled", true)
-
         }
     }
 
@@ -152,6 +164,7 @@ const contas = (function () {
         getContas: getContas,
         xmPagar: xmPagar,
         btnPagar: btnPagar,
+        btnImprimir: btnImprimir,
         adicionais: adicionais,
     }
 })();
