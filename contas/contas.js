@@ -148,7 +148,16 @@ const contas = (function () {
                 show('Não tem pagamentos para está data')
             }
             if (r.data.length > 0) {
+                let a = 0
                 xgContas.source(r.data)
+                for (let i in xgContas.data()) {
+                    a += Number(r.data[i].VALOR_PARCELA.replace(/[^\d]+/g, ''))
+                }
+                $('#edtTotal').removeAttr("disabled")
+                $('#edtTotal').val(a)
+                $('#edtTotal').focus()
+                xgContas.focus()
+                $('#edtTotal').prop("disabled", true)
             }
         })
     }
@@ -158,6 +167,8 @@ const contas = (function () {
             $('#btnPagar').prop("disabled", true)
         }
     }
+
+
 
     return {
         xgridContas: xgridContas,

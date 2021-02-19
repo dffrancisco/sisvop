@@ -102,6 +102,10 @@ body{
     margin-bottom: -8px !important;
 }
 
+table, th, td {
+    /* border: none; */
+    padding: 2px !important;
+}
 .pnUser {
     z-index: 100;
     color:#e0f2f1;
@@ -163,6 +167,7 @@ body{
 
 }
 
+
 .validate{
     text-transform: uppercase;
 }
@@ -176,6 +181,8 @@ body{
 .txtArea{
     height: 100px !important;
 }
+
+
 
 .btnDel{
     
@@ -271,7 +278,7 @@ body{
 nav{
     /* height: 40px !important;   
     line-height: 41px !important; */
-    background-color: #4679ad !important;
+    background-color: #004b69 !important;
 }
 
 @media only screen and (min-width: 601px){ 

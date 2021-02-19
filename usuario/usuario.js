@@ -41,11 +41,11 @@ const senha = (function () {
                 },
                 NOME: {
                     dataField: "NOME",
-                    width: "50%",
+                    width: "60%",
                 },
                 CPF: {
                     dataField: "CPF",
-                    width: "40%",
+                    width: "30%",
                     center: true,
                 },
             },

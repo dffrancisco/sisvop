@@ -39,7 +39,11 @@ const fornecedor = (function () {
             heightLine: '35',
 
             columns: {
-                CNPJ: { dataField: 'CNPJ' },
+                CNPJ: {
+                    dataField: 'CNPJ',
+                    center: true,
+                    width: "30%",
+                },
                 Fantasia: { dataField: 'FANTASIA' },
             },
             onSelectLine: (ln) => {

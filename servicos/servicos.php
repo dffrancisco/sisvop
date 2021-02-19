@@ -8,8 +8,26 @@
 <div id="Servicos" class="container">
     <div class="row">
         <div class="col s4" id="pnFieldServico">
-            <label>Buscar Servico</label>
+            <label>Buscar Serviço</label>
             <input type="text" id="xmEdtServico" class="validate">
+        </div>
+        <div class="col s2 push-s1" style="margin-top: 18px;">
+            <label>
+                <input type="checkbox" id="checkAndamento" class="filled-in" name="filtro" checked="checked">
+                <span>ANDAMENTO</span>
+            </label>
+        </div>
+        <div class="col s2 push-s1" style="margin-top: 18px;">
+            <label>
+                <input type="checkbox" id="checkProjeto" name="filtro" class="filled-in">
+                <span>PROJETO</span>
+            </label>
+        </div>
+        <div class="col s2 push-s1" style="margin-top: 18px;">
+            <label>
+                <input type="checkbox" id="checkFinalizado" name="filtro" class="filled-in">
+                <span>FINALIZADO</span>
+            </label>
         </div>
     </div>
 
@@ -163,19 +181,19 @@
     <div class="row">
         <div class="col s12">
             <label>Serviços</label>
-            <select name="id_servico" style="width: 94% !important" id="slctServico"></select>
+            <select name="id_servico" class="validate" style="width: 94% !important" id="slctServico"></select>
         </div>
     </div>
 
     <div class="row">
         <div class="col s6">
             <label>Engenheiro</label><br>
-            <input type="text" style="width: 83% !important;" id="xmInEngenheiro">
+            <input type="text" class="validate" style="width: 83% !important;" id="xmInEngenheiro">
         </div>
 
         <div class="col s6">
             <label>Executores</label>
-            <input type="text" style="width: 83% !important;" id="xmInEx">
+            <input type="text" class="validate" style="width: 83% !important;" id="xmInEx">
         </div>
 
         <div class="col s6">
@@ -194,7 +212,7 @@
     <div class="row">
         <div class="col s12">
             <label>OBS</label>
-            <textarea type="text" style=" width: 96% !important;" class="txtArea" id="xmInObs" rows="50"
+            <textarea type="text" style=" width: 96% !important;" class="txtArea validate" id="xmInObs" rows="50"
                 placeholder="Observações"></textarea>
         </div>
     </div>
@@ -271,36 +289,35 @@
     <div style="font-size: 9px !important;">
         <div class="tabela" id="rlFields">
             <div class="row">
-                <div class="col s6">
+                <div class="col s4">
                     <label>Cliente</label><br>
                     <span id="rlFantasia"><span>
 
                 </div>
 
-                <div class="col s6">
+                <div class="col s4">
                     <label>CNPJ</label><br>
                     <span id="rlCnpj"><span>
+                </div>
+
+                <div class="col s4">
+                    <label>Engenheiro</label><br>
+                    <span id="rlEngenheiro"></span>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col s3">
-                    <label>Engenheiro</label><br>
-                    <span id="rlEngenheiro"></span>
-                </div>
 
                 <div class="col s2">
                     <label>Serviço</label><br>
                     <span id="rlServico"></span>
                 </div>
 
-                <div class="col s7">
+                <div class="col s3">
                     <label>Executores</label><br>
                     <span id="rlExecutores"></span>
                 </div>
-            </div>
 
-            <div class="row">
                 <div class="col s3">
                     <label>Data prevista de início</label><br>
                     <span id="rlDataI"></span>
@@ -313,13 +330,9 @@
             </div>
         </div>
 
-        <table class="tb_produto" style="font-size: 9px;">
-            <thead>
-                <th>PRODUTO</th>
-                <th>MARCA</th>
-                <th>QTD</th>
-            </thead>
-        </table>
+        <div class="tb_produto" style="font-size: 9px;">
+
+        </div>
 
         <br>
         <br>
@@ -328,7 +341,7 @@
             <div class="row assRl">
                 <div class="col s4 push-s1">
                     __________________________<br>
-                    Ass. Destinatário
+                    <span id="rl_executores"></span>
                 </div>
                 <div class="col s4 push-s3">
                     __________________________<br>
@@ -339,40 +352,40 @@
     </div>
 </div>
 
+<!-- RELATORIO GERAL  style="display: none;"-->
 <div class="rl_geral" style="display: none;">
     <div style="font-size: 9px !important;">
         <div class="tabela" id="rl_geralFields">
             <div class="row">
-                <div class="col s6">
+                <div class="col s4">
                     <label>Cliente</label><br>
                     <span id="rl_geralFantasia"><span>
 
                 </div>
 
-                <div class="col s6">
+                <div class="col s4">
                     <label>CNPJ</label><br>
                     <span id="rl_geralCnpj"><span>
                 </div>
-            </div>
-
-            <div class="row">
                 <div class="col s3">
                     <label>Engenheiro</label><br>
                     <span id="rl_geralEngenheiro"></span>
                 </div>
+            </div>
+
+            <div class="row">
+
 
                 <div class="col s2">
                     <label>Serviço</label><br>
                     <span id="rl_geralServico"></span>
                 </div>
 
-                <div class="col s7">
+                <div class="col s3">
                     <label>Executores</label><br>
                     <span id="rl_geralExecutores"></span>
                 </div>
-            </div>
 
-            <div class="row">
                 <div class="col s3">
                     <label>Data prevista de início</label><br>
                     <span id="rl_geralDataI"></span>
@@ -386,7 +399,23 @@
         </div>
     </div>
 
+    <center>
+        <b>ITENS PROJETADOS</b>
+    </center>
+    <div class="tb_produto_saida"></div>
 
+    <br>
+
+    <center><b>ROMANEIO / ITENS DO ROMANEIO</b></center>
+    <div class="romaneio_itens_romaneio"></div>
+
+    <br>
+
+    <center>
+        <b>DEVOLUÇÕES</b>
+    </center>
+    <div class="tb_devolucao"></div>
+</div>
 
 </div>
 <div id="pnCodigoTela">Saída</div>
