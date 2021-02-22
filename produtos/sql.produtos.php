@@ -32,8 +32,10 @@ class SqlProdutos
 
   function getMarca()
   {
-    $sql = "SELECT * FROM marcas";
-
+    $sql = "SELECT
+    * 
+    FROM marcas
+    ORDER BY marca ASC";
 
     $query = $this->db->prepare($sql);
     $query->execute();

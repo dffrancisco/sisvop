@@ -3,6 +3,7 @@ let xgProduto;
 $(function () {
     produto.grid();
     produto.getMarca();
+    produto.keydown();
     xgProduto.queryOpen({ search: '' })
 
 });
@@ -43,6 +44,9 @@ const produto = (function () {
                 },
             },
 
+            dblClick: () => {
+                $('.btnEdit').click()
+            },
             sideBySide: {
                 el: "#pnFields",
 
@@ -56,14 +60,14 @@ const produto = (function () {
                             click: searchConf,
                         },
                         novo: {
-                            html: "Novo",
-                            class: "btnP",
+                            html: "Novo(F2)",
+                            class: "btnP btnNovo",
                             state: xGridV2.state.insert,
                             click: novo,
                         },
                         edit: {
                             html: "Editar",
-                            class: "btnP",
+                            class: "btnP btnEdit",
                             state: xGridV2.state.update,
                             click: editar,
                         },
@@ -75,7 +79,7 @@ const produto = (function () {
                         },
                         save: {
                             html: "Salvar",
-                            class: "btnP",
+                            class: "btnP btnSave",
                             state: xGridV2.state.save,
                             click: salvar
                         },
@@ -122,7 +126,7 @@ const produto = (function () {
     function getProdutos(search, offset) {
         axios.post(url, {
             call: 'getProdutos',
-            param: { search: search, offset: offset }
+            param: { search: search.toUpperCase(), offset: offset }
         })
             .then(rs => {
                 xgProduto.querySourceAdd(rs.data);
@@ -182,6 +186,7 @@ const produto = (function () {
             let allDuplicty = await xgProduto.getDuplicityAll()
 
             if (allDuplicty == false) {
+                show('Código já cadastrado!')
                 return false;
             }
         }
@@ -191,13 +196,18 @@ const produto = (function () {
         }
 
         param.DESCRICAO = param.DESCRICAO.toUpperCase()
-        param.ENDERECO = param.ENDERECO.toUpperCase()
-
+        if (param.ENDERECO != undefined) {
+            param.ENDERECO = param.ENDERECO.toUpperCase()
+        } else {
+            param.ENDERECO = ''
+        }
         axios.post(url, {
             call: 'save',
             param: param
         })
             .then(r => {
+
+                cancelar()
 
                 if (r.data == 'edit') {
                     xgProduto.dataSource("QTD", param.QTD)
@@ -218,8 +228,6 @@ const produto = (function () {
 
             })
 
-        xgProduto.enable()
-        xgProduto.focus()
     }
 
     function addReal(value) {
@@ -268,15 +276,36 @@ const produto = (function () {
     }
 
     function cancelar() {
-
         $('.btnPesq').removeAttr("disabled")
         $('#edtPesquisa').removeAttr("disabled")
         xgProduto.enable()
         xgProduto.focus()
     }
 
+    function keydown() {
+        $("#slctMarca").keydown(function (e) {
+            if (e.keyCode == 13) {
+                $('.btnSave').click()
+
+            }
+        })
+
+        $("#edtPesquisa").keydown(function (e) {
+            if (e.keyCode == 13) {
+                $('.btnPesq').click()
+            }
+        })
+
+        $(document).keydown(function (e) {
+            if (e.keyCode == 113) {
+                $('.btnNovo').click()
+            }
+        })
+    }
+
     return {
         grid: grid,
         getMarca: getMarca,
+        keydown: keydown
     };
 })();
