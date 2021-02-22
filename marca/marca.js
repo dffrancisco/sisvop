@@ -159,11 +159,6 @@ const marca = (function () {
 
     const salvar = async () => {
         let param = xgMarca.getElementSideBySideJson();
-        let allDuplicty = await xgMarca.getDuplicityAll()
-
-        if (allDuplicty == false)
-            return false;
-
 
         if (param.MARCA || param.MARCA.length > 0) {
 
@@ -184,6 +179,10 @@ const marca = (function () {
 
             if (controleGrid == 'new') {
                 param.ID_MARCA = ''
+                let allDuplicty = await xgMarca.getDuplicityAll()
+
+                if (allDuplicty == false)
+                    return false;
             }
 
             param.MARCA = param.MARCA.toUpperCase()
@@ -194,16 +193,21 @@ const marca = (function () {
 
             }).then(rs => {
 
-                if (rs.data[0].ID_MARCA) {
+                cancelar()
+
+                if (rs.data == 'edit') {
+                    xgMarca.dataSource(param);
+
+                }
+                else if (rs.data[0].ID_MARCA) {
 
                     param.ID_MARCA = rs.data.ID_MARCA;
                     xgMarca.insertLine(param);
 
                 } else {
-                    xgMarca.dataSource(param);
-
+                    show('ERRO INTERNO!')
                 }
-                cancelar()
+
             });
         } else {
             xgMarca.showMessageDuplicity('O campo está com valor duplicado ou vazio!')
