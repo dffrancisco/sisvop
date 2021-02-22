@@ -35,12 +35,12 @@ class Fornecedor
     function salvar($param)
     {
 
-        if (empty($param['id_fornecedor'])) {
+        if (empty($param['ID_FORNECEDOR'])) {
             $id_fornecedor = $this->sql->inserirFornecedor($param);
             echo json_encode($id_fornecedor);
         } else {
             $call = $this->sql->atualizaFornecedor($param);
-            echo json_encode($call);
+            echo json_encode('edit');
         }
     }
 

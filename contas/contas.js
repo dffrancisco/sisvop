@@ -108,7 +108,7 @@ const contas = (function () {
                     param: param
                 }).then(r => {
                     xmPagar.close()
-                    xgContas.dataSource('DATA_PAGO', $('#dataPago').val())
+                    xgContas.dataSource('DATA_PAGO', util.dataBrasil($('#dataPago').val()))
                     xgContas.dataSource('VALOR_PAGO', $('#valorPago').val())
                 })
 

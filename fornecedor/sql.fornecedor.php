@@ -35,7 +35,8 @@ class SqlFornecedor
   {
     $sql = 'SELECT
             *
-            FROM uf';
+            FROM uf
+            ORDER BY uf ASC';
 
     $query = $this->db->prepare($sql);
     $query->execute();

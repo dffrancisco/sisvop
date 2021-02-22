@@ -123,7 +123,7 @@ if (!empty($_GET['p'])) {
         <span style="font-size: 15px;">SAIR</span>
     </div>
 
-    <div class="pnMenu">
+    <div class="pnMenu" style="font-size: 15px;">
         <a href="?p=produtos/produtos">
             <li><i class="fa fa-product-hunt"></i>Produtos</li>
         </a>
