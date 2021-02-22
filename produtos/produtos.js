@@ -88,26 +88,26 @@ const produto = (function () {
 
                     },
                 },
-                // duplicity: {
-                //     dataField: ['CODIGO'],
+                duplicity: {
+                    dataField: ['CODIGO'],
 
-                //     execute: (r) => {
-                //         let param = {}
-                //         param.codigo = r.value,
-                //             axios.post(url, {
-                //                 call: 'getCodigo',
-                //                 param: param
+                    execute: (r) => {
+                        let param = {}
+                        param.CODIGO = r.value,
+                            axios.post(url, {
+                                call: 'getCodigo',
+                                param: param
 
-                //             })
-                //                 .then(rs => {
-                //                     if (rs.data[0]) {
-                //                         xgProduto.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
-                //                         xgProduto.focusField(r.field);
-                //                         return false
-                //                     }
-                //                 })
-                //     }
-                // },
+                            })
+                                .then(rs => {
+                                    if (rs.data[0]) {
+                                        xgProduto.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
+                                        xgProduto.focusField(r.field);
+                                        return false
+                                    }
+                                })
+                    }
+                },
             },
 
             query: {
@@ -153,23 +153,22 @@ const produto = (function () {
 
     const salvar = async () => {
         let param = xgProduto.getElementSideBySideJson()
+        param.QTD = Number(param.QTD)
+        param.ID_MARCA = Number(param.ID_MARCA)
+        param.MARCA = xgProduto.dataSource().MARCA
+
         param.DATA_CADASTRO = $('#edtData').val()
 
-        // let allDuplicty = await xgProduto.getDuplicityAll()
 
-        // if (allDuplicty == false)
-        //     return false;
 
         let valCampos = {
             codigo: $('#editCodigo').val(),
             descricao: $('#editDescricao').val(),
             valor: $('#editValor').val(),
-            endereco: $('#editEndereco').val(),
             qtd: $('#editQtd').val(),
             marca: $('#editMarca').val(),
         }
         valCampos.valor = valCampos.valor.replace(',', '');
-        console.log('valCampos :', valCampos);
 
         for (let i in valCampos) {
             if (valCampos[i] == '' || valCampos.valor == 0) {
@@ -180,6 +179,11 @@ const produto = (function () {
 
         if (controleGrid == 'insert') {
             param.ID_PRODUTO = ''
+            let allDuplicty = await xgProduto.getDuplicityAll()
+
+            if (allDuplicty == false) {
+                return false;
+            }
         }
 
         if (controleGrid == 'edit') {
@@ -196,11 +200,13 @@ const produto = (function () {
             .then(r => {
 
                 if (r.data == 'edit') {
-
-                    xgProduto.dataSource(param)
+                    xgProduto.dataSource("QTD", param.QTD)
+                    xgProduto.dataSource("CODIGO", param.CODIGO)
+                    xgProduto.dataSource("DESCRICAO", param.DESCRICAO)
+                    xgProduto.dataSource("VALOR", param.VALOR)
                 }
 
-                if (r.data[0].ID_PRODUTO) {
+                else if (r.data[0].ID_PRODUTO) {
                     param.ID_PRODUTO = r.data[0]
                     xgProduto.insertLine(param)
 

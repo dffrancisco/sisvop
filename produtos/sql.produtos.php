@@ -44,7 +44,7 @@ class SqlProdutos
   {
     extract($param);
     $sql = "SELECT codigo FROM produtos
-          WHERE codigo like ':CODIGO%'";
+          WHERE codigo = ':CODIGO'";
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);

@@ -239,13 +239,16 @@ const fornecedor = (function () {
 
         let allDuplicty = await xgFornecedor.getDuplicityAll();
 
-        if (allDuplicty == false) {
-            xgFornecedor.showMessageDuplicity('O campo CNPJ está com valor duplicado ou vazio!');
-            return false
-        }
 
-        if (controleGrid == 'novo')
+
+        if (controleGrid == 'novo') {
             param.id_fornecedor = '';
+
+            if (allDuplicty == false) {
+                xgFornecedor.showMessageDuplicity('O campo CNPJ está com valor duplicado ou vazio!');
+                return false
+            }
+        }
 
         if (controleGrid == 'editar')
             param.ID_FORNECEDOR = xgFornecedor.dataSource().ID_FORNECEDOR;
@@ -294,13 +297,18 @@ const fornecedor = (function () {
         })
             .then(rs => {
 
-                if (rs.data[0].ID_FORNECEDOR) {
+                if (rs.data == 'edit') {
+                    xgFornecedor.dataSource('FANTASIA', param.FANTASIA)
+                    xgFornecedor.dataSource('CNPJ', param.CNPJ)
+
+                }
+                else if (rs.data[0].ID_FORNECEDOR) {
                     param.ID_FORNECEDOR = rs.data[0].ID_FORNECEDOR;
                     xgFornecedor.insertLine(param);
 
                 }
                 else {
-                    xgFornecedor.dataSource(param)
+                    show('ERRO INTERNO')
                 }
                 cancelar()
             })

@@ -13,29 +13,29 @@
 
             <div class="col s9">
                 <label>Razão Social</label>
-                <input type="text" id="edtRazaoSocial" name="RAZAO">
+                <input type="text" class="validate" id="edtRazaoSocial" name="RAZAO">
             </div>
         </div>
 
         <div class="row">
             <div class="col s4">
                 <label>Nome Fantasia</label>
-                <input type="text" id="edtFantasia" name="FANTASIA">
+                <input type="text" id="edtFantasia" class="validate" name="FANTASIA">
             </div>
             <div class="col s5">
                 <label>Endereço</label>
-                <input type="text" id="edtEndereco" name="ENDERECO">
+                <input type="text" id="edtEndereco" class="validate" name="ENDERECO">
             </div>
             <div class="col s3">
                 <label>Cidade</label>
-                <input type="text" id="edtCidade" name="CIDADE">
+                <input type="text" id="edtCidade" class="validate" name="CIDADE">
             </div>
         </div>
 
         <div class="row">
             <div class="col s4">
                 <label>Bairro</label>
-                <input type="text" id="edtBairro" name="BAIRRO">
+                <input type="text" id="edtBairro" class="validate" name="BAIRRO">
             </div>
             <div class="col s2">
                 <label>UF</label>
@@ -44,7 +44,7 @@
 
             <div class="col s4">
                 <label>Município</label>
-                <input type="text" id="edtMunicipio" name="MUNICIPIO">
+                <input type="text" id="edtMunicipio" class="validate" name="MUNICIPIO">
             </div>
             <div class="col s2">
                 <label>CEP</label>
