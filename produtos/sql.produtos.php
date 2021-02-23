@@ -19,10 +19,10 @@ class SqlProdutos
   {
     extract($param);
     $sql = "SELECT first 10 skip $offset a.id_produto, a.qtd, a.descricao, a.valor, a.codigo, 
-            a.id_marca, a.data_cadastro, a.endereco, b.marca, b.id_marca 
+            a.id_marca, a.data_cadastro, a.endereco, a.qtd_minima, b.marca, b.id_marca 
             from produtos a, marcas b
             where b.id_marca = a.id_marca
-            and a.descricao like '$search%' 
+            and a.descricao like '%$search%' 
             ORDER BY qtd asc";
 
     $query = $this->db->prepare($sql);
@@ -32,8 +32,10 @@ class SqlProdutos
 
   function getMarca()
   {
-    $sql = "SELECT * FROM marcas";
-
+    $sql = "SELECT
+    * 
+    FROM marcas
+    ORDER BY marca ASC";
 
     $query = $this->db->prepare($sql);
     $query->execute();
@@ -44,7 +46,7 @@ class SqlProdutos
   {
     extract($param);
     $sql = "SELECT codigo FROM produtos
-          WHERE codigo like ':CODIGO%'";
+          WHERE codigo = ':CODIGO'";
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
@@ -55,8 +57,8 @@ class SqlProdutos
   function insert($param)
   {
     extract($param);
-    $sql = "INSERT INTO produtos (qtd, descricao, valor, codigo, id_marca, data_cadastro, endereco)
-    VALUES(:QTD, :DESCRICAO, :VALOR, :CODIGO, :ID_MARCA, :DATA_CADASTRO, :ENDERECO)
+    $sql = "INSERT INTO produtos (qtd, descricao, valor, codigo, id_marca, data_cadastro, endereco, qtd_minima)
+    VALUES(:QTD, :DESCRICAO, :VALOR, :CODIGO, :ID_MARCA, :DATA_CADASTRO, :ENDERECO, :QTD_MINIMA)
     returning id_produto";
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
@@ -68,7 +70,7 @@ class SqlProdutos
   {
     extract($param);
     $sql = "UPDATE produtos  
-    SET qtd = :QTD, descricao = :DESCRICAO, valor = :VALOR, codigo = :CODIGO, id_marca = :ID_MARCA, endereco = :ENDERECO 
+    SET qtd = :QTD, descricao = :DESCRICAO, valor = :VALOR, codigo = :CODIGO, id_marca = :ID_MARCA, endereco = :ENDERECO, qtd_minima = :QTD_MINIMA 
     WHERE id_produto =  :ID_PRODUTO
     returning id_produto";
 

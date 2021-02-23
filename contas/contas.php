@@ -20,10 +20,19 @@
 
     </div>
     <div id="xgContas" class="list"></div>
-    <div class="right-align">
-        <button class="btn-Frame btn-Frame-blue btnP" style="margin-top:14px ;" id="btnPagar" disabled>Pagar</button>
-        <button class="btn-Frame btn-Frame-blue btnP" style="margin-top:14px ;" id="btnImprimir"
-            disabled>Imprimi</button>
+    <div class="row">
+        <div class="col s2">
+            <label>Total a ser pago</label>
+            <input type="text" class="real" id="edtTotal" disabled>
+        </div>
+
+        <div class="right-align">
+
+            <button class="btn-Frame btn-Frame-blue btnP" style="margin-top:14px ;" id="btnPagar"
+                disabled>Pagar</button>
+            <button class="btn-Frame btn-Frame-blue btnP" style="margin-top:14px ;" id="btnImprimir"
+                disabled>Imprimir</button>
+        </div>
     </div>
 </div>
 <div id="modalPagar">

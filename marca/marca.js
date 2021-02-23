@@ -2,6 +2,7 @@ let xgMarca;
 
 $(function () {
     marca.grid();
+    marca.keydown();
     xgMarca.queryOpen({ search: '' })
 
 });
@@ -52,7 +53,7 @@ const marca = (function () {
                         },
                         save: {
                             html: "Salvar",
-                            class: "btnP",
+                            class: "btnP btnSave",
                             state: xGridV2.state.save,
                             click: salvar,
                         },
@@ -192,6 +193,7 @@ const marca = (function () {
                 param: param
 
             }).then(rs => {
+                cancelar()
 
                 if (rs.data[0].ID_MARCA) {
 
@@ -202,7 +204,6 @@ const marca = (function () {
                     xgMarca.dataSource(param);
 
                 }
-                cancelar()
             });
         } else {
             xgMarca.showMessageDuplicity('O campo está com valor duplicado ou vazio!')
@@ -217,8 +218,19 @@ const marca = (function () {
         $('.btnPesq').removeAttr('disabled');
     }
 
+    function keydown() {
+        $("#edtMarca").keydown(function (e) {
+
+            if (e.keyCode == 13) {
+                $('.btnSave').click()
+
+            }
+        })
+    }
+
     return {
         grid: grid,
+        keydown: keydown,
     };
 
 })();

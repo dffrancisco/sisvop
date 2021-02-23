@@ -23,11 +23,11 @@ const cliente = (function () {
                 CNPJ: {
                     dataField: "CNPJ",
                     center: true,
-                    width: "40%",
+                    width: "30%",
                 },
                 Razão: {
                     dataField: "RAZAO",
-                    width: "60%",
+                    width: "70%",
                 }
             },
             sideBySide: {

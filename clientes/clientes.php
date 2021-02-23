@@ -6,11 +6,11 @@
     <div class="tabela margintop" id="pnFields">
         <div class="row">
             <div class="col s3">
-                <label>CNPJ</label>
+                <label>CNPJ*</label>
                 <input placeholder="" type="text" class="CNPJ validate" id="edtCnpj" name="CNPJ">
             </div>
             <div class=" col s9">
-                <label>Razão social</label>
+                <label>Razão social*</label>
                 <input placeholder="" type="text" class="validate" id="edtRazao" name="RAZAO">
             </div>
         </div>
@@ -18,7 +18,7 @@
 
         <div class="row">
             <div class="col s4">
-                <label>Nome Fantasia</label>
+                <label>Nome Fantasia*</label>
                 <input placeholder="" type="text" class="validate" id="edtFantasia" name="FANTASIA">
             </div>
             <div class="col s5">
@@ -34,19 +34,19 @@
 
         <div class="row">
             <div class="col s3">
-                <label>Telefone fixo</label>
+                <label>Telefone fixo*</label>
                 <input placeholder="" type="text" class="validate TELEFONE" id="edtFixo" name="FIXO">
             </div>
             <div class="col s3">
-                <label>Telefone</label>
+                <label>Telefone*</label>
                 <input placeholder="" type="text" class="validate TELEFONE" id="edtTel" name="TEL">
             </div>
             <div class="col s3">
-                <label>Representante</label>
+                <label>Representante*</label>
                 <input placeholder="" type="text" class="validate" id="edtRepresentante" name="REPRESENTANTE">
             </div>
             <div class="col s3">
-                <label>Data de cadastro</label>
+                <label>Data de cadastro*</label>
                 <input placeholder="" type="text" class="validate" id="edtData" name="DATA_CADASTRO" disabled>
             </div>
         </div>
@@ -54,26 +54,26 @@
 
         <div class="row">
             <div class="col s3">
-                <label>CEP</label>
+                <label>CEP*</label>
                 <input placeholder="" type="text" class="validate" id="edtCep" name="CEP">
             </div>
             <div class="col s9">
-                <label>Endereço</label>
+                <label>Endereço*</label>
                 <input placeholder="" type="text" class="validate" id="edtEndereco" name="ENDERECO">
             </div>
         </div>
 
         <div class="row">
             <div class="col s2">
-                <label>UF</label>
+                <label>UF*</label>
                 <select name="ID_UF" id="slctUf"></select>
             </div>
             <div class="col s5">
-                <label>Cidade</label>
+                <label>Cidade*</label>
                 <input placeholder="" type="text" class="validate" id="edtCidade" name="CIDADE">
             </div>
             <div class="col s5">
-                <label>Bairro</label>
+                <label>Bairro*</label>
                 <input placeholder="" type="text" class="validate" id="edtBairro" name="BAIRRO">
             </div>
         </div>
