@@ -19,7 +19,7 @@ class SqlProdutos
   {
     extract($param);
     $sql = "SELECT first 10 skip $offset a.id_produto, a.qtd, a.descricao, a.valor, a.codigo, 
-            a.id_marca, a.data_cadastro, a.endereco, a.qtd_minima, b.marca, b.id_marca 
+            a.id_marca, a.data_cadastro, a.endereco, a.qtd_minima, a.medida, b.marca, b.id_marca 
             from produtos a, marcas b
             where b.id_marca = a.id_marca
             and a.descricao like '%$search%' 
@@ -57,8 +57,8 @@ class SqlProdutos
   function insert($param)
   {
     extract($param);
-    $sql = "INSERT INTO produtos (qtd, descricao, valor, codigo, id_marca, data_cadastro, endereco, qtd_minima)
-    VALUES(:QTD, :DESCRICAO, :VALOR, :CODIGO, :ID_MARCA, :DATA_CADASTRO, :ENDERECO, :QTD_MINIMA)
+    $sql = "INSERT INTO produtos (qtd, descricao, valor, codigo, id_marca, data_cadastro, endereco, qtd_minima, MEDIDA)
+    VALUES(:QTD, :DESCRICAO, :VALOR, :CODIGO, :ID_MARCA, :DATA_CADASTRO, :ENDERECO, :QTD_MINIMA, :MEDIDA)
     returning id_produto";
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
@@ -70,7 +70,8 @@ class SqlProdutos
   {
     extract($param);
     $sql = "UPDATE produtos  
-    SET qtd = :QTD, descricao = :DESCRICAO, valor = :VALOR, codigo = :CODIGO, id_marca = :ID_MARCA, endereco = :ENDERECO, qtd_minima = :QTD_MINIMA 
+    SET qtd = :QTD, descricao = :DESCRICAO, valor = :VALOR, codigo = :CODIGO, id_marca = :ID_MARCA, 
+    endereco = :ENDERECO, qtd_minima = :QTD_MINIMA, MEDIDA = :MEDIDA
     WHERE id_produto =  :ID_PRODUTO
     returning id_produto";
 

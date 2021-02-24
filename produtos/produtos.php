@@ -21,19 +21,26 @@
         </div>
 
         <div class="row">
-            <div class="col s4">
+            <div class="col S3">
                 <label>Valor*</label>
                 <input type="text" class="real validate" id="editValor" placeholder="" name="VALOR">
             </div>
-            <div class="col s4">
+            <div class="col S3">
                 <label>Endereço</label>
                 <input type="text" id="editEndereco" class="validate" placeholder="" name="ENDERECO">
             </div>
 
-            <div class="col s4">
+            <div class="col S3">
                 <label>Quantidade*</label>
                 <input type="number" placeholder="" id="editQtd" name="QTD">
 
+            </div>
+            <div class="col s3">
+                <label>Medida*</label>
+                <select name="MEDIDA" id="slctMedida">
+                    <option value="UNIDADE">UNIDADE</option>
+                    <option value="METRO">METRO</option>
+                </select>
             </div>
         </div>
 

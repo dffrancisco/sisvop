@@ -53,6 +53,7 @@ const produto = (function () {
             dblClick: () => {
                 $('.btnEdit').click()
             },
+
             sideBySide: {
                 el: "#pnFields",
 
@@ -178,6 +179,8 @@ const produto = (function () {
             valor: $('#editValor').val(),
             qtd: $('#editQtd').val(),
             marca: $('#editMarca').val(),
+            medida: $('#slctMedida').val(),
+
         }
         valCampos.valor = valCampos.valor.replace(',', '');
 
@@ -238,7 +241,6 @@ const produto = (function () {
                 }
                 destacarProd()
 
-                console.log(' oi');
             })
 
     }
