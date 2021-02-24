@@ -63,7 +63,10 @@ $(function () {
 
 });
 
+function pnNotifyToggle() {
+    $('.pnNotify').toggleClass('pnNotifyToggle');
 
+}
 
 function pnMenuToggle() {
     $('.pnMenu').toggleClass('pnMenuToggle');
@@ -100,6 +103,7 @@ function Login() {
 
             usuario = r.data
             $('#spUser').html(r.data.NOME.split(' ')[0])
+            getNotificacao()
         })
     }
 
@@ -118,6 +122,39 @@ function Login() {
 }
 
 login.session();
+
+function getNotificacao() {
+    axios.post('notificacao/per.notificacao.php', {
+        call: 'getNotificacao',
+    }).then(rs => {
+
+        if (rs.data.length > 0) {
+            let contador = 0
+
+            $('.activeNotify').css('display', 'block')
+            for (let i in rs.data) {
+                if (i < 5) {
+                    let descricao = `<a href="?p=produtos/produtos" class="collection-item black-text"
+                style="height:70px; font-size: 14px;">${rs.data[i].DESCRICAO}</a>`
+                    $('.pnNotify').append(descricao)
+                }
+                else if (i >= 5) {
+                    contador++
+
+                }
+            }
+            if (contador > 0) {
+                let adicional =
+                    `<a href="?p=produtos/produtos" class="collection-item black-text" style="height:40px; font-size: 14px;">+ ${contador} itens...</a>`
+                $('.pnNotify').append(adicional)
+            }
+
+        } else {
+            $('.pnNotify').append('Sem notificações!')
+
+        }
+    })
+}
 
 function getFrase() {
     let num = (Math.random(1, 50) * 10).toFixed()

@@ -111,8 +111,12 @@ if (!empty($_GET['p'])) {
                                 class="fa fa-user-circle"></i></a></li>
 
                 </ul>
-                <ul id="nav-mobile" class="right">
-                    <i class="fa fa-bell notify" aria-hidden="true" style="font-size: 18px; margin-right: 8px;"></i>
+                <ul id="nav-mobile" class="right e">
+                    <a onclick="pnNotifyToggle()" href="#">
+                        <i class="fa fa-bell notify" aria-hidden="true" style="font-size: 18px;">
+                            <div class="activeNotify"></div>
+                        </i>
+                    </a>
                 </ul>
             </div>
         </nav>
@@ -121,6 +125,9 @@ if (!empty($_GET['p'])) {
 
     <div class="pnUser btnSair">
         <span style="font-size: 15px;">SAIR</span>
+    </div>
+
+    <div class="pnNotify collection">
     </div>
 
     <div class="pnMenu" style="font-size: 15px;">
