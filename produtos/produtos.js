@@ -35,8 +35,6 @@ const produto = (function () {
                 Descrição: {
                     dataField: "DESCRICAO",
                     width: "60%",
-                    style: "font-size: 16px;",
-
                 },
                 QTD: {
                     dataField: "QTD",
@@ -53,6 +51,7 @@ const produto = (function () {
             dblClick: () => {
                 $('.btnEdit').click()
             },
+
             sideBySide: {
                 el: "#pnFields",
 
@@ -61,7 +60,7 @@ const produto = (function () {
                     buttons: {
 
                         pesquisar: {
-                            html: "Pesquisar(F2)",
+                            html: "Pesquisar",
                             class: "btnP btnPesq",
                             click: searchConf,
                         },
@@ -139,13 +138,7 @@ const produto = (function () {
                 xgProduto.querySourceAdd(rs.data);
                 if (rs.data[0]) xgProduto.focus();
 
-                for (let i in xgProduto.data()) {
-
-                    if (xgProduto.data()[i].QTD == 0) {
-                        i++
-                        $('.xGridV2-row:eq(' + i + ')').attr('style', 'color: red !important;')
-                    }
-                }
+                destacarProd()
             })
 
     }
@@ -175,22 +168,21 @@ const produto = (function () {
         param.QTD = Number(param.QTD)
         param.ID_MARCA = Number(param.ID_MARCA)
         param.MARCA = xgProduto.dataSource().MARCA
-
         param.DATA_CADASTRO = $('#edtData').val()
-
-
 
         let valCampos = {
             codigo: $('#editCodigo').val(),
             descricao: $('#editDescricao').val(),
             valor: $('#editValor').val(),
             qtd: $('#editQtd').val(),
-            marca: $('#editMarca').val(),
+            marca: $('#slctMarca').val(),
+            medida: $('#slctMedida').val(),
+
         }
         valCampos.valor = valCampos.valor.replace(',', '');
 
         for (let i in valCampos) {
-            if (valCampos[i] == '' || valCampos.valor == 0) {
+            if (valCampos[i] == '' || valCampos.valor == 0 || valCampos.medida == null || valCampos.marca == null) {
                 show('Por favor preencha todos os campos')
                 return false;
             }
@@ -216,6 +208,13 @@ const produto = (function () {
         } else {
             param.ENDERECO = ''
         }
+
+        if (param.QTD_MINIMA == undefined || param.QTD_MINIMA == '.') {
+            param.QTD_MINIMA = -1
+        } else {
+            param.QTD_MINIMA = Number(param.QTD_MINIMA)
+        }
+
         axios.post(url, {
             call: 'save',
             param: param
@@ -223,7 +222,6 @@ const produto = (function () {
             .then(r => {
 
                 cancelar()
-
                 if (r.data == 'edit') {
                     xgProduto.dataSource("QTD", param.QTD)
                     xgProduto.dataSource("CODIGO", param.CODIGO)
@@ -240,6 +238,7 @@ const produto = (function () {
                 else {
                     show('ERRO INTERNO')
                 }
+                destacarProd()
 
             })
 
@@ -326,6 +325,19 @@ const produto = (function () {
         })
     }
 
+    function destacarProd() {
+        for (let i in xgProduto.data()) {
+
+            if (xgProduto.data()[i].QTD == 0) {
+                i++
+                $('.xGridV2-row:eq(' + i + ')').attr('style', 'color: #ff0000 !important;')
+            }
+            else if (xgProduto.data()[i].QTD <= xgProduto.data()[i].QTD_MINIMA) {
+                i++
+                $('.xGridV2-row:eq(' + i + ')').attr('style', 'color:  #ffb400 !important;')
+            }
+        }
+    }
     return {
         grid: grid,
         getMarca: getMarca,

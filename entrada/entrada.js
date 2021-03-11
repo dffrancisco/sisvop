@@ -658,7 +658,7 @@ const itens = (function () {
             let valor_compra = $('#edtValorUni').val()
 
             let param = {
-                id_nota: cabecalho.ID_NOTA,
+                id_nota: id_nota,
                 id_produto: produtoSelecionado.ID_PRODUTO,
                 qtd_nota: qtd_compra,
                 valor_nota: valor_compra,
@@ -777,6 +777,7 @@ const itens = (function () {
 
     //Função buttons xModal
     function btnXmSalvar() {
+
         let param = {
             id_fornecedor: id_fornecedor,
             id_nota: id_nota,
@@ -788,6 +789,7 @@ const itens = (function () {
             valor_total: $('#edtValor').val(),
 
         }
+
         $('#edtCodigo').focus()
 
         let valCampos = {
@@ -807,13 +809,11 @@ const itens = (function () {
         }
         xmNovaNota.close()
 
-
         axios.post(url, {
             call: 'insertNota',
             param: param
         }).then(r => {
             cabecalho = r.data[0]
-
             id_nota = r.data[0].ID_NOTA
             $('#spNumero').html(cabecalho.NUMERO_NOTA)
             $('#spData').html(cabecalho.DATA_EMISSAO)
@@ -849,11 +849,9 @@ const itens = (function () {
             call: 'getDataNota',
             param: param.ID_NOTA
         }).then(r => {
-
             id_fornecedor = r.data[0].ID_FORNECEDOR
             id_nota = r.data[0].ID_NOTA
             editNota = r.data[0]
-
 
             $('#spNomeFantasia').html(r.data[0].FANTASIA)
             $('#spCnpj').html(r.data[0].CNPJ)
@@ -917,8 +915,6 @@ const itens = (function () {
             call: 'insertPagamento',
             param: param
         }).then(r => {
-            console.log('r :', r.data);
-
             let insertLine = {
                 ID_PAGAMENTO: r.data[0].ID_PAGAMENTO,
                 ID_NOTA: id_nota,
