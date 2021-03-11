@@ -7,54 +7,78 @@
     <div class="tabela margintop" id="pnFields">
         <div class="row">
             <div class="col s3">
-                <label>CNPJ</label>
+                <label>CNPJ*</label>
                 <input type="text" id="edtCnpj" name="CNPJ" class="CNPJ">
             </div>
 
             <div class="col s9">
+<<<<<<< HEAD
+                <label>Razão Social*</label>
+=======
                 <label>Razão Social</label>
-                <input type="text" id="edtRazaoSocial" name="RAZAO">
+>>>>>>> a54637b7d2d6b7f7acd1b517fbf884ba57f1a2b5
+                <input type="text" class="validate" id="edtRazaoSocial" name="RAZAO">
             </div>
         </div>
 
         <div class="row">
             <div class="col s4">
+<<<<<<< HEAD
+                <label>Nome Fantasia*</label>
+                <input type="text" id="edtFantasia" class="validate" name="FANTASIA">
+            </div>
+            <div class="col s5">
+                <label>Endereço*</label>
+                <input type="text" id="edtEndereco" class="validate" name="ENDERECO">
+            </div>
+            <div class="col s3">
+                <label>Cidade*</label>
+=======
                 <label>Nome Fantasia</label>
-                <input type="text" id="edtFantasia" name="FANTASIA">
+                <input type="text" id="edtFantasia" class="validate" name="FANTASIA">
             </div>
             <div class="col s5">
                 <label>Endereço</label>
-                <input type="text" id="edtEndereco" name="ENDERECO">
+                <input type="text" id="edtEndereco" class="validate" name="ENDERECO">
             </div>
             <div class="col s3">
                 <label>Cidade</label>
-                <input type="text" id="edtCidade" name="CIDADE">
+>>>>>>> a54637b7d2d6b7f7acd1b517fbf884ba57f1a2b5
+                <input type="text" id="edtCidade" class="validate" name="CIDADE">
             </div>
         </div>
 
         <div class="row">
             <div class="col s4">
+<<<<<<< HEAD
+                <label>Bairro*</label>
+=======
                 <label>Bairro</label>
-                <input type="text" id="edtBairro" name="BAIRRO">
+>>>>>>> a54637b7d2d6b7f7acd1b517fbf884ba57f1a2b5
+                <input type="text" id="edtBairro" class="validate" name="BAIRRO">
             </div>
             <div class="col s2">
-                <label>UF</label>
+                <label>UF*</label>
                 <select name="ID_UF" id="slctUf"></select>
             </div>
 
             <div class="col s4">
+<<<<<<< HEAD
+                <label>Município*</label>
+=======
                 <label>Município</label>
-                <input type="text" id="edtMunicipio" name="MUNICIPIO">
+>>>>>>> a54637b7d2d6b7f7acd1b517fbf884ba57f1a2b5
+                <input type="text" id="edtMunicipio" class="validate" name="MUNICIPIO">
             </div>
             <div class="col s2">
-                <label>CEP</label>
+                <label>CEP*</label>
                 <input type="text" id="edtCep" name="CEP" class="CEP">
             </div>
         </div>
 
         <div class="row">
             <div class="col s3">
-                <label>Telefone 1</label>
+                <label>Telefone 1*</label>
                 <input type="text" id="edtTel1" name="TEL_1" class="TELEFONE">
             </div>
 
@@ -63,11 +87,11 @@
                 <input type="text" id="edtTel2" name="TEL_2" class="TELEFONE">
             </div>
             <!-- <div class="col s3">
-                <label>FAX</label>
+                <label>FAX*</label>
                 <input type="text" id="edtFax" name="fax" class="TELEFONE">
             </div> -->
             <div class="col s3">
-                <label>Inscrição Estadual</label>
+                <label>Inscrição Estadual*</label>
                 <input type="text" id="edtInscricaoEstadual" name="INSCRICAO">
             </div>
             <div class="col s3">

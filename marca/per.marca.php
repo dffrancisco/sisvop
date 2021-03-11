@@ -34,7 +34,8 @@ class Marca
             echo json_encode($idMarca);
         } else {
             $call = $this->sql->atualizaMarca($param);
-            print_r($call);
+            echo json_encode('edit');
+
         }
     }
 

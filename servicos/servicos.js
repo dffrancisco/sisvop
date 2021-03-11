@@ -223,6 +223,7 @@ const saida = (function () {
 
             onKeyDown: {
                 '13': (ln, e) => {
+                    clientes.zerarGrids()
 
                     getDadosServ(ln)
                 }
@@ -232,6 +233,8 @@ const saida = (function () {
             dblClick: (ln,) => {
                 if (ln == false)
                     return false
+
+                clientes.zerarGrids()
 
                 getDadosServ(ln)
 
@@ -354,7 +357,7 @@ const saida = (function () {
         xgProdRomaneio = new xGridV2.create({
 
             el: '#xgProdRomaneio',
-            height: '420',
+            height: '390',
             theme: 'x-clownV2',
             heightLine: '35',
 
@@ -491,7 +494,7 @@ const saida = (function () {
 
             query: {
                 execute: (r) => {
-                    getItensRomaneio(r.param.search)
+                    getItensRomaneio(r.param.search, r.offset)
                 }
             }
         })
@@ -841,6 +844,7 @@ const saida = (function () {
     }
 
     async function gerarPDF() {
+
         let dt = xgRomaneiosItens.data()
 
         let dados_servico = {
@@ -854,6 +858,7 @@ const saida = (function () {
         }
 
         $('#rl_representante').html(xgRomaneios.dataSource().NOME)
+        $('#rl_executores').html(xgServicos.dataSource().EXECUTORES)
         $('#rlFantasia').html(dados_servico.FANTASIA)
         $('#rlCnpj').html(dados_servico.CNPJ)
         $('#rlEngenheiro').html(dados_servico.ENGENHEIRO)
@@ -868,27 +873,34 @@ const saida = (function () {
 
         $('.rlRomaneio').xPrint()
 
-        $('.tb_dados').html('')
+        $('.tb_produto').html('')
     }
 
-    function setTable(dt) {
-        for (let i in dt) {
+    function setTable() {
 
-            let tb_produto = `<tr class="tb_dados">
-                                    <td>
-                                    ${dt[i].DESCRICAO}
-                                    </td>
-                                    <td>
-                                    ${dt[i].MARCA}
-                                    </td>
-                                    <td>
-                                    ${dt[i].QTD}
-                                    </td>
-                               </tr>`
+        /* cabeçalho dos itens*/
+        let tableItensR = $('<table>', { class: "tbl_itens_r" })
+        tr = $('<thead>', { style: "font-size: 9px !important;" })
 
-            $('.tb_produto').append(tb_produto)
+        tr.append($('<th>', { html: 'PRODUTO' }))
+        tr.append($('<th>', { html: 'MARCA' }))
+        tr.append($('<th>', { html: 'QTD' }))
+
+        tableItensR.append(tr)
+
+        /* DADOS ITENS DO ROMANEIO */
+        for (let i in xgRomaneiosItens.data()) {
+            tr = $('<tr>', { style: "font-size: 9px !important;" })
+            tr.append($('<td>', { html: xgRomaneiosItens.data()[i].DESCRICAO }))
+            tr.append($('<td>', { html: xgRomaneiosItens.data()[i].MARCA }))
+            tr.append($('<td>', { html: xgRomaneiosItens.data()[i].QTD }))
+            tableItensR.append(tr)
         }
+
+        $('.tb_produto').append(tableItensR)
+
     }
+
     async function deletarItemRomaneio(r) {
 
         let status = xgRomaneios.dataSource().STATUS
@@ -955,6 +967,87 @@ const saida = (function () {
         })
     }
 
+    function todosProdutos() {
+
+        confirmaCodigo({
+            msg: 'Digite o código abaixo para selecionar todos os itens',
+            call: async () => {
+                for (let i in xgProdRomaneio.data()) {
+
+                    let existe = 'nao'
+
+                    let param = {
+                        ID_ITENS_SERVICO: xgProdRomaneio.data()[i].ID_ITENS_SERVICO,
+                        DESCRICAO: xgProdRomaneio.data()[i].DESCRICAO,
+                        ORIGEM: xgProdRomaneio.data()[i].ORIGEM,
+                        ID_PRODUTO: xgProdRomaneio.data()[i].ID_PRODUTO,
+                        QTD: Number(xgProdRomaneio.data()[i].QTD_P),
+                        QTD_RETIRADA: Number(xgProdRomaneio.data()[i].QTD_P) + Number(xgProdRomaneio.data()[i].QTD_RETIRADA),
+                        ID_ROMANEIO: xgRomaneios.dataSource().ID_ROMANEIO,
+                        MARCA: xgProdRomaneio.data()[i].MARCA
+
+                    }
+
+
+                    for (let j in xgRomaneiosItens.data()) {
+
+                        if (param.ID_PRODUTO == xgRomaneiosItens.data()[j].ID_PRODUTO) {
+                            existe = 'sim'
+                            show(param.DESCRICAO + ' já foi inserido! O item não será cadastrado novamente!')
+                        }
+
+                    }
+
+                    if (param.QTD >= xgProdRomaneio.data()[i].QTD) {
+                        show('Quantidade projetada de ' + param.DESCRICAO + ' é maior do que a existente! Será inserido a quantidade que ainda existe em estoque!(' + xgProdRomaneio.data()[i].QTD + ' unidades)')
+                        param.QTD = xgProdRomaneio.data()[i].QTD
+                    }
+
+                    if (existe == 'nao') {
+
+                        await insertTodosProdutos(param)
+                    }
+                }
+
+            }
+        })
+
+    }
+
+    async function insertTodosProdutos(param) {
+
+        await axios.post(url, {
+
+            call: 'inserirItemRomaneio',
+            param: param
+
+        }).then(rs => {
+
+            param.ID_ITEM_ROMANEIO = rs.data[0].ID_ITEM_ROMANEIO
+
+            xgProdRomaneio.queryOpen({ search: ID_LISTA_SERVICO })
+
+            xgRomaneiosItens.insertLine(param)
+
+        })
+
+        axios.post(url, {
+
+            call: 'getProduto',
+            param: param.ID_PRODUTO
+
+        }).then(rs => {
+
+            let newEstoque = rs.data[0].QTD - param.QTD
+
+            produtos.atualizaProduto(param.ID_PRODUTO, newEstoque)
+
+        })
+
+        xgSaida.queryOpen({ search: ID_LISTA_SERVICO })
+
+
+    }
     // RELATORIOS 
 
 
@@ -1132,6 +1225,15 @@ const saida = (function () {
             title: 'Produtos',
             width: '1000',
 
+            buttons: {
+                btn1: {
+                    html: 'Pegar Todos',
+                    click: () => {
+
+                        todosProdutos()
+                    }
+                }
+            },
             onClose: () => {
                 $('#xmEdtIRomaneio').val('')
             }
@@ -1396,6 +1498,7 @@ const clientes = (function () {
         grid: grid,
         modalNovoServico: modalNovoServico,
         getListaServicoX: getListaServicoX,
+        zerarGrids: zerarGrids
     }
 })();
 

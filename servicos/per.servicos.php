@@ -115,7 +115,7 @@ class Servicos
             $todos = $this->sql->getServicos($param);  
             $dados = array_merge($todos, $dados); 
         }
-
+        
         echo json_encode($dados);
     }
 

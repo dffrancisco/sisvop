@@ -216,7 +216,7 @@ class Sqlservicos
   function getServicosAnd($param){
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
-            a.id_lista_servico,
+            a.id_lista_servico, a.executores,
             a.data_inicio, a.hora, a.status, 
             a.data_finalizacao, a.engenheiro,
             b.id_servico,  b.servico ,
@@ -237,7 +237,7 @@ class Sqlservicos
   function getServicosPro($param){
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
-            a.id_lista_servico,
+            a.id_lista_servico, a.executores,
             a.data_inicio, a.hora, a.status, 
             a.data_finalizacao, a.engenheiro,
             b.id_servico,  b.servico ,
@@ -258,7 +258,7 @@ class Sqlservicos
   function getServicosFin($param){
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
-            a.id_lista_servico,
+            a.id_lista_servico, a.executores,
             a.data_inicio, a.hora, a.status, 
             a.data_finalizacao, a.engenheiro,
             b.id_servico,  b.servico ,
