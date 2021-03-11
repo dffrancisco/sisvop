@@ -12,22 +12,13 @@
             </div>
 
             <div class="col s9">
-<<<<<<< HEAD
                 <label>Razão Social*</label>
-=======
-<<<<<<< HEAD
-                <label>Razão Social*</label>
-=======
-                <label>Razão Social</label>
->>>>>>> a54637b7d2d6b7f7acd1b517fbf884ba57f1a2b5
->>>>>>> 43d51af044b9f9d7b4aec57303b8f4602107361e
                 <input type="text" class="validate" id="edtRazaoSocial" name="RAZAO">
             </div>
         </div>
 
         <div class="row">
             <div class="col s4">
-<<<<<<< HEAD
                 <label>Nome Fantasia*</label>
                 <input type="text" id="edtFantasia" class="validate" name="FANTASIA">
             </div>
@@ -37,8 +28,6 @@
             </div>
             <div class="col s3">
                 <label>Cidade*</label>
-=======
-<<<<<<< HEAD
                 <label>Nome Fantasia*</label>
                 <input type="text" id="edtFantasia" class="validate" name="FANTASIA">
             </div>
@@ -48,33 +37,13 @@
             </div>
             <div class="col s3">
                 <label>Cidade*</label>
-=======
-                <label>Nome Fantasia</label>
-                <input type="text" id="edtFantasia" class="validate" name="FANTASIA">
-            </div>
-            <div class="col s5">
-                <label>Endereço</label>
-                <input type="text" id="edtEndereco" class="validate" name="ENDERECO">
-            </div>
-            <div class="col s3">
-                <label>Cidade</label>
->>>>>>> a54637b7d2d6b7f7acd1b517fbf884ba57f1a2b5
->>>>>>> 43d51af044b9f9d7b4aec57303b8f4602107361e
                 <input type="text" id="edtCidade" class="validate" name="CIDADE">
             </div>
         </div>
 
         <div class="row">
             <div class="col s4">
-<<<<<<< HEAD
                 <label>Bairro*</label>
-=======
-<<<<<<< HEAD
-                <label>Bairro*</label>
-=======
-                <label>Bairro</label>
->>>>>>> a54637b7d2d6b7f7acd1b517fbf884ba57f1a2b5
->>>>>>> 43d51af044b9f9d7b4aec57303b8f4602107361e
                 <input type="text" id="edtBairro" class="validate" name="BAIRRO">
             </div>
             <div class="col s2">
@@ -83,15 +52,7 @@
             </div>
 
             <div class="col s4">
-<<<<<<< HEAD
                 <label>Município*</label>
-=======
-<<<<<<< HEAD
-                <label>Município*</label>
-=======
-                <label>Município</label>
->>>>>>> a54637b7d2d6b7f7acd1b517fbf884ba57f1a2b5
->>>>>>> 43d51af044b9f9d7b4aec57303b8f4602107361e
                 <input type="text" id="edtMunicipio" class="validate" name="MUNICIPIO">
             </div>
             <div class="col s2">
