@@ -167,6 +167,7 @@ const produto = (function () {
         let param = xgProduto.getElementSideBySideJson()
         param.QTD = Number(param.QTD)
         param.ID_MARCA = Number(param.ID_MARCA)
+        param.QTD_MINIMA = Number(param.QTD_MINIMA)
         param.MARCA = xgProduto.dataSource().MARCA
         param.DATA_CADASTRO = $('#edtData').val()
 

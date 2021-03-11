@@ -192,6 +192,7 @@ const marca = (function () {
                 param: param
 
             }).then(rs => {
+                cancelar()
 
                 cancelar()
 
@@ -207,7 +208,6 @@ const marca = (function () {
                 } else {
                     show('ERRO INTERNO!')
                 }
-
             });
         } else {
             xgMarca.showMessageDuplicity('O campo está com valor duplicado ou vazio!')

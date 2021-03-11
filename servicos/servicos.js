@@ -1868,6 +1868,7 @@ const produtos = (function () {
         })
     }
 
+
     return {
         grid: grid,
         modalEdtQtd: modalEdtQtd,
