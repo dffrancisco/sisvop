@@ -35,13 +35,6 @@
                 <input type="number" placeholder="" id="editQtd" name="QTD">
 
             </div>
-
-            <div class="col S3">
-                <label>Quatidade unitaria</label>
-                <input type="number" placeholder="" id="editQtd" name="QTD">
-
-            </div>
-
             <div class="col s3">
                 <label>Medida*</label>
                 <select name="MEDIDA" id="slctMedida">

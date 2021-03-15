@@ -228,8 +228,13 @@ const itens = (function () {
                 },
                 Descrição: {
                     dataField: "DESCRICAO",
-                    width: "80%",
+                    width: "60%",
                 },
+                Marca: {
+                    dataField: "MARCA",
+                    width: "20%",
+
+                }
 
             },
             onKeyDown: {
@@ -397,6 +402,9 @@ const itens = (function () {
             title: "Produto",
             width: 600,
             height: 400,
+            onClose: () => {
+                $('#edtPesquisaProduto').val('')
+            }
         })
     }
 
@@ -406,6 +414,10 @@ const itens = (function () {
             title: "Localizar nota",
             width: 700,
             height: 400,
+            onClose: () => {
+                $('#edtPesquisaNotaNumero').val('')
+                $('#edtPesquisaNota').val('')
+            }
         })
     }
 
@@ -453,13 +465,19 @@ const itens = (function () {
         $('#edtIcms').val('')
         $('#edtValor').val('')
         $('#edtChave').val('')
-        xgItens.source([])
+        $('#edtDataVencimento').val('')
+        $('#edtValorPagar').val('')
+
+
         $('.btnPesq').prop("disabled", true)
         $('.btnDel').prop("disabled", true)
         $('#btnBuscarFornecedor').removeAttr("disabled")
         $('.btnEdit').removeAttr("disabled")
         $('.btnSave').removeAttr("disabled")
 
+        xgItens.source([])
+        xgPagamento.source([])
+        adicionais()
         xmFornecedor.open()
         $('#edtPesquisaFornecedor').focus()
 
@@ -486,6 +504,8 @@ const itens = (function () {
         $('#edtSt').val(editNota.ST)
         $('#edtIcms').val(editNota.ICMS)
         $('#edtValor').val(editNota.VALOR_TOTAL)
+
+        $('#edtNumero').focus()
 
     }
 
@@ -528,7 +548,11 @@ const itens = (function () {
                     $('#spIcms').val('')
                     $('#spValor').val('')
                     $('#spChave').val('')
-                    xgItens.clear()
+                    $('#edtDataVencimento').val('')
+                    $('#edtValorPagar').val('')
+                    xgItens.source([])
+                    xgPagamento.source([])
+                    adicionais()
                     id_fornecedor = ''
                     id_nota = ''
                     $('.btnEdit').prop("disabled", true)
@@ -597,6 +621,8 @@ const itens = (function () {
     function localizar() {
         xmLocalizarNota.open()
         xgLocalizarNota.queryOpen({ searchNota: '' })
+        $('#edtPesquisaNotaNumero').focus()
+
     }
 
     //xgPagamentos
@@ -769,7 +795,6 @@ const itens = (function () {
             param: { searchProduto: searchProduto, offsetProduto: offsetProduto }
         }).then(r => {
             xgLupaProduto.querySourceAdd(r.data)
-            xgLupaProduto.focus()
         })
     }
 
@@ -844,6 +869,10 @@ const itens = (function () {
     }
 
     function btnSelectNota() {
+        $('#edtDataVencimento').val('')
+        $('#edtValorPagar').val('')
+        xgPagamento.source([])
+
         param = xgLocalizarNota.dataSource()
         axios.post(url, {
             call: 'getDataNota',
@@ -925,7 +954,6 @@ const itens = (function () {
             }
 
             xgPagamento.insertLine(insertLine)
-            $('#edtValorPagar').val('')
             $('#edtDataVencimento').val('')
             $('#edtDataVencimento').focus()
         })
@@ -1024,6 +1052,7 @@ const itens = (function () {
         $('.btnLupaProduto').click(function () {
             xmLupaProduto.open()
             xgLupaProduto.queryOpen({ searchProduto: '' })
+            $('#edtPesquisaProduto').focus()
         })
 
         $('#edtPesquisaProduto').keydown(function (e) {
@@ -1088,6 +1117,7 @@ const itens = (function () {
             $('.btnPrint').prop("disabled", true)
             $('#btnEditar').prop("disabled", true)
             $('#btnDeletar').prop("disabled", true)
+            $('#btnCadParcela').prop("disabled", true)
         }
         if ($('#spCnpj').html() != '') {
             $('.btnPrint').removeAttr("disabled")
@@ -1095,6 +1125,7 @@ const itens = (function () {
             $('.btnDel').removeAttr("disabled")
             $('#btnEditar').removeAttr("disabled")
             $('#btnDeletar').removeAttr("disabled")
+            $('#btnCadParcela').removeAttr("disabled")
         }
 
         $('.btnDelPag').prop("disabled", true)
@@ -1114,7 +1145,6 @@ const itens = (function () {
         })
             .then(rs => {
                 xgFornecedor.querySourceAdd(rs.data);
-                if (rs.data[0]) xgFornecedor.focus();
             })
 
     }

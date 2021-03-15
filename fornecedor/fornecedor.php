@@ -26,15 +26,7 @@
                 <label>Endereço*</label>
                 <input type="text" id="edtEndereco" class="validate" name="ENDERECO">
             </div>
-            <div class="col s3">
-                <label>Cidade*</label>
-                <label>Nome Fantasia*</label>
-                <input type="text" id="edtFantasia" class="validate" name="FANTASIA">
-            </div>
-            <div class="col s5">
-                <label>Endereço*</label>
-                <input type="text" id="edtEndereco" class="validate" name="ENDERECO">
-            </div>
+
             <div class="col s3">
                 <label>Cidade*</label>
                 <input type="text" id="edtCidade" class="validate" name="CIDADE">

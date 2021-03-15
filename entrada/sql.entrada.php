@@ -38,9 +38,10 @@ class SqlEntrada
   function getViewProdutos($param)
   {
     extract($param);
-    $sql = "SELECT first 10 skip $offsetProduto descricao, qtd, valor, id_produto, codigo 
-    FROM produtos
-    WHERE descricao like '%$searchProduto%'";
+    $sql = "SELECT first 10 skip $offsetProduto a.descricao, a.qtd, a.valor, a.id_produto, a.codigo, b.marca 
+    FROM produtos a, marcas b
+    WHERE a.id_marca = b.id_marca
+    AND a.descricao like '%$searchProduto%'";
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -138,7 +139,6 @@ class SqlEntrada
   {
     $sql = "DELETE FROM nota  
     WHERE id_nota = $param";
-
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -168,6 +168,15 @@ class SqlEntrada
   {
     $sql = "DELETE FROM pagamentos
     WHERE id_pagamento = $param";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function deletePagamento1($param)
+  {
+    $sql = "DELETE FROM pagamentos
+    WHERE id_nota = $param";
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -289,7 +298,6 @@ class SqlEntrada
     st = '$st',
     valor_total = '$valor_total' 
     WHERE id_nota = $id_nota";
-    print_r($sql);
 
     $query = $this->db->prepare($sql);
     $query->execute();
