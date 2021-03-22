@@ -117,12 +117,21 @@ class Entrada
             $id_nota = $this->sql->insertNota($param);
             $call = $this->sql->getCabecalho($id_nota[0]->ID_NOTA);
             echo json_encode($call);
+
         } else if ($param['id_nota']) {
 
             $id_nota = $this->sql->updateNota($param);
             $call = $this->sql->getCabecalho($id_nota);
             echo json_encode($call);
         } else {
+//=======
+//        } else if($param['id_nota']){
+//            
+//           $id_nota = $this->sql->updateNota($param);
+//            $call = $this->sql->getCabecalho($id_nota);
+//            echo json_encode($call);
+//        }else{
+//>>>>>>> master
             echo 'ERRO INTERNO';
         }
     }

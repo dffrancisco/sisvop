@@ -224,13 +224,12 @@ const cliente = (function () {
 
         })
             .then(r => {
-                console.log('r :', r.data);
                 if (r.data == 'edit') {
                     xgCliente.dataSource(param)
 
                 }
                 if (r.data[0].ID_CLIENTE) {
-                    param.ID_CLIENTE = r.data.ID_CLIENTE
+                    param.ID_CLIENTE = r.data[0].ID_CLIENTE
                     xgCliente.insertLine(param)
                 } else {
                     show('ERRO INTERNO')

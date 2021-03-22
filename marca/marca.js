@@ -199,6 +199,13 @@ const marca = (function () {
                 if (rs.data == 'edit') {
                     xgMarca.dataSource(param);
 
+
+                cancelar()
+
+                if (rs.data == 'edit') {
+                    xgMarca.dataSource(param);
+
+
                 }
                 else if (rs.data[0].ID_MARCA) {
 
@@ -208,6 +215,7 @@ const marca = (function () {
                 } else {
                     show('ERRO INTERNO!')
                 }
+
             });
         } else {
             xgMarca.showMessageDuplicity('O campo está com valor duplicado ou vazio!')
