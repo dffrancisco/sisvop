@@ -27,13 +27,9 @@
                 <label>Endereço*</label>
                 <input type="text" id="edtEndereco" class="validate" name="ENDERECO">
             </div>
-            <div class="col s3">
-                <label>Cidade*</label>
-                <input type="text" id="edtEndereco" class="validate" name="ENDERECO">
-            </div>
 
             <div class="col s3">
-               <label>Cidade*</label>
+                <label>Cidade*</label>
                 <input type="text" id="edtCidade" class="validate" name="CIDADE">
             </div>
         </div>
