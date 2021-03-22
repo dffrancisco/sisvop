@@ -32,7 +32,8 @@ class SqlClientes
 
   function getUf()
   {
-    $sql = "SELECT * FROM uf";
+    $sql = "SELECT * FROM uf
+    ORDER BY uf ASC";
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -69,7 +70,7 @@ class SqlClientes
 
     $sql = "UPDATE clientes SET cnpj = '$CNPJ', razao = '$RAZAO', fantasia = '$FANTASIA', email = '$EMAIL', inscricao = '$INSCRICAO', fixo = '$FIXO', tel = '$TEL', representante = '$REPRESENTANTE'
     WHERE id_cliente = '$ID_CLIENTE' ";
-    
+
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);

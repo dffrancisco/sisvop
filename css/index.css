@@ -102,10 +102,14 @@ body{
     margin-bottom: -8px !important;
 }
 
+table, th, td {
+    /* border: none; */
+    padding: 2px !important;
+}
 .pnUser {
     z-index: 100;
     color:#e0f2f1;
-    background: #66a7db;
+    background: #29689c;
     margin-top: 70px;
     padding: 3px 3px 3px 3px;
     -moz-transition: all 0.5s ease;
@@ -120,6 +124,36 @@ body{
     top: -210px;
     right: 4px;
     border-radius: 5px;
+}
+
+.pnNotify {
+    z-index: 100;
+    color:#e0f2f1;
+    background: #29689c;
+    margin-top: 70px;
+    padding: 3px 3px 3px 3px;
+    -moz-transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    font-size: 1.2em;
+    overflow: hidden;
+    width: 250px;
+    right: 0;
+    position: fixed;
+    top: -420px;
+    right: 108px;
+    border-radius: 5px;
+}
+
+.activeNotify{
+    display: none;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+    margin-top: -48px;
+    margin-left: 11px;
+    background-color: rgb(255, 0, 0);
 }
 
 .btnSair{
@@ -140,6 +174,10 @@ body{
     
 }
 
+.collection .collection-item{
+    padding: 10px !important;
+}
+
 .eyeSee{
     color: #000000 ;
 }
@@ -149,6 +187,10 @@ body{
 }
 
 .pnUserToggle {
+    top: 0 !important;
+}
+
+.pnNotifyToggle{
     top: 0 !important;
 }
 
@@ -163,6 +205,7 @@ body{
 
 }
 
+
 .validate{
     text-transform: uppercase;
 }
@@ -176,6 +219,8 @@ body{
 .txtArea{
     height: 100px !important;
 }
+
+
 
 .btnDel{
     

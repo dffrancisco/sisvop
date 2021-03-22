@@ -2,6 +2,7 @@ let xgItens;
 let xgFornecedor;
 let xgLocalizarNota;
 let xgridLupaProduto;
+let xgridPagamento;
 let xmFornecedor;
 let xmNovaNota;
 let xmLupaProduto;
@@ -14,6 +15,7 @@ $(function () {
     itens.xgridLocalizarNota()
     itens.xgridFornecedor();
     itens.xgridLupaProduto()
+    itens.xgridPagamento()
     itens.xmNovaNota()
     itens.xmFornecedor()
     itens.xmEditItens()
@@ -26,6 +28,7 @@ $(function () {
     itens.deleteItens()
 
     getDataEmpresa()
+    $('.tabs').tabs();
 
 })
 
@@ -266,6 +269,67 @@ const itens = (function () {
         })
     }
 
+    function xgridPagamento() {
+        xgPagamento = new xGridV2.create({
+            el: "#xgPagamento",
+            height: 190,
+            heightLine: 35,
+            theme: "x-clownV2",
+            onSelectLine: (ln) => {
+                $('.btnDelPag').removeAttr("disabled")
+                $('.btnEditPag').removeAttr("disabled")
+            },
+            columns: {
+                'Data de vencimento': {
+                    dataField: "DATA_VENCIMENTO",
+                    width: "25%",
+                    render: util.dataBrasil
+                },
+                'Valor parcela': {
+                    dataField: "VALOR_PARCELA",
+                    width: "25%",
+                    render: util.formatValor
+                },
+                'Data pago': {
+                    dataField: "DATA_PAGO",
+                    width: "25%",
+                    render: util.dataBrasil
+                },
+                'Valor pago': {
+                    dataField: "VALOR_PAGO",
+                    width: "25%",
+                    render: util.formatValor
+                }
+            },
+            sideBySide: {
+
+                frame: {
+                    el: "#pnButtonPagamento",
+                    buttons: {
+                        deletar: {
+                            html: "Deletar",
+                            class: "btnP btnDelPag btnDel",
+                            click: deletePagamento
+                        },
+                        editar: {
+                            html: "Editar",
+                            class: "btnP btnEditPag",
+                            click: editPagamento
+                        },
+                        salve: {
+                            html: "Salvar",
+                            class: "btnP btnSavePag",
+                            click: savePagamento
+                        },
+
+                    }
+                },
+
+            },
+
+        })
+    }
+
 
 
 
@@ -359,7 +423,7 @@ const itens = (function () {
         xgFornecedor.queryOpen({ search: '' })
         controleGrid = 'new';
         id_nota = ''
-        xgItens.focus()
+
         $('#edtAdicionar').removeAttr('hidden')
         $('#xgLocalizarNota').prop('hidden', true)
         $('#spNomeFantasia').html('')
@@ -472,8 +536,6 @@ const itens = (function () {
                     show('Nota deletada')
 
                 })
-
-
             }
         })
 
@@ -537,6 +599,55 @@ const itens = (function () {
         xgLocalizarNota.queryOpen({ searchNota: '' })
     }
 
+    //xgPagamentos
+    function editPagamento() {
+        $('.btnSavePag').removeAttr("disabled")
+        $('.btnEditPag').prop("disabled", true)
+        $('.btnDelPag').prop("disabled", true)
+        $('#btnCadParcela').prop("disabled", true)
+
+        $('#edtDataVencimento').val(util.dataBrasil(xgPagamento.dataSource().DATA_VENCIMENTO))
+        $('#edtValorPagar').val(xgPagamento.dataSource().VALOR_PARCELA)
+    }
+
+    function deletePagamento() {
+        confirmaCodigo({
+            msg: 'Digite o código de confirmação',
+            call: () => {
+                axios.post(url, {
+                    call: 'deletePagamento',
+                    param: xgPagamento.dataSource().ID_PAGAMENTO
+                }).then(r => {
+                    xgPagamento.deleteLine()
+                })
+            }
+        })
+    }
+
+    function savePagamento() {
+        $('.btnEditPag').removeAttr("disabled")
+        $('.btnDelPag').removeAttr("disabled")
+        $('#btnCadParcela').removeAttr("disabled")
+
+        $('.btnSavePag').prop("disabled", true)
+
+        let param = {
+            ID_PAGAMENTO: xgPagamento.dataSource().ID_PAGAMENTO,
+            DATA_VENCIMENTO: util.formatarDataUSA($('#edtDataVencimento').val()),
+            VALOR_PARCELA: $('#edtValorPagar').val()
+        }
+
+
+
+        axios.post(url, {
+            call: 'updatePagamento',
+            param: param
+        }).then(r => {
+            xgPagamento.dataSource('DATA_VENCIMENTO', param.DATA_VENCIMENTO)
+            xgPagamento.dataSource('VALOR_PARCELA', param.VALOR_PARCELA)
+        })
+    }
+
 
 
     //Função buttons add item
@@ -547,7 +658,7 @@ const itens = (function () {
             let valor_compra = $('#edtValorUni').val()
 
             let param = {
-                id_nota: cabecalho.ID_NOTA,
+                id_nota: id_nota,
                 id_produto: produtoSelecionado.ID_PRODUTO,
                 qtd_nota: qtd_compra,
                 valor_nota: valor_compra,
@@ -666,6 +777,7 @@ const itens = (function () {
 
     //Função buttons xModal
     function btnXmSalvar() {
+
         let param = {
             id_fornecedor: id_fornecedor,
             id_nota: id_nota,
@@ -677,6 +789,7 @@ const itens = (function () {
             valor_total: $('#edtValor').val(),
 
         }
+
         $('#edtCodigo').focus()
 
         let valCampos = {
@@ -696,13 +809,11 @@ const itens = (function () {
         }
         xmNovaNota.close()
 
-
         axios.post(url, {
             call: 'insertNota',
             param: param
         }).then(r => {
             cabecalho = r.data[0]
-
             id_nota = r.data[0].ID_NOTA
             $('#spNumero').html(cabecalho.NUMERO_NOTA)
             $('#spData').html(cabecalho.DATA_EMISSAO)
@@ -738,11 +849,9 @@ const itens = (function () {
             call: 'getDataNota',
             param: param.ID_NOTA
         }).then(r => {
-
             id_fornecedor = r.data[0].ID_FORNECEDOR
             id_nota = r.data[0].ID_NOTA
             editNota = r.data[0]
-
 
             $('#spNomeFantasia').html(r.data[0].FANTASIA)
             $('#spCnpj').html(r.data[0].CNPJ)
@@ -753,20 +862,24 @@ const itens = (function () {
             $('#spValor').html(r.data[0].VALOR_TOTAL)
             $('#spChave').html(r.data[0].CHAVE_ACESSO)
 
-            adicionais()
             axios.post(url, {
                 call: 'getItensNota',
                 param: param.ID_NOTA
             }).then(rs => {
                 xgItens.source(rs.data)
                 xmLocalizarNota.close()
+
+                axios.post(url, {
+                    call: 'getPagamentos',
+                    param: param.ID_NOTA
+                }).then(rsp => {
+                    xgPagamento.source(rsp.data)
+                    adicionais()
+
+                })
             })
+
         })
-
-
-
-
-
     }
 
     function btnFechar() {
@@ -788,6 +901,35 @@ const itens = (function () {
         xmEditItens.close()
     }
 
+
+
+    //Funçao button pagamento
+    function btnCadParcela() {
+        let param = {
+            ID_NOTA: id_nota,
+            DATA_VENCIMENTO: util.formatarDataUSA($('#edtDataVencimento').val()),
+            VALOR_PARCELA: $('#edtValorPagar').val()
+        }
+
+        axios.post(url, {
+            call: 'insertPagamento',
+            param: param
+        }).then(r => {
+            let insertLine = {
+                ID_PAGAMENTO: r.data[0].ID_PAGAMENTO,
+                ID_NOTA: id_nota,
+                DATA_VENCIMENTO: r.data[0].DATA_VENCIMENTO,
+                VALOR_PARCELA: r.data[0].VALOR_PARCELA,
+                DATA_PAGO: '',
+                VALOR_PAGO: ''
+            }
+
+            xgPagamento.insertLine(insertLine)
+            $('#edtValorPagar').val('')
+            $('#edtDataVencimento').val('')
+            $('#edtDataVencimento').focus()
+        })
+    }
 
 
 
@@ -891,6 +1033,22 @@ const itens = (function () {
             }
         })
 
+        $('#edtDataVencimento').keydown(function (e) {
+            if (e.keyCode == 13) {
+                $('#edtValorPagar').focus()
+            }
+        })
+
+        $('#edtValorPagar').keydown(function (e) {
+            if (e.keyCode == 13) {
+                btnCadParcela()
+            }
+        })
+
+        $('#btnCadParcela').click(function () {
+            btnCadParcela()
+        })
+
         $(document).keydown(function (e) {
 
             if (e.keyCode == 113) {
@@ -912,6 +1070,9 @@ const itens = (function () {
             if (e.keyCode == 35) {
                 $('.btnSave').click()
             }
+
+
+
         })
     }
 
@@ -927,9 +1088,8 @@ const itens = (function () {
             $('.btnPrint').prop("disabled", true)
             $('#btnEditar').prop("disabled", true)
             $('#btnDeletar').prop("disabled", true)
-
-
-        } else {
+        }
+        if ($('#spCnpj').html() != '') {
             $('.btnPrint').removeAttr("disabled")
             $('.btnEdit').removeAttr("disabled")
             $('.btnDel').removeAttr("disabled")
@@ -937,6 +1097,9 @@ const itens = (function () {
             $('#btnDeletar').removeAttr("disabled")
         }
 
+        $('.btnDelPag').prop("disabled", true)
+        $('.btnSavePag').prop("disabled", true)
+        $('.btnEditPag').prop("disabled", true)
 
     }
 
@@ -1009,6 +1172,7 @@ const itens = (function () {
         xmNovaNota: xmNovaNota,
         xmEditItens: xmEditItens,
         xmLupaProduto: xmLupaProduto,
+        xgridPagamento: xgridPagamento,
         xmLocalizarNota: xmLocalizarNota,
         finalizar: finalizar,
         deleteItens: deleteItens,
@@ -1017,6 +1181,7 @@ const itens = (function () {
         keydown: keydown,
         adicionais: adicionais,
         editarItens: editarItens,
+        btnCadParcela: btnCadParcela,
     }
 })();
 

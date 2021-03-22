@@ -7,7 +7,7 @@
 
     <div class="tabela margintop" id="pnFields">
 
-        <label>Marca</label><br>
+        <label>Marca*</label><br>
         <input type="text" class="corInp validate" name="MARCA" id="edtMarca">
 
     </div>

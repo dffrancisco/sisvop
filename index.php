@@ -61,9 +61,9 @@ if (!empty($_GET['p'])) {
 
 
     <div class="cabecalho">
-        <table width="100%" class="tbTitulo" style="font-size:15px ;">
+        <table width="100%" class="tbTitulo" style="font-size:13px ;">
             <tr>
-                <td rowspan="4" style="width: 150px;"><img src="img/LOGO AZUL WEB.png" width="155" alt="" /></td>
+                <td rowspan="4" style="width: 130px;"><img src="img/LOGO AZUL WEB.png" width="130" alt="" /></td>
                 <td colspan="3" style="font-weight: bold" id="printRazao"></td>
                 <td style="width: 150px;"><span class="spData"></span> <span class="spHora"></span></td>
             </tr>
@@ -78,7 +78,7 @@ if (!empty($_GET['p'])) {
             </tr>
             <tr>
                 <td>Inscrição.: <span id="printInscricao"></span> </td>
-                <td>Telefone.: <br> <span id="printFixo"></span> </td>
+                <td>Telefone.: <span id="printFixo"></span> </td>
                 <td></td>
                 <td></td>
             </tr>
@@ -111,8 +111,12 @@ if (!empty($_GET['p'])) {
                                 class="fa fa-user-circle"></i></a></li>
 
                 </ul>
-                <ul id="nav-mobile" class="right">
-                    <i class="fa fa-bell notify" aria-hidden="true" style="font-size: 18px; margin-right: 8px;"></i>
+                <ul id="nav-mobile" class="right e">
+                    <a onclick="pnNotifyToggle()" href="#">
+                        <i class="fa fa-bell notify" aria-hidden="true" style="font-size: 18px;">
+                            <div class="activeNotify"></div>
+                        </i>
+                    </a>
                 </ul>
             </div>
         </nav>
@@ -123,18 +127,44 @@ if (!empty($_GET['p'])) {
         <span style="font-size: 15px;">SAIR</span>
     </div>
 
-    <div class="pnMenu">
-        <a href="?p=produtos/produtos">
-            <li><i class="fa fa-product-hunt"></i>Produtos</li>
-        </a>
-        <a href="?p=marca/marca">
-            <li><i class="fa fa-copyright"></i>Marcas</li>
-        </a>
+    <div class="pnNotify collection">
+    </div>
+
+    <div class="pnMenu" style="font-size: 15px;">
         <a href="?p=clientes/clientes">
             <li><i class="fa fa-address-book"></i>Clientes</li>
         </a>
+
+        <a href="?p=contas/contas">
+            <li><i class="fa fa-money"></i>Contas a pagar</li>
+        </a>
+
+        <a href="?p=empresa/empresa">
+            <li><i class="fa fa-building"></i>Empresa</li>
+        </a>
+        
+        <a href="?p=entrada/entrada">
+            <li><i class="fa fa-shopping-cart"></i>Entrada</li>
+        </a>
+
         <a href="?p=fornecedor/fornecedor">
             <li><i class="fa fa-address-book"></i>Fornecedor</li>
+        </a>
+
+        <a href="?p=funcionarios/funcionarios">
+            <li><i class="fa fa-user-plus"></i>Funcionários</li>
+        </a>
+
+        <a href="?p=marca/marca">
+            <li><i class="fa fa-copyright"></i>Marcas</li>
+        </a>
+
+        <a href="?p=produtos/produtos">
+            <li><i class="fa fa-product-hunt"></i>Produtos</li>
+        </a>
+
+        <a href="?p=servicos/servicos">
+            <li><i class="fa fa-usd"></i>Serviços</li>
         </a>
 
         <a href="?p=usuario/usuario">
@@ -146,19 +176,6 @@ if (!empty($_GET['p'])) {
         <!-- <a href="?p=cargo/cargo">
             <li><i class="fa fa-address-book"></i>Cargo</li>
         </a> -->
-        <a href="?p=empresa/empresa">
-            <li><i class="fa fa-building"></i>Empresa</li>
-        </a>
-        <a href="?p=funcionarios/funcionarios">
-            <li><i class="fa fa-user-plus"></i>Funcionários</li>
-        </a>
-        <a href="?p=entrada/entrada">
-            <li><i class="fa fa-shopping-cart"></i>Entrada</li>
-        </a>
-
-        <a href="?p=servicos/servicos">
-            <li><i class="fa fa-usd"></i>Serviços</li>
-        </a>
 
         <hr />
         <li class="btnSair">Sair</li>

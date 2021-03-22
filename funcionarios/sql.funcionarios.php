@@ -17,8 +17,8 @@ class SqlFuncionarios
 
   function getFuncionarios($param)
   {
-      extract($param);
-      $sql = "SELECT FIRST 10 SKIP $offset 
+    extract($param);
+    $sql = "SELECT FIRST 10 SKIP $offset 
               a.id_funcionarios, a.nome, 
               a.telefone, a.cpf, a.rg, 
               a.cep, a.endereco, a.cidade, 
@@ -27,15 +27,16 @@ class SqlFuncionarios
               WHERE b.id_bairro = a.id_bairro
               AND nome LIKE '$search%'";
 
-      $query = $this->db->prepare($sql);
-      $query->execute(); 
-      return $query->fetchAll(PDO::FETCH_OBJ);
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
-  
+
 
   function getBairro()
   {
-    $sql = 'SELECT * FROM bairro';
+    $sql = 'SELECT * FROM bairro
+    ORDER BY bairro ASC';
 
     $query = $this->db->prepare($sql);
     $query->execute();
@@ -57,19 +58,19 @@ class SqlFuncionarios
 
   function insert($param)
   {
-     $sql = "INSERT INTO funcionarios
+    $sql = "INSERT INTO funcionarios
              (nome, telefone, cpf, rg, 
              cep, endereco, cidade, uf, id_bairro )
              VALUES
              (:NOME, :TELEFONE, :CPF, :RG, :CEP, 
              :ENDERECO, :CIDADE, :UF, :ID_BAIRRO)
              returning id_funcionarios";
-             
-      $sql = prepare::SQL($sql, $param);
-      // print_r($param);
-      $query = $this->db->prepare($sql);
-      $query->execute(); 
-      return $query->fetchAll(PDO::FETCH_OBJ);
+
+    $sql = prepare::SQL($sql, $param);
+    // print_r($param);
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function update($param)
@@ -85,7 +86,7 @@ class SqlFuncionarios
     $sql = prepare::SQL($sql, $param);
     // print_r($param);
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 

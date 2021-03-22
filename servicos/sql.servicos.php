@@ -136,8 +136,9 @@ class Sqlservicos
  
   function getItensRomaneio($param){
     extract($param);
-    $sql="SELECT FIRST 10 skip $offset
-          a.id_item_romaneio, a.qtd,
+
+    $sql="SELECT FIRST 100 skip $offset
+          a.id_item_romaneio, a.qtd, a.id_romaneio,
           b.id_produto, b.descricao,
           c.marca,
           d.origem, d.id_itens_servico
@@ -204,6 +205,69 @@ class Sqlservicos
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
             AND b.servico like '$search%'";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+
+  }
+
+  function getServicosAnd($param){
+    extract($param);
+    $sql = "SELECT FIRST 10 SKIP $offset
+            a.id_lista_servico, a.executores,
+            a.data_inicio, a.hora, a.status, 
+            a.data_finalizacao, a.engenheiro,
+            b.id_servico,  b.servico ,
+            c.id_cliente,c.fantasia
+            FROM lista_servicos a, servicos b, clientes c
+            WHERE a.id_servico = b.id_servico
+            AND a.id_cliente = c.id_cliente
+            AND b.servico like '$search%'
+            AND a.status = '$andamento'";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+
+  }
+
+  function getServicosPro($param){
+    extract($param);
+    $sql = "SELECT FIRST 10 SKIP $offset
+            a.id_lista_servico, a.executores,
+            a.data_inicio, a.hora, a.status, 
+            a.data_finalizacao, a.engenheiro,
+            b.id_servico,  b.servico ,
+            c.id_cliente,c.fantasia
+            FROM lista_servicos a, servicos b, clientes c
+            WHERE a.id_servico = b.id_servico
+            AND a.id_cliente = c.id_cliente
+            AND b.servico like '$search%'
+            AND a.status = '$projeto'";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+
+  }
+
+  function getServicosFin($param){
+    extract($param);
+    $sql = "SELECT FIRST 10 SKIP $offset
+            a.id_lista_servico, a.executores,
+            a.data_inicio, a.hora, a.status, 
+            a.data_finalizacao, a.engenheiro,
+            b.id_servico,  b.servico ,
+            c.id_cliente,c.fantasia
+            FROM lista_servicos a, servicos b, clientes c
+            WHERE a.id_servico = b.id_servico
+            AND a.id_cliente = c.id_cliente
+            AND b.servico like '$search%'
+            AND a.status = '$finalizado'";
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
