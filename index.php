@@ -131,6 +131,7 @@ if (!empty($_GET['p'])) {
     </div>
 
     <div class="pnMenu" style="font-size: 15px;">
+
         <a href="?p=clientes/clientes">
             <li><i class="fa fa-address-book"></i>Clientes</li>
         </a>
@@ -167,6 +168,10 @@ if (!empty($_GET['p'])) {
             <li><i class="fa fa-usd"></i>Serviços</li>
         </a>
 
+        <a href="?p=contas/contas">
+            <li><i class="fa fa-money"></i>Contas a pagar</li>
+        </a>
+
         <a href="?p=usuario/usuario">
             <li><i class="fa fa-key"></i>Usuario</i></li>
         </a>
@@ -176,6 +181,7 @@ if (!empty($_GET['p'])) {
         <!-- <a href="?p=cargo/cargo">
             <li><i class="fa fa-address-book"></i>Cargo</li>
         </a> -->
+
 
         <hr />
         <li class="btnSair">Sair</li>

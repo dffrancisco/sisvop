@@ -71,8 +71,9 @@ class Entrada
 
     function deleteNota($param)
     {
-        $id_nota = $this->sql->deleteNota($param);
+        $call = $this->sql->deletePagamento1($param);
         $id_itens_nota = $this->sql->deleteItens($param);
+        $id_nota = $this->sql->deleteNota($param);
     }
 
     function deleteItensUni($param)
@@ -111,17 +112,26 @@ class Entrada
 
     function insertNota($param)
     {
-        
+
         if (empty($param['id_nota'])) {
             $id_nota = $this->sql->insertNota($param);
             $call = $this->sql->getCabecalho($id_nota[0]->ID_NOTA);
             echo json_encode($call);
-        } else if($param['id_nota']){
-            
+
+        } else if ($param['id_nota']) {
+
             $id_nota = $this->sql->updateNota($param);
             $call = $this->sql->getCabecalho($id_nota);
             echo json_encode($call);
-        }else{
+        } else {
+//=======
+//        } else if($param['id_nota']){
+//            
+//           $id_nota = $this->sql->updateNota($param);
+//            $call = $this->sql->getCabecalho($id_nota);
+//            echo json_encode($call);
+//        }else{
+//>>>>>>> master
             echo 'ERRO INTERNO';
         }
     }

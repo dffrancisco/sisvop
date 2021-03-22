@@ -38,9 +38,11 @@ const login = (function () {
                 }
                 usuario = r.data
 
+                // window.location = "/index.php?p=home";
+
+
                 window.location = "/sisvop/index.php?p=home";
 
-                // window.location = "/index.php?p=home";
 
                 $('#spUser').html(r.data.NOME.split(' ')[0])
 
