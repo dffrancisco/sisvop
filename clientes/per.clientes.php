@@ -36,7 +36,7 @@ class clientes
     {
         if (empty($param['ID_CLIENTE'])) {
             $id_cliente = $this->sql->insert($param);
-            echo '{"ID_CLIENTE":"' . $id_cliente . '"}';
+            echo json_encode($id_cliente);
         } else {
             $call = $this->sql->update($param);
             echo 'edit';

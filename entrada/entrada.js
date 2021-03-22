@@ -674,6 +674,55 @@ const itens = (function () {
         })
     }
 
+    //xgPagamentos
+    function editPagamento() {
+        $('.btnSavePag').removeAttr("disabled")
+        $('.btnEditPag').prop("disabled", true)
+        $('.btnDelPag').prop("disabled", true)
+        $('#btnCadParcela').prop("disabled", true)
+
+        $('#edtDataVencimento').val(util.dataBrasil(xgPagamento.dataSource().DATA_VENCIMENTO))
+        $('#edtValorPagar').val(xgPagamento.dataSource().VALOR_PARCELA)
+    }
+
+    function deletePagamento() {
+        confirmaCodigo({
+            msg: 'Digite o código de confirmação',
+            call: () => {
+                axios.post(url, {
+                    call: 'deletePagamento',
+                    param: xgPagamento.dataSource().ID_PAGAMENTO
+                }).then(r => {
+                    xgPagamento.deleteLine()
+                })
+            }
+        })
+    }
+
+    function savePagamento() {
+        $('.btnEditPag').removeAttr("disabled")
+        $('.btnDelPag').removeAttr("disabled")
+        $('#btnCadParcela').removeAttr("disabled")
+
+        $('.btnSavePag').prop("disabled", true)
+
+        let param = {
+            ID_PAGAMENTO: xgPagamento.dataSource().ID_PAGAMENTO,
+            DATA_VENCIMENTO: util.formatarDataUSA($('#edtDataVencimento').val()),
+            VALOR_PARCELA: $('#edtValorPagar').val()
+        }
+
+
+
+        axios.post(url, {
+            call: 'updatePagamento',
+            param: param
+        }).then(r => {
+            xgPagamento.dataSource('DATA_VENCIMENTO', param.DATA_VENCIMENTO)
+            xgPagamento.dataSource('VALOR_PARCELA', param.VALOR_PARCELA)
+        })
+    }
+
 
 
     //Função buttons add item
@@ -954,6 +1003,7 @@ const itens = (function () {
             }
 
             xgPagamento.insertLine(insertLine)
+            $('#edtValorPagar').val('')
             $('#edtDataVencimento').val('')
             $('#edtDataVencimento').focus()
         })
@@ -1118,6 +1168,7 @@ const itens = (function () {
             $('#btnEditar').prop("disabled", true)
             $('#btnDeletar').prop("disabled", true)
             $('#btnCadParcela').prop("disabled", true)
+
         }
         if ($('#spCnpj').html() != '') {
             $('.btnPrint').removeAttr("disabled")

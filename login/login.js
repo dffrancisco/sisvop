@@ -43,6 +43,7 @@ const login = (function () {
 
                 window.location = "/sisvop/index.php?p=home";
 
+
                 $('#spUser').html(r.data.NOME.split(' ')[0])
 
 

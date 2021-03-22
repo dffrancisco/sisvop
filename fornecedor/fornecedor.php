@@ -13,6 +13,7 @@
 
             <div class="col s9">
                 <label>Razão Social*</label>
+
                 <input type="text" class="validate" id="edtRazaoSocial" name="RAZAO">
             </div>
         </div>
@@ -26,9 +27,13 @@
                 <label>Endereço*</label>
                 <input type="text" id="edtEndereco" class="validate" name="ENDERECO">
             </div>
-
             <div class="col s3">
                 <label>Cidade*</label>
+                <input type="text" id="edtEndereco" class="validate" name="ENDERECO">
+            </div>
+
+            <div class="col s3">
+               <label>Cidade*</label>
                 <input type="text" id="edtCidade" class="validate" name="CIDADE">
             </div>
         </div>
@@ -45,6 +50,7 @@
 
             <div class="col s4">
                 <label>Município*</label>
+
                 <input type="text" id="edtMunicipio" class="validate" name="MUNICIPIO">
             </div>
             <div class="col s2">

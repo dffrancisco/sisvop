@@ -38,10 +38,12 @@ class SqlEntrada
   function getViewProdutos($param)
   {
     extract($param);
+
     $sql = "SELECT first 10 skip $offsetProduto a.descricao, a.qtd, a.valor, a.id_produto, a.codigo, b.marca 
     FROM produtos a, marcas b
     WHERE a.id_marca = b.id_marca
     AND a.descricao like '%$searchProduto%'";
+
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -182,6 +184,7 @@ class SqlEntrada
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+
   function insertNota($param)
   {
 
@@ -298,6 +301,7 @@ class SqlEntrada
     st = '$st',
     valor_total = '$valor_total' 
     WHERE id_nota = $id_nota";
+    print_r($sql);
 
     $query = $this->db->prepare($sql);
     $query->execute();
