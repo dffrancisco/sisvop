@@ -26,11 +26,17 @@ class Login
 
     function setLogin($param)
     {
+        extract($param);
+
         $sql = "SELECT A.ID_FUNCIONARIOS, A.NOME, A.CPF
                 FROM FUNCIONARIOS A, USUARIOS B
                 WHERE B.ID_FUNCIONARIOS = A.ID_FUNCIONARIOS
-                AND A.ID_FUNCIONARIOS = :login
                 AND B.SENHA = :senha";
+        if ($length == 14) {
+            $sql = $sql . "AND A.CPF = :login";
+        } else {
+            $sql = $sql . "AND A.ID_FUNCIONARIOS = :login";
+        };
 
         $sql = prepare::SQL($sql, $param);
         $query = $this->db->prepare($sql);
