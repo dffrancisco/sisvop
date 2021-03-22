@@ -111,6 +111,7 @@ class Entrada
 
     function insertNota($param)
     {
+        
         if (empty($param['id_nota'])) {
             $id_nota = $this->sql->insertNota($param);
             $call = $this->sql->getCabecalho($id_nota[0]->ID_NOTA);

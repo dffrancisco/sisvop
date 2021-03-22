@@ -117,6 +117,7 @@ class SqlEntrada
     from nota a, fornecedor b
     WHERE a.id_fornecedor = b.id_fornecedor
     and a.id_nota = $id_nota";
+
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -280,7 +281,7 @@ class SqlEntrada
   {
     extract($param);
     $sql = "UPDATE nota 
-    SET id_fornecedor = 20, 
+    SET id_fornecedor = $id_fornecedor, 
     numero_nota = '$numero_nota', 
     chave_acesso = '$chave_acesso', 
     data_emissao = '$data_emissao', 
@@ -288,6 +289,7 @@ class SqlEntrada
     st = '$st',
     valor_total = '$valor_total' 
     WHERE id_nota = $id_nota";
+    print_r($sql);
 
     $query = $this->db->prepare($sql);
     $query->execute();
