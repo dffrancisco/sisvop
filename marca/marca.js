@@ -192,11 +192,19 @@ const marca = (function () {
                 param: param
 
             }).then(rs => {
+                cancelar()
 
                 cancelar()
 
                 if (rs.data == 'edit') {
                     xgMarca.dataSource(param);
+
+
+                cancelar()
+
+                if (rs.data == 'edit') {
+                    xgMarca.dataSource(param);
+
 
                 }
                 else if (rs.data[0].ID_MARCA) {
