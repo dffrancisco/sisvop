@@ -2,7 +2,7 @@
 
 include_once '../class/class.connect_firebird.php';
 include_once '../class/prepareSql.php';
-class Sqlservicos
+class SqlObras
 {
   public $db;
 

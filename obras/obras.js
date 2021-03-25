@@ -201,7 +201,7 @@ $(function () {
 
 const saida = (function () {
 
-    let url = 'servicos/per.servicos.php';
+    let url = 'obras/per.obras.php';
     let ControleGrid;
 
     function grid() {
@@ -1255,7 +1255,7 @@ const saida = (function () {
 
 const clientes = (function () {
 
-    let url = 'servicos/per.servicos.php';
+    let url = 'obras/per.obras.php';
     let ControleGrid;
 
     function grid() {
@@ -1504,7 +1504,7 @@ const clientes = (function () {
 
 const produtos = (function () {
 
-    let url = 'servicos/per.servicos.php';
+    let url = 'obras/per.obras.php';
     let ControleGrid;
 
     function grid() {
@@ -1878,7 +1878,7 @@ const produtos = (function () {
 
 const devolucao = (function () {
 
-    let url = 'servicos/per.servicos.php';
+    let url = 'obras/per.obras.php';
     let ControleGrid;
 
     function grid() {

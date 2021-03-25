@@ -167,8 +167,8 @@ if (!empty($_GET['p'])) {
         <a href="?p=projetos/projeto">
             <li><i class="fa fa-key"></i>projetos</i></li>
         </a>
-        <a href="?p=servicos/servicos">
-            <li><i class="fa fa-usd"></i>Serviços</li>
+        <a href="?p=obras/obras">
+            <li><i class="fa fa-usd"></i>Obras</li>
         </a>
 
         <a href="?p=contas/contas">

@@ -167,7 +167,20 @@ const projetos = (function () {
             }
         })
 
+        xgProjeto = new xGridV2.create({
+            el: '#xgProjeto',
+            height: '180',
+            theme: 'x-clownV2',
+            heightLine: '35',
 
+            columns: {
+                Produto: { dataField: 'DESCRICAO' },
+                Marca: { dataField: 'MARCA' },
+                QTD: { dataField: 'QTD', width: '10%' },
+                Data: { dataField: 'DATA', center: true },
+            },
+
+        })
     }
 
     // GETS

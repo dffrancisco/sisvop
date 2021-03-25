@@ -4,11 +4,11 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include_once './sql.servicos.php';
+include_once './sql.obras.php';
 
 extract(json_decode(file_get_contents("php://input"), TRUE));
 
-class Servicos
+class Obras
 {
 
     private $sql;
@@ -17,7 +17,7 @@ class Servicos
     {
 
         //instancia da class        
-        $this->sql = new SqlServicos();
+        $this->sql = new SqlObras();
     }
 
     // GETS
@@ -201,5 +201,5 @@ class Servicos
     }
 }
 
-$class = new Servicos();
+$class = new Obras();
 $class->$call(@$param);

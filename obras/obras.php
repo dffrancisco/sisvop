@@ -1,7 +1,7 @@
-<script src="servicos/servicos.js" type="text/javascript"></script>
+<script src="obras/obras.js" type="text/javascript"></script>
 
 
-<title>Serviços</title>
+<title>Obras</title>
 
 
 <!-- xModal da Lista de Servicos-->

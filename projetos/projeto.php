@@ -121,7 +121,7 @@
     </ul>
 
     <div id="tabProdutoServico" class="col s12">
-        <div id="pnGridSaida" class="list"></div>
+        <div id="xgProjeto" class="list"></div>
         <div id="pnButtonsP" style="margin-left: 20px !important" class="col s12"></div>
     </div>
 
