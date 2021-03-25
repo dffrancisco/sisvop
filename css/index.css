@@ -392,4 +392,16 @@ input:focus, select:focus, textarea:focus{
     background-color: #4679AD;
     outline: none;
 }
+
+.servico{
+    background-color: #3f688a;
+    height: 40px;
+    padding: 5px;
+    margin-top: 5px;
+}   
+
+
+.marginBottom{
+    margin-bottom: 5px;
+}
 /*materialize* fim *********************************/
