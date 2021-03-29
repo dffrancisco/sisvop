@@ -81,4 +81,17 @@ class SqlServicos
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
+
+
+  function duplicityProduto($param)
+  {
+    extract($param);
+    $sql = "SELECT ID_MASCARA_PROJETO FROM MASCARA_PROJETO
+          WHERE ID_SERVICO = $ID_SERVICO 
+          and ID_PRODUTO = $ID_PRODUTO";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
 }

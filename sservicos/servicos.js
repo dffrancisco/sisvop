@@ -11,6 +11,7 @@ $(function () {
     servicos.getServico()
     servicos.grid()
     servicos.modalProdutos()
+    servicos.keydown()
 
     $('#edtPesquisa').keydown(function (e) {
 
@@ -78,7 +79,7 @@ const servicos = (function () {
                     buttons: {
 
                         add: {
-                            html: "Adicionar",
+                            html: "Adicionar (Enter)",
                             class: "btnP btnAdd",
                             click: add,
                         },
@@ -137,8 +138,8 @@ const servicos = (function () {
         })
     }
 
-    // GETS
 
+    // GETS
     function getServico() {
         axios.post(url, {
             call: 'getServico',
@@ -171,7 +172,7 @@ const servicos = (function () {
             }
         }).then(r => {
             xgItensServico.sourceAdd(r.data)
-
+            xgItensServico.focus()
         })
 
     }
@@ -181,7 +182,6 @@ const servicos = (function () {
             call: 'getProdutos',
             param: { search: param, offset: offset }
         }).then(r => {
-
             xgProdutos.sourceAdd(r.data)
         })
     }
@@ -192,7 +192,6 @@ const servicos = (function () {
             call: 'getItem',
             param: { item: item, id_servico: id_servico }
         }).then(r => {
-            console.log('r :', r);
 
         })
     }
@@ -200,7 +199,9 @@ const servicos = (function () {
     function add() {
         xmProdutos.open()
 
+        $('#xmEdtPesquisa').val('')
         $('#xmEdtPesquisa').focus()
+        xgProdutos.source([])
 
         xgProdutos.queryOpen({ search: '' })
     }
@@ -226,6 +227,11 @@ const servicos = (function () {
             call: 'insertProduto',
             param: { ID_SERVICO: id_servico, ID_PRODUTO: ln.ID_PRODUTO }
         }).then(r => {
+            if (r.data.msg) {
+                show(r.data.msg)
+                return false
+            }
+
             ln.ID_MASCARA_PROJETO = r.data[0].ID_MASCARA_PROJETO
             xgItensServico.insertLine(ln)
             xmProdutos.close()
@@ -243,12 +249,29 @@ const servicos = (function () {
         })
     }
 
+    function keydown() {
+        $('#xgItensServico').keydown(function (e) {
+
+            if (e.keyCode == 113) {
+                $('#edtPesquisa').focus()
+            }
+
+            if (e.keyCode == 13) {
+                if (id_servico != undefined) {
+                    add()
+                }
+            }
+        })
+
+    }
+
     return {
         getServico: getServico,
         grid: grid,
         getMascaraProjeto: getMascaraProjeto,
         modalProdutos: modalProdutos,
         buscar: buscar,
+        keydown: keydown
     }
 
 })();

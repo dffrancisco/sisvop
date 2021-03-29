@@ -40,6 +40,11 @@ class Servicos
 
     function insertProduto($param)
     {
+        $duplicity = $this->sql->duplicityProduto($param);
+        if (!empty($duplicity)) {
+            echo '{"msg":"Produto ja incluso"}';
+            return false;
+        }
         $call = $this->sql->insertProduto($param);
         echo json_encode($call);
     }

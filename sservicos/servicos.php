@@ -9,7 +9,7 @@
 
     <div class="row" id="rowPesq" hidden>
         <div class="col s3">
-            <input type="text" class="margintop validate" id="edtPesquisa">
+            <input type="text" class="margintop validate" placeholder="Precione F2" id="edtPesquisa">
         </div>
         <button class="btnP btnPesq btn-Frame btn-Frame-blue btnPesqItem">Pesquisar</button>
 
