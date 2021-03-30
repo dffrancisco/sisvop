@@ -1029,11 +1029,11 @@ const projetos = (function () {
             return false
         }
 
-        else if (VALOR < (valorMinimo) {
+        // else if (VALOR < valorMinimo) {
 
-            show('O valor do serviço não pode ser menor que o orçamento mínimo!')
-            return false
-        }
+        //     show('O valor do serviço não pode ser menor que o orçamento mínimo!')
+        //     return false
+        // }
 
         else if (VALOR > '0') {
 
