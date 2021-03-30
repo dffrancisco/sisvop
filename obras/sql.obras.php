@@ -204,7 +204,8 @@ class SqlObras
             FROM lista_servicos a, servicos b, clientes c
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
-            AND b.servico like '$search%'";
+            AND b.servico like '$search%'
+            ORDER BY a.STATUS";
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
@@ -234,7 +235,7 @@ class SqlObras
 
   }
 
-  function getServicosPro($param){
+  function getServicosPre($param){
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
             a.id_lista_servico, a.executores,
@@ -246,7 +247,7 @@ class SqlObras
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
             AND b.servico like '$search%'
-            AND a.status = '$projeto'";
+            AND a.status = '$preparo'";
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
@@ -255,7 +256,7 @@ class SqlObras
 
   }
 
-  function getServicosFin($param){
+  function getServicosEnc($param){
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
             a.id_lista_servico, a.executores,
@@ -267,7 +268,7 @@ class SqlObras
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
             AND b.servico like '$search%'
-            AND a.status = '$finalizado'";
+            AND a.status = '$encerrado'";
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
@@ -309,6 +310,7 @@ class SqlObras
             VALUES 
             (:ID_SERVICO, :ID_PRODUTO , :QTD_PRODUTO, :DATA, :ORIGEM, :QTD_RETIRADA)";
     $sql = prepare::SQL($sql, $param);
+    print_r($sql);
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ);

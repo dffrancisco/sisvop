@@ -94,26 +94,39 @@ class Obras
         if($param['andamento']== 'ANDAMENTO'){
 
             $andamento = $this->sql->getServicosAnd($param);
-
             $dados = array_merge($andamento, $dados);
         }
         
-        if($param['projeto']== 'PROJETO'){
+        if($param['preparo']== 'PREPARO'){
 
-            $projeto = $this->sql->getServicosPro($param);
-            $dados = array_merge($projeto, $dados);
+            $preparo = $this->sql->getServicosPre($param);
+            $dados = array_merge($preparo, $dados);
 
         }
         
-        if($param['finalizado']== 'FINALIZADO'){
+        if($param['encerrado']== 'ENCERRADO'){
 
-            $finalizado = $this->sql->getServicosFin($param);
-            $dados = array_merge($finalizado, $dados);
+            $encerrado = $this->sql->getServicosEnc($param);
+            $dados = array_merge($encerrado, $dados);
 
         }
-        if($param['finalizado'] == '' && $param['projeto'] == '' && $param['andamento'] == ''){
-            $todos = $this->sql->getServicos($param);  
-            $dados = array_merge($todos, $dados); 
+
+        if($param['encerrado'] == '' && $param['preparo'] == '' && $param['andamento'] == ''){
+            
+            $todos = $this->sql->getServicos($param);
+            
+            foreach($todos as $ln){
+                
+                if($ln->STATUS == 'PREPARO' || $ln->STATUS == 'ANDAMENTO' || 
+                   $ln->STATUS == 'ENCERRADO'){
+                        // print_r(Array($ln));
+                       
+                    $dados = array_merge(Array($ln), $dados); 
+
+                }
+
+            }
+
         }
         
         echo json_encode($dados);
