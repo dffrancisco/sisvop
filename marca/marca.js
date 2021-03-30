@@ -200,22 +200,22 @@ const marca = (function () {
                     xgMarca.dataSource(param);
 
 
-                cancelar()
+                    cancelar()
 
-                if (rs.data == 'edit') {
-                    xgMarca.dataSource(param);
+                    if (rs.data == 'edit') {
+                        xgMarca.dataSource(param);
 
 
+                    }
+                    else if (rs.data[0].ID_MARCA) {
+
+                        param.ID_MARCA = rs.data.ID_MARCA;
+                        xgMarca.insertLine(param);
+
+                    } else {
+                        show('ERRO INTERNO!')
+                    }
                 }
-                else if (rs.data[0].ID_MARCA) {
-
-                    param.ID_MARCA = rs.data.ID_MARCA;
-                    xgMarca.insertLine(param);
-
-                } else {
-                    show('ERRO INTERNO!')
-                }
-
             });
         } else {
             xgMarca.showMessageDuplicity('O campo está com valor duplicado ou vazio!')

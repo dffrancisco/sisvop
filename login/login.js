@@ -2,6 +2,7 @@
 $(function () {
     login.logar()
     $('#edtLogin').focus()
+    $('.CPF').mask('999.999.999-99');
 
     $('#edtLogin').keydown(function (e) {
         if (e.keyCode == 13) {
@@ -24,12 +25,13 @@ const login = (function () {
 
             let login = $('#edtLogin').val()
             let senha = $('#edtPassword').val()
-
+            let length = $('#edtLogin').val().length
             axios.post('login.php', {
                 call: 'setLogin',
                 param: {
                     login: login,
-                    senha: senha
+                    senha: senha,
+                    length: length
                 }
             }).then(r => {
                 if (r.data.msg) {
