@@ -4,11 +4,11 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include_once './sql.servicos.php';
+include_once './sql.obras.php';
 
 extract(json_decode(file_get_contents("php://input"), TRUE));
 
-class Servicos
+class Obras
 {
 
     private $sql;
@@ -17,7 +17,7 @@ class Servicos
     {
 
         //instancia da class        
-        $this->sql = new SqlServicos();
+        $this->sql = new SqlObras();
     }
 
     // GETS
@@ -94,26 +94,39 @@ class Servicos
         if($param['andamento']== 'ANDAMENTO'){
 
             $andamento = $this->sql->getServicosAnd($param);
-
             $dados = array_merge($andamento, $dados);
         }
         
-        if($param['projeto']== 'PROJETO'){
+        if($param['preparo']== 'PREPARO'){
 
-            $projeto = $this->sql->getServicosPro($param);
-            $dados = array_merge($projeto, $dados);
+            $preparo = $this->sql->getServicosPre($param);
+            $dados = array_merge($preparo, $dados);
 
         }
         
-        if($param['finalizado']== 'FINALIZADO'){
+        if($param['encerrado']== 'ENCERRADO'){
 
-            $finalizado = $this->sql->getServicosFin($param);
-            $dados = array_merge($finalizado, $dados);
+            $encerrado = $this->sql->getServicosEnc($param);
+            $dados = array_merge($encerrado, $dados);
 
         }
-        if($param['finalizado'] == '' && $param['projeto'] == '' && $param['andamento'] == ''){
-            $todos = $this->sql->getServicos($param);  
-            $dados = array_merge($todos, $dados); 
+
+        if($param['encerrado'] == '' && $param['preparo'] == '' && $param['andamento'] == ''){
+            
+            $todos = $this->sql->getServicos($param);
+            
+            foreach($todos as $ln){
+                
+                if($ln->STATUS == 'PREPARO' || $ln->STATUS == 'ANDAMENTO' || 
+                   $ln->STATUS == 'ENCERRADO'){
+                        // print_r(Array($ln));
+                       
+                    $dados = array_merge(Array($ln), $dados); 
+
+                }
+
+            }
+
         }
         
         echo json_encode($dados);
@@ -201,5 +214,5 @@ class Servicos
     }
 }
 
-$class = new Servicos();
+$class = new Obras();
 $class->$call(@$param);

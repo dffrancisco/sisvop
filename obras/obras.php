@@ -1,7 +1,7 @@
-<script src="servicos/servicos.js" type="text/javascript"></script>
+<script src="obras/obras.js" type="text/javascript"></script>
 
 
-<title>Serviços</title>
+<title>Obras</title>
 
 
 <!-- xModal da Lista de Servicos-->
@@ -11,22 +11,25 @@
             <label>Buscar Serviço</label>
             <input type="text" id="xmEdtServico" class="validate">
         </div>
+
+        <div class="col s2 push-s1" style="margin-top: 18px;">
+            <label>
+                <input type="checkbox" id="checkPreparo" name="filtro" class="filled-in">
+                <span>PREPARO</span>
+            </label>
+        </div>
+
         <div class="col s2 push-s1" style="margin-top: 18px;">
             <label>
                 <input type="checkbox" id="checkAndamento" class="filled-in" name="filtro" checked="checked">
                 <span>ANDAMENTO</span>
             </label>
         </div>
+
         <div class="col s2 push-s1" style="margin-top: 18px;">
             <label>
-                <input type="checkbox" id="checkProjeto" name="filtro" class="filled-in">
-                <span>PROJETO</span>
-            </label>
-        </div>
-        <div class="col s2 push-s1" style="margin-top: 18px;">
-            <label>
-                <input type="checkbox" id="checkFinalizado" name="filtro" class="filled-in">
-                <span>FINALIZADO</span>
+                <input type="checkbox" id="checkEncerrado" name="filtro" class="filled-in">
+                <span>ENCERRADO</span>
             </label>
         </div>
     </div>
@@ -151,75 +154,7 @@
 
 </div>
 
-<!-- xModal da Lista de Clientes -->
-<div id="xmListaCliente">
-    <div class="row">
-        <div class="col s4" id="pnFieldCliente">
-            <label>Buscar Cliente</label>
-            <input type="text" id="xmEdtCliente" class="validate">
-        </div>
-    </div>
-    <!-- xGrid de Cliente -->
-    <div id="pnGridCliente"></div>
-</div>
-
-<!-- MODAL DE NOVO SERVICO -->
-<div id="xmServico">
-    <span id="xmSpId_cliente" hidden></span>
-    <div class="row">
-        <div class="col s6">
-            <label>Cliente</label><br>
-            <span id="xmSpFantasia" class="spanAutoPreenc"></span>
-        </div>
-
-        <div class="col s6">
-            <label>CPNJ</label><br>
-            <span id="xmSpCnpj" class="spanAutoPreenc"></span>
-        </div>
-
-    </div>
-    <div class="row">
-        <div class="col s12">
-            <label>Serviços</label>
-            <select name="id_servico" class="validate" style="width: 94% !important" id="slctServico"></select>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col s6">
-            <label>Engenheiro</label><br>
-            <input type="text" class="validate" style="width: 83% !important;" id="xmInEngenheiro">
-        </div>
-
-        <div class="col s6">
-            <label>Executores</label>
-            <input type="text" class="validate" style="width: 83% !important;" id="xmInEx">
-        </div>
-
-        <div class="col s6">
-            <label>Data de início</label><br>
-            <input type="text" style="width: 83% !important;" id="xmInDataI" class="date">
-        </div>
-
-        <div class="col s6">
-            <label>Data de finalização</label>
-            <input type="text" style="width: 83% !important;" id="xmInDataF" class="date">
-        </div>
-
-
-    </div>
-
-    <div class="row">
-        <div class="col s12">
-            <label>OBS</label>
-            <textarea type="text" style=" width: 96% !important;" class="txtArea validate" id="xmInObs" rows="50"
-                placeholder="Observações"></textarea>
-        </div>
-    </div>
-
-</div>
-
-<!-- xModal para cadastrar um novo serviço -->
+<!-- xModal para cadastrar um novo produto-->
 <div id="xmInsProduto">
     <div class="row">
         <div class="col s4" id="pnFieldProduto">
