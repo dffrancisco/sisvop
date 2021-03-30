@@ -396,4 +396,20 @@ textarea:focus {
   background-color: #4679ad;
   outline: none;
 }
+
 /*materialize* fim *********************************/
+
+
+.servico{
+    background-color: #3f688a;
+    height: 40px;
+    padding: 5px;
+    margin-top: 5px;
+}   
+
+
+.marginBottom{
+    margin-bottom: 5px;
+}
+/*materialize* fim *********************************/
+
