@@ -5,7 +5,7 @@ let xmProdutos
 
 let id_servico
 
-const url = 'sservicos/per.servicos.php'
+const url = 'servicos/per.servicos.php'
 
 $(function () {
     servicos.getServico()

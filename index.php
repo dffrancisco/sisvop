@@ -164,7 +164,7 @@ if (!empty($_GET['p'])) {
             <li><i class="fa fa-product-hunt"></i>Produtos</li>
         </a>
 
-        <a href="?p=sservicos/servicos">
+        <a href="?p=servicos/servicos">
             <li><i class="fa fa-usd"></i>Serviços</li>
         </a>
 
@@ -175,13 +175,6 @@ if (!empty($_GET['p'])) {
         <a href="?p=usuario/usuario">
             <li><i class="fa fa-key"></i>Usuario</i></li>
         </a>
-        <!-- <a href="?p=marca/marca">
-            <li><i class="fa fa-address-book"></i>Marcas</li>
-        </a> -->
-        <!-- <a href="?p=cargo/cargo">
-            <li><i class="fa fa-address-book"></i>Cargo</li>
-        </a> -->
-
 
         <hr />
         <li class="btnSair">Sair</li>

@@ -1,4 +1,4 @@
-<script src="sservicos/servicos.js" type="text/javascript"></script>
+<script src="servicos/servicos.js" type="text/javascript"></script>
 
 <title>Serviços</title>
 
