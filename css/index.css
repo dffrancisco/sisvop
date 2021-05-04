@@ -332,6 +332,7 @@ nav {
 input,
 select,
 textarea {
+  background-color: white !important;
   border: 1px solid #899caa !important;
   border-radius: 3px !important;
   -moz-border-radius: 3px !important;
@@ -399,17 +400,36 @@ textarea:focus {
 
 /*materialize* fim *********************************/
 
+.servico {
+  background-color: #3f688a;
+  height: 40px;
+  padding: 5px;
+  margin-top: 5px;
+}
 
-.servico{
-    background-color: #3f688a;
-    height: 40px;
-    padding: 5px;
-    margin-top: 5px;
-}   
+.marginBottom {
+  margin-bottom: 5px;
+}
 
+#frame-container {
+  position: relative;
+}
+.iframe-button {
+  position: absolute;
+  top: 19px;
+  left: 157px;
+  color: #f1f1f1;
+  font-size: 19px;
+  cursor: pointer;
+}
 
-.marginBottom{
-    margin-bottom: 5px;
+.iframe-button:hover {
+  color: #e64141;
+}
+
+/* Only show the button when the parent is hovered: */
+
+#frame-container:hover .iframe-button {
+  display: initial;
 }
 /*materialize* fim *********************************/
-

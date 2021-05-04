@@ -310,7 +310,6 @@ class SqlObras
             VALUES 
             (:ID_SERVICO, :ID_PRODUTO , :QTD_PRODUTO, :DATA, :ORIGEM, :QTD_RETIRADA)";
     $sql = prepare::SQL($sql, $param);
-    print_r($sql);
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ);

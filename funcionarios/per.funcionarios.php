@@ -49,6 +49,11 @@ class Funcionarios
         $call = $this->sql->getBairro();
         echo json_encode($call);
     }
+
+    function getCargo(){
+        $call = $this->sql->getCargo();
+        echo json_encode($call);
+    }
 }
 
 $class = new Funcionarios();

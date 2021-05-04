@@ -7,10 +7,6 @@
 <!-- xModal da Lista de Servicos-->
 <div id="Servicos" class="container">
     <div class="row">
-        <div class="col s4" id="pnFieldServico">
-            <label>Buscar Serviço</label>
-            <input type="text" id="xmEdtServico" class="validate">
-        </div>
 
         <div class="col s2 push-s1" style="margin-top: 18px;">
             <label>
@@ -37,9 +33,12 @@
     <!-- xGrid de lista servicos -->
     <div id="xgServicos" class="list"></div>
 
-    <div class="row"><button class="btn-Frame btn-Frame-blue btnP btnPesq">Novo Serviço</button></div>
-
-
+    <div class="row">
+        <div class="col s4" id="pnFieldServico">
+            <label>Buscar Serviço</label>
+            <input type="text" id="xmEdtServico" class="validate">
+        </div>
+    </div>
 </div>
 
 <div class="container" id="dados_cliente" hidden>
@@ -99,22 +98,18 @@
 
         </div>
 
-        <br>
-
         <div id="obsText">
             <span id="spObsText"></span>
 
         </div>
 
-        <br>
         <hr>
         <br>
 
         <div class="btnAll" style="margin-bottom: 7px; margin-top:-16px;">
-            <button class="btn-Frame btn-Frame-blue btnP btnPesq">Novo Serviço</button>
             <button class="btn-Frame btn-Frame-blue btnP btnBS">Buscar Serviço</button>
             <button class="btn-Frame btn-Frame-blue btnP btnRG">Relatório Geral</button>
-            <button class="btn-Frame btn-Frame-blue btnP btnFS">Finalizar Serviço</button>
+            <button class="btn-Frame btn-Frame-blue btnP btnObra">Obra</button>
         </div>
     </div>
 
@@ -170,41 +165,44 @@
 
 <!-- xModal editar a quantidade do produto -->
 <div id="xmQtd">
+    <span id="xmSpId" hidden></span>
+    <span id="xmSpValor" hidden></span>
     <div class="row">
-        <div class="col s10" id="pnFieldEdtQtd">
 
-            <span id="xmSpId" hidden></span>
-            <span id="xmSpValor" hidden></span>
+        <div class="col s2">
+            <label>Código</label>
+            <span id="xmSpCodigo" class="spanAutoPreenc"></span>
+        </div>
 
-            <div class="col s10" id="pnFieldEdtQtd">
-                <label>Código</label><br>
-                <span id="xmSpCodigo" class="spanAutoPreenc"></span>
-            </div>
-
-            <div class="col s10" id="pnFieldEdtQtd">
-                <br><label>Produto</label><br>
-                <span id="xmSpProd" class="spanAutoPreenc"></span>
-            </div>
-
-            <div class="col s10" id="pnFieldEdtQtd">
-                <br><label>Marca</label><br>
-                <span id="xmSpMarca" class="spanAutoPreenc"></span>
-            </div>
-
-            <div class="col s10">
-                <br><label>Quantidade existente</label><br>
-                <b id="xmBQtd"></b><b> Unidades restantes</b>
-            </div>
-            <div class="col s10" id="pnFieldQtdRetirado" hidden>
-                <b id="xmBQtdRetirado"></b><b> Unidades retiradas</b>
-            </div>
-            <div class="col s10" id="pnFieldEdtQtd">
-                <br><label>QTD</label>
-                <input type="number" id="xmEdtQtd">
-            </div>
+        <div class="col s10">
+            <label>Produto</label><br>
+            <span id="xmSpProd" class="spanAutoPreenc"></span>
         </div>
     </div>
-    <div id="xmQtdBtn"></div>
+    <div class="row">
+        <div class="col s5" id="pnFieldEdtQtd">
+            <label>Marca</label>
+            <span id="xmSpMarca" class="spanAutoPreenc"></span>
+        </div>
+
+        <div class="col s7">
+            <label>Quantidade existente</label><br>
+            <b id="xmBQtd"></b><b> Unidades restantes</b>
+        </div>
+
+        <div class="col s10" id="pnFieldQtdRetirado" hidden>
+            <b id="xmBQtdRetirado"></b><b> Unidades retiradas</b>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s5" id="pnFieldEdtQtd">
+            <label>QTD</label>
+            <input type="number" id="xmEdtQtd">
+        </div>
+    </div>
+</div>
+<div id="xmQtdBtn"></div>
 </div>
 
 <!-- MODAL INSERIR ROMANEIO -->
@@ -353,4 +351,4 @@
 </div>
 
 </div>
-<div id="pnCodigoTela">Saída</div>
+<div id="pnCodigoTela">Obras</div>
