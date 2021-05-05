@@ -239,6 +239,7 @@ const projetos = (function () {
                     $("#xmSpFantasia").html(cliente.FANTASIA);
                     $("#xmSpCnpj").html(cliente.CNPJ);
                     $("#xmInEngenheiro").val(usuario.NOME)
+
                     getServico();
 
                     xmNovoServico.open();
@@ -250,13 +251,15 @@ const projetos = (function () {
 
             dblClick: (ln) => {
 
+                if (ln == false)
+                    return false
+
                 cliente = ln
                 ID_CLIENTE = cliente.ID_CLIENTE
 
                 $("#xmSpFantasia").html(cliente.FANTASIA);
                 $("#xmSpCnpj").html(cliente.CNPJ);
                 $("#xmInEngenheiro").val(usuario.NOME)
-
 
                 getServico();
 
@@ -317,7 +320,7 @@ const projetos = (function () {
                     $('.btnDel').removeAttr('disabled', true)
                 }
 
-                else if (STATUS == 'ORÇAMENTO' || STATUS == 'ANÁLISE') {
+                else if (STATUS == 'ORÇAMENTO' || STATUS == 'ANÁLISE' || STATUS == 'ANDAMENTO') {
                     $('.btnDel').attr('disabled', true)
 
                 }
@@ -329,7 +332,8 @@ const projetos = (function () {
             },
 
             dblClick: (ln) => {
-
+                if (ln == false)
+                    return false
                 setQtd(ln)
             },
 
@@ -376,6 +380,9 @@ const projetos = (function () {
             },
 
             dblClick: (ln) => {
+                if (ln == false)
+                    return false
+
                 addItem(ln)
 
             },
@@ -551,7 +558,7 @@ const projetos = (function () {
 
                 }
 
-                else if (STATUS == 'ANÁLISE') {
+                else if (STATUS == 'ANÁLISE' || STATUS == 'ANDAMENTO') {
                     bloqueiaButtons()
 
                     margem = rs.data[0].MARGEM_PRODUTO
@@ -570,6 +577,7 @@ const projetos = (function () {
                     $('#btnAprovado').attr('disabled', true)
                     $('#btnReprovado').attr('disabled', true)
                 }
+
 
                 else {
                     show('ERRO INTERNO!')

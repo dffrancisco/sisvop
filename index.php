@@ -132,56 +132,77 @@ if (!empty($_GET['p'])) {
 
     <div class="pnMenu" style="font-size: 15px;">
 
-        <a href="?p=clientes/clientes">
-            <li><i class="fa fa-address-book"></i>Clientes</li>
-        </a>
+        <div id="cliente">
+            <a href="?p=clientes/clientes">
+                <li><i class="fa fa-address-book"></i>Clientes</li>
+            </a>
+        </div>
 
-        <a href="?p=contas/contas">
-            <li><i class="fa fa-money"></i>Contas a pagar</li>
-        </a>
+        <div id="contas">
+            <a href="?p=contas/contas">
+                <li><i class="fa fa-money"></i>Contas a pagar</li>
+            </a>
+        </div>
 
-        <a href="?p=empresa/empresa">
-            <li><i class="fa fa-building"></i>Empresa</li>
-        </a>
+        <div id="empresa">
+            <a href="?p=empresa/empresa">
+                <li><i class="fa fa-building"></i>Empresa</li>
+            </a>
+        </div>
 
-        <a href="?p=entrada/entrada">
-            <li><i class="fa fa-shopping-cart"></i>Entrada</li>
-        </a>
+        <div id="entrada">
+            <a href="?p=entrada/entrada">
+                <li><i class="fa fa-shopping-cart"></i>Entrada</li>
+            </a>
+        </div>
 
-        <a href="?p=fornecedor/fornecedor">
-            <li><i class="fa fa-address-book"></i>Fornecedor</li>
-        </a>
+        <div id="fornecedor">
+            <a href="?p=fornecedor/fornecedor">
+                <li><i class="fa fa-address-book"></i>Fornecedor</li>
+            </a>
+        </div>
 
-        <a href="?p=funcionarios/funcionarios">
-            <li><i class="fa fa-user-plus"></i>Funcionários</li>
-        </a>
+        <div id="funcionarios">
+            <a href="?p=funcionarios/funcionarios">
+                <li><i class="fa fa-user-plus"></i>Funcionários</li>
+            </a>
+        </div>
 
-        <a href="?p=marca/marca">
-            <li><i class="fa fa-copyright"></i>Marcas</li>
-        </a>
+        <div id="marca">
+            <a href="?p=marca/marca">
+                <li><i class="fa fa-copyright"></i>Marcas</li>
+            </a>
+        </div>
 
-        <a href="?p=produtos/produtos">
-            <li><i class="fa fa-product-hunt"></i>Produtos</li>
-        </a>
+        <div id="produtos">
+            <a href="?p=produtos/produtos">
+                <li><i class="fa fa-product-hunt"></i>Produtos</li>
+            </a>
+        </div>
 
+        <div id="projeto">
+            <a href="?p=projetos/projeto">
+                <li><i class="fa fa-key"></i>projetos</i></li>
+            </a>
+        </div>
 
-        <a href="?p=projetos/projeto">
-            <li><i class="fa fa-key"></i>projetos</i></li>
-        </a>
-        <a href="?p=obras/obras">
-            <li><i class="fa fa-usd"></i>Obras</li>
+        <div id="obras">
+            <a href="?p=obras/obras">
+                <li><i class="fa fa-usd"></i>Obras</li>
+            </a>
+        </div>
 
-        <a href="?p=sservicos/servicos">
-            <li><i class="fa fa-usd"></i>Serviços</li>
-        </a>
+        <div id="servicos">
+            <a href="?p=sservicos/sservicos">
+                <li><i class="fa fa-usd"></i>Serviços</li>
+            </a>
+        </div>
 
-        <a href="?p=contas/contas">
-            <li><i class="fa fa-money"></i>Contas a pagar</li>
-        </a>
-
-        <a href="?p=usuario/usuario">
-            <li><i class="fa fa-key"></i>Usuario</i></li>
-        </a>
+        <div id="usuario">
+            <a href="?p=usuario/usuario">
+                <li><i class="fa fa-key"></i>Usuario</i></li>
+            </a>
+        </div>
         <!-- <a href="?p=marca/marca">
             <li><i class="fa fa-address-book"></i>Marcas</li>
         </a> -->
@@ -197,7 +218,6 @@ if (!empty($_GET['p'])) {
     <div id="pnPrincipal">
         <?php require_once($p); ?>
     </div>
-
 
 </body>
 

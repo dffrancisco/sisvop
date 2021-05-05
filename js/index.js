@@ -101,6 +101,51 @@ function Login() {
                 return false
             }
 
+            var nomeTela = $('#pnCodigoTela').html();
+
+            if (r.data.CARGO == 'RH') {
+                $('#projeto').remove()
+                $('#obras').remove()
+                $('#servicos').remove()
+
+                if (['Clientes', 'contas', 'Marca',
+                    'Funcionarios', 'Home', 'Documentos',
+                    'entrada', 'Fornecedor', 'Estoque', 'usuario'].indexOf(nomeTela) < 0) {
+                    location.href = '/sisvop/index.php?p=home';
+                }
+            }
+
+            if (r.data.CARGO == 'ENG') {
+                $('#contas').remove()
+                $('#cliente').remove()
+                $('#funcionarios').remove()
+                $('#empresa').remove()
+                $('#fornecedor').remove()
+                $('#usuario').remove()
+                $('#entrada').remove()
+
+                if (['Marca', 'Estoque', 'PROJETOS', 'Obras', 'servicos', 'Home'].indexOf(nomeTela) < 0) {
+                    location.href = '/sisvop/index.php?p=home';
+                }
+            }
+
+            if (r.data.CARGO == 'OBR') {
+                $('#contas').remove()
+                $('#cliente').remove()
+                $('#funcionarios').remove()
+                $('#empresa').remove()
+                $('#fornecedor').remove()
+                $('#usuario').remove()
+                $('#entrada').remove()
+                $('#projeto').remove()
+                $('#servicos').remove()
+
+                if (['Marca', 'Obras', 'Estoque', 'Home'].indexOf(nomeTela) < 0) {
+                    location.href = '/sisvop/index.php?p=home';
+                }
+            }
+
+
             usuario = r.data
             $('#spUser').html(r.data.NOME.split(' ')[0])
             getNotificacao()
@@ -179,6 +224,7 @@ function getFrase() {
         $('#saudacao').html('BOA TARDE!')
     }
 }
+
 function getDataEmpresa() {
     axios.post(`empresa/per.empresa.php`, {
         call: 'getDataEmpresa'

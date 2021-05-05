@@ -53,11 +53,16 @@
                 <label>Cidade*</label>
                 <input placeholder="" type="text" class="validate" id="edtCidade" name="CIDADE" disabled>
             </div>
-            <div class="col s6">
+            <div class="col s3">
                 <label>Bairro*</label>
                 <select id="slctBairro" name="ID_BAIRRO" class="validate">
                 </select>
-                <!-- <input placeholder="" type="text" class="validate" id="edtBairro" name="bairro" disabled> -->
+            </div>
+
+            <div class="col s3">
+                <label>Cargo*</label>
+                <select id="slctCargo" name="ID_CARGO" class="validate">
+                </select>
             </div>
         </div>
     </div>

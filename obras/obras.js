@@ -28,6 +28,8 @@ let ID_CLIENTE;
 
 
 $(function () {
+
+
     saida.modalInsProduto();
     saida.grid();
     saida.modalInserirRomaneio();
@@ -45,7 +47,7 @@ $(function () {
     $('.btnDel').attr("disabled", true);
     // $('.btnAF').attr("disabled", true);
     // $('.btnV').attr("disabled", true);
-    // $('.btnFS').attr("disabled", true);
+    // $('.btnObra').attr("disabled", true);
     // $('.btnInsP').attr("disabled", true);
     // $('.btnNR').attr("disabled", true);
     // $('.btnPR').attr("disabled", true);
@@ -91,13 +93,8 @@ $(function () {
         }
     })
 
-    $(".btnPesq").click(function () {
-        $('.btnNR').attr("disabled", true);
-        saida.buscar()
-    })
-
-    $(".btnFS").click(function () {
-        saida.finalizarObra()
+    $(".btnObra").click(function () {
+        saida.statusObra()
     })
 
     $(".btnBS").click(function () {
@@ -274,30 +271,43 @@ const saida = (function () {
                 let origem = r.ORIGEM
 
                 if (origem == 'PROJETO' && STATUS == 'PREPARO') {
+
+                    $('.btnDel').attr('disabled', true)
+                }
+
+                else if (origem == 'PROJETO' && STATUS == 'ANDAMENTO') {
+                    $('.btnDel').attr("disabled", true);
+                }
+
+                else if (origem == 'PROJETO' && STATUS == 'ENCERRADO') {
+                    $('.btnDel').attr("disabled", true);
+                }
+
+                else if (origem == 'ADICIONAL' && STATUS == 'ENCERRADO') {
+                    $('.btnDel').attr("disabled", true);
+                }
+
+                else if (origem == 'ADICIONAL' && STATUS == 'PREPARO') {
+                    $('.btnDel').removeAttr("disabled", true);
+                }
+
+                else if (origem == 'ADICIONAL' && STATUS == 'ANDAMENTO') {
                     $('.btnDel').removeAttr('disabled', true)
                 }
 
-                if (origem == 'PROJETO' && STATUS == 'ANDAMENTO') {
-                    $('.btnDel').attr("disabled", true);
-                }
-
-                if (origem == 'PROJETO' && STATUS == 'ENCERRADO') {
-                    $('.btnDel').attr("disabled", true);
-                }
-
-                if (origem == 'ADICIONAL' && STATUS == 'ENCERRADO') {
-                    $('.btnDel').attr("disabled", true);
-                }
-
-                if (origem == 'ADICIONAL' && STATUS == 'ANDAMENTO') {
-                    $('.btnDel').removeAttr('disabled', true)
+                else {
+                    show('erro interno')
                 }
             },
 
             onKeyDown: {
 
                 '46': (ln) => {
-                    let ORIGEM = xgSaida.dataSource().ORIGEM
+                    let ORIGEM = ln.ORIGEM
+
+                    if (ORIGEM == 'PROJETO' && STATUS == 'PREPARO') {
+                        return false
+                    }
 
                     if (ORIGEM == 'PROJETO' && STATUS == 'ANDAMENTO') {
                         return false
@@ -332,8 +342,8 @@ const saida = (function () {
 
             columns: {
                 Produto: { dataField: 'DESCRICAO' },
-                Marca: { dataField: 'MARCA' },
-                Origem: { dataField: 'ORIGEM' },
+                Marca: { dataField: 'MARCA', width: '20%' },
+                Origem: { dataField: 'ORIGEM', width: '13%' },
                 ESTOQUE: { dataField: 'QTD', width: '13%' },
                 PROJETADO: { dataField: 'QTD_P', width: '13%' },
                 RETIRADO: { dataField: 'QTD_RETIRADA', width: '13%' },
@@ -350,6 +360,8 @@ const saida = (function () {
             },
 
             dblClick: (ln) => {
+                if (ln == false)
+                    return false
                 edtQtd(ln)
 
             },
@@ -470,33 +482,39 @@ const saida = (function () {
 
     }
 
-    function finalizarObra() {
+    function statusObra() {
 
 
-        confirmaCodigo({
-            msg: 'Digite o código abaixo caso deseja finalizar o projeto<br>' +
-                '(APÓS ISSO, O PROJETO NÃO PODERÁ SER FINALIZADO NOVAMENTE)',
-            call: () => {
+        console.log(' :', STATUS);
+        if (STATUS == 'ANDAMENTO') {
 
-                axios.post(url, {
-                    call: 'atualizaStatus',
-                    param: { ID_LISTA_SERVICO: ID_LISTA_SERVICO, STATUS: 'FINALIZADO' }
-                })
 
-                $('#spStatus').html('FINALIZADO');
+        }
 
-                $('.btnInsP').prop('disabled', true)
-                $('.btnDel').prop('disabled', true)
-                $('.btnNR').prop('disabled', true)
-                $('.btnPR').prop('disabled', true)
-                $('.btnFR').prop('disabled', true)
-                $('.btnPDF').prop('disabled', true)
-                $('.btnDI').prop('disabled', true)
-                $('.btnFS').prop('disabled', true)
-                $('.btnRG').removeAttr('disabled')
+        // confirmaCodigo({
+        //     msg: 'Digite o código abaixo caso deseja finalizar o projeto<br>' +
+        //         '(APÓS ISSO, O PROJETO NÃO PODERÁ SER FINALIZADO NOVAMENTE)',
+        //     call: () => {
 
-            }
-        })
+        //         axios.post(url, {
+        //             call: 'atualizaStatus',
+        //             param: { ID_LISTA_SERVICO: ID_LISTA_SERVICO, STATUS: 'FINALIZADO' }
+        //         })
+
+        //         $('#spStatus').html('FINALIZADO');
+
+        //         $('.btnInsP').prop('disabled', true)
+        //         $('.btnDel').prop('disabled', true)
+        //         $('.btnNR').prop('disabled', true)
+        //         $('.btnPR').prop('disabled', true)
+        //         $('.btnFR').prop('disabled', true)
+        //         $('.btnPDF').prop('disabled', true)
+        //         $('.btnDI').prop('disabled', true)
+        //         $('.btnObra').prop('disabled', true)
+        //         $('.btnRG').removeAttr('disabled')
+
+        //     }
+        // })
     }
 
     // FUNCTION SERVICOS
@@ -510,11 +528,19 @@ const saida = (function () {
 
         $('.btnInsP').removeAttr("disabled");
 
-        if (STATUS == 'ANDAMENTO' || STATUS == 'PREPARO') {
+        if (STATUS == 'ANDAMENTO') {
             $('.btnNR').removeAttr("disabled");
-            $('.btnFS').removeAttr("disabled");
+            $('.btnObra').removeAttr("disabled");
             $('.btnRG').prop('disabled', true)
+            $('.btnFR').prop('disabled', true)
 
+        }
+
+        if (STATUS == 'PREPARO') {
+            $('.btnFR').prop("disabled", true);
+            $('.btnRG').prop('disabled', true)
+            $('.btnPDF').prop('disabled', true)
+            $('.btnObra').prop("disabled", true);
         }
 
         if (STATUS == 'ENCERRADO') {
@@ -525,7 +551,7 @@ const saida = (function () {
             $('.btnFR').prop('disabled', true)
             $('.btnPDF').prop('disabled', true)
             $('.btnDI').prop('disabled', true)
-            $('.btnFS').prop('disabled', true)
+            $('.btnObra').prop('disabled', true)
             $('.btnRG').removeAttr('disabled', true)
         }
 
@@ -775,7 +801,7 @@ const saida = (function () {
 
                 $('.btnPR').attr("disabled", true);
                 $('.btnFR').attr("disabled", true);
-                $('.btnFS').removeAttr("disabled");
+                $('.btnObra').removeAttr("disabled");
 
             }
         })
@@ -797,7 +823,6 @@ const saida = (function () {
     function novoRomaneio() {
 
         confirmaCodigo({
-
             msg: 'Digite o código abaixo para criar um novo romaneio',
             call: () => {
 
@@ -819,11 +844,15 @@ const saida = (function () {
                     $('.btnPR').attr("disabled", true);
 
                     if (STATUS == 'PREPARO') {
-                        axios.post(url{
-                            call: '',
+                        axios.post(url, {
+                            call: 'atualizaStatus',
                             param: {
-
+                                ID_LISTA_SERVICO: ID_LISTA_SERVICO,
+                                STATUS: 'ANDAMENTO'
                             }
+                        }).then(rs => {
+
+                            $('#spStatus').html('ANDAMENTO')
                         })
                     }
 
@@ -1225,7 +1254,7 @@ const saida = (function () {
         modalInsProduto: modalInsProduto,
         buscarServ: buscarServ,
         modalInserirRomaneio: modalInserirRomaneio,
-        finalizarObra: finalizarObra,
+        statusObra: statusObra,
         relatorioGeral: relatorioGeral,
 
     }
@@ -1246,10 +1275,10 @@ const produtos = (function () {
             heightLine: '35',
 
             columns: {
-                Codigo: { dataField: 'CODIGO' },
+                Codigo: { dataField: 'CODIGO', width: '10%' },
                 Produto: { dataField: 'DESCRICAO' },
-                Marca: { dataField: 'MARCA' },
-                QTD: { dataField: 'QTD' },
+                Marca: { dataField: 'MARCA', width: '25%' },
+                QTD: { dataField: 'QTD', width: '10%' },
             },
 
             onKeyDown: {
@@ -1304,6 +1333,9 @@ const produtos = (function () {
             },
 
             dblClick: (ln) => {
+                if (ln == false)
+                    return false
+
                 for (let i = 0; i < 11; i++) {
                     delete ln[i]
                 }
@@ -1397,14 +1429,9 @@ const produtos = (function () {
             return false
         }
 
-        if (status == 'ANDAMENTO') {
+        if (status == 'ANDAMENTO' || status == 'PREPARO') {
 
             origem = 'ADICIONAL'
-        }
-        if (status == 'PROJETO') {
-            $('.btnFP').removeAttr('disabled');
-
-            origem = 'PROJETO'
         }
 
         valorT += valProduto.VALOR * valProduto.QTDs
@@ -1547,8 +1574,8 @@ const produtos = (function () {
         xmEdtQtd = new xModal.create({
             el: '#xmQtd',
             title: 'Produto',
-            height: '410',
-            width: '280',
+            height: '285',
+            width: '400',
             buttons: {
                 btn1: {
                     html: 'Confirma',
@@ -1563,6 +1590,7 @@ const produtos = (function () {
                                 confirma({
                                     msg: "Quantidade maior que a existente, deseja inserir?!",
                                     call: () => {
+
                                         salvarCarrinho()
 
                                     }
@@ -1621,10 +1649,10 @@ const devolucao = (function () {
             columns: {
 
                 Produto: { dataField: 'DESCRICAO' },
-                Marca: { dataField: 'MARCA' },
-                Devolvido: { dataField: 'QTD' },
-                Data: { dataField: 'DATA', center: true },
-                Hora: { dataField: 'HORA', center: true }
+                Marca: { dataField: 'MARCA', width: '20%' },
+                Devolvido: { dataField: 'QTD', width: '13%' },
+                Data: { dataField: 'DATA', center: true, width: '15%' },
+                Hora: { dataField: 'HORA', center: true, width: '15%' }
 
             },
 
@@ -1664,9 +1692,9 @@ const devolucao = (function () {
 
             columns: {
                 Produto: { dataField: 'DESCRICAO' },
-                Marca: { dataField: 'MARCA' },
-                Origem: { dataField: 'ORIGEM' },
-                Retirado: { dataField: 'QTD_RETIRADA' },
+                Marca: { dataField: 'MARCA', width: '25%' },
+                Origem: { dataField: 'ORIGEM', width: '20%' },
+                Retirado: { dataField: 'QTD_RETIRADA', width: '13%' },
 
             },
 
@@ -1678,7 +1706,8 @@ const devolucao = (function () {
             },
 
             dblClick: (ln) => {
-
+                if (ln == false)
+                    return false
                 edtQtd(ln)
             },
 
