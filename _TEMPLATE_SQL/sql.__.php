@@ -1,4 +1,6 @@
 <?php
+include_once '../class/class.connect_firebird.php';
+include_once '../class/prepareSql.php';
 class Sql__
 {
 
@@ -7,7 +9,7 @@ class Sql__
   
   function __construct()
   {
-    $this->db = new PDO('sqlite:/var/www/html/Estoque.sqlite');
+    $this->db = ConexaoFirebird::getConectar();
   }
 
 
