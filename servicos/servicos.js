@@ -79,7 +79,7 @@ const servicos = (function () {
                     buttons: {
 
                         add: {
-                            html: "Adicionar (Enter)",
+                            html: "Adicionar",
                             class: "btnP btnAdd",
                             click: add,
                         },
