@@ -1,12 +1,6 @@
-let xgItensServico
-let xgProdutos
 
-<<<<<<< HEAD:servicos/servicos.js
-let xmProdutos
-
-let id_servico
-=======
 let xgSaida;
+let xgCliente;
 let xgProduto;
 let xgRomaneios;
 let xgRomaneiosItens;
@@ -16,7 +10,9 @@ let xgDevolucao;
 let xgRomaneiosItensD;
 
 let xmEdtQtd
+let xmListaCliente;
 let xmInsProduto;
+let xmNovoServico;
 let xmInserirRomaneio;
 let xmModalPDevolucao
 
@@ -32,25 +28,19 @@ let finalizado = ''
 
 let ID_LISTA_SERVICO;
 let ID_CLIENTE;
->>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434:obras/obras.js
 
-const url = 'servicos/per.servicos.php'
 
 $(function () {
-<<<<<<< HEAD:servicos/servicos.js
-    servicos.getServico()
-    servicos.grid()
-    servicos.modalProdutos()
-    servicos.keydown()
-
-    $('#edtPesquisa').keydown(function (e) {
-=======
+    saida.modalCliente();
     saida.modalInsProduto();
     saida.grid();
     saida.modalInserirRomaneio();
 
     devolucao.grid();
     devolucao.modalPDevolucao();
+
+    clientes.grid();
+    clientes.modalNovoServico();
 
     produtos.grid();
     produtos.modalEdtQtd();
@@ -60,54 +50,63 @@ $(function () {
     $('.tabs').tabs();
 
     $('.btnDel').attr("disabled", true);
-    // $('.btnAF').attr("disabled", true);
-    // $('.btnV').attr("disabled", true);
-    // $('.btnFS').attr("disabled", true);
-    // $('.btnInsP').attr("disabled", true);
-    // $('.btnNR').attr("disabled", true);
-    // $('.btnPR').attr("disabled", true);
-    // $('.btnFR').attr("disabled", true);
-    // $('.btnPDF').attr("disabled", true);
-    // $('.btnDI').attr("disabled", true);
-    // $('.btnRG').attr("disabled", true);
+    $('.btnAF').attr("disabled", true);
+    $('.btnV').attr("disabled", true);
+    $('.btnFP').attr("disabled", true);
+    $('.btnFS').attr("disabled", true);
+    $('.btnInsP').attr("disabled", true);
+    $('.btnNR').attr("disabled", true);
+    $('.btnPR').attr("disabled", true);
+    $('.btnFR').attr("disabled", true);
+    $('.btnPDF').attr("disabled", true);
+    $('.btnDI').attr("disabled", true);
+    $('.btnRG').attr("disabled", true);
+
+    $("#xmEdtCliente").keydown(function (e) {
+        if (e.keyCode == 13) {
+            search = $(this).val().trim()
+            xgCliente.queryOpen({ search: search.toUpperCase() })
+        }
+
+        if (e.keyCode == 40) {
+            $("#xmEdtCliente").val('')
+            xgCliente.focus()
+        }
+    })
 
     $("#xmEdtProduto").keydown(function (e) {
->>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434:obras/obras.js
 
         if (e.keyCode == 13) {
-            $(".btnPesqItem").click()
+            search = $(this).val().trim()
+            xgProduto.queryOpen({ search: search.toUpperCase() })
         }
 
         if (e.keyCode == 40) {
-            xgItensServico.focus()
-            $("#edtPesquisa").val('')
+            xgProduto.focus()
+            $("#xmEdtProduto").val('')
         }
     })
 
-    $(".btnPesqItem").click(function () {
-        let item = $('#edtPesquisa').val()
-        xgItensServico.queryOpen({ search: item.toUpperCase() })
-        xgItensServico.source([])
-    })
-
-    $('#xmEdtPesquisa').keydown(function (e) {
+    $("#xmEdtServico").keydown(function (e) {
 
         if (e.keyCode == 13) {
-            $(".btnPesqProd").click()
+            search = $(this).val().trim()
+            xgServicos.queryOpen({ search: search.toUpperCase() })
         }
 
         if (e.keyCode == 40) {
-<<<<<<< HEAD:servicos/servicos.js
-            xgProdutos.focus()
-            $("#xmEdtPesquisa").val('')
+            xgServicos.focus()
         }
     })
 
-    $(".btnPesqProd").click(function () {
-        let item = $('#xmEdtPesquisa').val()
-        xgProdutos.queryOpen({ search: item.toUpperCase() })
-        xgProdutos.source([])
-=======
+    $("#xmEdtIRomaneio").keydown(function (e) {
+
+        if (e.keyCode == 13) {
+            search = $(this).val().trim()
+            xgProdRomaneio.queryOpen({ search: search.toUpperCase() })
+        }
+
+        if (e.keyCode == 40) {
             xgProdRomaneio.focus()
         }
     })
@@ -131,6 +130,18 @@ $(function () {
             $(".xmQtdBtn").click()
 
         }
+
+    })
+
+    $("#edtCnpj").focusout(function (e) {
+        CNPJ = $(this).val().trim()
+        if (clientes.validarCpnj(CNPJ) == false)
+            show({
+                msg: 'CNPJ inválido',
+                onClose: () => {
+                    $("#edtCnpj").select().focus()
+                }
+            })
 
     })
 
@@ -165,7 +176,7 @@ $(function () {
 
     })
 
-    $('#checkPreparo').click(function (e) {
+    $('#checkProjeto').click(function (e) {
         let search = $('#xmEdtServico').val().trim().toUpperCase()
 
         xgServicos.queryOpen({ search: search })
@@ -173,62 +184,35 @@ $(function () {
 
     })
 
-    $('#checkEncerrado').click(function (e) {
+    $('#checkFinalizado').click(function (e) {
         let search = $('#xmEdtServico').val().trim().toUpperCase()
 
         xgServicos.queryOpen({ search: search })
         $('#xmEdtServico').focus()
 
->>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434:obras/obras.js
     })
+
+    xgServicos.queryOpen({ search: '' })
+    $('#xmEdtServico').focus()
 
 });
 
 
-<<<<<<< HEAD:servicos/servicos.js
-const servicos = (function () {
-    let lista_servico
-=======
 
 const saida = (function () {
 
-    let url = 'obras/per.obras.php';
+    let url = 'servicos/per.servicos.php';
     let ControleGrid;
->>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434:obras/obras.js
-
-    let andamento
-    let projeto
-    let finalizado
-
-    let STATUS
-    let dados_servico = {
-        FANTASIA: '',
-        CNPJ: '',
-        ENGENHEIRO: '',
-        SERVICO: '',
-        EXECUTORES: '',
-        DATA_INICIO: '',
-        DATA_FINALIZACAO: '',
-    }
 
     function grid() {
-        xgItensServico = new xGridV2.create({
-            el: "#xgItensServico",
-            height: 330,
-            heightLine: 35,
-            theme: "x-clownV2",
 
+        // GRID SERVICOS
+        xgServicos = new xGridV2.create({
+            el: `#xgServicos`,
+            theme: 'x-clownV2',
+            height: '320',
             columns: {
 
-<<<<<<< HEAD:servicos/servicos.js
-                Descrição: {
-                    dataField: "DESCRICAO",
-                }
-
-            },
-            onKeyDown: {
-                '13': (ln) => {
-=======
                 'SERVIÇO': { dataField: 'SERVICO' },
                 FANTASIA: { dataField: 'FANTASIA' },
                 'DATA INÍCIO': { dataField: 'DATA_INICIO', center: true },
@@ -239,6 +223,7 @@ const saida = (function () {
 
             onKeyDown: {
                 '13': (ln, e) => {
+                    clientes.zerarGrids()
 
                     getDadosServ(ln)
                 }
@@ -249,6 +234,8 @@ const saida = (function () {
                 if (ln == false)
                     return false
 
+                clientes.zerarGrids()
+
                 getDadosServ(ln)
 
             },
@@ -256,64 +243,83 @@ const saida = (function () {
             query: {
                 execute: (r) => {
                     getServicos(r.param.search, r.offset);
->>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434:obras/obras.js
                 }
+            }
+
+        })
+
+        // GRID LISTA DE ITENS
+        xgSaida = new xGridV2.create({
+
+            el: '#pnGridSaida',
+            height: '180',
+            theme: 'x-clownV2',
+            heightLine: '35',
+
+            columns: {
+                Produto: { dataField: 'DESCRICAO' },
+                Marca: { dataField: 'MARCA' },
+                QTD: { dataField: 'QTD', width: '10%' },
+                Retirado: { dataField: 'QTD_RETIRADA', width: '10%' },
+                Data: { dataField: 'DATA', center: true },
+                ORIGEM: { dataField: 'ORIGEM', center: true },
+
             },
+
             sideBySide: {
+                el: '#pnFields',
+
                 frame: {
-                    el: '#pnButtons',
+                    el: '#pnButtonsP',
                     buttons: {
 
-<<<<<<< HEAD:servicos/servicos.js
-                        add: {
-                            html: "Adicionar",
-                            class: "btnP btnAdd",
-                            click: add,
-                        },
-                        del: {
-                            html: "Excluir",
-                            class: "btnP btnDel",
-=======
                         newProduto: {
                             html: "Inserir Produto",
                             class: "btnP btnInsP",
                             click: novo,
+                        },
+                        fechar: {
+                            html: "Finalizar Projeto",
+                            class: "btnP btnFP",
+                            click: fecharProj,
                         },
 
                         deletar: {
                             html: 'Deletar',
                             class: 'btnP btnDel',
                             state: xGridV2.state.delete,
->>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434:obras/obras.js
                             click: deletar,
                         },
+                        // // print: {
+                        // //     html: 'Print',
+                        // //     class: 'btnP btnPrint',
+                        // // },
                     }
                 },
             },
 
-<<<<<<< HEAD:servicos/servicos.js
-=======
             onSelectLine: (r) => {
 
                 let origem = r.ORIGEM
+                let status = xgServicos.dataSource().STATUS
 
-                if (origem == 'PROJETO' && STATUS == 'PREPARO') {
+                if (origem == 'PROJETO' && $('#spStatus').html() == 'PROJETO') {
                     $('.btnDel').removeAttr('disabled', true)
                 }
 
-                if (origem == 'PROJETO' && STATUS == 'ANDAMENTO') {
+                if (origem == 'PROJETO' && $('#spStatus').html() == 'ANDAMENTO') {
                     $('.btnDel').attr("disabled", true);
                 }
 
-                if (origem == 'PROJETO' && STATUS == 'ENCERRADO') {
+                if (origem == 'PROJETO' && $('#spStatus').html() == 'FINALIZADO') {
                     $('.btnDel').attr("disabled", true);
                 }
 
-                if (origem == 'ADICIONAL' && STATUS == 'ENCERRADO') {
+                if (origem == 'ADICIONAL' && $('#spStatus').html() == 'FINALIZADO') {
                     $('.btnDel').attr("disabled", true);
                 }
 
-                if (origem == 'ADICIONAL' && STATUS == 'ANDAMENTO') {
+                if (origem == 'ADICIONAL' && $('#spStatus').html() == 'ANDAMENTO') {
                     $('.btnDel').removeAttr('disabled', true)
                 }
             },
@@ -322,16 +328,17 @@ const saida = (function () {
 
                 '46': (ln) => {
                     let ORIGEM = xgSaida.dataSource().ORIGEM
+                    let status = xgServicos.dataSource().STATUS
 
-                    if (ORIGEM == 'PROJETO' && STATUS == 'ANDAMENTO') {
+                    if (ORIGEM == 'PROJETO' && status == 'ANDAMENTO') {
                         return false
                     }
 
-                    if (ORIGEM == 'PROJETO' && STATUS == 'ENCERRADO') {
+                    if (ORIGEM == 'PROJETO' && status == 'FINALIZADO') {
                         return false
                     }
 
-                    if (ORIGEM == 'ADICIONAL' && STATUS == 'ENCERRADO') {
+                    if (ORIGEM == 'ADICIONAL' && status == 'FINALIZADO') {
                         return false
                     }
 
@@ -339,81 +346,160 @@ const saida = (function () {
                 }
             },
 
->>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434:obras/obras.js
             query: {
                 execute: (r) => {
-                    getMascaraProjeto(r.param.search, r.offset)
-
-                },
+                    getItens1(r.param.search, r.offset);
+                }
             }
         })
 
-        xgProdutos = new xGridV2.create({
-            el: '#xgProdutos',
-            height: 330,
-            heightLine: 35,
-            theme: "x-clownV2",
+        // GRID LISTA DE ITENS PARA IR PARA O ROMANEIO
+        xgProdRomaneio = new xGridV2.create({
+
+            el: '#xgProdRomaneio',
+            height: '390',
+            theme: 'x-clownV2',
+            heightLine: '35',
 
             columns: {
-                Código: {
-                    dataField: "CODIGO",
-                    width: '10%'
-                },
-                Descrição: {
-                    dataField: "DESCRICAO",
-                    width: '70%'
-                },
-                Marca: {
-                    dataField: "MARCA",
-                    width: '20%'
-                }
+                Produto: { dataField: 'DESCRICAO' },
+                Marca: { dataField: 'MARCA' },
+                Origem: { dataField: 'ORIGEM' },
+                ESTOQUE: { dataField: 'QTD', width: '13%' },
+                PROJETADO: { dataField: 'QTD_P', width: '13%' },
+                RETIRADO: { dataField: 'QTD_RETIRADA', width: '13%' },
+
             },
+
             onKeyDown: {
+
                 '13': (ln) => {
-                    addProduto(ln)
+
+                    edtQtd(ln)
+
                 }
             },
 
             dblClick: (ln) => {
-                addProduto(ln)
+                edtQtd(ln)
+
             },
+
             query: {
                 execute: (r) => {
-                    getProduto(r.param.search, r.offset)
-
-                },
-            }
-        })
-    }
-
-
-    // GETS
-    function getServico() {
-        axios.post(url, {
-            call: 'getServico',
-        })
-            .then(r => {
-                lista_servico = r.data
-
-                for (let i in r.data) {
-                    let servico = `
-                <div class="col s3">
-                    <div class=" marginBottom">
-                        <div onclick="activeCard(this.id)" class="center-align servico" id="${r.data[i].ID_SERVICO}">
-                            <span class="white-text" style="font-size: 20px;">${r.data[i].SERVICO}</span>
-                        </div >
-                    </div>
-                </div>`
-                    $('#rowServico').append(servico)
+                    getItens2(r.param.search, r.offset);
                 }
-<<<<<<< HEAD:servicos/servicos.js
-            })
-    }
-
-    function getMascaraProjeto(param, offset) {
-=======
             }
         })
+
+        // GRID ROMANEIO
+        xgRomaneios = new xGridV2.create({
+            el: `#xgRomaneios`,
+            theme: 'x-clownV2',
+            height: '120',
+
+            columns: {
+                'ID': { dataField: 'ID_ROMANEIO', width: '10%' },
+                'Responsável': { dataField: 'NOME', width: '40%' },
+                Data: { dataField: 'DATA', center: true, width: '15%' },
+                Hora: { dataField: 'HORA', center: true, width: '15%' },
+                Status: { dataField: 'STATUS', width: '20%' }
+            },
+
+            onSelectLine: (r) => {
+
+                xgRomaneiosItens.queryOpen({ search: r.ID_ROMANEIO })
+
+
+
+                if (r.STATUS == "PREPARO") {
+
+                    $('.btnPR').removeAttr("disabled");
+                    $('.btnPDF').attr("disabled", true);
+                    $('.btnFR').removeAttr("disabled");
+
+
+                }
+                if (r.STATUS == "PRONTO") {
+
+                    $('.btnPR').attr("disabled", true);
+                    $('.btnFR').attr("disabled", true);
+                    $('.btnPDF').removeAttr("disabled");
+                }
+
+                if (xgServicos.dataSource().STATUS == 'FINALIZADO') {
+                    $('.btnPDF').attr("disabled", true);
+
+                }
+
+
+            },
+
+            query: {
+                execute: (r) => {
+                    getRomaneio(r.param.search, r.offset)
+                }
+            }
+        })
+
+        // GRID ITENS DO ROMANEIOS
+        xgRomaneiosItens = new xGridV2.create({
+            el: `#xgRomaneiosItens`,
+            theme: 'x-clownV2',
+            height: '150',
+
+            columns: {
+                Produto: { dataField: 'DESCRICAO' },
+                Marca: { dataField: 'MARCA' },
+                Origem: { dataField: 'ORIGEM' },
+                QTD: { dataField: 'QTD', width: '10%' },
+            },
+
+            sideBySide: {
+                frame: {
+                    el: '#pnButtonsR',
+                    buttons: {
+                        Novo: {
+                            html: "Novo Romaneio",
+                            class: "btnP btnNR",
+                            click: novoRomaneio
+                        },
+
+                        Inserir: {
+                            html: "Inserir Produto",
+                            class: "btnP btnPR",
+                            click: InserirRomaneio
+                        },
+
+                        Salvar: {
+                            html: "Finalizar Romaneio",
+                            class: "btnP btnFR",
+                            click: finalizarRomaneio
+                        },
+                        PDF: {
+                            html: "Gerar PDF",
+                            class: "btnP btnPDF",
+                            click: gerarPDF
+                        },
+                    },
+                }
+            },
+
+            onKeyDown: {
+                '46': (r) => {
+                    deletarItemRomaneio(r)
+
+                }
+            },
+
+            query: {
+                execute: (r) => {
+                    getItensRomaneio(r.param.search, r.offset)
+                }
+            }
+        })
+
+
 
     }
 
@@ -433,6 +519,7 @@ const saida = (function () {
                 $('#spStatus').html('FINALIZADO');
 
                 $('.btnInsP').prop('disabled', true)
+                $('.btnFP').prop('disabled', true)
                 $('.btnDel').prop('disabled', true)
                 $('.btnNR').prop('disabled', true)
                 $('.btnPR').prop('disabled', true)
@@ -441,44 +528,39 @@ const saida = (function () {
                 $('.btnDI').prop('disabled', true)
                 $('.btnFS').prop('disabled', true)
                 $('.btnRG').removeAttr('disabled')
->>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434:obras/obras.js
 
-        axios.post(url, {
-            call: 'getMascaraProjeto',
-            param: {
-                id_servico: id_servico,
-                item: param,
-                offset: offset
             }
-        }).then(r => {
-            xgItensServico.sourceAdd(r.data)
-            xgItensServico.focus()
         })
-<<<<<<< HEAD:servicos/servicos.js
-
-=======
     }
 
     // FUNCTION SERVICOS
 
     function getDadosServ(ln) {
 
+        clientes.getListaServicoX(ln.ID_LISTA_SERVICO);
 
         ID_LISTA_SERVICO = ln.ID_LISTA_SERVICO
 
-        STATUS = ln.STATUS
-
         $('.btnInsP').removeAttr("disabled");
 
-        if (STATUS == 'ANDAMENTO' || STATUS == 'PREPARO') {
+        if (ln.STATUS == 'ANDAMENTO') {
+            $('.btnFP').attr('disabled', true);
             $('.btnNR').removeAttr("disabled");
             $('.btnFS').removeAttr("disabled");
             $('.btnRG').prop('disabled', true)
 
         }
+        if (ln.STATUS == 'PROJETO') {
+            $('.btnNR').attr("disabled", true);
+            $('.btnFP').removeAttr('disabled');
+            $('.btnFS').attr("disabled", true);
+            $('.btnRG').prop('disabled', true)
 
-        if (STATUS == 'ENCERRADO') {
+        }
+
+        if (ln.STATUS == 'FINALIZADO') {
             $('.btnInsP').prop('disabled', true)
+            $('.btnFP').prop('disabled', true)
             $('.btnDel').prop('disabled', true)
             $('.btnNR').prop('disabled', true)
             $('.btnPR').prop('disabled', true)
@@ -493,32 +575,27 @@ const saida = (function () {
         xgRomaneios.queryOpen({ search: ln.ID_LISTA_SERVICO })
         xgDevolucao.queryOpen({ search: ln.ID_LISTA_SERVICO })
 
-        getListaServicoX(ID_LISTA_SERVICO);
-
-
         $('#Servicos').hide()
         $('#dados_cliente').show()
->>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434:obras/obras.js
     }
 
-    function getProduto(param, offset) {
+    // FUNCTION PRODUTOS SERVICO 
+
+    function getItens1(search, offset) {
+
         axios.post(url, {
-            call: 'getProdutos',
-            param: { search: param, offset: offset }
-        }).then(r => {
-            xgProdutos.sourceAdd(r.data)
+            call: 'getItens',
+            param: { search: search, offset: offset },
+
+        }).then(rs => {
+            xgSaida.querySourceAdd(rs.data);
+
         })
     }
 
-    function buscar(item) {
+    function getItens2(search, offset) {
 
         axios.post(url, {
-<<<<<<< HEAD:servicos/servicos.js
-            call: 'getItem',
-            param: { item: item, id_servico: id_servico }
-        }).then(r => {
-
-=======
             call: 'getItens2',
             param: { search: search, offset: offset },
 
@@ -528,135 +605,113 @@ const saida = (function () {
         })
     }
 
-    const getServicos = async (search, offset) => {
+    function getServicos(search, offset) {
 
-        validaCheckbox()
-
-        let param = {
-            search: search,
-            offset: offset,
-            andamento: andamento,
-            preparo: preparo,
-            encerrado: encerrado
+        if ($('#checkAndamento').is(':checked') == true) {
+            andamento = 'ANDAMENTO'
         }
+
+        if ($('#checkProjeto').is(':checked') == true) {
+            projeto = 'PROJETO'
+        }
+
+        if ($('#checkFinalizado').is(':checked') == true) {
+            finalizado = 'FINALIZADO'
+        }
+
+        if ($('#checkFinalizado').is(':checked') == false) {
+            finalizado = ''
+        }
+        if ($('#checkProjeto').is(':checked') == false) {
+            projeto = ''
+        }
+        if ($('#checkAndamento').is(':checked') == false) {
+            andamento = ''
+        }
+
         axios.post(url, {
             call: 'getServicos',
-            param: param
+            param: {
+                search: search,
+                offset: offset,
+                andamento: andamento,
+                projeto: projeto,
+                finalizado: finalizado
+            }
         }).then(rs => {
-
             xgServicos.querySourceAdd(rs.data);
-
->>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434:obras/obras.js
         })
     }
 
-    function add() {
-        xmProdutos.open()
+    async function buscarServ() {
 
-        $('#xmEdtPesquisa').val('')
-        $('#xmEdtPesquisa').focus()
-        xgProdutos.source([])
+        await xgServicos.queryOpen({ search: '' })
 
-        xgProdutos.queryOpen({ search: '' })
+        $('#xmEdtServico').focus()
+        $('#dados_cliente').hide()
+        $('#Servicos').show()
     }
 
-<<<<<<< HEAD:servicos/servicos.js
-    function deletar() {
-        let param = xgItensServico.dataSource().ID_MASCARA_PROJETO
-        confirma({
-            msg: `Deseja deletar o item ${xgItensServico.dataSource().DESCRICAO}`,
+    function fecharProj() {
+
+        confirmaCodigo({
+            msg: 'Digite o código abaixo caso deseja finalizar o projeto<br>' +
+                '(APÓS ISSO, O PROJETO NÃO PODERÁ SER FINALIZADO NOVAMENTE)',
             call: () => {
+
                 axios.post(url, {
-                    call: 'deleteProduto',
-                    param: param
-                }).then(r => {
-                    xgItensServico.deleteLine()
+                    call: 'atualizaStatus',
+                    param: { ID_LISTA_SERVICO: ID_LISTA_SERVICO, STATUS: 'ANDAMENTO' }
                 })
+
+                $('#spStatus').html('ANDAMENTO');
+                $('.btnFP').prop('disabled', true)
+                $('.btnNR').removeAttr("disabled");
+                $('.btnDI').removeAttr("disabled");
             }
         })
     }
 
-    function addProduto(ln) {
-=======
     function novo() {
->>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434:obras/obras.js
 
-        axios.post(url, {
-            call: 'insertProduto',
-            param: { ID_SERVICO: id_servico, ID_PRODUTO: ln.ID_PRODUTO }
-        }).then(r => {
-            if (r.data.msg) {
-                show(r.data.msg)
-                return false
-            }
+        xgProduto.queryOpen({ search: '' });
 
-            ln.ID_MASCARA_PROJETO = r.data[0].ID_MASCARA_PROJETO
-            xgItensServico.insertLine(ln)
-            xmProdutos.close()
-        })
+        xmInsProduto.open()
+
+        $('.xmBtnRetirar').attr("disabled", true);
+
+        $('#xmEdtProduto').focus()
     }
 
-    // MODAIS
-    function modalProdutos() {
+    function buscar() {
 
-        xmProdutos = new xModal.create({
-            el: '#xmProdutos',
-            title: 'Produtos',
-            width: '700',
-            height: '500'
-        })
-    }
+        xgCliente.queryOpen({ search: '' });
 
-<<<<<<< HEAD:servicos/servicos.js
-    function keydown() {
-        $('#xgItensServico').keydown(function (e) {
+        xmListaCliente.open();
 
-            if (e.keyCode == 113) {
-                $('#edtPesquisa').focus()
-            }
-
-            if (e.keyCode == 13) {
-                if (id_servico != undefined) {
-                    add()
-                }
-            }
-        })
+        $('#xmEdtCliente').focus()
 
     }
 
-    return {
-        getServico: getServico,
-        grid: grid,
-        getMascaraProjeto: getMascaraProjeto,
-        modalProdutos: modalProdutos,
-        buscar: buscar,
-        keydown: keydown
-    }
-=======
     function deletar(ln) {
->>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434:obras/obras.js
 
-})();
+        if (xgSaida.data().length > 0) {
 
-function activeCard(param) {
-    let cards = $('.servico')
-    id_servico = param
+            confirmaCodigo({
+                msg: 'Digite o código de confirmação!',
+                call: () => {
 
-    $('#pnButtons').removeAttr("hidden")
-    $('#rowPesq').removeAttr("hidden")
+                    axios.post(url, {
+                        call: 'deletarItem',
+                        param: ln.ID_ITENS_SERVICO,
+                    })
 
-    for (let i = 0; i < cards.length; i++) {
-        cards[i].style.background = "#1D4B70"
-    }
-    document.getElementById(param).style.background = "#4a5f71"
+                    if (xgSaida.data().length - 1 <= 0) {
 
-    xgItensServico.queryOpen({ search: '' })
+                        $('.btnDel').prop('disabled', true)
 
-    xgItensServico.source([])
+                    } else {
 
-<<<<<<< HEAD:servicos/servicos.js
-}
-=======
                         $('.btnDel').removeAttr('disabled')
                     }
                     xgSaida.deleteLine()
@@ -701,74 +756,6 @@ function activeCard(param) {
         xmEdtQtd.open()
 
         $('#xmEdtQtd').focus()
-    }
-
-    function validaCheckbox() {
-        if ($('#checkAndamento').is(':checked') == true) {
-            andamento = 'ANDAMENTO'
-        }
-
-        if ($('#checkPreparo').is(':checked') == true) {
-            preparo = 'PREPARO'
-        }
-
-        if ($('#checkEncerrado').is(':checked') == true) {
-            encerrado = 'ENCERRADO'
-        }
-
-        if ($('#checkEncerrado').is(':checked') == false) {
-            encerrado = ''
-        }
-        if ($('#checkPreparo').is(':checked') == false) {
-            preparo = ''
-        }
-        if ($('#checkAndamento').is(':checked') == false) {
-            andamento = ''
-        }
-    }
-
-    function getListaServicoX(id_lista_servico) {
-
-        axios.post(url, {
-
-            call: 'getListaServicoX',
-            param: { id_lista_servico: id_lista_servico }
-
-        })
-            .then(rs => {
-
-                setServicoTela(rs.data[0])
-                STATUS = rs.data[0].STATUS
-
-            })
-
-    }
-
-    function setServicoTela(param) {
-
-        $('#spId_lista_servico').html(param.ID_LISTA_SERVICO)
-        $('#spFantasia').html(param.FANTASIA)
-        $('#spCnpj').html(param.CNPJ)
-        $('#spEngenheiro').html(param.ENGENHEIRO)
-        $('#spServico').html(param.SERVICO)
-        $('#spExecutores').html(param.EXECUTORES)
-        $('#spDataI').html(param.DATA_INICIO)
-        $('#spDataF').html(param.DATA_FINALIZACAO)
-        $('#spStatus').html(param.STATUS)
-        $('#spValor').html(param.VALOR)
-
-        dados_servico = {
-            FANTASIA: param.FANTASIA,
-            CNPJ: param.CNPJ,
-            ENGENHEIRO: param.ENGENHEIRO,
-            SERVICO: param.SERVICO,
-            EXECUTORES: param.EXECUTORES,
-            DATA_INICIO: param.DATA_INICIO,
-            DATA_FINALIZACAO: param.DATA_FINALIZACAO,
-        }
-
-        OBS = param.OBS
-
     }
 
     // FUNCTIONS DO ROMANEIO
@@ -848,16 +835,6 @@ function activeCard(param) {
                 }).then(rs => {
 
                     $('.btnPR').attr("disabled", true);
-
-                    if (STATUS == 'PREPARO') {
-                        axios.post(url{
-                            call: '',
-                            param: {
-
-                            }
-                        })
-                    }
-
                     xgRomaneios.queryOpen({ search: ID_LISTA_SERVICO })
 
                 })
@@ -1072,6 +1049,9 @@ function activeCard(param) {
 
     }
     // RELATORIOS 
+
+
+
     async function relatorioGeral() {
 
         let dados_servico = {
@@ -1211,6 +1191,15 @@ function activeCard(param) {
     }
 
     // MODAIS
+    function modalCliente() {
+
+        xmListaCliente = new xModal.create({
+            el: '#xmListaCliente',
+            title: 'Clientes',
+            width: '700',
+        })
+    }
+
     function modalInsProduto() {
 
         xmInsProduto = new xModal.create({
@@ -1253,7 +1242,9 @@ function activeCard(param) {
 
     return {
         grid: grid,
+        modalCliente: modalCliente,
         modalInsProduto: modalInsProduto,
+        buscar: buscar,
         buscarServ: buscarServ,
         modalInserirRomaneio: modalInserirRomaneio,
         finalizarObra: finalizarObra,
@@ -1262,9 +1253,258 @@ function activeCard(param) {
     }
 })();
 
+const clientes = (function () {
+
+    let url = 'servicos/per.servicos.php';
+    let ControleGrid;
+
+    function grid() {
+
+        xgCliente = new xGridV2.create({
+
+            el: '#pnGridCliente',
+            height: '330',
+            theme: 'x-clownV2',
+            heightLine: '35',
+
+            columns: {
+
+                'Razão Social': { dataField: 'FANTASIA' },
+                CNPJ: { dataField: 'CNPJ', center: true },
+                UF: { dataField: 'UF', center: true },
+                Cidade: { dataField: 'CIDADE' },
+            },
+
+            onKeyDown: {
+                '13': (ln, e) => {
+
+                    cliente = ln
+                    ID_CLIENTE = cliente.ID_CLIENTE
+
+                    $("#xmSpFantasia").html(cliente.FANTASIA);
+                    $("#xmSpCnpj").html(cliente.CNPJ);
+
+                    getServico();
+
+                    xmNovoServico.open();
+
+                    $("#xmInEngenheiro").focus()
+
+                },
+            },
+
+            dblClick: (ln) => {
+
+                cliente = ln
+                ID_CLIENTE = cliente.ID_CLIENTE
+
+                $("#xmSpFantasia").html(cliente.FANTASIA);
+                $("#xmSpCnpj").html(cliente.CNPJ);
+
+                getServico();
+
+                xmNovoServico.open();
+
+                $("#xmInEngenheiro").focus()
+
+            },
+
+            query: {
+                execute: (r) => {
+
+                    getCliente(r.param.search, r.offset);
+                }
+            }
+        })
+    }
+
+    function getCliente(search, offset) {
+
+        axios.post(url, {
+
+            call: 'getCliente',
+            param: { search: search, offset: offset },
+
+        })
+            .then(rs => {
+
+                xgCliente.querySourceAdd(rs.data);
+            })
+    }
+
+    function getServico() {
+
+        $('#slctServico').html('')
+
+        axios.post(url, {
+
+            call: 'getServ',
+
+        }).then(rs => {
+
+            for (let i in rs.data) {
+
+                let table = `<option value="${rs.data[i].ID_SERVICO}"> ${rs.data[i].SERVICO}</option>`
+                $('#slctServico').append(table)
+            }
+        })
+    }
+
+    function novoServico() {
+
+        let param = {
+            ID_CLIENTE: xgCliente.dataSource().ID_CLIENTE,
+            ID_SERVICO: $('#slctServico').val(),
+            ENGENHEIRO: $('#xmInEngenheiro').val(),
+            EXECUTORES: $('#xmInEx').val(),
+            DATA_INICIO: $('#xmInDataI').val(),
+            DATA_FINAL: $('#xmInDataF').val(),
+            DATA: new Date().toLocaleDateString('pt-BR'),
+            HORA: new Date().toLocaleTimeString('pt-BR'),
+
+        }
+
+
+        for (let i in param) {
+            if (param[i] == "" || param[i] == null || param == undefined) {
+                show("Preencha corretamente todos os campos!")
+                return false
+            }
+        }
+
+        if (param.DATA_INICIO.length != 10) {
+            show("Data de início inválida")
+            return false
+
+        }
+
+        if (param.DATA_INICIO.length != 10) {
+            show("Data de finalização inválida")
+            return false
+
+        }
+
+        param.OBS = $('#xmInObs').val()
+
+        axios.post(url, {
+
+            call: 'gerarServico',
+            param: param
+
+        }).then(rs => {
+
+            ID_LISTA_SERVICO = rs.data.ID_LISTA_SERVICO
+            getListaServicoX(ID_LISTA_SERVICO)
+            xgSaida.clear()
+            xgRomaneios.clear()
+            xgRomaneiosItens.clear()
+            xgDevolucao.clear()
+
+
+        })
+
+        $('#dados_cliente').show()
+        $('#Servicos').hide()
+        xmNovoServico.close()
+        xmListaCliente.close()
+
+    }
+
+    function getListaServicoX(id_lista_servico) {
+
+        axios.post(url, {
+
+            call: 'getListaServicoX',
+            param: { id_lista_servico: id_lista_servico }
+
+        })
+            .then(rs => {
+
+                setServicoTela(rs.data[0])
+
+                if (rs.data[0].STATUS == "PROJETO") {
+                    $('.btnDI').attr("disabled", true)
+                    $('.btnPDF').attr('disabled', true)
+                    $('.btnFS').attr('disabled', true)
+                    $('.btnInsP').removeAttr("disabled")
+
+                }
+
+                if (rs.data[0].STATUS == "ANDAMENTO")
+                    $('.btnDI').removeAttr("disabled")
+
+            })
+
+    }
+
+    function setServicoTela(param) {
+
+        $('#spId_lista_servico').html(param.ID_LISTA_SERVICO)
+        $('#spFantasia').html(param.FANTASIA)
+        $('#spCnpj').html(param.CNPJ)
+        $('#spEngenheiro').html(param.ENGENHEIRO)
+        $('#spServico').html(param.SERVICO)
+        $('#spExecutores').html(param.EXECUTORES)
+        $('#spDataI').html(param.DATA_INICIO)
+        $('#spDataF').html(param.DATA_FINALIZACAO)
+        $('#spStatus').html(param.STATUS)
+        $('#spValor').html(param.VALOR)
+
+        OBS = param.OBS
+
+    }
+
+    function zerarGrids() {
+
+        xgSaida.source([])
+        xgRomaneios.source([])
+        xgRomaneiosItens.source([])
+        xgRomaneiosItensD.source([])
+
+    }
+
+    //  MODAIS
+    function modalNovoServico() {
+
+        xmNovoServico = new xModal.create({
+            el: '#xmServico',
+            title: 'Novo Serviço',
+            height: '525',
+            width: '500',
+            buttons: {
+                btn1: {
+
+                    html: 'Confirmar',
+                    class: 'xmBtnNovoS',
+                    click: (e) => {
+                        novoServico()
+                        zerarGrids()
+
+                    }
+                }
+            },
+
+            onClose: () => {
+                $('#xmInEngenheiro').val('')
+                $('#xmInEx').val('')
+                $('#xmInDataI').val('')
+                $('#xmInDataF').val('')
+                $('#xmInObs').val('')
+            }
+        })
+    }
+
+    return {
+        grid: grid,
+        modalNovoServico: modalNovoServico,
+        getListaServicoX: getListaServicoX,
+        zerarGrids: zerarGrids
+    }
+})();
+
 const produtos = (function () {
 
-    let url = 'obras/per.obras.php';
+    let url = 'servicos/per.servicos.php';
     let ControleGrid;
 
     function grid() {
@@ -1429,6 +1669,7 @@ const produtos = (function () {
         }
 
         if (status == 'ANDAMENTO') {
+            $('.btnFP').prop('disabled', true);
 
             origem = 'ADICIONAL'
         }
@@ -1637,7 +1878,7 @@ const produtos = (function () {
 
 const devolucao = (function () {
 
-    let url = 'obras/per.obras.php';
+    let url = 'servicos/per.servicos.php';
     let ControleGrid;
 
     function grid() {
@@ -1866,4 +2107,3 @@ const devolucao = (function () {
         devolverItem: devolverItem
     }
 })();
->>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434:obras/obras.js

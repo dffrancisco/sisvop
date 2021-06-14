@@ -31,13 +31,12 @@ class Login
         $sql = "SELECT A.ID_FUNCIONARIOS, A.NOME, A.CPF
                 FROM FUNCIONARIOS A, USUARIOS B
                 WHERE B.ID_FUNCIONARIOS = A.ID_FUNCIONARIOS
-                AND B.SENHA = :senha";
+                AND B.SENHA = '$senha'";
         if ($length == 14) {
-            $sql = $sql . "AND A.CPF = :login";
+            $sql = $sql . " AND A.CPF = '$login'";
         } else {
-            $sql = $sql . "AND A.ID_FUNCIONARIOS = :login";
+            $sql = $sql . " AND A.ID_FUNCIONARIOS = '$login'";
         };
-
         $sql = prepare::SQL($sql, $param);
         $query = $this->db->prepare($sql);
         $query->execute();

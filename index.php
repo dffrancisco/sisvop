@@ -13,7 +13,7 @@ if (!empty($_GET['p'])) {
     <link rel="icon" href="icon/carro.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google" content="notranslate">
-    <link rel="icon" href="img/logo sisvop.jpeg">
+    <link rel="icon" href="img/icone.png">
     <link rel="stylesheet" href="produtos/produtos.css" type="text/css" />
     <link rel="stylesheet" href="marca/marca.css" type="text/css" />
 
@@ -53,7 +53,7 @@ if (!empty($_GET['p'])) {
     <link rel="stylesheet" href="css/index.css" type="text/css" />
 
 
-    <title>Sisvop</title>
+    <title>Sisvopaa</title>
 
 </head>
 
@@ -164,6 +164,9 @@ if (!empty($_GET['p'])) {
             <li><i class="fa fa-product-hunt"></i>Produtos</li>
         </a>
 
+<<<<<<< HEAD
+        <a href="?p=servicos/servicos">
+=======
 
         <a href="?p=projetos/projeto">
             <li><i class="fa fa-key"></i>projetos</i></li>
@@ -172,6 +175,7 @@ if (!empty($_GET['p'])) {
             <li><i class="fa fa-usd"></i>Obras</li>
 
         <a href="?p=sservicos/servicos">
+>>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434
             <li><i class="fa fa-usd"></i>Serviços</li>
         </a>
 
@@ -182,13 +186,6 @@ if (!empty($_GET['p'])) {
         <a href="?p=usuario/usuario">
             <li><i class="fa fa-key"></i>Usuario</i></li>
         </a>
-        <!-- <a href="?p=marca/marca">
-            <li><i class="fa fa-address-book"></i>Marcas</li>
-        </a> -->
-        <!-- <a href="?p=cargo/cargo">
-            <li><i class="fa fa-address-book"></i>Cargo</li>
-        </a> -->
-
 
         <hr />
         <li class="btnSair">Sair</li>

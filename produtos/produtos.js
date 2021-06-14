@@ -330,11 +330,11 @@ const produto = (function () {
 
             if (xgProduto.data()[i].QTD == 0) {
                 i++
-                $('.xGridV2-row:eq(' + i + ')').attr('style', 'color: #ff0000 !important;')
+                $('.xGridV2-row:eq(' + i + ')').attr('style', 'color: #DAA520 !important;')
             }
             else if (xgProduto.data()[i].QTD <= xgProduto.data()[i].QTD_MINIMA) {
                 i++
-                $('.xGridV2-row:eq(' + i + ')').attr('style', 'color:  #ffb400 !important;')
+                $('.xGridV2-row:eq(' + i + ')').attr('style', 'color:  #8B4513 !important;')
             }
         }
     }
