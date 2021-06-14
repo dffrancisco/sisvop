@@ -13,7 +13,7 @@ if (!empty($_GET['p'])) {
     <link rel="icon" href="icon/carro.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google" content="notranslate">
-
+    <link rel="icon" href="img/logo sisvop.jpeg">
     <link rel="stylesheet" href="produtos/produtos.css" type="text/css" />
     <link rel="stylesheet" href="marca/marca.css" type="text/css" />
 
@@ -44,6 +44,8 @@ if (!empty($_GET['p'])) {
     <link href="plugins/xCalk/style.css" rel="stylesheet" type="text/css" />
     <script src="plugins/xCalk/xCalk.js" type="text/javascript"></script>
 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
 
     <script src="js/index.js" type="text/javascript"></script>
 
@@ -59,24 +61,24 @@ if (!empty($_GET['p'])) {
 
 
     <div class="cabecalho">
-        <table width="100%" class="tbTitulo">
+        <table width="100%" class="tbTitulo" style="font-size:13px ;">
             <tr>
-                <td rowspan="4" style="width: 150px;"><img src="img/bg2.jpg" width="155" alt="" /></td>
-                <td colspan="3" style="font-weight: bold" name="razao"></td>
+                <td rowspan="4" style="width: 130px;"><img src="img/LOGO AZUL WEB.png" width="130" alt="" /></td>
+                <td colspan="3" style="font-weight: bold" id="printRazao"></td>
                 <td style="width: 150px;"><span class="spData"></span> <span class="spHora"></span></td>
             </tr>
             <tr>
-                <td colspan="3" name="endereco"></td>
-                <td name="cnpj"></td>
+                <td colspan="2" id="printEndereco"></td>
+                <td colspan="2" style="font-weight: bold" id="printCnpj"></td>
             </tr>
             <tr>
-                <td>Cidade.: <span name="cidade"></span> </td>
-                <td>Bairro.: <span name="bairro"></span> </td>
-                <td>CEP.: <span name="cep"></span> </td>
-                <td> <span name="inscricao"></span> </td>
+                <td>Cidade.: <span id="printCidade"></span> </td>
+                <td>Bairro.: <span id="printBairro"></span> </td>
+                <td>CEP.: <span id="printCep"></span> </td>
             </tr>
             <tr>
-                <td colspan="2">Telefone.: <span name="fone"></span> </td>
+                <td>Inscrição.: <span id="printInscricao"></span> </td>
+                <td>Telefone.: <span id="printFixo"></span> </td>
                 <td></td>
                 <td></td>
             </tr>
@@ -105,30 +107,76 @@ if (!empty($_GET['p'])) {
                 <a href="#" class="brand-logo center truncate" style="font-size: 18px" id="pnTitulo">HOME</a>
 
                 <ul id="nav-mobile" class="right e">
+                    <li><a onclick="pnUserToggle()" href="#!"><span id="spUser"></span> <i
+                                class="fa fa-user-circle"></i></a></li>
 
-                    <li><a onclick="pnUserToggle()" href="#!"><span id="spUser"></span> <i class="fa fa-user-circle"></i></a></li>
+                </ul>
+                <ul id="nav-mobile" class="right e">
+                    <a onclick="pnNotifyToggle()" href="#">
+                        <i class="fa fa-bell notify" aria-hidden="true" style="font-size: 18px;">
+                            <div class="activeNotify"></div>
+                        </i>
+                    </a>
                 </ul>
             </div>
         </nav>
 
     </div>
 
-    <div class="pnUser">
-        <span id="btnSair" style="font-size: 15px;">SAIR</span>
+    <div class="pnUser btnSair">
+        <span style="font-size: 15px;">SAIR</span>
     </div>
 
-    <div class="pnMenu">
-        <a href="?p=produtos/produtos">
-            <li><i class="fa fa-product-hunt"></i>Produtos</li>
-        </a>
-        <a href="?p=marca/marca">
-            <li><i class="fa fa-copyright"></i>Marcas</li>
-        </a>
+    <div class="pnNotify collection">
+    </div>
+
+    <div class="pnMenu" style="font-size: 15px;">
+
         <a href="?p=clientes/clientes">
             <li><i class="fa fa-address-book"></i>Clientes</li>
         </a>
+
+        <a href="?p=contas/contas">
+            <li><i class="fa fa-money"></i>Contas a pagar</li>
+        </a>
+
+        <a href="?p=empresa/empresa">
+            <li><i class="fa fa-building"></i>Empresa</li>
+        </a>
+
+        <a href="?p=entrada/entrada">
+            <li><i class="fa fa-shopping-cart"></i>Entrada</li>
+        </a>
+
         <a href="?p=fornecedor/fornecedor">
             <li><i class="fa fa-address-book"></i>Fornecedor</li>
+        </a>
+
+        <a href="?p=funcionarios/funcionarios">
+            <li><i class="fa fa-user-plus"></i>Funcionários</li>
+        </a>
+
+        <a href="?p=marca/marca">
+            <li><i class="fa fa-copyright"></i>Marcas</li>
+        </a>
+
+        <a href="?p=produtos/produtos">
+            <li><i class="fa fa-product-hunt"></i>Produtos</li>
+        </a>
+
+
+        <a href="?p=projetos/projeto">
+            <li><i class="fa fa-key"></i>projetos</i></li>
+        </a>
+        <a href="?p=obras/obras">
+            <li><i class="fa fa-usd"></i>Obras</li>
+
+        <a href="?p=sservicos/servicos">
+            <li><i class="fa fa-usd"></i>Serviços</li>
+        </a>
+
+        <a href="?p=contas/contas">
+            <li><i class="fa fa-money"></i>Contas a pagar</li>
         </a>
 
         <a href="?p=usuario/usuario">
@@ -140,22 +188,10 @@ if (!empty($_GET['p'])) {
         <!-- <a href="?p=cargo/cargo">
             <li><i class="fa fa-address-book"></i>Cargo</li>
         </a> -->
-        <a href="?p=empresa/empresa">
-            <li><i class="fa fa-building"></i>Empresa</li>
-        </a>
-        <a href="?p=funcionarios/funcionarios">
-            <li><i class="fa fa-user-plus"></i>Funcionários</li>
-        </a>
-        <a href="?p=entrada/entrada">
-            <li><i class="fa fa-shopping-cart"></i>Notas</li>
-        </a>
 
-        <a href="?p=servicos/servicos">
-            <li><i class="fa fa-usd"></i>Serviços</li>
-        </a>
 
         <hr />
-        <li>Sair</li>
+        <li class="btnSair">Sair</li>
     </div>
 
     <div id="pnPrincipal">

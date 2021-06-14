@@ -41,11 +41,11 @@ const senha = (function () {
                 },
                 NOME: {
                     dataField: "NOME",
-                    width: "50%",
+                    width: "60%",
                 },
                 CPF: {
                     dataField: "CPF",
-                    width: "40%",
+                    width: "30%",
                     center: true,
                 },
             },
@@ -83,7 +83,7 @@ const senha = (function () {
 
             query: {
                 execute: (r) => {
-                    getSenhaFuncionarios(r.param.search);
+                    getSenhaFuncionarios(r.param.search, r.offset);
                 }
             }
         })
@@ -158,7 +158,7 @@ const senha = (function () {
 
     //Btn
     function pesquisar() {
-        let search = $('#edtPesquisa').val().trim();
+        let search = $('#edtPesquisa').val().trim().toUpperCase();
         xgUsuario.queryOpen({ search });
         xgUsuario.focus();
     }
@@ -300,7 +300,7 @@ const senha = (function () {
         $("#edtPesquisa").keydown(function (e) {
 
             if (e.keyCode == 13) {
-                search = $(this).val().trim()
+                search = $(this).val().trim().toUpperCase()
                 xgUsuario.queryOpen({ search: search })
                 xgUsuario.focus();
             }
@@ -316,10 +316,10 @@ const senha = (function () {
 
 
     //rotas
-    function getSenhaFuncionarios(search) {
+    function getSenhaFuncionarios(search, offset) {
         axios.post(url, {
             call: 'getSenhaFuncionarios',
-            param: { search: search }
+            param: { search: search, offset: offset }
         })
             .then(rs => {
                 xgUsuario.querySourceAdd(rs.data);
@@ -424,7 +424,6 @@ const senha = (function () {
             SENHA: senha,
             ID_FUNCIONARIOS: $("#slctFuncionario option:selected").val()
         }
-        let search = ''
         let funcionario = $("#slctFuncionario option:selected").html()
         setTimeout(function () {
             confirma({
@@ -436,8 +435,7 @@ const senha = (function () {
                     }).then(r => {
                         $('#edtNovoSenha').val('')
                         $('#edtNovoConfSenha').val('')
-                        xgUsuario.clear()
-                        getSenhaFuncionarios(search)
+                        xgUsuario.queryOpen({ search: '' })
 
                         xmNovaSenha.close()
                         show('A senha foi cadastrada')

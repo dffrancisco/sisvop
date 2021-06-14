@@ -2,7 +2,7 @@
 
 include_once '../class/class.connect_firebird.php';
 include_once '../class/prepareSql.php';
-class Sqlservicos
+class SqlObras
 {
   public $db;
 
@@ -37,7 +37,7 @@ class Sqlservicos
       a.id_lista_servico, a.valor,
       a.data_inicio, a.hora, a.status, 
       a.data_finalizacao, a.engenheiro,
-      a.executores, a.finalizadores, a.obs,
+      a.executores, a.obs,
       b.servico, 
       c.id_cliente,c.fantasia, c.cnpj
       FROM lista_servicos a, servicos b, clientes c
@@ -136,8 +136,9 @@ class Sqlservicos
  
   function getItensRomaneio($param){
     extract($param);
-    $sql="SELECT FIRST 10 skip $offset
-          a.id_item_romaneio, a.qtd,
+
+    $sql="SELECT FIRST 100 skip $offset
+          a.id_item_romaneio, a.qtd, a.id_romaneio,
           b.id_produto, b.descricao,
           c.marca,
           d.origem, d.id_itens_servico
@@ -203,7 +204,71 @@ class Sqlservicos
             FROM lista_servicos a, servicos b, clientes c
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
-            AND b.servico like '$search%'";
+            AND b.servico like '$search%'
+            ORDER BY a.STATUS";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+
+  }
+
+  function getServicosAnd($param){
+    extract($param);
+    $sql = "SELECT FIRST 10 SKIP $offset
+            a.id_lista_servico, a.executores,
+            a.data_inicio, a.hora, a.status, 
+            a.data_finalizacao, a.engenheiro,
+            b.id_servico,  b.servico ,
+            c.id_cliente,c.fantasia
+            FROM lista_servicos a, servicos b, clientes c
+            WHERE a.id_servico = b.id_servico
+            AND a.id_cliente = c.id_cliente
+            AND b.servico like '$search%'
+            AND a.status = '$andamento'";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+
+  }
+
+  function getServicosPre($param){
+    extract($param);
+    $sql = "SELECT FIRST 10 SKIP $offset
+            a.id_lista_servico, a.executores,
+            a.data_inicio, a.hora, a.status, 
+            a.data_finalizacao, a.engenheiro,
+            b.id_servico,  b.servico ,
+            c.id_cliente,c.fantasia
+            FROM lista_servicos a, servicos b, clientes c
+            WHERE a.id_servico = b.id_servico
+            AND a.id_cliente = c.id_cliente
+            AND b.servico like '$search%'
+            AND a.status = '$preparo'";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+
+  }
+
+  function getServicosEnc($param){
+    extract($param);
+    $sql = "SELECT FIRST 10 SKIP $offset
+            a.id_lista_servico, a.executores,
+            a.data_inicio, a.hora, a.status, 
+            a.data_finalizacao, a.engenheiro,
+            b.id_servico,  b.servico ,
+            c.id_cliente,c.fantasia
+            FROM lista_servicos a, servicos b, clientes c
+            WHERE a.id_servico = b.id_servico
+            AND a.id_cliente = c.id_cliente
+            AND b.servico like '$search%'
+            AND a.status = '$encerrado'";
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
@@ -228,6 +293,15 @@ class Sqlservicos
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function getUf(){
+
+    $sql = "SELECT * FROM uf";
+    
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+  
   // INSERT
   function inserirItens($param){
     $sql = "INSERT INTO 
@@ -236,6 +310,7 @@ class Sqlservicos
             VALUES 
             (:ID_SERVICO, :ID_PRODUTO , :QTD_PRODUTO, :DATA, :ORIGEM, :QTD_RETIRADA)";
     $sql = prepare::SQL($sql, $param);
+    print_r($sql);
     $query = $this->db->prepare($sql);
     $query->execute(); 
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -267,6 +342,21 @@ class Sqlservicos
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function insert($param){
+    extract($param);
+
+    $sql = "INSERT INTO clientes 
+            (cnpj, razao, fantasia, email, inscricao, fixo, tel, representante, data_cadastro, cep, endereco, id_uf, cidade, bairro)
+            VALUES
+            (:CNPJ, :RAZAO, :EMAIL,:FANTASIA, :INSCRICAO, :FIXO, :TEL, :REPRESENTANTE, :DATA_CADASTRO, :CEP, :ENDERECO, :ID_UF, :CIDADE, :BAIRRO)
+            RETURNING ID_CLIENTE";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
   //NOVO E GERAR
   function novoRomaneio($param){
 
@@ -287,11 +377,11 @@ class Sqlservicos
     $sql = "INSERT INTO lista_servicos 
             (id_cliente, id_servico, 
             data, hora, status, data_inicio, data_finalizacao,
-            engenheiro, executores, obs, valor, finalizadores)
+            engenheiro, executores, obs)
             VALUES 
             (:ID_CLIENTE, :ID_SERVICO, 
-            :DIA, :HORA, 'ABERTO', :DATA_INICIO, :DATA_FINAL,
-            :ENGENHEIRO, :EXECUTORES, :OBS, :VALOR, :FINALIZADORES)
+            :DATA, :HORA, 'PROJETO', :DATA_INICIO, :DATA_FINAL,
+            :ENGENHEIRO, :EXECUTORES, :OBS)
             returning id_lista_servico";
 
     $sql = prepare::SQL($sql, $param);

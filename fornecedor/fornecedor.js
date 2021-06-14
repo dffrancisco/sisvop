@@ -39,7 +39,11 @@ const fornecedor = (function () {
             heightLine: '35',
 
             columns: {
-                CNPJ: { dataField: 'CNPJ' },
+                CNPJ: {
+                    dataField: 'CNPJ',
+                    center: true,
+                    width: "30%",
+                },
                 Fantasia: { dataField: 'FANTASIA' },
             },
             onSelectLine: (ln) => {
@@ -147,7 +151,7 @@ const fornecedor = (function () {
 
     function pesquisar() {
         let search = $('#edtPesquisa').val().trim();
-        xgFornecedor.queryOpen({ search });
+        xgFornecedor.queryOpen({ search: search.toUpperCase() });
         $('#edtPesquisa').focus()
 
     }
@@ -224,15 +228,27 @@ const fornecedor = (function () {
         param.TEL_2 = $('#edtTel2').val()
         param.INSCRICAO = $('#edtInscricaoEstadual').val()
 
+
+
+        param.RAZAO = param.RAZAO.toUpperCase()
+        param.FANTASIA = param.FANTASIA.toUpperCase()
+        param.ENDERECO = param.ENDERECO.toUpperCase()
+        param.CIDADE = param.CIDADE.toUpperCase()
+        param.BAIRRO = param.BAIRRO.toUpperCase()
+        param.MUNICIPIO = param.MUNICIPIO.toUpperCase()
+
         let allDuplicty = await xgFornecedor.getDuplicityAll();
 
-        if (allDuplicty == false) {
-            xgFornecedor.showMessageDuplicity('O campo CNPJ está com valor duplicado ou vazio!');
-            return false
-        }
 
-        if (controleGrid == 'novo')
+
+        if (controleGrid == 'novo') {
             param.id_fornecedor = '';
+
+            if (allDuplicty == false) {
+                xgFornecedor.showMessageDuplicity('O campo CNPJ está com valor duplicado ou vazio!');
+                return false
+            }
+        }
 
         if (controleGrid == 'editar')
             param.ID_FORNECEDOR = xgFornecedor.dataSource().ID_FORNECEDOR;
@@ -275,21 +291,24 @@ const fornecedor = (function () {
             return false
         }
 
-        console.log('param :', param);
         axios.post(url, {
             call: 'salvar',
             param: param
         })
             .then(rs => {
-                console.log('rs :', rs);
 
-                if (rs.data[0].ID_FORNECEDOR) {
+                if (rs.data == 'edit') {
+                    xgFornecedor.dataSource('FANTASIA', param.FANTASIA)
+                    xgFornecedor.dataSource('CNPJ', param.CNPJ)
+
+                }
+                else if (rs.data[0].ID_FORNECEDOR) {
                     param.ID_FORNECEDOR = rs.data[0].ID_FORNECEDOR;
                     xgFornecedor.insertLine(param);
 
                 }
                 else {
-                    xgFornecedor.dataSource(param)
+                    show('ERRO INTERNO')
                 }
                 cancelar()
             })

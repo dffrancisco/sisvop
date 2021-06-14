@@ -91,17 +91,17 @@ $.fn.xPrint = function (options) {
             style += "<link type='text/css' rel='stylesheet' href='" + href + "' media='" + media + "'>";
         }
     });
-    
-    
+
+
 
 
     var iframe = $('<iframe/>');
     iframe[0].name = "iframe";
-    iframe.css({"position": "absolute", "top": "-1000000px"});
+    iframe.css({ "position": "absolute", "top": "-1000000px" });
 
     $("body").append(iframe);
     var frameDoc = iframe[0].contentWindow ? iframe[0].contentWindow
-            : iframe[0].contentDocument.document ? iframe[0].contentDocument.document
+        : iframe[0].contentDocument.document ? iframe[0].contentDocument.document
             : iframe[0].contentDocument;
     frameDoc.document.open();
 
@@ -115,9 +115,9 @@ $.fn.xPrint = function (options) {
 
 
     let dataTime = new Date();
-    $(arg.cabecalhoID+' .spData').html(dataTime.getDate() + '/' + (("0" + parseInt(dataTime.getMonth() + 1)).substr(-2)) + '/' + dataTime.getFullYear());
-    $(arg.cabecalhoID+' .spHora').html(dataTime.getHours() + ':' + ('0' + dataTime.getMinutes()).substr(-2));
-    
+    $(arg.cabecalhoID + ' .spData').html(dataTime.getDate() + '/' + (("0" + parseInt(dataTime.getMonth() + 1)).substr(-2)) + '/' + dataTime.getFullYear());
+    $(arg.cabecalhoID + ' .spHora').html(dataTime.getHours() + ':' + ('0' + dataTime.getMinutes()).substr(-2));
+
     if (arg.cabecalhoID == '.cabecalho')
         frameDoc.document.write($('.cabecalho').html());
     else

@@ -1,8 +1,8 @@
 <?php
 
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 include_once './sql.entrada.php';
 
@@ -25,6 +25,7 @@ class Entrada
         echo json_encode($call);
     }
 
+
     function getDataNota($param)
     {
         $call = $this->sql->getDataNota($param);
@@ -34,6 +35,13 @@ class Entrada
     function getItensNota($param)
     {
         $call = $this->sql->getItensNota($param);
+
+        echo json_encode($call);
+    }
+
+    function getPagamentos($param)
+    {
+        $call = $this->sql->getPagamentos($param);
         echo json_encode($call);
     }
 
@@ -55,20 +63,34 @@ class Entrada
         echo json_encode($call);
     }
 
+    function getViewProdutos($param)
+    {
+        $call = $this->sql->getViewProdutos($param);
+        echo json_encode($call);
+    }
+
     function deleteNota($param)
     {
+        $call = $this->sql->deletePagamento1($param);
+        $id_itens_nota = $this->sql->deleteItens($param);
         $id_nota = $this->sql->deleteNota($param);
     }
 
-    function deleteItens($param)
+    function deleteItensUni($param)
     {
-        $id_itens_nota = $this->sql->deleteItens($param);
+        $id_itens_nota = $this->sql->deleteItensUni($param);
         $call = $this->sql->updateDelProduto($param);
     }
 
-    function updateProduto($param)
+    function deletePagamento($param)
     {
-        $call = $this->sql->updateProduto($param);
+        $id_itens_nota = $this->sql->deletePagamento($param);
+    }
+
+
+    function updateDelProduto($param)
+    {
+        $call = $this->sql->updateDelProduto($param);
     }
 
     function updateItens($param)
@@ -76,18 +98,44 @@ class Entrada
         $call = $this->sql->updateItens($param);
     }
 
+    function updatePagamento($param)
+    {
+        $call = $this->sql->updatePagamento($param);
+    }
+
+    function editItens($param)
+    {
+        $call = $this->sql->updateDelProduto($param);
+        $call = $this->sql->updateProdutoEdit($param);
+        $call = $this->sql->updateItens($param);
+    }
+
     function insertNota($param)
     {
+
         if (empty($param['id_nota'])) {
             $id_nota = $this->sql->insertNota($param);
             $call = $this->sql->getCabecalho($id_nota[0]->ID_NOTA);
             echo json_encode($call);
-        } else {
+
+        } else if ($param['id_nota']) {
+
             $id_nota = $this->sql->updateNota($param);
             $call = $this->sql->getCabecalho($id_nota);
             echo json_encode($call);
+        } else {
+//=======
+//        } else if($param['id_nota']){
+//            
+//           $id_nota = $this->sql->updateNota($param);
+//            $call = $this->sql->getCabecalho($id_nota);
+//            echo json_encode($call);
+//        }else{
+//>>>>>>> master
+            echo 'ERRO INTERNO';
         }
     }
+
 
     function insertProduto($param)
     {
@@ -100,6 +148,11 @@ class Entrada
         $call = $this->sql->updateProduto($param);
 
         // echo '{"id_itens_nota":"' . $id_itens_nota[0] . '"}';
+    }
+    function insertPagamento($param)
+    {
+        $call = $this->sql->insertPagamento($param);
+        echo json_encode($call);
     }
 }
 

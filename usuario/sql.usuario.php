@@ -19,10 +19,12 @@ class SqlUsuario
   function getSenhaFuncionarios($param)
   {
     extract($param);
-    $sql = "SELECT a.id_funcionarios, a.nome, a.cpf, b.id_usuario 
+    $sql = "SELECT first 10 skip $offset 
+            a.id_funcionarios, a.nome, a.cpf, b.id_usuario 
             FROM funcionarios a, usuarios b
             WHERE a.id_funcionarios = b.id_funcionarios
             AND nome like '$search%'";
+
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -47,7 +49,6 @@ class SqlUsuario
     MATCHING (id_funcionarios)";
 
     $sql = prepare::SQL($sql, $param);
-    print_r($sql);
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);

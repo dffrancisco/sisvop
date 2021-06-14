@@ -31,7 +31,7 @@ const funcionario = (function () {
             columns: {
                 Nome: {
                     dataField: "NOME",
-                    width: "60%",
+                    width: "70%",
                 },
                 CPF: {
                     dataField: "CPF",
@@ -190,7 +190,7 @@ const funcionario = (function () {
 
         let search = $('#edtPesquisa').val()
 
-        xgFuncionarios.queryOpen({ search })
+        xgFuncionarios.queryOpen({ search: search.toUpperCase() })
 
 
     }
@@ -225,6 +225,13 @@ const funcionario = (function () {
         let param = xgFuncionarios.getElementSideBySideJson()
 
         param.BAIRRO = $('#slctBairro option:selected').text()
+
+        param.ENDERECO = param.ENDERECO.toUpperCase()
+        param.CIDADE = param.CIDADE.toUpperCase()
+        param.NOME = param.NOME.toUpperCase()
+        param.NOME = param.NOME.toUpperCase()
+        param.UF = param.UF.toUpperCase()
+
 
         let allDuplicty = await xgFuncionarios.getDuplicityAll()
 

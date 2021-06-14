@@ -31,6 +31,7 @@ class Produtos
             echo json_encode($id_produto);
         } else {
             $call = $this->sql->update($param);
+            echo json_encode('edit');
         }
     }
 

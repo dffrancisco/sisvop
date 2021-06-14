@@ -2,6 +2,7 @@
 $(function () {
     login.logar()
     $('#edtLogin').focus()
+    $('.CPF').mask('999.999.999-99');
 
     $('#edtLogin').keydown(function (e) {
         if (e.keyCode == 13) {
@@ -24,12 +25,13 @@ const login = (function () {
 
             let login = $('#edtLogin').val()
             let senha = $('#edtPassword').val()
-
+            let length = $('#edtLogin').val().length
             axios.post('login.php', {
                 call: 'setLogin',
                 param: {
                     login: login,
-                    senha: senha
+                    senha: senha,
+                    length: length
                 }
             }).then(r => {
                 if (r.data.msg) {
@@ -38,7 +40,11 @@ const login = (function () {
                 }
                 usuario = r.data
 
+                // window.location = "/index.php?p=home";
+
+
                 window.location = "/sisvop/index.php?p=home";
+
 
                 $('#spUser').html(r.data.NOME.split(' ')[0])
 

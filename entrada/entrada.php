@@ -3,6 +3,9 @@
 <title>Entrada</title>
 
 <div class="container">
+
+
+
     <div class="tabela margintop" id="pnFields">
         <div class="row">
             <div class=" col s7">
@@ -47,14 +50,14 @@
         </div>
     </div>
 
-
-
     <div class="container" id="edtAdicionar" hidden>
         <div class="row">
-            <div class="col s2">
-                <label>Código do produto</label>
-                <input type="text" placeholder="" class="validate" id="edtCodigo">
-
+            <div class="col s1">
+                <label>Código</label>
+                <input type="number" placeholder="" class="validate" id="edtCodigo">
+            </div>
+            <div class="col s1">
+                <i class="fa fa-search btnLupaProduto" aria-hidden="true"></i>
             </div>
             <div class="col s4">
                 <label>Descrição</label> <br>
@@ -84,35 +87,89 @@
             </div>
 
             <div class="col s1">
-                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnFinalizar"><i class="fa fa-check"></i></button>
+                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnFinalizar"><i
+                        class="fa fa-check"></i></button>
             </div>
 
             <div class="col s1">
-                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnEditar" disabled><i class="fa fa-pencil"></i></button>
+                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnEditar" disabled><i
+                        class="fa fa-pencil"></i></button>
             </div>
 
             <div class="col s1">
-                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnDeletar" disabled><i class="fa fa-times"></i></button>
+                <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnDeletar" disabled><i
+                        class="fa fa-times"></i></button>
             </div>
         </div>
     </div>
 
-    <div id="xgItens" class="list"></div>
+    <ul class="tabs" style="margin-left: 5px">
+        <li class="tab"><a id="abaItens" class="active" href="#tabItens">Itens</a></li>
+        <li class="tab"><a id="abaPagamento" href="#tabPagamento">Pagamento</a></li>
+    </ul>
 
-    <div id="pnButtons" class="center-align"></div>
+    <div id="tabItens" class="col s12">
+        <div id="xgItens" class="list"></div>
 
-    <button class="btn-Frame btn-Frame-blue btnP" id="btnPrint">Print</button>
+        <div id="pnButtons" class="center-align"></div>
+    </div>
+
+    <div id="tabPagamento">
+        <div class="row">
+            <div class="col s4">
+                <label>Data de vencimento</label>
+                <input type="text" class="date" id="edtDataVencimento">
+            </div>
+
+            <div class="col s4">
+                <label>Valor</label>
+                <input type="text" class="real" id="edtValorPagar">
+
+            </div>
+            <div class="col s4">
+                <button class="btn-Frame btn-Frame-blue btnP" style="margin-top:14px ;"
+                    id="btnCadParcela">Cadastrar</button>
+            </div>
+        </div>
+        <div id="xgPagamento" class="list"></div>
+        <div id="pnButtonPagamento" class="center-align"></div>
+    </div>
 
 
 </div>
 
+
+
+
+<div id="modalLocalizarNota">
+
+    <div class="row">
+
+        <div class="col s3">
+            <label>Pesquisa Nº</label>
+            <input type="text" placeholder="Numero da nota" class="validate margintop numeroNota"
+                id="edtPesquisaNotaNumero">
+        </div>
+        <div class="col s4">
+            <label>Pesquisa Nome</label>
+            <input type="text" placeholder="Nome fantasia" class="validate margintop" id="edtPesquisaNota">
+        </div>
+    </div>
+
+    <div id=xgLocalizarNota class="list"></div>
+
+</div>
+
+
 <div id="modalFornecedor">
     <div class="row">
         <div class="col s5">
-            <input type="text" placeholder="Pesquisar" class="margintop" id="edtPesquisaFornecedor">
+            <input type="text" placeholder="Pesquisar" class="validate margintop" id="edtPesquisaFornecedor">
         </div>
     </div>
     <div id="xgFornecedor"></div>
+
+
 </div>
 
 <div id="modalNovaNota">
@@ -150,25 +207,22 @@
 
         <div class="col s11">
             <label>Chave de acesso</label>
-            <input type="text" placeholder="" class="validate" id="edtChave">
+            <input type="text" placeholder="" class="validate chave" id="edtChave">
 
         </div>
     </div>
 
 </div>
 
-
-<div id="modalNota">
+<div id="modalLupaProduto">
     <div class="row">
-        <div class="col s4">
-            <input type="text" placeholder="Nome fantasia" class="margintop" id="edtPesquisaNota">
-        </div>
-        <div class="col s3">
-            <input type="text" placeholder="Numero da nota" class="margintop numeroNota" id="edtPesquisaNotaNumero">
+        <div class="col s5">
+            <input type="text" placeholder="Pesquisar" class="validate margintop" id="edtPesquisaProduto">
         </div>
     </div>
-    <div id=xgLocalizarNota></div>
+    <div id="xgLupaProduto"></div>
 </div>
+
 
 <div id="editItens">
     <div class="row">

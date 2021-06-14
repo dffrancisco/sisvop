@@ -2,6 +2,7 @@ let xgMarca;
 
 $(function () {
     marca.grid();
+    marca.keydown();
     xgMarca.queryOpen({ search: '' })
 
 });
@@ -20,7 +21,6 @@ const marca = (function () {
                 Marca: { dataField: 'MARCA' },
             },
             onSelectLine: (r) => {
-                console.log('r :', r);
             },
             sideBySide: {
                 el: "#pnFields",
@@ -53,7 +53,7 @@ const marca = (function () {
                         },
                         save: {
                             html: "Salvar",
-                            class: "btnP",
+                            class: "btnP btnSave",
                             state: xGridV2.state.save,
                             click: salvar,
                         },
@@ -100,7 +100,6 @@ const marca = (function () {
             param: { search: search, offset: offset }
 
         }).then(rs => {
-            console.log('rs :', rs);
             xgMarca.querySourceAdd(rs.data);
 
             if (rs.data[0])
@@ -109,7 +108,7 @@ const marca = (function () {
     }
 
     function pesquisar() {
-        let search = $('#edtPesquisa').val().trim();
+        let search = $('#edtPesquisa').val().trim().toUpperCase();
         xgMarca.queryOpen({ search })
         xgMarca.focus();
     }
@@ -160,11 +159,6 @@ const marca = (function () {
 
     const salvar = async () => {
         let param = xgMarca.getElementSideBySideJson();
-        let allDuplicty = await xgMarca.getDuplicityAll()
-
-        if (allDuplicty == false)
-            return false;
-
 
         if (param.MARCA || param.MARCA.length > 0) {
 
@@ -185,29 +179,46 @@ const marca = (function () {
 
             if (controleGrid == 'new') {
                 param.ID_MARCA = ''
+                let allDuplicty = await xgMarca.getDuplicityAll()
+
+                if (allDuplicty == false)
+                    return false;
             }
+
+            param.MARCA = param.MARCA.toUpperCase()
 
             axios.post(url, {
                 call: 'salvar',
                 param: param
 
             }).then(rs => {
+                cancelar()
 
-                console.log('param :', param);
-                if (rs.data[0].ID_MARCA) {
+                cancelar()
 
-                    param.ID_MARCA = rs.data.ID_MARCA;
-                    xgMarca.insertLine(param);
-
-                } else {
+                if (rs.data == 'edit') {
                     xgMarca.dataSource(param);
 
+
+                    cancelar()
+
+                    if (rs.data == 'edit') {
+                        xgMarca.dataSource(param);
+
+
+                    }
+                    else if (rs.data[0].ID_MARCA) {
+
+                        param.ID_MARCA = rs.data.ID_MARCA;
+                        xgMarca.insertLine(param);
+
+                    } else {
+                        show('ERRO INTERNO!')
+                    }
                 }
-                cancelar()
             });
         } else {
             xgMarca.showMessageDuplicity('O campo está com valor duplicado ou vazio!')
-            console.log('as')
         }
     }
 
@@ -219,8 +230,19 @@ const marca = (function () {
         $('.btnPesq').removeAttr('disabled');
     }
 
+    function keydown() {
+        $("#edtMarca").keydown(function (e) {
+
+            if (e.keyCode == 13) {
+                $('.btnSave').click()
+
+            }
+        })
+    }
+
     return {
         grid: grid,
+        keydown: keydown,
     };
 
 })();

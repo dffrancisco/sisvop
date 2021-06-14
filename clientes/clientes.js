@@ -23,11 +23,11 @@ const cliente = (function () {
                 CNPJ: {
                     dataField: "CNPJ",
                     center: true,
-                    width: "40%",
+                    width: "30%",
                 },
                 Razão: {
                     dataField: "RAZAO",
-                    width: "60%",
+                    width: "70%",
                 }
             },
             sideBySide: {
@@ -78,19 +78,18 @@ const cliente = (function () {
                     dataField: ['CNPJ'],
 
                     execute: (r) => {
-                        console.log('r :');
                         let param = {}
-                        param.cnpj = r.value,
-                            validarCpnj(param.cnpj),
+                        param.CNPJ = r.value,
+                            validarCpnj(param.CNPJ),
                             axios.post(url, {
                                 call: 'duplicity',
                                 param: param
 
                             })
                                 .then(rs => {
-                                    
+
                                     if (rs.data[0]) {
-                                        xgCliente.showMessageDuplicity('CNPJ inválido')
+                                        xgCliente.showMessageDuplicity('CNPJ inválido DUP')
                                         xgCliente.focusField(r.field);
                                     }
                                 })
@@ -111,11 +110,10 @@ const cliente = (function () {
 
         axios.post(url, {
             call: 'getCliente',
-            param: { search: search, offset: offset }
+            param: { search: search.toUpperCase(), offset: offset }
         })
             .then(rs => {
 
-                console.log('rs :', rs.data);
 
                 xgCliente.querySourceAdd(rs.data);
                 if (rs.data[0]) xgCliente.focus();
@@ -126,7 +124,7 @@ const cliente = (function () {
 
     function pesquisar() {
         let search = $('#edtPesquisa').val().trim();
-        xgCliente.queryOpen({ search })
+        xgCliente.queryOpen({ search: search })
     }
 
     function novo() {
@@ -174,7 +172,6 @@ const cliente = (function () {
 
         // let allDuplicty = await xgCliente.getDuplicityAll()
         // if (allDuplicty == false) {
-        //     console.log('travei')
         //     return false;
         // }
 
@@ -194,6 +191,16 @@ const cliente = (function () {
             cidade: $('#edtCidade').val(),
             bairro: $('#edtBairro').val(),
         }
+
+        param.RAZAO = param.RAZAO.toUpperCase()
+        param.FANTASIA = param.FANTASIA.toUpperCase()
+        param.EMAIL = param.EMAIL.toUpperCase()
+        param.REPRESENTANTE = param.REPRESENTANTE.toUpperCase()
+        param.ENDERECO = param.ENDERECO.toUpperCase()
+        param.CIDADE = param.CIDADE.toUpperCase()
+        param.BAIRRO = param.BAIRRO.toUpperCase()
+
+
 
 
         for (let i in valCampos) {
@@ -217,11 +224,15 @@ const cliente = (function () {
 
         })
             .then(r => {
-                if (r.data.ID_CLIENTE[0]) {
-                    param.ID_CLIENTE = r.data.ID_CLIENTE
+                if (r.data == 'edit') {
+                    xgCliente.dataSource(param)
+
+                }
+                if (r.data[0].ID_CLIENTE) {
+                    param.ID_CLIENTE = r.data[0].ID_CLIENTE
                     xgCliente.insertLine(param)
                 } else {
-                    xgCliente.dataSource(param)
+                    show('ERRO INTERNO')
                 }
 
             })
@@ -258,8 +269,8 @@ const cliente = (function () {
 
         if (cnpj == '') return false;
 
-        if (cnpj.length != 14) if (cnpj.length < 14) {
-            xgCliente.showMessageDuplicity(`CNPJ inválido`);
+        if (cnpj.length != 14) {
+            xgCliente.showMessageDuplicity(`Digite um CNPJ com tamanho válido`);
             xgCliente.focusField();
             return false;
         }

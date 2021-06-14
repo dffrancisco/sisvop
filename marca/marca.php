@@ -7,8 +7,8 @@
 
     <div class="tabela margintop" id="pnFields">
 
-        <label>Marca</label><br>
-        <input type="text" class="corInp" name="MARCA" id="edtMarca">
+        <label>Marca*</label><br>
+        <input type="text" class="corInp validate" name="MARCA" id="edtMarca">
 
     </div>
 
@@ -16,7 +16,7 @@
 
     <div class="row">
         <div class="col s3">
-            <input type="text" class="margintop" placeholder="Pesquisar" id="edtPesquisa">
+            <input type="text" class="margintop validate" placeholder="Pesquisar" id="edtPesquisa">
         </div>
         <div id="pnButtons" class="right-align col s9"></div>
     </div>

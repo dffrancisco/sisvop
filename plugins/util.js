@@ -1,11 +1,26 @@
 
 
 const util = (function () {
-   
+
     const formatValor = function (num) {
         if (num == null) return '';
         num = String(num);
         return num.replace('.', ',').replace(/(\d)(?=(\d{3})+,)/g, "$1.");
+    }
+
+    const formatarValorUSA = function (num) {
+        return parseFloat(num.replace(/\./g, '').replace(/,/g, '.'));
+    };
+
+    const formatarDataUSA = (dt) => {
+        if (!dt)
+            return ''
+
+        console.log(dt);
+
+        let data = dt.substr(0, 10)
+        data = data.split(/\.|-|\//g).reverse().join('/')
+        return data
     }
 
     const formatValorFix2Casas = function (num) {
@@ -30,7 +45,7 @@ const util = (function () {
             ret = ' - ' + ret;
         return ret;
     }
-  
+
     const dataBrasil = function (data) {
         let separador;
         if (data != null && data != '') {
@@ -112,6 +127,8 @@ const util = (function () {
         block: block,
         formatValor: formatValor,
         formatValorFix2Casas: formatValorFix2Casas,
-        dataBrasil:dataBrasil,
+        dataBrasil: dataBrasil,
+        formatarDataUSA: formatarDataUSA,
+        formatarValorUSA: formatarValorUSA,
     }
 })()

@@ -3,7 +3,14 @@ let xgProduto;
 $(function () {
     produto.grid();
     produto.getMarca();
+    produto.keydown();
     xgProduto.queryOpen({ search: '' })
+
+
+
+    // $('.xGridV2-col:eq(5)').attr('style', 'color: red !important; font font-size: 16px !important; width: 60% !important;')
+
+    // $('#editDescricao').attr('style', 'color: red !important')
 
 });
 
@@ -28,8 +35,6 @@ const produto = (function () {
                 Descrição: {
                     dataField: "DESCRICAO",
                     width: "60%",
-                    style: "font-size: 16px;",
-
                 },
                 QTD: {
                     dataField: "QTD",
@@ -41,6 +46,10 @@ const produto = (function () {
                     render: addReal,
                     width: "15%",
                 },
+            },
+
+            dblClick: () => {
+                $('.btnEdit').click()
             },
 
             sideBySide: {
@@ -56,14 +65,14 @@ const produto = (function () {
                             click: searchConf,
                         },
                         novo: {
-                            html: "Novo",
-                            class: "btnP",
+                            html: "Novo(F8)",
+                            class: "btnP btnNovo",
                             state: xGridV2.state.insert,
                             click: novo,
                         },
                         edit: {
                             html: "Editar",
-                            class: "btnP",
+                            class: "btnP btnEdit",
                             state: xGridV2.state.update,
                             click: editar,
                         },
@@ -75,13 +84,13 @@ const produto = (function () {
                         },
                         save: {
                             html: "Salvar",
-                            class: "btnP",
+                            class: "btnP btnSave",
                             state: xGridV2.state.save,
                             click: salvar
                         },
                         cancelar: {
                             html: "Cancelar",
-                            class: "btnP",
+                            class: "btnP btnCancel",
                             state: xGridV2.state.cancel,
                             click: cancelar,
                         },
@@ -93,7 +102,7 @@ const produto = (function () {
 
                     execute: (r) => {
                         let param = {}
-                        param.codigo = r.value,
+                        param.CODIGO = r.value,
                             axios.post(url, {
                                 call: 'getCodigo',
                                 param: param
@@ -122,11 +131,14 @@ const produto = (function () {
     function getProdutos(search, offset) {
         axios.post(url, {
             call: 'getProdutos',
-            param: { search: search, offset: offset }
+            param: { search: search.toUpperCase(), offset: offset }
         })
             .then(rs => {
+
                 xgProduto.querySourceAdd(rs.data);
                 if (rs.data[0]) xgProduto.focus();
+
+                destacarProd()
             })
 
     }
@@ -153,59 +165,83 @@ const produto = (function () {
 
     const salvar = async () => {
         let param = xgProduto.getElementSideBySideJson()
+        param.QTD = Number(param.QTD)
+        param.ID_MARCA = Number(param.ID_MARCA)
+        param.MARCA = xgProduto.dataSource().MARCA
         param.DATA_CADASTRO = $('#edtData').val()
-        console.log('param.data_cadastro :', param.data_cadastro);
-
-
-        let allDuplicty = await xgProduto.getDuplicityAll()
-
-        if (allDuplicty == false)
-            return false;
 
         let valCampos = {
             codigo: $('#editCodigo').val(),
             descricao: $('#editDescricao').val(),
             valor: $('#editValor').val(),
-            endereco: $('#editEndereco').val(),
             qtd: $('#editQtd').val(),
-            marca: $('#editMarca').val(),
+            marca: $('#slctMarca').val(),
+            medida: $('#slctMedida').val(),
+
         }
         valCampos.valor = valCampos.valor.replace(',', '');
 
         for (let i in valCampos) {
-            if (valCampos[i] == '' || valCampos.valor == 0) {
+            if (valCampos[i] == '' || valCampos.valor == 0 || valCampos.medida == null || valCampos.marca == null) {
                 show('Por favor preencha todos os campos')
                 return false;
             }
         }
 
         if (controleGrid == 'insert') {
-            param.id_produto = ''
+            param.ID_PRODUTO = ''
+            let allDuplicty = await xgProduto.getDuplicityAll()
+
+            if (allDuplicty == false) {
+                show('Código já cadastrado!')
+                return false;
+            }
         }
 
         if (controleGrid == 'edit') {
-            param.id_produto = xgProduto.dataSource().ID_PRODUTO;
+            param.ID_PRODUTO = xgProduto.dataSource().ID_PRODUTO;
         }
 
-        console.log(' p', param);
+        param.DESCRICAO = param.DESCRICAO.toUpperCase()
+        if (param.ENDERECO != undefined) {
+            param.ENDERECO = param.ENDERECO.toUpperCase()
+        } else {
+            param.ENDERECO = ''
+        }
+
+        if (param.QTD_MINIMA == undefined || param.QTD_MINIMA == '.') {
+            param.QTD_MINIMA = -1
+        } else {
+            param.QTD_MINIMA = Number(param.QTD_MINIMA)
+        }
+
         axios.post(url, {
             call: 'save',
             param: param
         })
             .then(r => {
-                if (r.data[0].ID_PRODUTO) {
-                    param.ID_PRODUTO = r.data[0].ID_PRODUTO
+
+                cancelar()
+                if (r.data == 'edit') {
+                    xgProduto.dataSource("QTD", param.QTD)
+                    xgProduto.dataSource("CODIGO", param.CODIGO)
+                    xgProduto.dataSource("DESCRICAO", param.DESCRICAO)
+                    xgProduto.dataSource("VALOR", param.VALOR)
+                }
+
+                else if (r.data[0].ID_PRODUTO) {
+                    param.ID_PRODUTO = r.data[0]
                     xgProduto.insertLine(param)
 
-                } else {
-
-                    xgProduto.dataSource(param)
                 }
+
+                else {
+                    show('ERRO INTERNO')
+                }
+                destacarProd()
 
             })
 
-        xgProduto.enable()
-        xgProduto.focus()
     }
 
     function addReal(value) {
@@ -221,10 +257,13 @@ const produto = (function () {
         $('#edtData').val(date)
         $('#edtPesquisa').prop("disabled", true)
         $('.btnPesq').prop("disabled", true)
+
+        $('#editCodigo').val()
     }
 
     function editar() {
         controleGrid = 'edit';
+        xgProduto.disable()
         $('#edtPesquisa').prop("disabled", true)
         $('.btnPesq').prop("disabled", true)
 
@@ -251,15 +290,57 @@ const produto = (function () {
     }
 
     function cancelar() {
-
         $('.btnPesq').removeAttr("disabled")
         $('#edtPesquisa').removeAttr("disabled")
         xgProduto.enable()
         xgProduto.focus()
     }
 
+    function keydown() {
+        $("#slctMarca").keydown(function (e) {
+            if (e.keyCode == 13) {
+                $('.btnSave').click()
+
+            }
+        })
+
+        $("#edtPesquisa").keydown(function (e) {
+            if (e.keyCode == 13) {
+                $('.btnPesq').click()
+            }
+        })
+
+        $(document).keydown(function (e) {
+            if (e.keyCode == 113) {
+                $('#edtPesquisa').focus()
+            }
+
+            if (e.keyCode == 119) {
+                $('.btnNovo').click()
+            }
+
+            if (e.keyCode == 27) {
+                $('.btnCancel').click()
+            }
+        })
+    }
+
+    function destacarProd() {
+        for (let i in xgProduto.data()) {
+
+            if (xgProduto.data()[i].QTD == 0) {
+                i++
+                $('.xGridV2-row:eq(' + i + ')').attr('style', 'color: #ff0000 !important;')
+            }
+            else if (xgProduto.data()[i].QTD <= xgProduto.data()[i].QTD_MINIMA) {
+                i++
+                $('.xGridV2-row:eq(' + i + ')').attr('style', 'color:  #ffb400 !important;')
+            }
+        }
+    }
     return {
         grid: grid,
         getMarca: getMarca,
+        keydown: keydown
     };
 })();

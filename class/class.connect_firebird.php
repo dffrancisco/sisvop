@@ -4,7 +4,10 @@ class ConexaoFirebird
 
     public static function getConectar()
     {
-        $banco = '/home/sisvop/sisvop.fdb';
+        // $banco = '/home/sisvop/sisvop.fdb';
+        $banco = '/home/sisvop/sisvop_beta.fdb';
+
+
         $server = '10.0.80.38';
         //$server = 'vsescola.com.br';
 

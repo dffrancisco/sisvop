@@ -4,11 +4,11 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include_once './sql.servicos.php';
+include_once './sql.obras.php';
 
 extract(json_decode(file_get_contents("php://input"), TRUE));
 
-class Servicos
+class Obras
 {
 
     private $sql;
@@ -17,7 +17,7 @@ class Servicos
     {
 
         //instancia da class        
-        $this->sql = new SqlServicos();
+        $this->sql = new SqlObras();
     }
 
     // GETS
@@ -56,6 +56,25 @@ class Servicos
         echo json_encode($call);
     }
 
+    function getRomaneioRela($param){
+        $call = $this->sql->getRomaneio($param);
+
+        $rs = [];
+
+            foreach ($call as $ln) {
+                $ln->offset = 0;
+                $rsIR = $this->sql->getItensRomaneio((Array) $ln);
+                $ln->ITENS = $rsIR; 
+
+                unset($ln->offset);
+                
+                $rs[] = $ln;
+            }
+
+        echo json_encode($rs);
+    }  
+
+
     function getItens($param)
     {
         $call = $this->sql->getItens($param);
@@ -70,8 +89,47 @@ class Servicos
 
     function getServicos($param){
         
-        $call = $this->sql->getServicos($param);
-        echo json_encode($call);
+        $dados = [];
+        
+        if($param['andamento']== 'ANDAMENTO'){
+
+            $andamento = $this->sql->getServicosAnd($param);
+            $dados = array_merge($andamento, $dados);
+        }
+        
+        if($param['preparo']== 'PREPARO'){
+
+            $preparo = $this->sql->getServicosPre($param);
+            $dados = array_merge($preparo, $dados);
+
+        }
+        
+        if($param['encerrado']== 'ENCERRADO'){
+
+            $encerrado = $this->sql->getServicosEnc($param);
+            $dados = array_merge($encerrado, $dados);
+
+        }
+
+        if($param['encerrado'] == '' && $param['preparo'] == '' && $param['andamento'] == ''){
+            
+            $todos = $this->sql->getServicos($param);
+            
+            foreach($todos as $ln){
+                
+                if($ln->STATUS == 'PREPARO' || $ln->STATUS == 'ANDAMENTO' || 
+                   $ln->STATUS == 'ENCERRADO'){
+                        // print_r(Array($ln));
+                       
+                    $dados = array_merge(Array($ln), $dados); 
+
+                }
+
+            }
+
+        }
+        
+        echo json_encode($dados);
     }
 
     function getListaServicoX($param)
@@ -85,6 +143,11 @@ class Servicos
         echo json_encode($call);
     }
 
+    function getUf()
+    {
+        $call = $this->sql->getUf();
+        echo json_encode($call);
+    }
     //NOVO E GERAR
     function novoRomaneio($param){
         $call = $this->sql->novoRomaneio($param);
@@ -94,6 +157,13 @@ class Servicos
     function gerarServico($param){
         $call = $this->sql->gerarServico($param);
         echo '{"ID_LISTA_SERVICO":"'.$call[0]->ID_LISTA_SERVICO.'"}';
+    }
+
+    function saveCliente($param){
+
+        $id_cliente = $this->sql->insert($param);
+        echo '{"ID_CLIENTE":"' . $id_cliente[0]->ID_CLIENTE . '"}';
+       
     }
 
     //INSERIR
@@ -144,5 +214,5 @@ class Servicos
     }
 }
 
-$class = new Servicos();
+$class = new Obras();
 $class->$call(@$param);

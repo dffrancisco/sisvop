@@ -32,7 +32,8 @@ class SqlClientes
 
   function getUf()
   {
-    $sql = "SELECT * FROM uf";
+    $sql = "SELECT * FROM uf
+    ORDER BY uf ASC";
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -69,8 +70,10 @@ class SqlClientes
 
     $sql = "UPDATE clientes SET cnpj = '$CNPJ', razao = '$RAZAO', fantasia = '$FANTASIA', email = '$EMAIL', inscricao = '$INSCRICAO', fixo = '$FIXO', tel = '$TEL', representante = '$REPRESENTANTE'
     WHERE id_cliente = '$ID_CLIENTE' ";
-    $this->db->exec($sql);
-    return $this->db->lastInsertId();
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function duplicity($param)
@@ -78,7 +81,7 @@ class SqlClientes
 
     extract($param);
     $sql = "SELECT cnpj FROM clientes
-          WHERE cnpj like $CNPJ";
+          WHERE cnpj = '$CNPJ'";
 
     $query = $this->db->prepare($sql);
     $query->execute();

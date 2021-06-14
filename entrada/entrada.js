@@ -1,9 +1,12 @@
 let xgItens;
 let xgFornecedor;
 let xgLocalizarNota;
+let xgridLupaProduto;
+let xgridPagamento;
 let xmFornecedor;
-let xmNota;
 let xmNovaNota;
+let xmLupaProduto;
+let xmLocalizarNota
 let cabecalho;
 
 
@@ -11,22 +14,23 @@ $(function () {
     itens.xgridItens()
     itens.xgridLocalizarNota()
     itens.xgridFornecedor();
+    itens.xgridLupaProduto()
+    itens.xgridPagamento()
     itens.xmNovaNota()
     itens.xmFornecedor()
     itens.xmEditItens()
-    itens.xmNota()
+    itens.xmLupaProduto()
+    itens.xmLocalizarNota()
     itens.keydown()
     itens.adicionais()
     itens.finalizar()
     itens.editarItens()
     itens.deleteItens()
 
-    $('#btnPrint').click(function () {
-        $('#pnFields').xPrint();
-    })
+    getDataEmpresa()
+    $('.tabs').tabs();
 
-});
-
+})
 
 const itens = (function () {
 
@@ -46,7 +50,7 @@ const itens = (function () {
     function xgridItens() {
         xgItens = new xGridV2.create({
             el: "#xgItens",
-            height: 210,
+            height: 170,
             heightLine: 35,
             theme: "x-clownV2",
 
@@ -73,15 +77,21 @@ const itens = (function () {
 
 
             },
+
             sideBySide: {
                 el: "#pnFields",
                 frame: {
                     el: "#pnButtons",
                     buttons: {
                         localizar: {
-                            html: "Localizar Nota (F2)",
+                            html: "Localizar nota",
                             class: "btnP btnPesq",
                             click: localizar
+                        },
+                        print: {
+                            html: "Imprimir",
+                            class: "btnP btnPrint",
+                            click: print
                         },
                         novo: {
                             html: "Novo (F8)",
@@ -114,20 +124,18 @@ const itens = (function () {
     function xgridLocalizarNota() {
         xgLocalizarNota = new xGridV2.create({
             el: "#xgLocalizarNota",
-            height: 210,
+            height: 190,
             heightLine: 35,
             theme: "x-clownV2",
 
             columns: {
-
-                Fornecedor: {
-                    dataField: "FANTASIA",
-                    width: "35%",
-                },
                 Nº: {
                     dataField: "NUMERO_NOTA",
-                    center: true,
-                    width: "25%",
+                    width: "20%",
+                },
+                Fornecedor: {
+                    dataField: "FANTASIA",
+                    width: "40%",
                 },
                 Data: {
                     dataField: "DATA_EMISSAO",
@@ -139,6 +147,14 @@ const itens = (function () {
                     center: true,
                     width: "20%",
                 },
+            },
+            onKeyDown: {
+                '13': (ln) => {
+                    btnSelectNota()
+                }
+            },
+            dblClick: (ln) => {
+                btnSelectNota()
             },
             query: {
                 execute: (r) => {
@@ -180,6 +196,15 @@ const itens = (function () {
                     $('#edtNumero').focus()
                 }
             },
+            dblClick: (ln) => {
+                $('#spNomeFantasia').html(ln.FANTASIA)
+                $('#spCnpj').html(ln.CNPJ)
+                $('#spCnpj').val(ln.ID_FORNECEDOR)
+                id_fornecedor = ln.ID_FORNECEDOR
+                xmNovaNota.open()
+                xmFornecedor.close()
+                $('#edtNumero').focus()
+            },
             query: {
                 execute: (r) => {
                     getFornecedor(r.param.search, r.offset)
@@ -189,18 +214,129 @@ const itens = (function () {
         })
     }
 
+    function xgridLupaProduto() {
+        xgLupaProduto = new xGridV2.create({
+            el: "#xgLupaProduto",
+            height: 190,
+            heightLine: 35,
+            theme: "x-clownV2",
 
+            columns: {
+                Código: {
+                    dataField: "CODIGO",
+                    width: "20%",
+                },
+                Descrição: {
+                    dataField: "DESCRICAO",
+                    width: "60%",
+                },
+                Marca: {
+                    dataField: "MARCA",
+                    width: "20%",
 
-    //xModal
-    function xmNota() {
-        xmNota = new xModal.create({
-            el: '#modalNota',
-            title: "Notas",
-            width: 900,
-            height: 400,
+                }
+
+            },
+            onKeyDown: {
+                '13': (ln) => {
+                    produtoSelecionado = ln
+                    xmLupaProduto.close()
+                    $('#spDescricao').html(ln.DESCRICAO)
+                    $('#spQtd').html(ln.QTD)
+                    $('#spValorProduto').html(ln.VALOR)
+                    $('#edtCodigo').val(ln.CODIGO)
+                    $('#spDescricao').val(ln.DESCRICAO)
+                    $('#spQtd').val(ln.QTD)
+                    $('#spValorProduto').val(ln.VALOR)
+                    $('#edtQtdCompra').focus()
+                }
+            },
+            dblClick: (ln) => {
+
+                produtoSelecionado = ln
+                xmLupaProduto.close()
+
+                $('#spDescricao').html(ln.DESCRICAO)
+                $('#spQtd').html(ln.QTD)
+                $('#spValorProduto').html(ln.VALOR)
+                $('#edtCodigo').val(ln.CODIGO)
+                $('#spDescricao').val(ln.DESCRICAO)
+                $('#spQtd').val(ln.QTD)
+                $('#spValorProduto').val(ln.VALOR)
+                $('#edtQtdCompra').focus()
+            },
+            query: {
+                execute: (r) => {
+                    lupaProduto(r.param.searchProduto, r.offset)
+
+                },
+            }
         })
-
     }
+
+    function xgridPagamento() {
+        xgPagamento = new xGridV2.create({
+            el: "#xgPagamento",
+            height: 190,
+            heightLine: 35,
+            theme: "x-clownV2",
+            onSelectLine: (ln) => {
+                $('.btnDelPag').removeAttr("disabled")
+                $('.btnEditPag').removeAttr("disabled")
+            },
+            columns: {
+                'Data de vencimento': {
+                    dataField: "DATA_VENCIMENTO",
+                    width: "25%",
+                    render: util.dataBrasil
+                },
+                'Valor parcela': {
+                    dataField: "VALOR_PARCELA",
+                    width: "25%",
+                    render: util.formatValor
+                },
+                'Data pago': {
+                    dataField: "DATA_PAGO",
+                    width: "25%",
+                    render: util.dataBrasil
+                },
+                'Valor pago': {
+                    dataField: "VALOR_PAGO",
+                    width: "25%",
+                    render: util.formatValor
+                }
+            },
+            sideBySide: {
+
+                frame: {
+                    el: "#pnButtonPagamento",
+                    buttons: {
+                        deletar: {
+                            html: "Deletar",
+                            class: "btnP btnDelPag btnDel",
+                            click: deletePagamento
+                        },
+                        editar: {
+                            html: "Editar",
+                            class: "btnP btnEditPag",
+                            click: editPagamento
+                        },
+                        salve: {
+                            html: "Salvar",
+                            class: "btnP btnSavePag",
+                            click: savePagamento
+                        },
+
+                    }
+                },
+
+            },
+
+        })
+    }
+
+
+
 
     function xmFornecedor() {
         xmFornecedor = new xModal.create({
@@ -260,25 +396,48 @@ const itens = (function () {
 
     }
 
+    function xmLupaProduto() {
+        xmLupaProduto = new xModal.create({
+            el: '#modalLupaProduto',
+            title: "Produto",
+            width: 600,
+            height: 400,
+            onClose: () => {
+                $('#edtPesquisaProduto').val('')
+            }
+        })
+    }
+
+    function xmLocalizarNota() {
+        xmLocalizarNota = new xModal.create({
+            el: '#modalLocalizarNota',
+            title: "Localizar nota",
+            width: 700,
+            height: 400,
+            onClose: () => {
+                $('#edtPesquisaNotaNumero').val('')
+                $('#edtPesquisaNota').val('')
+            }
+        })
+    }
+
+
 
 
     //Função buttons xGrid
-    function localizar() {
-        searchNota = $('#edtPesquisaNota').val().trim()
-        searchNota = $('#edtPesquisaNotaNumero').val().trim()
-        xgLocalizarNota.queryOpen({ searchNota: '' })
-        xmNota.open()
-        $('#edtPesquisaNota').focus()
-
+    function print() {
+        xgItens.print($('.cabecalho').html() + $('#pnFields').html())
 
     }
 
     function novo() {
         search = $('#edtPesquisaFornecedor').val().trim()
         xgFornecedor.queryOpen({ search: '' })
-
         controleGrid = 'new';
+        id_nota = ''
+
         $('#edtAdicionar').removeAttr('hidden')
+        $('#xgLocalizarNota').prop('hidden', true)
         $('#spNomeFantasia').html('')
         $('#spCnpj').html('')
         $('#spNumero').html('')
@@ -306,14 +465,19 @@ const itens = (function () {
         $('#edtIcms').val('')
         $('#edtValor').val('')
         $('#edtChave').val('')
+        $('#edtDataVencimento').val('')
+        $('#edtValorPagar').val('')
 
-        xgItens.clear()
+
         $('.btnPesq').prop("disabled", true)
         $('.btnDel').prop("disabled", true)
         $('#btnBuscarFornecedor').removeAttr("disabled")
         $('.btnEdit').removeAttr("disabled")
         $('.btnSave').removeAttr("disabled")
 
+        xgItens.source([])
+        xgPagamento.source([])
+        adicionais()
         xmFornecedor.open()
         $('#edtPesquisaFornecedor').focus()
 
@@ -322,12 +486,18 @@ const itens = (function () {
 
     function editar() {
         controleGrid = 'edit';
+        xgLocalizarNota.disable()
+        $('.btnPesq').prop("disabled", true)
+        $('.btnDel').prop("disabled", true)
+        $('.btnNovo').prop("disabled", true)
+        $('.btnEdit').prop("disabled", true)
+        $('.btnPrint').prop("disabled", true)
+        $('.btnSave').prop("disabled", true)
+        $('.btnPesq').prop("disabled", true)
         $('#edtAdicionar').removeAttr('hidden')
+        $('#xgLocalizarNota').prop('hidden', true)
         $('.btnSave').removeAttr("disabled")
         xmNovaNota.open()
-        $('#edtNumero').focus()
-
-
         $('#edtNumero').val(editNota.NUMERO_NOTA)
         $('#edtChave').val(editNota.CHAVE_ACESSO)
         $('#edtData').val(editNota.DATA_EMISSAO)
@@ -335,49 +505,60 @@ const itens = (function () {
         $('#edtIcms').val(editNota.ICMS)
         $('#edtValor').val(editNota.VALOR_TOTAL)
 
-
+        $('#edtNumero').focus()
 
     }
 
     function deletar() {
 
+
         confirmaCodigo({
             msg: 'Digite o código de confirmação',
             call: () => {
+                for (let i in xgItens.data()) {
+                    let param = {
+                        qtd_nota: Number(xgItens.data()[i].QTD_NOTA),
+                        valor_nota: xgItens.data()[i].VALOR_ANTIGO,
+                        id_produto: xgItens.data()[i].ID_PRODUTO,
+                    }
+                    axios.post(url, {
+                        call: 'updateDelProduto',
+                        param: param
+                    })
+                }
+
                 axios.post(url, {
                     call: 'deleteNota',
                     param: id_nota
-                })
-                    .then(r => {
-                        $('#spNomeFantasia').html('')
-                        $('#spCnpj').html('')
-                        $('#spNumero').html('')
-                        $('#spData').html('')
-                        $('#spSt').html('')
-                        $('#spIcms').html('')
-                        $('#spValor').html('')
-                        $('#spChave').html('')
+                }).then(r => {
+                    $('#spNomeFantasia').html('')
+                    $('#spCnpj').html('')
+                    $('#spNumero').html('')
+                    $('#spData').html('')
+                    $('#spSt').html('')
+                    $('#spIcms').html('')
+                    $('#spValor').html('')
+                    $('#spChave').html('')
 
-                        $('#spNomeFantasia').val('')
-                        $('#spCnpj').val('')
-                        $('#spNumero').val('')
-                        $('#spData').val('')
-                        $('#spSt').val('')
-                        $('#spIcms').val('')
-                        $('#spValor').val('')
-                        $('#spChave').val('')
-                        xgItens.clear()
-                        id_fornecedor = ''
-                        id_nota = ''
-                        $('.btnEdit').prop("disabled", true)
-                        $('.btnDel').prop("disabled", true)
-                        show('Nota deletada')
+                    $('#spNomeFantasia').val('')
+                    $('#spCnpj').val('')
+                    $('#spNumero').val('')
+                    $('#spData').val('')
+                    $('#spSt').val('')
+                    $('#spIcms').val('')
+                    $('#spValor').val('')
+                    $('#spChave').val('')
+                    $('#edtDataVencimento').val('')
+                    $('#edtValorPagar').val('')
+                    xgItens.source([])
+                    xgPagamento.source([])
+                    adicionais()
+                    id_fornecedor = ''
+                    id_nota = ''
+                    $('.btnEdit').prop("disabled", true)
+                    $('.btnDel').prop("disabled", true)
+                    show('Nota deletada')
 
-                    })
-
-                axios.post(url, {
-                    call: 'deleteItens',
-                    param: id_nota
                 })
             }
         })
@@ -390,18 +571,27 @@ const itens = (function () {
         $('.btnPesq').removeAttr("disabled")
         $('.btnEdit').removeAttr("disabled")
         $('.btnDel').removeAttr("disabled")
+        $('.btnPrint').removeAttr("disabled")
+        $('.btnNovo').removeAttr("disabled")
         $('.btnSave').prop('disabled', true)
 
         $('#edtAdicionar').prop('hidden', true)
+        $('#xgLocalizarNota').removeAttr('hidden')
+        xgLocalizarNota.enable()
+        xgLocalizarNota.focus()
+
+
     }
 
     function cancelar() {
         $('#edtAdicionar').prop('hidden', true)
+        $('#xgLocalizarNota').removeAttr('hidden')
         $('.btnEdit').prop('disabled', true)
         $('.btnSave').prop('disabled', true)
         $('.btnDel').prop('disabled', true)
         $('.btnPesq').removeAttr("disabled")
         $('.btnNovo').removeAttr("disabled")
+        xgLocalizarNota.focus()
 
         $('#spNomeFantasia').html('')
         $('#spCnpj').html('')
@@ -428,6 +618,110 @@ const itens = (function () {
 
     }
 
+    function localizar() {
+        xmLocalizarNota.open()
+        xgLocalizarNota.queryOpen({ searchNota: '' })
+        $('#edtPesquisaNotaNumero').focus()
+
+    }
+
+    //xgPagamentos
+    function editPagamento() {
+        $('.btnSavePag').removeAttr("disabled")
+        $('.btnEditPag').prop("disabled", true)
+        $('.btnDelPag').prop("disabled", true)
+        $('#btnCadParcela').prop("disabled", true)
+
+        $('#edtDataVencimento').val(util.dataBrasil(xgPagamento.dataSource().DATA_VENCIMENTO))
+        $('#edtValorPagar').val(xgPagamento.dataSource().VALOR_PARCELA)
+    }
+
+    function deletePagamento() {
+        confirmaCodigo({
+            msg: 'Digite o código de confirmação',
+            call: () => {
+                axios.post(url, {
+                    call: 'deletePagamento',
+                    param: xgPagamento.dataSource().ID_PAGAMENTO
+                }).then(r => {
+                    xgPagamento.deleteLine()
+                })
+            }
+        })
+    }
+
+    function savePagamento() {
+        $('.btnEditPag').removeAttr("disabled")
+        $('.btnDelPag').removeAttr("disabled")
+        $('#btnCadParcela').removeAttr("disabled")
+
+        $('.btnSavePag').prop("disabled", true)
+
+        let param = {
+            ID_PAGAMENTO: xgPagamento.dataSource().ID_PAGAMENTO,
+            DATA_VENCIMENTO: util.formatarDataUSA($('#edtDataVencimento').val()),
+            VALOR_PARCELA: $('#edtValorPagar').val()
+        }
+
+
+
+        axios.post(url, {
+            call: 'updatePagamento',
+            param: param
+        }).then(r => {
+            xgPagamento.dataSource('DATA_VENCIMENTO', param.DATA_VENCIMENTO)
+            xgPagamento.dataSource('VALOR_PARCELA', param.VALOR_PARCELA)
+        })
+    }
+
+    //xgPagamentos
+    function editPagamento() {
+        $('.btnSavePag').removeAttr("disabled")
+        $('.btnEditPag').prop("disabled", true)
+        $('.btnDelPag').prop("disabled", true)
+        $('#btnCadParcela').prop("disabled", true)
+
+        $('#edtDataVencimento').val(util.dataBrasil(xgPagamento.dataSource().DATA_VENCIMENTO))
+        $('#edtValorPagar').val(xgPagamento.dataSource().VALOR_PARCELA)
+    }
+
+    function deletePagamento() {
+        confirmaCodigo({
+            msg: 'Digite o código de confirmação',
+            call: () => {
+                axios.post(url, {
+                    call: 'deletePagamento',
+                    param: xgPagamento.dataSource().ID_PAGAMENTO
+                }).then(r => {
+                    xgPagamento.deleteLine()
+                })
+            }
+        })
+    }
+
+    function savePagamento() {
+        $('.btnEditPag').removeAttr("disabled")
+        $('.btnDelPag').removeAttr("disabled")
+        $('#btnCadParcela').removeAttr("disabled")
+
+        $('.btnSavePag').prop("disabled", true)
+
+        let param = {
+            ID_PAGAMENTO: xgPagamento.dataSource().ID_PAGAMENTO,
+            DATA_VENCIMENTO: util.formatarDataUSA($('#edtDataVencimento').val()),
+            VALOR_PARCELA: $('#edtValorPagar').val()
+        }
+
+
+
+        axios.post(url, {
+            call: 'updatePagamento',
+            param: param
+        }).then(r => {
+            xgPagamento.dataSource('DATA_VENCIMENTO', param.DATA_VENCIMENTO)
+            xgPagamento.dataSource('VALOR_PARCELA', param.VALOR_PARCELA)
+        })
+    }
 
 
 
@@ -439,7 +733,7 @@ const itens = (function () {
             let valor_compra = $('#edtValorUni').val()
 
             let param = {
-                id_nota: cabecalho.ID_NOTA,
+                id_nota: id_nota,
                 id_produto: produtoSelecionado.ID_PRODUTO,
                 qtd_nota: qtd_compra,
                 valor_nota: valor_compra,
@@ -483,7 +777,6 @@ const itens = (function () {
                     VALOR_ANTIGO: produtoSelecionado.VALOR
                 }
                 xgItens.insertLine(itensGrid)
-                console.log(xgItens.dataSource())
 
                 $('#edtCodigo').focus()
                 $('#spDescricao').val('')
@@ -529,11 +822,11 @@ const itens = (function () {
                     let param = {
                         id_itens_nota: xgItens.dataSource().ID_ITENS_NOTA,
                         qtd_nota: xgItens.dataSource().QTD_NOTA,
-                        valor_antigo: xgItens.dataSource().VALOR_ANTIGO,
+                        valor_nota: xgItens.dataSource().VALOR_ANTIGO,
                         id_produto: xgItens.dataSource().ID_PRODUTO,
                     }
                     axios.post(url, {
-                        call: 'deleteItens',
+                        call: 'deleteItensUni',
                         param: param
                     }).then(r => {
                         xgItens.deleteLine()
@@ -545,11 +838,20 @@ const itens = (function () {
 
     }
 
+    function lupaProduto(searchProduto, offsetProduto) {
+        axios.post(url, {
+            call: 'getViewProdutos',
+            param: { searchProduto: searchProduto, offsetProduto: offsetProduto }
+        }).then(r => {
+            xgLupaProduto.querySourceAdd(r.data)
+        })
+    }
 
 
 
     //Função buttons xModal
     function btnXmSalvar() {
+
         let param = {
             id_fornecedor: id_fornecedor,
             id_nota: id_nota,
@@ -561,6 +863,7 @@ const itens = (function () {
             valor_total: $('#edtValor').val(),
 
         }
+
         $('#edtCodigo').focus()
 
         let valCampos = {
@@ -580,13 +883,11 @@ const itens = (function () {
         }
         xmNovaNota.close()
 
-
         axios.post(url, {
             call: 'insertNota',
             param: param
         }).then(r => {
             cabecalho = r.data[0]
-
             id_nota = r.data[0].ID_NOTA
             $('#spNumero').html(cabecalho.NUMERO_NOTA)
             $('#spData').html(cabecalho.DATA_EMISSAO)
@@ -602,25 +903,33 @@ const itens = (function () {
             $('#spValor').val(cabecalho.VALOR_TOTAL)
             $('#spChave').val(cabecalho.CHAVE_ACESSO)
 
-            xgLocalizarNota.insertLine(r.data)
+
+            if (controleGrid == 'edit') {
+                xgLocalizarNota.dataSource(r.data)
+
+            }
+            if (controleGrid == 'new') {
+                xgLocalizarNota.insertLine(r.data)
+
+            }
 
         })
 
     }
 
     function btnSelectNota() {
-        r = xgLocalizarNota.dataSource()
+        $('#edtDataVencimento').val('')
+        $('#edtValorPagar').val('')
+        xgPagamento.source([])
+
+        param = xgLocalizarNota.dataSource()
         axios.post(url, {
             call: 'getDataNota',
-            param: r.ID_NOTA
+            param: param.ID_NOTA
         }).then(r => {
-            xgItens.clear()
-            xmNota.close()
-
             id_fornecedor = r.data[0].ID_FORNECEDOR
             id_nota = r.data[0].ID_NOTA
             editNota = r.data[0]
-
 
             $('#spNomeFantasia').html(r.data[0].FANTASIA)
             $('#spCnpj').html(r.data[0].CNPJ)
@@ -631,45 +940,74 @@ const itens = (function () {
             $('#spValor').html(r.data[0].VALOR_TOTAL)
             $('#spChave').html(r.data[0].CHAVE_ACESSO)
 
-            adicionais()
+            axios.post(url, {
+                call: 'getItensNota',
+                param: param.ID_NOTA
+            }).then(rs => {
+                xgItens.source(rs.data)
+                xmLocalizarNota.close()
+
+                axios.post(url, {
+                    call: 'getPagamentos',
+                    param: param.ID_NOTA
+                }).then(rsp => {
+                    xgPagamento.source(rsp.data)
+                    adicionais()
+
+                })
+            })
 
         })
-
-        axios.post(url, {
-            call: 'getItensNota',
-            param: r.ID_NOTA
-        }).then(r => {
-
-            xgItens.clear
-            setTimeout(function () {
-                xgItens.insertLine(r.data)
-            }, 10)
-
-        })
-
-
     }
 
     function btnFechar() {
         let param = {
-            qtd_nota: $('#edtQtdEdit').val(),
-            valor_nota: $('#edtValorUniEdit').val()
+            qtd_nota: xgItens.dataSource().ID_PRODUTO,
+            qtd: Number($('#edtQtdEdit').val()),
+            valor_nota: $('#edtValorUniEdit').val(),
+            id_produto: xgItens.dataSource().ID_PRODUTO,
+            id_itens_nota: xgItens.dataSource().ID_ITENS_NOTA
         }
+        axios.post(url, {
+            call: 'editItens',
+            param: param
+        })
 
-        updateItens = {
-            id_produto: xgItens.dataSource().id_produto,
-            qtd_nota: $('#edtQtdEdit').val(),
-            valor_nota: $('#edtValorUniEdit').val()
-        }
-
-        xgItens.dataSource(param)
+        xgItens.dataSource('QTD_NOTA', param.qtd)
+        xgItens.dataSource('VALOR_NOTA', param.valor_nota)
 
         xmEditItens.close()
     }
 
 
 
+    //Funçao button pagamento
+    function btnCadParcela() {
+        let param = {
+            ID_NOTA: id_nota,
+            DATA_VENCIMENTO: util.formatarDataUSA($('#edtDataVencimento').val()),
+            VALOR_PARCELA: $('#edtValorPagar').val()
+        }
 
+        axios.post(url, {
+            call: 'insertPagamento',
+            param: param
+        }).then(r => {
+            let insertLine = {
+                ID_PAGAMENTO: r.data[0].ID_PAGAMENTO,
+                ID_NOTA: id_nota,
+                DATA_VENCIMENTO: r.data[0].DATA_VENCIMENTO,
+                VALOR_PARCELA: r.data[0].VALOR_PARCELA,
+                DATA_PAGO: '',
+                VALOR_PAGO: ''
+            }
+
+            xgPagamento.insertLine(insertLine)
+            $('#edtValorPagar').val('')
+            $('#edtDataVencimento').val('')
+            $('#edtDataVencimento').focus()
+        })
+    }
 
 
 
@@ -680,7 +1018,7 @@ const itens = (function () {
 
             if (e.keyCode == 13) {
                 search = $(this).val().trim()
-                xgFornecedor.queryOpen({ search: search })
+                xgFornecedor.queryOpen({ search: search.toUpperCase() })
             }
         })
 
@@ -688,7 +1026,7 @@ const itens = (function () {
 
             if (e.keyCode == 13) {
                 searchNota = $(this).val().trim()
-                xgLocalizarNota.queryOpen({ searchNota: searchNota })
+                xgLocalizarNota.queryOpen({ searchNota: searchNota.toUpperCase() })
             }
 
             if (e.keyCode == 40) {
@@ -700,7 +1038,7 @@ const itens = (function () {
 
             if (e.keyCode == 13) {
                 searchNota = $(this).val().trim()
-                xgLocalizarNota.queryOpen({ searchNota: searchNota })
+                xgLocalizarNota.queryOpen({ searchNota: searchNota.toUpperCase() })
             }
         })
 
@@ -721,7 +1059,6 @@ const itens = (function () {
                     cancelar()
                 } if (controleGrid == 'edit') {
                     xmNovaNota.close()
-                    xmFornecedor.open()
                 }
 
             }
@@ -750,12 +1087,45 @@ const itens = (function () {
             if (e.keyCode == 40) {
                 xgItens.focus()
             }
+
+            if (e.keyCode == 70) {
+                lupaProduto()
+            }
         })
 
         $('#editItens').keydown(function (e) {
             if (e.keyCode == 13) {
                 btnFechar()
             }
+        })
+
+        $('.btnLupaProduto').click(function () {
+            xmLupaProduto.open()
+            xgLupaProduto.queryOpen({ searchProduto: '' })
+            $('#edtPesquisaProduto').focus()
+        })
+
+        $('#edtPesquisaProduto').keydown(function (e) {
+            if (e.keyCode == 13) {
+                searchProduto = $(this).val().trim()
+                xgLupaProduto.queryOpen({ searchProduto: searchProduto.toUpperCase() })
+            }
+        })
+
+        $('#edtDataVencimento').keydown(function (e) {
+            if (e.keyCode == 13) {
+                $('#edtValorPagar').focus()
+            }
+        })
+
+        $('#edtValorPagar').keydown(function (e) {
+            if (e.keyCode == 13) {
+                btnCadParcela()
+            }
+        })
+
+        $('#btnCadParcela').click(function () {
+            btnCadParcela()
         })
 
         $(document).keydown(function (e) {
@@ -779,6 +1149,9 @@ const itens = (function () {
             if (e.keyCode == 35) {
                 $('.btnSave').click()
             }
+
+
+
         })
     }
 
@@ -791,17 +1164,24 @@ const itens = (function () {
             $('.btnEdit').prop("disabled", true)
             $('.btnDel').prop("disabled", true)
             $('.btnSave').prop("disabled", true)
+            $('.btnPrint').prop("disabled", true)
             $('#btnEditar').prop("disabled", true)
             $('#btnDeletar').prop("disabled", true)
+            $('#btnCadParcela').prop("disabled", true)
 
-
-        } else {
+        }
+        if ($('#spCnpj').html() != '') {
+            $('.btnPrint').removeAttr("disabled")
             $('.btnEdit').removeAttr("disabled")
             $('.btnDel').removeAttr("disabled")
             $('#btnEditar').removeAttr("disabled")
             $('#btnDeletar').removeAttr("disabled")
+            $('#btnCadParcela').removeAttr("disabled")
         }
 
+        $('.btnDelPag').prop("disabled", true)
+        $('.btnSavePag').prop("disabled", true)
+        $('.btnEditPag').prop("disabled", true)
 
     }
 
@@ -816,7 +1196,6 @@ const itens = (function () {
         })
             .then(rs => {
                 xgFornecedor.querySourceAdd(rs.data);
-                if (rs.data[0]) xgFornecedor.focus();
             })
 
     }
@@ -832,7 +1211,6 @@ const itens = (function () {
                 if (r.data[0]) {
 
                     produtoSelecionado = r.data[0]
-                    console.log('r.data[0] :', r.data[0]);
 
                     $('#spDescricao').html(r.data[0].DESCRICAO)
                     $('#spQtd').html(r.data[0].QTD)
@@ -856,23 +1234,27 @@ const itens = (function () {
         let serchNumero = $('#edtPesquisaNotaNumero').val()
         axios.post(url, {
             call: 'getNota',
-            param: { offsetNota: offsetNota, serchNumero: serchNumero, serchNome: serchNome }
+            param: { offsetNota: offsetNota, serchNumero: serchNumero, serchNome: serchNome.toUpperCase() }
         }).then(r => {
             xgLocalizarNota.querySourceAdd(r.data);
-            if (r.data[0]) xgLocalizarNota.focus();
+
             id_nota = r.id_nota
         })
     }
+
 
 
     return {
         xgridItens: xgridItens,
         xgridLocalizarNota: xgridLocalizarNota,
         xgridFornecedor: xgridFornecedor,
+        xgridLupaProduto: xgridLupaProduto,
         xmFornecedor: xmFornecedor,
         xmNovaNota: xmNovaNota,
-        xmNota: xmNota,
         xmEditItens: xmEditItens,
+        xmLupaProduto: xmLupaProduto,
+        xgridPagamento: xgridPagamento,
+        xmLocalizarNota: xmLocalizarNota,
         finalizar: finalizar,
         deleteItens: deleteItens,
         btnXmSalvar: btnXmSalvar,
@@ -880,6 +1262,7 @@ const itens = (function () {
         keydown: keydown,
         adicionais: adicionais,
         editarItens: editarItens,
+        btnCadParcela: btnCadParcela,
     }
 })();
 
