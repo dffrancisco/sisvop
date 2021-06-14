@@ -107,7 +107,8 @@ if (!empty($_GET['p'])) {
                 <a href="#" class="brand-logo center truncate" style="font-size: 18px" id="pnTitulo">HOME</a>
 
                 <ul id="nav-mobile" class="right e">
-                    <li><a onclick="pnUserToggle()" href="#!"><span id="spUser"></span> <i class="fa fa-user-circle"></i></a></li>
+                    <li><a onclick="pnUserToggle()" href="#!"><span id="spUser"></span> <i
+                                class="fa fa-user-circle"></i></a></li>
 
                 </ul>
                 <ul id="nav-mobile" class="right e">
