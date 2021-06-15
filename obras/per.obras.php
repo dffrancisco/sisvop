@@ -20,15 +20,16 @@ class Obras
         $this->sql = new SqlObras();
     }
 
-    function getServico()
+    // GETS
+    function getCliente($param)
     {
-        $call = $this->sql->getServico();
+        $call = $this->sql->getCliente($param);
         echo json_encode($call);
     }
 
-    function getMascaraProjeto($param)
+    function getListaServico($param)
     {
-        $call = $this->sql->getMascaraProjeto($param);
+        $call = $this->sql->getListaServico($param);
         echo json_encode($call);
     }
 
@@ -38,22 +39,195 @@ class Obras
         echo json_encode($call);
     }
 
-    function insertProduto($param)
+    function getServ()
     {
-        $duplicity = $this->sql->duplicityProduto($param);
-        if (!empty($duplicity)) {
-            echo '{"msg":"Produto ja incluso"}';
-            return false;
+        $call = $this->sql->getServ();
+        echo json_encode($call);
+    }
+
+    function getProduto($param)
+    {
+        $call = $this->sql->getProduto($param);
+        echo json_encode($call);
+    }
+
+    function getRomaneio($param)
+    {
+        $call = $this->sql->getRomaneio($param);
+        echo json_encode($call);
+    }
+
+    function getItensRomaneio($param)
+    {
+        $call = $this->sql->getItensRomaneio($param);
+        echo json_encode($call);
+    }
+
+    function getRomaneioRela($param)
+    {
+        $call = $this->sql->getRomaneio($param);
+
+        $rs = [];
+
+        foreach ($call as $ln) {
+            $ln->offset = 0;
+            $rsIR = $this->sql->getItensRomaneio((array) $ln);
+            $ln->ITENS = $rsIR;
+
+            unset($ln->offset);
+
+            $rs[] = $ln;
         }
-        $call = $this->sql->insertProduto($param);
+
+        echo json_encode($rs);
+    }
+
+
+    function getItens($param)
+    {
+        $call = $this->sql->getItens($param);
+        echo json_encode($call);
+    }
+
+    function getItens2($param)
+    {
+        $call = $this->sql->getItens2($param);
+        echo json_encode($call);
+    }
+
+    function getServicos($param)
+    {
+
+        $dados = [];
+
+        if ($param['andamento'] == 'ANDAMENTO') {
+
+            $andamento = $this->sql->getServicosAnd($param);
+            $dados = array_merge($andamento, $dados);
+        }
+
+        if ($param['preparo'] == 'PREPARO') {
+
+            $preparo = $this->sql->getServicosPre($param);
+            $dados = array_merge($preparo, $dados);
+        }
+
+        if ($param['encerrado'] == 'ENCERRADO') {
+
+            $encerrado = $this->sql->getServicosEnc($param);
+            $dados = array_merge($encerrado, $dados);
+        }
+
+        if ($param['encerrado'] == '' && $param['preparo'] == '' && $param['andamento'] == '') {
+
+            $todos = $this->sql->getServicos($param);
+
+            foreach ($todos as $ln) {
+
+                if (
+                    $ln->STATUS == 'PREPARO' || $ln->STATUS == 'ANDAMENTO' ||
+                    $ln->STATUS == 'ENCERRADO'
+                ) {
+                    // print_r(Array($ln));
+
+                    $dados = array_merge(array($ln), $dados);
+                }
+            }
+        }
+
+        echo json_encode($dados);
+    }
+
+    function getListaServicoX($param)
+    {
+        $call = $this->sql->getListaServicoX($param);
+        echo json_encode($call);
+    }
+
+    function getDevolucao($param)
+    {
+        $call = $this->sql->getDevolucao($param);
+        echo json_encode($call);
+    }
+
+    function getUf()
+    {
+        $call = $this->sql->getUf();
+        echo json_encode($call);
+    }
+    //NOVO E GERAR
+    function novoRomaneio($param)
+    {
+        $call = $this->sql->novoRomaneio($param);
+        echo json_encode($call);
+    }
+
+    function gerarServico($param)
+    {
+        $call = $this->sql->gerarServico($param);
+        echo '{"ID_LISTA_SERVICO":"' . $call[0]->ID_LISTA_SERVICO . '"}';
+    }
+
+    function saveCliente($param)
+    {
+
+        $id_cliente = $this->sql->insert($param);
+        echo '{"ID_CLIENTE":"' . $id_cliente[0]->ID_CLIENTE . '"}';
+    }
+
+    //INSERIR
+    function inserirItens($param)
+    {
+        $call = $this->sql->inserirItens($param);
+        echo json_encode($call);
+    }
+
+    function inserirItemRomaneio($param)
+    {
+        $call = $this->sql->inserirItemRomaneio($param);
+        $attServ = $this->sql->atualizaQtdItens($param);
+        echo json_encode($call);
+    }
+
+    function inserirDevolucao($param)
+    {
+        $call = $this->sql->inserirDevolucao($param);
         echo json_encode($call);
     }
 
 
-    function deleteProduto($param)
+    // UPDATE
+    function atualizaProduto($param)
     {
-        $call = $this->sql->deleteProduto($param);
+        $call = $this->sql->atualizaProduto($param);
         echo json_encode($call);
+    }
+
+    function atualizaStatus($param)
+    {
+
+        $call = $this->sql->atualizaStatus($param);
+        echo json_encode($call);
+    }
+
+    function finalizarRomaneio($param)
+    {
+        $call = $this->sql->finalizarRomaneio($param);
+        echo json_encode($call);
+    }
+
+    //DELETE
+    function deletarItem($param)
+    {
+        $call = $this->sql->deletarItem($param);
+        echo json_encode($call);
+    }
+
+    function deletarItemRomaneio($param)
+    {
+        $attP = $this->sql->atualizaProduto($param);
+        $attQ = $this->sql->atualizaQtdItens($param);
+        $dltI = $this->sql->deletarItemRomaneio($param);
     }
 }
 
