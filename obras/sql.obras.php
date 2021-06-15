@@ -64,6 +64,23 @@ class SqlObras
             VALUES 
             (:ID_SERVICO, :ID_PRODUTO)
             returning ID_MASCARA_PROJETO";
+
+            (:ID_SERVICO, :ID_PRODUTO , :QTD_PRODUTO, :DATA, :ORIGEM, :QTD_RETIRADA)";
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute(); 
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function inserirItemRomaneio($param){
+
+    $sql="INSERT INTO itens_romaneio
+          (id_romaneio, id_produto, qtd, id_itens_servico)
+          VALUES
+          (:ID_ROMANEIO, :ID_PRODUTO, :QTD, :ID_ITENS_SERVICO)
+          returning id_item_romaneio";
+
+
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
     $query->execute();

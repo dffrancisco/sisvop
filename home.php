@@ -9,6 +9,7 @@
 </div>
 
 
+<div id="pnCodigoTela">Home</div>
 <script>
 getFrase()
 </script>

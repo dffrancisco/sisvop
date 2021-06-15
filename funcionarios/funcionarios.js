@@ -1,8 +1,11 @@
 let xgFuncionarios;
 
 $(function () {
+
     funcionario.grid();
     funcionario.getBairro();
+    funcionario.getCargo();
+
     xgFuncionarios.queryOpen({ search: '' })
 
     $("#edtPesquisa").keydown(function (e) {
@@ -186,6 +189,21 @@ const funcionario = (function () {
         })
     }
 
+    function getCargo() {
+
+        axios.post(url, {
+            call: 'getCargo',
+
+        }).then(rs => {
+
+            for (let i in rs.data) {
+                let table = `<option value="${rs.data[i].ID_CARGO}"> ${rs.data[i].CARGO}</option>`
+                $('#slctCargo').append(table)
+            }
+
+        })
+    }
+
     function search() {
 
         let search = $('#edtPesquisa').val()
@@ -200,13 +218,15 @@ const funcionario = (function () {
         $('.btnEdit').removeAttr('disabled')
         $('.btnDel').removeAttr('disabled')
         $('.container .validate').removeAttr("disabled")
+
         $('#edtPesquisa').prop("disabled", true)
         $('.btnPesq').prop("disabled", true);
+
+        // getCargo()
+        // getBairro()
+
         xgFuncionarios.clearElementSideBySide()
         xgFuncionarios.disable()
-
-
-
 
     }
 
@@ -228,15 +248,15 @@ const funcionario = (function () {
 
         param.ENDERECO = param.ENDERECO.toUpperCase()
         param.CIDADE = param.CIDADE.toUpperCase()
+
         param.NOME = param.NOME.toUpperCase()
         param.NOME = param.NOME.toUpperCase()
         param.UF = param.UF.toUpperCase()
 
-
         let allDuplicty = await xgFuncionarios.getDuplicityAll()
 
-        if (allDuplicty == false)
-            return false;
+        // if (allDuplicty == false)
+        //     return false;
 
         let valCampos = {
             nome: $('#edtNome').val(),
@@ -320,6 +340,7 @@ const funcionario = (function () {
     return {
         grid: grid,
         getBairro: getBairro,
+        getCargo: getCargo,
     };
 })();
 
