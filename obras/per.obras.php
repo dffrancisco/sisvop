@@ -32,56 +32,7 @@ class Obras
         echo json_encode($call);
     }
 
-<<<<<<< HEAD:servicos/per.servicos.php
     function getProdutos($param)
-=======
-    function getServicos($param){
-        
-        $dados = [];
-        
-        if($param['andamento']== 'ANDAMENTO'){
-
-            $andamento = $this->sql->getServicosAnd($param);
-            $dados = array_merge($andamento, $dados);
-        }
-        
-        if($param['preparo']== 'PREPARO'){
-
-            $preparo = $this->sql->getServicosPre($param);
-            $dados = array_merge($preparo, $dados);
-
-        }
-        
-        if($param['encerrado']== 'ENCERRADO'){
-
-            $encerrado = $this->sql->getServicosEnc($param);
-            $dados = array_merge($encerrado, $dados);
-
-        }
-
-        if($param['encerrado'] == '' && $param['preparo'] == '' && $param['andamento'] == ''){
-            
-            $todos = $this->sql->getServicos($param);
-            
-            foreach($todos as $ln){
-                
-                if($ln->STATUS == 'PREPARO' || $ln->STATUS == 'ANDAMENTO' || 
-                   $ln->STATUS == 'ENCERRADO'){
-                        // print_r(Array($ln));
-                       
-                    $dados = array_merge(Array($ln), $dados); 
-
-                }
-
-            }
-
-        }
-        
-        echo json_encode($dados);
-    }
-
-    function getListaServicoX($param)
->>>>>>> 926d60f84dd966fbbe6921c11fc04928bc846434:obras/per.obras.php
     {
         $call = $this->sql->getProdutos($param);
         echo json_encode($call);
