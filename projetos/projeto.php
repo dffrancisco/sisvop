@@ -115,14 +115,11 @@
 
         </div>
 
-        <br>
-
         <div id="obsText">
             <span id="spObsText"></span>
 
         </div>
 
-        <br>
         <hr>
         <br>
 

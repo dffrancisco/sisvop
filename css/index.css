@@ -332,6 +332,7 @@ nav {
 input,
 select,
 textarea {
+  background-color: white !important;
   border: 1px solid #899caa !important;
   border-radius: 3px !important;
   -moz-border-radius: 3px !important;
@@ -399,17 +400,14 @@ textarea:focus {
 
 /*materialize* fim *********************************/
 
+.servico {
+  background-color: #3f688a;
+  height: 40px;
+  padding: 5px;
+  margin-top: 5px;
+}
 
-.servico{
-    background-color: #3f688a;
-    height: 40px;
-    padding: 5px;
-    margin-top: 5px;
-}   
-
-
-.marginBottom{
-    margin-bottom: 5px;
+.marginBottom {
+  margin-bottom: 5px;
 }
 /*materialize* fim *********************************/
-
