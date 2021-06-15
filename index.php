@@ -1,7 +1,7 @@
 <?php
 $p = 'home.php';
 if (!empty($_GET['p'])) {
-    $p = $_GET['p'] . '.php';
+  $p = $_GET['p'] . '.php';
 }
 ?>
 
@@ -178,40 +178,47 @@ if (!empty($_GET['p'])) {
         <li><i class="fa fa-product-hunt"></i>Produtos</li>
       </a>
     </div>
+    <a href="?p=servicos/servicos">
 
-    <div id="projeto">
-      <a href="?p=projetos/projeto">
-        <li><i class="fa fa-key"></i>projetos</i></li>
-      </a>
-    </div>
+      <div id="projeto">
+        <a href="?p=projetos/projeto">
+          <li><i class="fa fa-key"></i>projetos</i></li>
+        </a>
+      </div>
 
-    <div id="obras">
-      <a href="?p=obras/obras">
-        <li><i class="fa fa-usd"></i>Obras</li>
-      </a>
-    </div>
-
-    <div id="servicos">
-      <a href="?p=sservicos/sservicos">
+      <div id="obras">
+        <a href="?p=obras/obras">
+          <li><i class="fa fa-usd"></i>Obras</li>
+        </a>
+      </div>
+      <a href="?p=sservicos/servicos">
         <li><i class="fa fa-usd"></i>Serviços</li>
       </a>
-    </div>
 
-    <div id="usuario">
+
+      <div id="servicos">
+        <a href="?p=sservicos/sservicos">
+          <li><i class="fa fa-usd"></i>Serviços</li>
+        </a>
+      </div>
+
+      <div id="usuario">
+        <a href="?p=usuario/usuario">
+          <li><i class="fa fa-key"></i>Usuario</i></li>
+        </a>
+      </div>
+      <!-- <a href="?p=marca/marca">
+            <li><i class="fa fa-address-book"></i>Marcas</li>
+        </a> -->
+      <!-- <a href="?p=cargo/cargo">
+            <li><i class="fa fa-address-book"></i>Cargo</li>
+        </a> -->
       <a href="?p=usuario/usuario">
         <li><i class="fa fa-key"></i>Usuario</i></li>
       </a>
-    </div>
-    <!-- <a href="?p=marca/marca">
-            <li><i class="fa fa-address-book"></i>Marcas</li>
-        </a> -->
-    <!-- <a href="?p=cargo/cargo">
-            <li><i class="fa fa-address-book"></i>Cargo</li>
-        </a> -->
 
-
-    <hr />
-    <li class="btnSair">Sair</li>
+      <hr />
+      <li class="btnSair">Sair</li>
   </div>
 
   <div id="pnPrincipal">
