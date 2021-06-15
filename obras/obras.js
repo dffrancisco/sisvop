@@ -8,6 +8,7 @@ let id_servico
 const url = 'servicos/per.servicos.php'
 
 $(function () {
+
   servicos.getServico()
   servicos.grid()
   servicos.modalProdutos()
@@ -42,6 +43,7 @@ $(function () {
 
     $("#xmEdtProduto").keydown(function (e) {
 
+
       if (e.keyCode == 13) {
         $(".btnPesqItem").click()
       }
@@ -64,6 +66,7 @@ $(function () {
         $(".btnPesqProd").click()
       }
 
+
       if (e.keyCode == 40) {
         xgProdutos.focus()
         $("#xmEdtPesquisa").val('')
@@ -80,6 +83,7 @@ $(function () {
 
 
   const servicos = (function () {
+
     let lista_servico
 
     let andamento
@@ -98,6 +102,51 @@ $(function () {
     }
 
     function grid() {
+
+        xgItensServico = new xGridV2.create({
+            el: "#xgItensServico",
+            height: 330,
+            heightLine: 35,
+            theme: "x-clownV2",
+
+            columns: {
+
+                Descrição: {
+                    dataField: "DESCRICAO",
+                }
+
+            },
+            onKeyDown: {
+                '13': (ln) => {
+                }
+            },
+            sideBySide: {
+                frame: {
+                    el: '#pnButtons',
+                    buttons: {
+
+                        add: {
+                            html: "Adicionar",
+                            class: "btnP btnAdd",
+                            click: add,
+                        },
+                        del: {
+                            html: "Excluir",
+                            class: "btnP btnDel",
+                            click: deletar,
+                        },
+                    }
+                },
+            },
+
+            query: {
+                execute: (r) => {
+                    getMascaraProjeto(r.param.search, r.offset)
+
+                },
+            }
+        })
+
       xgItensServico = new xGridV2.create({
         el: "#xgItensServico",
         height: 330,
@@ -119,6 +168,7 @@ $(function () {
           frame: {
             el: '#pnButtons',
             buttons: {
+
 
               add: {
                 html: "Adicionar",
@@ -196,6 +246,7 @@ $(function () {
                         </div >
                     </div>
                 </div>`
+
             $('#rowServico').append(servico)
           }
         })
@@ -273,6 +324,16 @@ $(function () {
 
     }
 
+    function buscar(item) {
+
+        axios.post(url, {
+            call: 'getItem',
+            param: { item: item, id_servico: id_servico }
+        }).then(r => {
+
+        })
+    }
+
     if (STATUS == 'PREPARO') {
       $('.btnFR').prop("disabled", true);
       $('.btnRG').prop('disabled', true)
@@ -312,6 +373,7 @@ $(function () {
     })
   }
 
+
   function buscar(item) {
 
     axios.post(url, {
@@ -322,6 +384,24 @@ $(function () {
     })
   }
 
+
+    function deletar() {
+        let param = xgItensServico.dataSource().ID_MASCARA_PROJETO
+        confirma({
+            msg: `Deseja deletar o item ${xgItensServico.dataSource().DESCRICAO}`,
+            call: () => {
+                axios.post(url, {
+                    call: 'deleteProduto',
+                    param: param
+                }).then(r => {
+                    xgItensServico.deleteLine()
+                })
+            }
+        })
+    }
+
+    function addProduto(ln) {
+
   function add() {
     xmProdutos.open()
 
@@ -331,6 +411,7 @@ $(function () {
 
     xgProdutos.queryOpen({ search: '' })
   }
+
 
   function deletar() {
     let param = xgItensServico.dataSource().ID_MASCARA_PROJETO
@@ -378,6 +459,7 @@ $(function () {
   function keydown() {
     $('#xgItensServico').keydown(function (e) {
 
+
       if (e.keyCode == 113) {
         $('#edtPesquisa').focus()
       }
@@ -391,6 +473,7 @@ $(function () {
 
   }
 
+
   return {
     getServico: getServico,
     grid: grid,
@@ -399,6 +482,7 @@ $(function () {
     buscar: buscar,
     keydown: keydown
   }
+
 
 })();
 
