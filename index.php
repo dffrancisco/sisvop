@@ -206,16 +206,13 @@ if (!empty($_GET['p'])) {
       </a>
     </div>
 
-    <a href="?p=usuario/usuario">
-      <li><i class="fa fa-key"></i>Usuario</i></li>
-    </a>
-
     <hr />
     <li class="btnSair">Sair</li>
+  </div>
 
-    <div id="pnPrincipal">
-      <?php require_once($p); ?>
-    </div>
+  <div id="pnPrincipal">
+    <?php require_once($p); ?>
+  </div>
 
 </body>
 
