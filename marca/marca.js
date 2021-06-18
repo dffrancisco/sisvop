@@ -34,19 +34,19 @@ const marca = (function () {
                             click: pesquisar,
                         },
                         novo: {
-                            html: "Novo",
-                            class: "btnP",
+                            html: "Novo(F8)",
+                            class: "btnP btnNovo",
                             state: xGridV2.state.insert,
                             click: novo,
                         },
                         edit: {
-                            html: "Editar",
+                            html: "Editar(INS)",
                             class: "btnP btnEdit",
                             state: xGridV2.state.update,
                             click: edit,
                         },
                         deletar: {
-                            html: "Deletar",
+                            html: "Deletar(DEL)",
                             class: "btnP btnDel",
                             state: xGridV2.state.delete,
                             click: deletar,
@@ -232,10 +232,31 @@ const marca = (function () {
 
     function keydown() {
         $("#edtMarca").keydown(function (e) {
-
             if (e.keyCode == 13) {
                 $('.btnSave').click()
+            }
+        })
+        $("#edtPesquisa").keydown(function (e) {
+            if (e.keyCode == 13) {
+                $('.btnPesq').click()
+            }
+        })
+        $(document).keydown(function (e) {
 
+            if (e.keyCode == 113) {
+                $('#edtPesquisa').focus()
+            }
+
+            if (e.keyCode == 45) {
+                $('.btnEdit').click()
+            }
+
+            if (e.keyCode == 119) {
+                $('.btnNovo').click()
+            }
+
+            if (e.keyCode == 46) {
+                $('.btnDel').click()
             }
         })
     }
