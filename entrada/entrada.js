@@ -30,6 +30,7 @@ $(function () {
     getDataEmpresa()
     $('.tabs').tabs();
 
+
 })
 
 const itens = (function () {
@@ -729,6 +730,10 @@ const itens = (function () {
     function finalizar() {
 
         $('#btnFinalizar').click(function () {
+            if ($('#spDescricao').html() == "") {
+                show("Selecione um produto pelo codigo ou na lupa")
+                return false
+            }
             let qtd_compra = $('#edtQtdCompra').val()
             let valor_compra = $('#edtValorUni').val()
 
@@ -798,6 +803,10 @@ const itens = (function () {
     function editarItens() {
 
         $('#btnEditar').click(function () {
+            if (xgItens.dataSource() == false) {
+                show("Selecione um produto")
+                return false
+            }
             xmEditItens.open()
             $('#edtValorUniEdit').focus()
 
@@ -805,7 +814,7 @@ const itens = (function () {
             $('#spDescricaoEdit').html(xgItens.dataSource().DESCRICAO)
 
             $('#edtQtdEdit').val(xgItens.dataSource().QTD_NOTA)
-            $('#edtValorUniEdit').val(xgItens.dataSource().VALOR_TOTAL)
+            $('#edtValorUniEdit').val(xgItens.dataSource().VALOR_NOTA)
 
         })
 
@@ -814,8 +823,10 @@ const itens = (function () {
 
     function deleteItens() {
         $('#btnDeletar').click(function () {
-
-
+            if (xgItens.dataSource() == false) {
+                show("Selecione um produto")
+                return false
+            }
             confirma({
                 msg: `Deseja deletar ${xgItens.dataSource().DESCRICAO}?`,
                 call: () => {
@@ -903,14 +914,15 @@ const itens = (function () {
             $('#spValor').val(cabecalho.VALOR_TOTAL)
             $('#spChave').val(cabecalho.CHAVE_ACESSO)
 
-
+            $('.btnDelPag').prop("disabled", true)
+            $('.btnNovo').prop("disabled", true)
+            $('.btnSave').removeAttr("disabled")
+            $('#btnCadParcela').removeAttr("disabled")
             if (controleGrid == 'edit') {
                 xgLocalizarNota.dataSource(r.data)
-
             }
             if (controleGrid == 'new') {
                 xgLocalizarNota.insertLine(r.data)
-
             }
 
         })
@@ -962,7 +974,7 @@ const itens = (function () {
 
     function btnFechar() {
         let param = {
-            qtd_nota: xgItens.dataSource().ID_PRODUTO,
+            qtd_nota: xgItens.dataSource().QTD_NOTA,
             qtd: Number($('#edtQtdEdit').val()),
             valor_nota: $('#edtValorUniEdit').val(),
             id_produto: xgItens.dataSource().ID_PRODUTO,
@@ -987,6 +999,17 @@ const itens = (function () {
             ID_NOTA: id_nota,
             DATA_VENCIMENTO: util.formatarDataUSA($('#edtDataVencimento').val()),
             VALOR_PARCELA: $('#edtValorPagar').val()
+        }
+
+        if (param.DATA_VENCIMENTO == "" || param.DATA_VENCIMENTO.length < 10) {
+            show("Data inválida")
+            return false
+
+        }
+
+        if (param.VALOR_PARCELA == "") {
+            show("Valor inválido")
+            return false
         }
 
         axios.post(url, {

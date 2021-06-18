@@ -11,17 +11,21 @@
                 <input type="text" id="edtCnpj" name="CNPJ" class="CNPJ">
             </div>
 
-            <div class="col s9">
+            <div class="col s5">
                 <label>Razão Social*</label>
-
                 <input type="text" class="validate" id="edtRazaoSocial" name="RAZAO">
             </div>
-        </div>
-
-        <div class="row">
             <div class="col s4">
                 <label>Nome Fantasia*</label>
                 <input type="text" id="edtFantasia" class="validate" name="FANTASIA">
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class=" col s4">
+                <label>Representante</label>
+                <input placeholder="" type="text" class="validate" id="edtRepresentante" name="REPRESENTANTE">
             </div>
             <div class="col s5">
                 <label>Endereço*</label>

@@ -13,7 +13,7 @@ if (!empty($_GET['p'])) {
   <link rel="icon" href="icon/carro.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
-  <link rel="icon" href="img/logo sisvop.jpeg">
+  <link rel="icon" href="img/icone.png">
   <link rel="stylesheet" href="produtos/produtos.css" type="text/css" />
   <link rel="stylesheet" href="marca/marca.css" type="text/css" />
 

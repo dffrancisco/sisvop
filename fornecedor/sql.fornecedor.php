@@ -19,7 +19,7 @@ class SqlFornecedor
             a.fantasia, a.endereco, a.cidade,
             a.bairro, a.municipio, a.cep,
             a.tel_1, a.tel_2, a.inscricao,
-            a.data_cadastro,
+            a.data_cadastro, a.representante,
             b.id_uf, b.uf
             FROM fornecedor a, uf b
             WHERE b.id_uf = a.id_uf 
@@ -46,12 +46,12 @@ class SqlFornecedor
   function inserirFornecedor($param)
   {
     $sql = "INSERT INTO fornecedor 
-            (cnpj, razao, fantasia, 
+            (cnpj, razao, fantasia, representante,
             endereco, cidade, bairro, id_uf, 
             municipio, cep, tel_1, tel_2,
             inscricao, data_cadastro)
             VALUES
-            (:CNPJ, :RAZAO, :FANTASIA, 
+            (:CNPJ, :RAZAO, :FANTASIA, :REPRESENTANTE, 
             :ENDERECO, :CIDADE, :BAIRRO, :ID_UF, 
             :MUNICIPIO, :CEP, :TEL_1, :TEL_2,
             :INSCRICAO, :DATA_CADASTRO)
@@ -67,11 +67,11 @@ class SqlFornecedor
     $sql = "UPDATE fornecedor 
             SET 
             cnpj = :CNPJ, razao = :RAZAO, 
-            fantasia = :FANTASIA, endereco = :ENDERECO, 
-            cidade = :CIDADE, bairro = :BAIRRO, 
-            id_uf = :ID_UF, municipio = :MUNICIPIO, 
-            cep = :CEP, tel_1 = :TEL_1, 
-            tel_2 = :TEL_2, inscricao = :INSCRICAO
+            fantasia = :FANTASIA, representante = :REPRESENTANTE
+            ,endereco = :ENDERECO, cidade = :CIDADE, 
+            bairro = :BAIRRO, id_uf = :ID_UF,
+            municipio = :MUNICIPIO, cep = :CEP,
+            tel_1 = :TEL_1, tel_2 = :TEL_2, inscricao = :INSCRICAO
             WHERE id_fornecedor = :ID_FORNECEDOR
             returning id_fornecedor";
 

@@ -176,14 +176,7 @@ const cliente = (function () {
         // }
 
         let valCampos = {
-            cnpj: $('#edtCnpj').val(),
             razao: $('#edtRazao').val(),
-            fantasia: $('#edtFantasia').val(),
-            email: $('#edtEmail').val(),
-            inscricao: $('#edtInscricao').val(),
-            fixo: $('#edtFixo').val(),
-            tel: $('#edtTel').val(),
-            representante: $('#edtRepresentante').val(),
             data_cadastro: $('#edtData').val(),
             cep: $('#edtCep').val(),
             endereco: $('#edtEndereco').val(),
