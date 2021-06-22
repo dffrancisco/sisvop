@@ -52,7 +52,7 @@ const itens = (function () {
         xgItens = new xGridV2.create({
             el: "#xgItens",
             height: 170,
-            heightLine: 35,
+            heightLine: 27,
             theme: "x-clownV2",
 
             columns: {
@@ -126,7 +126,7 @@ const itens = (function () {
         xgLocalizarNota = new xGridV2.create({
             el: "#xgLocalizarNota",
             height: 190,
-            heightLine: 35,
+            heightLine: 27,
             theme: "x-clownV2",
 
             columns: {
@@ -170,7 +170,7 @@ const itens = (function () {
         xgFornecedor = new xGridV2.create({
             el: "#xgFornecedor",
             height: 210,
-            heightLine: 35,
+            heightLine: 27,
             theme: "x-clownV2",
 
             columns: {
@@ -219,7 +219,7 @@ const itens = (function () {
         xgLupaProduto = new xGridV2.create({
             el: "#xgLupaProduto",
             height: 190,
-            heightLine: 35,
+            heightLine: 27,
             theme: "x-clownV2",
 
             columns: {
@@ -279,7 +279,7 @@ const itens = (function () {
         xgPagamento = new xGridV2.create({
             el: "#xgPagamento",
             height: 190,
-            heightLine: 35,
+            heightLine: 27,
             theme: "x-clownV2",
             onSelectLine: (ln) => {
                 $('.btnDelPag').removeAttr("disabled")

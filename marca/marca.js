@@ -16,7 +16,7 @@ const marca = (function () {
             el: '#pnGridMarca',
             height: '200',
             theme: 'x-clownV2',
-            heightLine: '35',
+            heightLine: 27,
             columns: {
                 Marca: { dataField: 'MARCA' },
             },

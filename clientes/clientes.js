@@ -16,7 +16,7 @@ const cliente = (function () {
         xgCliente = new xGridV2.create({
             el: "#xgCliente",
             height: 210,
-            heightLine: 35,
+            heightLine: 27,
             theme: "x-clownV2",
 
             columns: {

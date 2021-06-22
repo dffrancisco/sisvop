@@ -14,13 +14,23 @@
 
 
         <div class="row">
-            <div class="col s5">
+            <div class="col s3">
                 <label>RG*</label>
                 <input placeholder="" type="number" class="validate" id="edtRg" name="RG" disabled>
             </div>
-            <div class="col s7">
+            <div class="col s3">
                 <label>CPF*</label>
                 <input placeholder="" type="text" class="validate CPF" id="edtCpf" name="CPF" disabled>
+            </div>
+            <div class="col s5">
+                <label>Email</label>
+                <input placeholder="" type="text" class="validate" id="edtEmail" name="EMAIL" disabled>
+            </div>
+            <div class="col s1" style="margin-top: 18px;">
+                <label style="margin-left: 12px;">
+                    <input type="checkbox" id="checkEmail" name="SENDEMAIL" disabled>
+                    <span> </span>
+                </label>
             </div>
         </div>
         <div class="row">

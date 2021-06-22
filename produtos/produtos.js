@@ -23,7 +23,7 @@ const produto = (function () {
         xgProduto = new xGridV2.create({
             el: "#xgProduto",
             height: 210,
-            heightLine: 35,
+            heightLine: 27,
             theme: "x-clownV2",
 
             columns: {

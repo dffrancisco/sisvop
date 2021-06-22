@@ -1,7 +1,7 @@
 <?php
 $p = 'home.php';
 if (!empty($_GET['p'])) {
-  $p = $_GET['p'] . '.php';
+    $p = $_GET['p'] . '.php';
 }
 ?>
 
