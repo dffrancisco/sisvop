@@ -158,6 +158,12 @@ if (!empty($_GET['p'])) {
             </a>
         </div>
 
+        <div id="executor">
+            <a href="?p=executor/executor">
+                <li><i class="fa fa-bolt"></i>Executor</li>
+            </a>
+        </div>
+
         <div id="fornecedor">
             <a href="?p=fornecedor/fornecedor">
                 <li><i class="fa fa-address-book"></i>Fornecedor</li>
@@ -184,7 +190,7 @@ if (!empty($_GET['p'])) {
 
         <div id="projeto">
             <a href="?p=projetos/projeto">
-                <li><i class="fa fa-key"></i>projetos</i></li>
+                <li><i class="fa fa-key"></i>Projetos</i></li>
             </a>
         </div>
 

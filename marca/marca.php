@@ -21,5 +21,5 @@
         <div id="pnButtons" class="right-align col s9"></div>
     </div>
 
-    <div id="pnCodigoTela">Marca</div>
 </div>
+<div id="pnCodigoTela">Marca</div>

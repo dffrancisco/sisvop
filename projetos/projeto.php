@@ -5,54 +5,57 @@
 <div id="Servicos" class="container">
 
     <div class="row">
-        <div class="col s2 push-s1" style="margin-top: 18px;">
-            <label>
-                <input type="checkbox" id="checkProjeto" name="filtro" class="filled-in">
-                <span>PROJETO</span>
-            </label>
-        </div>
+        <div id="checkbox">
+            <div class="col s10">
+                <div id="xgServicos" class=""></div>
+            </div>
 
-        <div class="col s2 push-s1" style="margin-top: 18px;">
-            <label>
-                <input type="checkbox" id="checkOrcamento" name="filtro" class="filled-in">
-                <span>ORÇAMENTO</span>
-            </label>
-        </div>
+            <div class="col s2 " style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkProjeto" name="filtro">
+                    <span>PROJETO</span>
+                </label>
+            </div>
 
-        <div class="col s2 push-s1" style="margin-top: 18px;">
-            <label>
-                <input type="checkbox" id="checkAnalise" name="filtro" class="filled-in">
-                <span>ANÁLISE</span>
-            </label>
-        </div>
+            <div class="col s2 " style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkOrcamento" name="filtro">
+                    <span>ORÇAMENTO</span>
+                </label>
+            </div>
 
-        <div class="col s2 push-s1" style="margin-top: 18px;">
-            <label>
-                <input type="checkbox" id="checkAndamento" class="filled-in" name="filtro" checked="checked">
-                <span>ANDAMENTO</span>
-            </label>
-        </div>
+            <div class="col s2 " style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkAnalise" name="filtro">
+                    <span>ANÁLISE</span>
+                </label>
+            </div>
 
-        <div class="col s2 push-s1" style="margin-top: 18px;">
-            <label>
-                <input type="checkbox" id="checkFinalizado" name="filtro" class="filled-in">
-                <span>FINALIZADO</span>
-            </label>
+            <div class="col s2 " style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkAndamento" name="filtro" checked="checked">
+                    <span>ANDAMENTO</span>
+                </label>
+            </div>
+
+            <div class="col s2" style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkFinalizado" name="filtro">
+                    <span>FINALIZADO</span>
+                </label>
+            </div>
         </div>
 
 
     </div>
 
     <!-- xGrid de lista servicos -->
-    <div id="xgServicos" class="list"></div>
 
     <div class="row">
         <div class="col s3" id="pnFieldServico" style="margin-top: 18px;">
-            <input type="text" id="xmEdtFantasia" placeholder="Nome" class="validate">
+            <input type="text" id="edtPesquisa" placeholder="Nome" class="validate">
         </div>
-        <div class="col s1" style="margin-top: 2px;">
-            <i class="fa fa-search btnLupaProduto" aria-hidden="true"></i>
-        </div>
+        <div class="col s1" style="margin-top: 2px;" id="pnButtons"></div>
 
         <div class="col s3 margintop push-s6"><button class="btn-Frame btn-Frame-blue btnP" id="btnNovoServ">Novo
                 Serviço</button>
@@ -259,7 +262,8 @@
     <div class="row">
         <div class="col s5" style="width: 46.666667% !important;">
             <label>Serviços</label>
-            <select name="id_servico" class="validate" id="slctServico"></select>
+            <select name="id_servico" class="validate" id="slctServico">
+            </select>
         </div>
         <div class="col s6">
             <label>Engenheiro</label><br>
@@ -272,7 +276,8 @@
 
         <div class="col s12">
             <label>Executores</label>
-            <select name="id_servico" class="validate" id="slctExecutor"></select>
+            <select name="id_servico" class="validate" id="slctExecutor">
+            </select>
         </div>
 
     </div>
@@ -280,7 +285,8 @@
     <div class="row">
         <div class="col s6">
             <label>Vendedor</label>
-            <select name="id_servico" class="validate" id="slctVendedor"></select>
+            <select name="id_servico" class="validate" id="slctVendedor">
+            </select>
         </div>
         <div class="col s5">
             <label>Nº projeto</label>

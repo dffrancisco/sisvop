@@ -72,6 +72,13 @@ class Projeto
         $call = $this->sql->getServ();
         echo json_encode($call);
     }
+
+    function getExecutor()
+    {
+        $call = $this->sql->getExecutor();
+        echo json_encode($call);
+    }
+
     function getVendedor()
     {
         $call = $this->sql->getVendedor();

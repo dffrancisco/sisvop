@@ -42,6 +42,11 @@ nav, nav .nav-wrapper i, nav a.sidenav-trigger, nav a.sidenav-trigger i{
   font-size: 17px;
 }
 
+#checkbox span{
+  font-size: 11px;
+  
+}
+
 .btnLupaProduto:hover {
   color: #2e4bab;
 }

@@ -29,7 +29,7 @@ $(function () {
     $('.tabs').tabs();
 
     // LISTENNING
-    $("#xmEdtServico").keydown(function (e) {
+    $("#edtPesquisa").keydown(function (e) {
 
         if (e.keyCode == 13) {
             search = $(this).val().trim()
@@ -183,15 +183,26 @@ const projetos = (function () {
             theme: 'x-clownV2',
             height: '320',
             columns: {
-
                 'SERVIÇO': { dataField: 'SERVICO' },
                 FANTASIA: { dataField: 'FANTASIA' },
-                'DATA INÍCIO': { dataField: 'DATA_INICIO', center: true },
-                'DATA FINAL': { dataField: 'DATA_FINALIZACAO', center: true },
-                STATUS: { dataField: 'STATUS' },
+                'DATA INÍCIO': { dataField: 'DATA_INICIO', width: "12%", center: true },
+                'DATA FINAL': { dataField: 'DATA_FINALIZACAO', width: "12%", center: true },
+                STATUS: { dataField: 'STATUS', width: "20%" },
+            },
+            sideBySide: {
+                frame: {
+                    el: "#pnButtons",
+                    buttons: {
+                        pesquisa: {
+                            html: `<i class="fa fa-search" aria-hidden="true"></i>`,
+                            class: "btnP btnPesq",
+                            style: "margin-left:0px !important; margin-top:14px !important;",
+                            click: searchCliente,
+                        },
+                    },
+                },
 
             },
-
             onKeyDown: {
                 '13': (ln, e) => {
 
@@ -420,6 +431,12 @@ const projetos = (function () {
         })
     }
 
+    function searchCliente() {
+        let search = $('#edtPesquisa').val().trim().toUpperCase();
+        xgServicos.queryOpen({ search })
+        xgServicos.focus();
+    }
+
     function buscar() {
 
         xgCliente.queryOpen({ search: '' });
@@ -465,11 +482,25 @@ const projetos = (function () {
             axios.post(url, {
                 call: 'getVendedor',
             }).then(r => {
+                $('#slctVendedor').html('')
+                $('#slctVendedor').append(`<option value="">Selecione</option>`)
                 for (let i in r.data) {
                     let vendedor = `<option value="${r.data[i].ID_FUNCIONARIOS}"> ${r.data[i].NOME}</option>`
                     $('#slctVendedor').append(vendedor)
                 }
             })
+            axios.post(url, {
+                call: 'getExecutor',
+            }).then(resp => {
+                $('#slctExecutor').html('')
+                $('#slctExecutor').append(`<option value="">Selecione</option>`)
+                for (let i in resp.data) {
+                    let executor = `<option value="${resp.data[i].ID_EXECUTOR}"> ${resp.data[i].LIDER} / ${resp.data[i].AUXILIAR}</option>`
+                    $('#slctExecutor').append(executor)
+                }
+            })
+            $('#slctServico').append(`<option value="">Selecione</option>`)
+
             for (let i in rs.data) {
                 let table = `<option value="${rs.data[i].ID_SERVICO}"> ${rs.data[i].SERVICO}</option>`
                 $('#slctServico').append(table)
@@ -611,32 +642,17 @@ const projetos = (function () {
             ID_CLIENTE: xgCliente.dataSource().ID_CLIENTE,
             ID_SERVICO: $('#slctServico').val(),
             ENGENHEIRO: $('#xmInEngenheiro').val(),
-            EXECUTORES: $('#xmInEx').val(),
-            DATA_INICIO: $('#xmInDataI').val(),
-            DATA_FINAL: $('#xmInDataF').val(),
+            EXECUTORES: $('#slctExecutor').val(),
+            PROJETO: $('#edtProjeto').val(),
             DATA: new Date().toLocaleDateString('pt-BR'),
             HORA: new Date().toLocaleTimeString('pt-BR'),
-
         }
-
 
         for (let i in param) {
             if (param[i] == "" || param[i] == null || param == undefined) {
                 show("Preencha corretamente todos os campos!")
                 return false
             }
-        }
-
-        if (param.DATA_INICIO.length != 10) {
-            show("Data de início inválida")
-            return false
-
-        }
-
-        if (param.DATA_INICIO.length != 10) {
-            show("Data de finalização inválida")
-            return false
-
         }
 
         param.OBS = $('#xmInObs').val()

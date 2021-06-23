@@ -270,7 +270,6 @@ const produto = (function () {
     }
 
     function searchConf() {
-
         let search = $('#edtPesquisa').val().trim();
         xgProduto.queryOpen({ search })
 

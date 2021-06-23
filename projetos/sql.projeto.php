@@ -25,8 +25,7 @@ class SqlProjeto
             FROM lista_servicos a, servicos b, clientes c
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
-            AND b.servico like '%$search%'";
-
+            AND c.fantasia like '$search%'";
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
     $query->execute();
@@ -181,6 +180,17 @@ class SqlProjeto
   }
 
 
+  function getExecutor()
+  {
+
+    $sql = "SELECT lider, id_executores, auxiliar
+          FROM executores";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+
 
   function getListaServicoX($param)
   {
@@ -258,13 +268,12 @@ class SqlProjeto
   {
     extract($param);
     $sql = "INSERT INTO lista_servicos 
-            (id_cliente, id_servico, 
-            data, hora, status, data_inicio, data_finalizacao,
-            engenheiro, executores, obs)
+            (id_cliente, id_servico, data, hora,
+            status, engenheiro, executores, projeto, obs)
             VALUES 
             (:ID_CLIENTE, :ID_SERVICO, 
-            :DATA, :HORA, 'PROJETO', :DATA_INICIO, :DATA_FINAL,
-            :ENGENHEIRO, :EXECUTORES, :OBS)
+            :DATA, :HORA, 'PROJETO',
+            :ENGENHEIRO,:PROJETO, :EXECUTORES, :OBS)
             returning id_lista_servico";
 
     $sql = prepare::SQL($sql, $param);
