@@ -1,35 +1,35 @@
-let xgMarca;
+
+let xgExecutores;
 
 $(function () {
-    marca.grid();
-    marca.keydown();
-    xgMarca.queryOpen({ search: '' })
+    executor.grid()
+    executor.keydown()
 
+    xgExecutores.queryOpen({ search: '' })
 });
 
-const marca = (function () {
-    let url = 'marca/per.marca.php';
+
+const executor = (function () {
+    let url = 'executor/per.executor.php';
     let controleGrid;
 
     function grid() {
-        xgMarca = new xGridV2.create({
-            el: '#pnGridMarca',
+        xgExecutores = new xGridV2.create({
+            el: '#pnGridExecutor',
             height: '200',
             theme: 'x-clownV2',
             heightLine: 27,
             columns: {
-                Marca: { dataField: 'MARCA' },
-            },
-            onSelectLine: (r) => {
+                Lider: { dataField: 'LIDER' },
+                Auxiliar: { dataField: 'AUXILIAR' },
             },
             sideBySide: {
                 el: "#pnFields",
-
                 frame: {
                     el: "#pnButtons",
                     buttons: {
                         pesquisa: {
-                            html: "Pesquisar",
+                            html: `<i class="fa fa-search" aria-hidden="true"></i>`,
                             class: "btnP btnPesq",
                             click: pesquisar,
                         },
@@ -46,7 +46,7 @@ const marca = (function () {
                             click: edit,
                         },
                         deletar: {
-                            html: "Deletar(DEL)",
+                            html: `<i class="fa fa-times" aria-hidden="true"> (DEL)</i>`,
                             class: "btnP btnDel",
                             state: xGridV2.state.delete,
                             click: deletar,
@@ -66,78 +66,62 @@ const marca = (function () {
                     },
                 },
                 duplicity: {
-                    dataField: ['MARCA'],
+                    dataField: ['LIDER'],
                     execute: (r) => {
                         let param = {}
-                        param.MARCA = r.value
+                        param.LIDER = r.value
 
                         return axios.post(url, {
-                            call: 'findMarca',
+                            call: 'duplicity',
                             param: param
                         })
                             .then(rs => {
                                 if (rs.data[0]) {
-                                    xgMarca.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
-                                    xgMarca.focusField(r.field);
+                                    xgExecutores.showMessageDuplicity('O campo ' + r.text + ' está com valor duplicado ou vazio!')
+                                    xgExecutores.focusField(r.field);
                                     return false;
                                 }
                             })
                     }
-                }
+                },
             },
             query: {
                 execute: (r) => {
-                    getMarcas(r.param.search, r.offset);
+                    getExecutor(r.param.search, r.offset);
                 }
             },
-        });
-    }
-
-    function getMarcas(search, offset) {
-        axios.post(url, {
-            call: 'getMarca',
-            param: { search: search, offset: offset }
-
-        }).then(rs => {
-            xgMarca.querySourceAdd(rs.data);
-
-            if (rs.data[0])
-                xgMarca.focus();
         });
     }
 
     function pesquisar() {
         let search = $('#edtPesquisa').val().trim().toUpperCase();
-        xgMarca.queryOpen({ search })
-        xgMarca.focus();
+        xgExecutores.queryOpen({ search })
+        xgExecutores.focus();
     }
 
     function novo() {
         controleGrid = "new"
-        xgMarca.clearElementSideBySide()
-        xgMarca.focusField()
-        xgMarca.disable()
+        xgExecutores.clearElementSideBySide()
+        xgExecutores.focusField()
+        xgExecutores.disable()
 
         // $('#edtPesquisa').prop('disabled', true);
         $('.btnPesq').prop('disabled', true);
     }
 
     function edit() {
-        controleGrid = "edit"
-        xgMarca.disable()
-        xgMarca.focusField()
-
-        // $('#edtPesquisa').prop('disabled', true);
-        $('.btnPesq').prop('disabled', true);
-
+        controleGrid = 'edit';
+        xgExecutores.disable()
+        xgExecutores.focusField()
+        $('#edtPesquisa').prop("disabled", true)
+        $('.btnPesq').prop("disabled", true)
     }
 
     function deletar() {
         let param;
 
-        if (xgMarca.dataSource().ID_MARCA) {
-            param = xgMarca.dataSource().ID_MARCA;
-
+        if (xgExecutores.dataSource().ID_EXECUTORES) {
+            param = xgExecutores.dataSource().ID_EXECUTORES;
             confirmaCodigo({
                 msg: 'Para deletar o registro insira o código abaixo!',
 
@@ -145,9 +129,8 @@ const marca = (function () {
                     axios.post(url, {
                         call: 'deletar',
                         param: param
-
                     }).then(rs => {
-                        xgMarca.deleteLine();
+                        xgExecutores.deleteLine();
                     });
                 }
             })
@@ -155,72 +138,71 @@ const marca = (function () {
     }
 
     const salvar = async () => {
-        let param = xgMarca.getElementSideBySideJson();
 
-        if (param.MARCA || param.MARCA.length > 0) {
-
-            let valCampos = {
-                nome: $('#edtMarca').val(),
-            }
-
-            for (let i in valCampos) {
-                if (valCampos == '') {
-                    show('Por favor preencha todos os campos')
-                    return false
-                }
-            }
-
-            if (controleGrid == 'edit') {
-                param.ID_MARCA = xgMarca.dataSource().ID_MARCA;
-            }
-
-            if (controleGrid == 'new') {
-                param.ID_MARCA = ''
-                let allDuplicty = await xgMarca.getDuplicityAll()
-
-                if (allDuplicty == false)
-                    return false;
-            }
-
-            param.MARCA = param.MARCA.toUpperCase()
-
-            axios.post(url, {
-                call: 'salvar',
-                param: param
-
-            }).then(rs => {
-
-                cancelar()
-                if (rs.data == 'edit') {
-                    xgMarca.dataSource(param);
-
-
-                }
-                else if (rs.data[0].ID_MARCA) {
-
-                    param.ID_MARCA = rs.data.ID_MARCA;
-                    xgMarca.insertLine(param);
-
-                } else {
-                    show('ERRO INTERNO!')
-                }
-
-            });
-        } else {
-            xgMarca.showMessageDuplicity('O campo está com valor duplicado ou vazio!')
+        let param = xgExecutores.getElementSideBySideJson();
+        if ($('#edtLider').val() == "") {
+            show('Por favor insira o lider para criar uma equipe')
+            return false
         }
+        for (let i in param) {
+            param[i] = param[i].toUpperCase()
+        }
+
+        if (controleGrid == 'edit') {
+            param.ID_EXECUTORES = xgExecutores.dataSource().ID_EXECUTORES;
+        }
+
+        if (controleGrid == 'new') {
+            param.ID_EXECUTORES = ''
+            let allDuplicty = await xgExecutores.getDuplicityAll()
+            if (allDuplicty == false)
+                return false;
+        }
+
+
+
+        axios.post(url, {
+            call: 'salvar',
+            param: param
+
+        }).then(rs => {
+            cancelar()
+            if (rs.data == 'edit') {
+                xgExecutores.dataSource(param);
+            }
+            else if (rs.data[0].ID_EXECUTORES) {
+                param.ID_EXECUTORES = rs.data.ID_EXECUTORES;
+                xgExecutores.insertLine(param);
+            } else {
+                show('ERRO INTERNO!')
+            }
+        });
     }
 
     function cancelar() {
-        xgMarca.enable();
-        xgMarca.focus();
+        xgExecutores.enable();
+        xgExecutores.focus();
 
         $('#edtPesquisa').removeAttr('disabled');
         $('.btnPesq').removeAttr('disabled');
     }
 
+    function getExecutor(search, offset) {
+        axios.post(url, {
+            call: 'getExecutor',
+            param: { search: search, offset: offset }
+
+        }).then(r => {
+            xgExecutores.querySourceAdd(r.data);
+
+            if (r.data[0]) {
+                xgExecutores.focus();
+            }
+        });
+    }
+
     function keydown() {
-        $("#edtMarca").keydown(function (e) {
+        $("#edtAuxiliar").keydown(function (e) {
             if (e.keyCode == 13) {
                 $('.btnSave').click()
             }
@@ -253,6 +235,6 @@ const marca = (function () {
     return {
         grid: grid,
         keydown: keydown,
-    };
 
+    }
 })();

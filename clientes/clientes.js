@@ -16,7 +16,7 @@ const cliente = (function () {
         xgCliente = new xGridV2.create({
             el: "#xgCliente",
             height: 210,
-            heightLine: 35,
+            heightLine: 27,
             theme: "x-clownV2",
 
             columns: {
@@ -123,7 +123,7 @@ const cliente = (function () {
 
 
     function pesquisar() {
-        let search = $('#edtPesquisa').val().trim();
+        let search = $('#edtPesquisa').val().trim().toUpperCase();
         xgCliente.queryOpen({ search: search })
     }
 
@@ -176,14 +176,7 @@ const cliente = (function () {
         // }
 
         let valCampos = {
-            cnpj: $('#edtCnpj').val(),
             razao: $('#edtRazao').val(),
-            fantasia: $('#edtFantasia').val(),
-            email: $('#edtEmail').val(),
-            inscricao: $('#edtInscricao').val(),
-            fixo: $('#edtFixo').val(),
-            tel: $('#edtTel').val(),
-            representante: $('#edtRepresentante').val(),
             data_cadastro: $('#edtData').val(),
             cep: $('#edtCep').val(),
             endereco: $('#edtEndereco').val(),
@@ -192,15 +185,9 @@ const cliente = (function () {
             bairro: $('#edtBairro').val(),
         }
 
-        param.RAZAO = param.RAZAO.toUpperCase()
-        param.FANTASIA = param.FANTASIA.toUpperCase()
-        param.EMAIL = param.EMAIL.toUpperCase()
-        param.REPRESENTANTE = param.REPRESENTANTE.toUpperCase()
-        param.ENDERECO = param.ENDERECO.toUpperCase()
-        param.CIDADE = param.CIDADE.toUpperCase()
-        param.BAIRRO = param.BAIRRO.toUpperCase()
-
-
+        for (let i in param) {
+            param[i] = param[i].toUpperCase()
+        }
 
 
         for (let i in valCampos) {

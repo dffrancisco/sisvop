@@ -3,9 +3,6 @@
 <title>Entrada</title>
 
 <div class="container">
-
-
-
     <div class="tabela margintop" id="pnFields">
         <div class="row">
             <div class=" col s7">

@@ -6,14 +6,15 @@ class SqlProjeto
 {
 
   public $db;
-  
+
   function __construct()
   {
     $this->db = ConexaoFirebird::getConectar();
   }
 
   // GET
-  function getServicos($param){
+  function getServicos($param)
+  {
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
             a.id_lista_servico,
@@ -24,16 +25,15 @@ class SqlProjeto
             FROM lista_servicos a, servicos b, clientes c
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
-            AND b.servico like '%$search%'";
-
+            AND c.fantasia like '$search%'";
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
-
   }
 
-  function getServicosAnd($param){
+  function getServicosAnd($param)
+  {
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
             a.id_lista_servico, a.executores,
@@ -49,12 +49,12 @@ class SqlProjeto
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
-
   }
 
-  function getServicosPro($param){
+  function getServicosPro($param)
+  {
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
             a.id_lista_servico, a.executores,
@@ -70,12 +70,12 @@ class SqlProjeto
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
-
   }
 
-  function getServicosFin($param){
+  function getServicosFin($param)
+  {
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
             a.id_lista_servico, a.executores,
@@ -91,12 +91,12 @@ class SqlProjeto
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
-
   }
 
-  function getServicosOrc($param){
+  function getServicosOrc($param)
+  {
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
             a.id_lista_servico, a.executores,
@@ -112,12 +112,12 @@ class SqlProjeto
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
-
   }
 
-  function getServicosAna($param){
+  function getServicosAna($param)
+  {
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
             a.id_lista_servico, a.executores,
@@ -133,12 +133,12 @@ class SqlProjeto
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
-
   }
 
-  function getCliente($param){
+  function getCliente($param)
+  {
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset 
             a.id_cliente, a.cnpj, a.razao,
@@ -150,25 +150,51 @@ class SqlProjeto
             FROM clientes a, uf b
             WHERE a.id_uf = b.id_uf
             AND fantasia LIKE '%$search%'";
-            
+
     // $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function getServ(){
+  function getServ()
+  {
 
-    $sql = "SELECT * 
-            FROM servicos";
+    $sql = "SELECT id_servico, servico
+          FROM servicos";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function getListaServicoX($param){
-    
+  function getVendedor()
+  {
+
+    $sql = "SELECT nome, id_funcionarios
+          FROM funcionarios 
+          WHERE id_cargo = 5";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+
+  function getExecutor()
+  {
+
+    $sql = "SELECT lider, id_executores, auxiliar
+          FROM executores";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+
+
+  function getListaServicoX($param)
+  {
+
     $sql = "SELECT 
       a.id_lista_servico, a.valor,
       a.data_inicio, a.hora, a.status, 
@@ -185,11 +211,12 @@ class SqlProjeto
     $sql = prepare::SQL($sql, $param);
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function getItensProjeto($param){
+  function getItensProjeto($param)
+  {
     extract($param);
     $sql = "SELECT FIRST 10 SKIP :offset 
             c.id_produto
@@ -200,13 +227,13 @@ class SqlProjeto
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
-
   }
 
-  function getItens($param){
-    
+  function getItens($param)
+  {
+
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset 
             a.id_itens_servico, a.id_lista_servico, 
@@ -220,7 +247,8 @@ class SqlProjeto
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function getProdutos($param){
+  function getProdutos($param)
+  {
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset
             a.id_produto, a.qtd, a.descricao,
@@ -231,30 +259,31 @@ class SqlProjeto
             AND descricao LIKE '%$search%'";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
-    return $query->fetchAll(PDO::FETCH_OBJ); 
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-// SETS
-  function gerarServico($param){
+  // SETS
+  function gerarServico($param)
+  {
     extract($param);
     $sql = "INSERT INTO lista_servicos 
-            (id_cliente, id_servico, 
-            data, hora, status, data_inicio, data_finalizacao,
-            engenheiro, executores, obs)
+            (id_cliente, id_servico, data, hora,
+            status, engenheiro, executores, projeto, obs)
             VALUES 
             (:ID_CLIENTE, :ID_SERVICO, 
-            :DATA, :HORA, 'PROJETO', :DATA_INICIO, :DATA_FINAL,
-            :ENGENHEIRO, :EXECUTORES, :OBS)
+            :DATA, :HORA, 'PROJETO',
+            :ENGENHEIRO,:PROJETO, :EXECUTORES, :OBS)
             returning id_lista_servico";
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function inserirItens($param, $ln){
+  function inserirItens($param, $ln)
+  {
     extract($param);
     $sql = "INSERT INTO 
             lista_itens_servico 
@@ -263,11 +292,12 @@ class SqlProjeto
             ($ID_LISTA_SERVICO, $ln->ID_PRODUTO , $QTD_PRODUTO, '$DATA', '$ORIGEM', $QTD_RETIRADA)";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function inserirItem($param){
+  function inserirItem($param)
+  {
     extract($param);
     $sql = "INSERT INTO 
             lista_itens_servico 
@@ -277,11 +307,12 @@ class SqlProjeto
             returning id_itens_servico";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function setQtd($param){
+  function setQtd($param)
+  {
     extract($param);
 
     $sql = "UPDATE lista_itens_servico
@@ -289,11 +320,12 @@ class SqlProjeto
             WHERE id_itens_servico = $ID_ITENS_SERVICO ";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function statusServico($param){
+  function statusServico($param)
+  {
     extract($param);
 
     $sql = "UPDATE lista_servicos
@@ -301,12 +333,13 @@ class SqlProjeto
             WHERE id_lista_servico = $ID_LISTA_SERVICO ";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   //UPDATE
-  function updateOrcamento($param){
+  function updateOrcamento($param)
+  {
     extract($param);
     $sql = "UPDATE lista_servicos 
       SET margem_produto = '$margem', 
@@ -316,29 +349,30 @@ class SqlProjeto
       WHERE id_lista_servico = $ID_LISTA_SERVICO";
 
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function updateValorServico($param){
+  function updateValorServico($param)
+  {
     extract($param);
     $sql = "UPDATE lista_servicos
             SET valor = '$VALOR',
             status = '$STATUS'
             WHERE id_lista_servico = $ID_LISTA_SERVICO";
-    
+
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   // DELETE
-  function deleteItem($param){
+  function deleteItem($param)
+  {
 
     $sql = "DELETE FROM lista_itens_servico WHERE id_itens_servico = $param";
     $query = $this->db->prepare($sql);
-    $query->execute(); 
+    $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
-
 }

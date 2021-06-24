@@ -885,19 +885,20 @@
 
 .x-clownV2 {
   color: black;
-  border: 1px solid #55828B;
-  font-size: 17px;
+  border: 1px solid #8e8e8e;
+  font-size: 15px;
   /*font-family: Verdana, Arial, sans-serif;*/
   /* background: #55828B; */
   margin-top: 10px;
 }
 
 .x-clownV2 .xGridV2-title {
-  border-bottom: 1px solid #55828B;
-  color: #FFFFFF;
-  background: #4679ad;
+  border-bottom: 1px solid #8e8e8e;
+  color: #4a4a4a;
+  /* background: #bfdde6; */
+  background: linear-gradient(to bottom, #eeeeee 0%,#cccccc 100%);
   cursor: pointer;
-  height: 29px;
+  height: 20px;
 }
 
 .x-clownV2 .xGridV2-title .xGridV2-col {
@@ -927,11 +928,11 @@
 }
 
 .x-clownV2 .xGridV2-content .xGridV2-row:nth-child(odd) {
-  background-color: #c3d5d8;/* <-*/
+  background-color: #d8d8d8;/* <-*/
 }
 
 .x-clownV2 .xGridV2-Selected {
-  background: -webkit-gradient(
+  /* background: -webkit-gradient(
     linear,
     left top,
     left bottom,
@@ -939,10 +940,14 @@
     color-stop(19%, #0385f3),
     color-stop(72%, #0167e9),
     color-stop(100%, #015de6)
-  );
+  ); */
+  background-color: #6a93cb;
+  background-image: linear-gradient(315deg, #7598c9 0%, #b0c8f3 74%);;
   border-color: rgb(165, 169, 170);
   color: #000000 !important;
   outline: 0;
+
+
 }
 
 .x-clownV2 .xGridV2-load {
@@ -981,7 +986,7 @@
 .x-clownV2::-webkit-scrollbar-thumb:horizontal,
 .x-clownV2 .xGridV2-content::-webkit-scrollbar-thumb:vertical,
 .x-clownV2 .xGridV2-content::-webkit-scrollbar-thumb:horizontal {
-  background: #356ca3;
+  background: #9eb4e2;
   border-radius: 5px;
 }
 

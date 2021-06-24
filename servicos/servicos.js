@@ -59,7 +59,7 @@ const servicos = (function () {
         xgItensServico = new xGridV2.create({
             el: "#xgItensServico",
             height: 330,
-            heightLine: 35,
+            heightLine: 27,
             theme: "x-clownV2",
 
             columns: {
@@ -103,7 +103,7 @@ const servicos = (function () {
         xgProdutos = new xGridV2.create({
             el: '#xgProdutos',
             height: 330,
-            heightLine: 35,
+            heightLine: 27,
             theme: "x-clownV2",
 
             columns: {

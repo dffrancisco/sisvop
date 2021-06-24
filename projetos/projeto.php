@@ -5,55 +5,61 @@
 <div id="Servicos" class="container">
 
     <div class="row">
-        <div class="col s2 push-s1" style="margin-top: 18px;">
-            <label>
-                <input type="checkbox" id="checkProjeto" name="filtro" class="filled-in">
-                <span>PROJETO</span>
-            </label>
-        </div>
+        <div id="checkbox">
+            <div class="col s10">
+                <div id="xgServicos" class=""></div>
+            </div>
 
-        <div class="col s2 push-s1" style="margin-top: 18px;">
-            <label>
-                <input type="checkbox" id="checkOrcamento" name="filtro" class="filled-in">
-                <span>ORÇAMENTO</span>
-            </label>
-        </div>
+            <div class="col s2 " style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkProjeto" name="filtro">
+                    <span>PROJETO</span>
+                </label>
+            </div>
 
-        <div class="col s2 push-s1" style="margin-top: 18px;">
-            <label>
-                <input type="checkbox" id="checkAnalise" name="filtro" class="filled-in">
-                <span>ANÁLISE</span>
-            </label>
-        </div>
+            <div class="col s2 " style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkOrcamento" name="filtro">
+                    <span>ORÇAMENTO</span>
+                </label>
+            </div>
 
-        <div class="col s2 push-s1" style="margin-top: 18px;">
-            <label>
-                <input type="checkbox" id="checkAndamento" class="filled-in" name="filtro" checked="checked">
-                <span>ANDAMENTO</span>
-            </label>
-        </div>
+            <div class="col s2 " style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkAnalise" name="filtro">
+                    <span>ANÁLISE</span>
+                </label>
+            </div>
 
-        <div class="col s2 push-s1" style="margin-top: 18px;">
-            <label>
-                <input type="checkbox" id="checkFinalizado" name="filtro" class="filled-in">
-                <span>FINALIZADO</span>
-            </label>
+            <div class="col s2 " style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkAndamento" name="filtro" checked="checked">
+                    <span>ANDAMENTO</span>
+                </label>
+            </div>
+
+            <div class="col s2" style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkFinalizado" name="filtro">
+                    <span>FINALIZADO</span>
+                </label>
+            </div>
         </div>
 
 
     </div>
 
     <!-- xGrid de lista servicos -->
-    <div id="xgServicos" class="list"></div>
 
     <div class="row">
-        <div class="col s4" id="pnFieldServico">
-            <label>Buscar Fantasia</label>
-            <input type="text" id="xmEdtFantasia" class="validate">
+        <div class="col s3" id="pnFieldServico" style="margin-top: 18px;">
+            <input type="text" id="edtPesquisa" placeholder="Nome" class="validate">
         </div>
+        <div class="col s1" style="margin-top: 2px;" id="pnButtons"></div>
 
-        <div class="col s3 margintop push-s6"><button class="btn-Frame btn-Frame-blue btnP btnPesq">Novo
-                Serviço</button></div>
+        <div class="col s3 margintop push-s6"><button class="btn-Frame btn-Frame-blue btnP" id="btnNovoServ">Novo
+                Serviço</button>
+        </div>
     </div>
 
 </div>
@@ -187,7 +193,8 @@
                     </div>
                 </li>
                 <li class="collection-item">
-                    <div class="fontOrcamento">Valor mínimo de venda<a class=" secondary-content" id="valorMinimo"> </a>
+                    <div class="fontOrcamento">Valor mínimo de venda<a class=" secondary-content" id="valorMinimo">
+                        </a>
                     </div>
                 </li>
                 <li class="collection-item">
@@ -253,41 +260,47 @@
 
     </div>
     <div class="row">
-        <div class="col s12">
+        <div class="col s5" style="width: 46.666667% !important;">
             <label>Serviços</label>
-            <select name="id_servico" class="validate" style="width: 94% !important" id="slctServico"></select>
+            <select name="id_servico" class="validate" id="slctServico">
+            </select>
+        </div>
+        <div class="col s6">
+            <label>Engenheiro</label><br>
+            <input type="text" class="validate" id="xmInEngenheiro" disabled>
         </div>
     </div>
 
     <div class="row">
-        <div class="col s6">
-            <label>Engenheiro</label><br>
-            <input type="text" class="validate" style="width: 83% !important;" id="xmInEngenheiro">
-        </div>
 
-        <div class="col s6">
+
+        <div class="col s12">
             <label>Executores</label>
-            <input type="text" class="validate" style="width: 83% !important;" id="xmInEx">
+            <select name="id_servico" class="validate" id="slctExecutor">
+            </select>
         </div>
 
+    </div>
+
+    <div class="row">
         <div class="col s6">
-            <label>Data de início</label><br>
-            <input type="text" style="width: 83% !important;" id="xmInDataI" class="date">
+            <label>Vendedor</label>
+            <select name="id_servico" class="validate" id="slctVendedor">
+            </select>
         </div>
-
-        <div class="col s6">
-            <label>Data de finalização</label>
-            <input type="text" style="width: 83% !important;" id="xmInDataF" class="date">
+        <div class="col s5">
+            <label>Nº projeto</label>
+            <input type="text" class="validate" id="edtProjeto">
         </div>
-
-
+        <div class="col s1">
+            <i class="fa fa-upload" style="font-size: 23px; margin-top: 18px;" aria-hidden="true"></i>
+        </div>
     </div>
 
     <div class="row">
         <div class="col s12">
             <label>OBS</label>
-            <textarea type="text" style=" width: 96% !important;" class="txtArea validate" id="xmInObs" rows="50"
-                placeholder="Observações"></textarea>
+            <textarea type="text" class="txtArea validate" id="xmInObs" rows="50" placeholder="Observações"></textarea>
         </div>
     </div>
 
