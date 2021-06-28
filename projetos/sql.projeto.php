@@ -179,7 +179,6 @@ class SqlProjeto
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-
   function getExecutor()
   {
 
@@ -189,8 +188,6 @@ class SqlProjeto
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
-
-
 
   function getListaServicoX($param)
   {
@@ -269,11 +266,11 @@ class SqlProjeto
     extract($param);
     $sql = "INSERT INTO lista_servicos 
             (id_cliente, id_servico, data, hora,
-            status, engenheiro, executores, projeto, obs)
+            status, engenheiro, projeto, executores,id_vendedor, obs)
             VALUES 
             (:ID_CLIENTE, :ID_SERVICO, 
             :DATA, :HORA, 'PROJETO',
-            :ENGENHEIRO,:PROJETO, :EXECUTORES, :OBS)
+            :ENGENHEIRO,:PROJETO, :EXECUTORES,:ID_VENDEDOR, :OBS)
             returning id_lista_servico";
 
     $sql = prepare::SQL($sql, $param);
