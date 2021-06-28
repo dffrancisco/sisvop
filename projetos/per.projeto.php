@@ -122,8 +122,24 @@ class Projeto
     // SET
     function gerarServico($param)
     {
+        extract($param);
         $call = $this->sql->gerarServico($param);
-        echo json_encode($call);
+
+        extract($projeto);
+
+        mkdir("../arquivos_projetos/" . $call[0]->ID_LISTA_SERVICO);
+
+        chmod("../arquivos_projetos/" . $call[0]->ID_LISTA_SERVICO, 0777);
+
+        list($tipo, $dados) = explode(';', $arquivo);
+
+        list(, $dados) = explode(',', $dados);
+
+        $dados = base64_decode($dados);
+
+        file_put_contents("../arquivos_projetos/" . $call[0]->ID_LISTA_SERVICO . "/" . $name, $dados);
+
+        echo json_encode("../arquivos_projetos/" . $call[0]->ID_LISTA_SERVICO);
     }
 
     function setQtd($param)

@@ -57,7 +57,7 @@
         </div>
         <div class="col s1" style="margin-top: 2px;" id="pnButtons"></div>
 
-        <div class="col s3 margintop push-s6"><button class="btn-Frame btn-Frame-blue btnP" id="btnNovoServ">Novo
+        <div class="col s3 margintop push-s6"><button class="btn-Frame btn-Frame-blue btnP btnNovoServ">Novo
                 Serviço</button>
         </div>
     </div>
@@ -155,7 +155,7 @@
         </div>
 
         <div class="btnAll" style="margin-bottom: 7px; margin-top:-16px;">
-            <button class="btn-Frame btn-Frame-blue btnP btnPesq">Novo Serviço</button>
+            <button class="btn-Frame btn-Frame-blue btnP btnPesq btnNovoServ">Novo Serviço</button>
             <button class="btn-Frame btn-Frame-blue btnP btnBS">Buscar Serviço</button>
             <button class="btn-Frame btn-Frame-blue btnP btnVR">VENDA REALIZADA</button>
 
@@ -290,10 +290,10 @@
         </div>
         <div class="col s5">
             <label>Nº projeto</label>
-            <input type="text" class="validate" id="edtProjeto">
+            <input type="number" class="validate" id="edtProjeto">
         </div>
         <div class="col s1">
-            <i class="fa fa-upload" style="font-size: 23px; margin-top: 18px;" aria-hidden="true"></i>
+            <i class="fa fa-upload" style="font-size: 23px; margin-top: 18px;" aria-hidden="true" id="icon_up"></i>
         </div>
     </div>
 
@@ -303,6 +303,8 @@
             <textarea type="text" class="txtArea validate" id="xmInObs" rows="50" placeholder="Observações"></textarea>
         </div>
     </div>
+
+    <input type="file" class="validate" id="up_file" hidden>
 
 </div>
 
