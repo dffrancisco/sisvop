@@ -23,6 +23,7 @@ let andamento = ''
 let projeto = ''
 let finalizado = ''
 
+
 let ID_LISTA_SERVICO;
 let ID_CLIENTE;
 
@@ -135,7 +136,6 @@ $(function () {
 
     $('#checkAndamento').click(function (e) {
         let search = $('#xmEdtServico').val().trim().toUpperCase()
-
         xgServicos.queryOpen({ search: search })
         $('#xmEdtServico').focus()
 
@@ -143,18 +143,26 @@ $(function () {
 
     $('#checkPreparo').click(function (e) {
         let search = $('#xmEdtServico').val().trim().toUpperCase()
-
         xgServicos.queryOpen({ search: search })
         $('#xmEdtServico').focus()
-
     })
 
     $('#checkEncerrado').click(function (e) {
         let search = $('#xmEdtServico').val().trim().toUpperCase()
-
         xgServicos.queryOpen({ search: search })
         $('#xmEdtServico').focus()
+    })
 
+    $('#checkFinalizacao').click(function (e) {
+        let search = $('#xmEdtServico').val().trim().toUpperCase()
+        xgServicos.queryOpen({ search: search })
+        $('#xmEdtServico').focus()
+    })
+
+    $('#checkAtrasado').click(function (e) {
+        let search = $('#xmEdtServico').val().trim().toUpperCase()
+        xgServicos.queryOpen({ search: search })
+        $('#xmEdtServico').focus()
     })
 
     xgServicos.queryOpen({ search: '' })
@@ -380,11 +388,10 @@ const saida = (function () {
             height: '120',
 
             columns: {
-                'ID': { dataField: 'ID_ROMANEIO', width: '10%' },
                 'Responsável': { dataField: 'NOME', width: '40%' },
                 Data: { dataField: 'DATA', center: true, width: '15%' },
                 Hora: { dataField: 'HORA', center: true, width: '15%' },
-                Status: { dataField: 'STATUS', width: '20%' }
+                Status: { dataField: 'STATUS' }
             },
 
             onSelectLine: (r) => {
@@ -601,7 +608,9 @@ const saida = (function () {
             offset: offset,
             andamento: andamento,
             preparo: preparo,
-            encerrado: encerrado
+            encerrado: encerrado,
+            finalizacao: finalizacao,
+            atrasado: atrasado,
         }
         axios.post(url, {
             call: 'getServicos',
@@ -711,6 +720,14 @@ const saida = (function () {
             encerrado = 'ENCERRADO'
         }
 
+        if ($('#checkFinalizacao').is(':checked') == true) {
+            finalizacao = 'FINALIZACAO'
+        }
+
+        if ($('#checkAtrasado').is(':checked') == true) {
+            atrasado = 'ATRASADO'
+        }
+
         if ($('#checkEncerrado').is(':checked') == false) {
             encerrado = ''
         }
@@ -719,6 +736,12 @@ const saida = (function () {
         }
         if ($('#checkAndamento').is(':checked') == false) {
             andamento = ''
+        }
+        if ($('#checkFinalizacao').is(':checked') == false) {
+            finalizacao = ''
+        }
+        if ($('#checkAtrasado').is(':checked') == false) {
+            atrasado = ''
         }
     }
 
@@ -835,12 +858,10 @@ const saida = (function () {
                 }
 
                 axios.post(url, {
-
                     call: 'novoRomaneio',
                     param: param,
 
                 }).then(rs => {
-
                     $('.btnPR').attr("disabled", true);
 
                     if (STATUS == 'PREPARO') {
@@ -848,16 +869,17 @@ const saida = (function () {
                             call: 'atualizaStatus',
                             param: {
                                 ID_LISTA_SERVICO: ID_LISTA_SERVICO,
-                                STATUS: 'ANDAMENTO'
+                                STATUS: 'ANDAMENTO',
+                                DATA: param.DATA,
                             }
-                        }).then(rs => {
+                        }).then(r => {
 
+                            $('#spDataI').html(param.DATA)
                             $('#spStatus').html('ANDAMENTO')
                         })
                     }
-
                     xgRomaneios.queryOpen({ search: ID_LISTA_SERVICO })
-
+                    xgRomaneios.focus()
                 })
 
             }

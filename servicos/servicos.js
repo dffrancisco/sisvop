@@ -58,7 +58,7 @@ const servicos = (function () {
     function grid() {
         xgItensServico = new xGridV2.create({
             el: "#xgItensServico",
-            height: 330,
+            height: 300,
             heightLine: 27,
             theme: "x-clownV2",
 
@@ -284,9 +284,9 @@ function activeCard(param) {
     $('#rowPesq').removeAttr("hidden")
 
     for (let i = 0; i < cards.length; i++) {
-        cards[i].style.background = "#1D4B70"
+        cards[i].style.background = "#3e85c1"
     }
-    document.getElementById(param).style.background = "#4a5f71"
+    document.getElementById(param).style.background = "#26679e"
 
     xgItensServico.queryOpen({ search: '' })
 

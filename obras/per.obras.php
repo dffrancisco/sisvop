@@ -118,6 +118,18 @@ class Obras
             $dados = array_merge($encerrado, $dados);
         }
 
+        if ($param['finalizacao'] == 'FINALIZACAO') {
+
+            $encerrado = $this->sql->getServicosFin($param);
+            $dados = array_merge($encerrado, $dados);
+        }
+
+        if ($param['atrasado'] == 'ATRASADO') {
+
+            $encerrado = $this->sql->getServicosAtr($param);
+            $dados = array_merge($encerrado, $dados);
+        }
+
         if ($param['encerrado'] == '' && $param['preparo'] == '' && $param['andamento'] == '') {
 
             $todos = $this->sql->getServicos($param);

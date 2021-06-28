@@ -7,6 +7,13 @@
 
     </div>
 
+    <ul class="" style="margin-left: 5px">
+        <!-- <li class="tab"><a class="active" href="#tabRomaneio">Romaneio</a></li> -->
+        <!-- <li class="tab"><a href="#tabProdutoServico">Produto do Serviço</a></li> -->
+        <li class="tab"><a href="#rowPesq"><i class="fa fa-circle" aria-hidden="true"></i></a></li>
+        <li class="tab"><a href="#xgItensServico"><i class="fa fa-circle" aria-hidden="true"></i></a></li>
+    </ul>
+
     <div class="row" id="rowPesq" hidden>
         <div class="col s3">
             <input type="text" class="margintop validate" placeholder="Precione F2" id="edtPesquisa">

@@ -216,7 +216,7 @@ class SqlObras
             FROM lista_servicos a, servicos b, clientes c
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
-            AND b.servico like '$search%'
+            AND c.fantasia like '$search%'
             ORDER BY a.STATUS";
 
     $sql = prepare::SQL($sql, $param);
@@ -237,7 +237,7 @@ class SqlObras
             FROM lista_servicos a, servicos b, clientes c
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
-            AND b.servico like '$search%'
+            AND c.fantasia like '$search%'
             AND a.status = '$andamento'";
 
     $sql = prepare::SQL($sql, $param);
@@ -258,7 +258,7 @@ class SqlObras
             FROM lista_servicos a, servicos b, clientes c
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
-            AND b.servico like '$search%'
+            AND c.fantasia like '$search%'
             AND a.status = '$preparo'";
 
     $sql = prepare::SQL($sql, $param);
@@ -279,8 +279,50 @@ class SqlObras
             FROM lista_servicos a, servicos b, clientes c
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
-            AND b.servico like '$search%'
+            AND c.fantasia like '$search%'
             AND a.status = '$encerrado'";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function getServicosFin($param)
+  {
+    extract($param);
+    $sql = "SELECT FIRST 10 SKIP $offset
+            a.id_lista_servico, a.executores,
+            a.data_inicio, a.hora, a.status, 
+            a.data_finalizacao, a.engenheiro,
+            b.id_servico,  b.servico ,
+            c.id_cliente,c.fantasia
+            FROM lista_servicos a, servicos b, clientes c
+            WHERE a.id_servico = b.id_servico
+            AND a.id_cliente = c.id_cliente
+            AND c.fantasia like '$search%'
+            AND a.status = '$finalizacao'";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function getServicosAtr($param)
+  {
+    extract($param);
+    $sql = "SELECT FIRST 10 SKIP $offset
+            a.id_lista_servico, a.executores,
+            a.data_inicio, a.hora, a.status, 
+            a.data_finalizacao, a.engenheiro,
+            b.id_servico,  b.servico ,
+            c.id_cliente,c.fantasia
+            FROM lista_servicos a, servicos b, clientes c
+            WHERE a.id_servico = b.id_servico
+            AND a.id_cliente = c.id_cliente
+            AND c.fantasia like '$search%'
+            AND a.status = '$atrasado'";
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
@@ -427,7 +469,7 @@ class SqlObras
     extract($param);
 
     $sql = "UPDATE lista_servicos
-            SET status = :STATUS
+            SET status = :STATUS, data_inicio = :DATA
             WHERE id_lista_servico = :ID_LISTA_SERVICO";
 
     $sql = prepare::SQL($sql, $param);
