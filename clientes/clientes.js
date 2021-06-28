@@ -169,11 +169,12 @@ const cliente = (function () {
 
         let param = xgCliente.getElementSideBySideJson()
         param.DATA_CADASTRO = $('#edtData').val()
-
         // let allDuplicty = await xgCliente.getDuplicityAll()
         // if (allDuplicty == false) {
         //     return false;
         // }
+
+
 
         let valCampos = {
             razao: $('#edtRazao').val(),
@@ -205,6 +206,7 @@ const cliente = (function () {
             param.ID_CLIENTE = ''
         }
 
+        console.log(' :', param);
         axios.post(url, {
             call: 'save',
             param: param
@@ -218,8 +220,6 @@ const cliente = (function () {
                 if (r.data[0].ID_CLIENTE) {
                     param.ID_CLIENTE = r.data[0].ID_CLIENTE
                     xgCliente.insertLine(param)
-                } else {
-                    show('ERRO INTERNO')
                 }
 
             })

@@ -58,6 +58,16 @@ nav, nav .nav-wrapper i, nav a.sidenav-trigger, nav a.sidenav-trigger i{
   font-size: 18px;
 }
 
+.btnBS{
+  cursor: pointer;
+  font-size: 22px;
+  border: solid 0px;
+}
+
+.btnFR{
+  float: right;
+}
+
 .notify:hover {
   color: #b3b3b3;
 }
@@ -382,43 +392,48 @@ textarea:focus {
 
 .tabs .tab a:hover,
 .tabs .tab a.active {
-  background-color: #4679ad;
+  background-color: #3e85c1;
   color: #ffffff;
 }
 
 .tabs {
   background-color: #eee;
-  border-bottom: 1px solid #d0d0d0;
-  height: 37px !important;
+  border-bottom: 1px solid #8e8e8e;
+  height: 26px;
+  width: 42%;
 }
 
 .tabs .tab a {
   color: rgb(49, 49, 49);
-  background-color: #a4bdcd;
+  background-color: #d8d8d8;
+  font-size: 10px;
 }
 
 .tabs .indicator {
-  background-color: #003bff;
+  background-color: #d8d8d8;
 }
 
 .tabs .tab {
-  height: 39px !important;
-  line-height: 41px !important;
+  line-height: 26px;
 }
 
 .tabs .tab a:focus,
 .tabs .tab a:focus.active {
-  background-color: #4679ad;
+  background-color: #3e85c1;
   outline: none;
 }
 
 /*materialize* fim *********************************/
 
 .servico {
-  background-color: #3f688a;
+  background-color: #3e85c1;
   height: 40px;
   padding: 5px;
   margin-top: 5px;
+}
+
+.tabServico{
+  border-bottom: 1px solid #eeeeee;
 }
 
 .marginBottom {

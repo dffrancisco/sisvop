@@ -27,7 +27,7 @@ class SqlServicos
   function getProdutos($param)
   {
     extract($param);
-    $sql = "SELECT FIRST 10 SKIP $offset
+    $sql = "SELECT FIRST 12 SKIP $offset
     a.id_produto, a.descricao, a.codigo, 
     b.id_marca, b.marca 
     FROM produtos a, marcas b
@@ -47,7 +47,25 @@ class SqlServicos
     $sql = "SELECT FIRST 10 SKIP $offset b.ID_PRODUTO, b.DESCRICAO, a.ID_MASCARA_PROJETO
     FROM MASCARA_PROJETO a, PRODUTOS b, SERVICOS c
     WHERE a.ID_PRODUTO = b.ID_PRODUTO 
+    AND a.ID_SERVICO = c.ID_SERVICO
+    AND a.FINALIZACAO = 0
+    AND c.ID_SERVICO = $id_servico
+    AND b.DESCRICAO LIKE '%$item%'";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function getMascaraProjetoFin($param)
+  {
+    extract($param);
+
+    $sql = "SELECT FIRST 10 SKIP $offset b.ID_PRODUTO, b.DESCRICAO, a.ID_MASCARA_PROJETO
+    FROM MASCARA_PROJETO a, PRODUTOS b, SERVICOS c
+    WHERE a.ID_PRODUTO = b.ID_PRODUTO 
     AND a.ID_SERVICO = c.ID_SERVICO 
+    AND a.FINALIZACAO = 1 
     AND c.ID_SERVICO = $id_servico
     AND b.DESCRICAO LIKE '%$item%'";
 
@@ -60,9 +78,9 @@ class SqlServicos
   {
     $sql = "INSERT INTO 
             mascara_projeto
-            (id_servico, id_produto)
+            (id_servico, id_produto, finalizacao)
             VALUES 
-            (:ID_SERVICO, :ID_PRODUTO)
+            (:ID_SERVICO, :ID_PRODUTO, :FINALIZACAO)
             returning ID_MASCARA_PROJETO";
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);

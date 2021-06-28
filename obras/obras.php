@@ -7,35 +7,53 @@
 <!-- xModal da Lista de Servicos-->
 <div id="Servicos" class="container">
     <div class="row">
+        <div id="checkbox">
+            <div>
+                <div id="xgServicos" class="col s10"></div>
+            </div>
+            <div class="col s2" style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkPreparo" name="filtro">
+                    <span>PREPARO</span>
+                </label>
+            </div>
 
-        <div class="col s2 push-s1" style="margin-top: 18px;">
-            <label>
-                <input type="checkbox" id="checkPreparo" name="filtro" class="filled-in">
-                <span>PREPARO</span>
-            </label>
-        </div>
+            <div class="col s2" style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkAndamento" name="filtro" checked="checked">
+                    <span>ANDAMENTO</span>
+                </label>
+            </div>
 
-        <div class="col s2 push-s1" style="margin-top: 18px;">
-            <label>
-                <input type="checkbox" id="checkAndamento" class="filled-in" name="filtro" checked="checked">
-                <span>ANDAMENTO</span>
-            </label>
-        </div>
+            <div class="col s2" style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkFinalizacao" name="filtro">
+                    <span>FINALIZAÇÃO</span>
+                </label>
+            </div>
 
-        <div class="col s2 push-s1" style="margin-top: 18px;">
-            <label>
-                <input type="checkbox" id="checkEncerrado" name="filtro" class="filled-in">
-                <span>ENCERRADO</span>
-            </label>
+            <div class="col s2" style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkEncerrado" name="filtro">
+                    <span>ENCERRADO</span>
+                </label>
+            </div>
+
+            <div class="col s2" style="margin-top: 18px;">
+                <label>
+                    <input type="checkbox" id="checkAtrasado" name="filtro" checked="checked">
+                    <span>ATRASADO</span>
+                </label>
+            </div>
+
         </div>
     </div>
 
     <!-- xGrid de lista servicos -->
-    <div id="xgServicos" class="list"></div>
 
     <div class="row">
         <div class="col s4" id="pnFieldServico">
-            <label>Buscar Serviço</label>
+            <label>Buscar cliente</label>
             <input type="text" id="xmEdtServico" class="validate">
         </div>
     </div>
@@ -44,6 +62,14 @@
 <div class="container" id="dados_cliente" hidden>
     <div class="tabela" id="pnFields">
         <div class="row">
+            <div class="col s1">
+                <button class="btnBS"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i></button>
+
+            </div>
+        </div>
+
+        <div class="row">
+
             <div class="col s6">
                 <span id="spId_cliente" hidden></span>
                 <span id="spId_lista_servico" hidden></span>
@@ -81,7 +107,7 @@
         </div>
 
         <div class="row">
-            <div class="col s3">
+            <div class="col s6">
                 <label>OBS</label><br>
                 <span id="spObs" class="spanAutoPreenc">VER OBSERVAÇÃO...</span>
             </div>
@@ -100,26 +126,18 @@
 
         <div id="obsText">
             <span id="spObsText"></span>
-
         </div>
 
         <hr>
         <br>
-
-        <div class="btnAll" style="margin-bottom: 7px; margin-top:-16px;">
-            <button class="btn-Frame btn-Frame-blue btnP btnBS">Buscar Serviço</button>
-            <button class="btn-Frame btn-Frame-blue btnP btnRG">Relatório Geral</button>
-            <button class="btn-Frame btn-Frame-blue btnP btnObra">Obra</button>
-        </div>
     </div>
 
 
 
     <ul class="tabs" style="margin-left: 5px">
-        <li class="tab col s4"><a class="active" href="#tabProdutoServico">Produto do Serviço</a></li>
-        <li class="tab col s4"><a href="#tabRomaneio">Romaneio</a></li>
-        <!-- <li class="tab col s3"><a href="#tabAcrecismo">Acréscimo</a></li> -->
-        <li class="tab col s4"><a href="#tabDevolucao">Devolução</a></li>
+        <li class="tab"><a class="active" href="#tabRomaneio">Romaneio</a></li>
+        <li class="tab"><a href="#tabProdutoServico">Produto do Serviço</a></li>
+        <li class="tab"><a href="#tabDevolucao">Devolução</a></li>
     </ul>
 
     <div id="tabProdutoServico" class="col s12">
@@ -252,12 +270,12 @@
                 </div>
 
                 <div class="col s3">
-                    <label>Data prevista de início</label><br>
+                    <label>Data de início</label><br>
                     <span id="rlDataI"></span>
                 </div>
 
                 <div class="col s4">
-                    <label>Data prevista de finalização</label><br>
+                    <label>Data de finalização</label><br>
                     <span id="rlDataF"></span>
                 </div>
             </div>
