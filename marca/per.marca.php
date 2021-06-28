@@ -12,34 +12,38 @@ class Marca
 
     private $sql;
 
-    function __construct(){
+    function __construct()
+    {
 
         //instancia da class        
         $this->sql = new SqlMarca();
     }
 
-    function getMarca($param){
+    function getMarca($param)
+    {
         $call = $this->sql->getMarca($param);
         echo json_encode($call);
     }
 
-    function findMarca($param){
+    function findMarca($param)
+    {
         $call = $this->sql->findMarca($param);
         echo json_encode($call);
     }
 
-    function salvar($param){
+    function salvar($param)
+    {
         if (empty($param['ID_MARCA'])) {
             $idMarca = $this->sql->inserirMarca($param);
             echo json_encode($idMarca);
         } else {
             $call = $this->sql->atualizaMarca($param);
             echo json_encode('edit');
-
         }
     }
 
-    function deletar($param){
+    function deletar($param)
+    {
         $call = $this->sql->deletarMarca($param);
     }
 }

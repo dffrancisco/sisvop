@@ -29,8 +29,22 @@ body {
   padding-bottom: 30px;
 }
 
+[type="checkbox"]:checked+span:not(.lever):before{ 
+  border-right: 2px solid #2064e0 !important;
+    border-bottom: 2px solid #2064e0 !important;
+}
+
+nav, nav .nav-wrapper i, nav a.sidenav-trigger, nav a.sidenav-trigger i{
+ height: 50px !important; 
+ line-height: 52px !important;
+}
 .fontOrcamento {
   font-size: 17px;
+}
+
+#checkbox span{
+  font-size: 11px;
+  
 }
 
 .btnLupaProduto:hover {
@@ -79,12 +93,12 @@ body {
 .pnMenu {
   color: #e0f2f1;
   padding: 3px;
-  height: calc(100% - 39px);
+  /* height: calc(100% - 39px); */
   position: fixed;
   width: 300px;
   left: -310px;
-  top: 64px;
-  background-color: #263238;
+  top: 50px;
+  background-color: #000000f1;
   z-index: 100;
   box-shadow: 10px 0px 13px -8px rgba(0, 0, 0, 0.68);
   transition: all 0.5s cubic-bezier(0.61, -0.12, 0.34, 1.16);
@@ -97,7 +111,7 @@ body {
   color: #e0f2f1;
 }
 .pnMenu a:hover {
-  color: #b2dfdb;
+  color: #c9c9c9;
 }
 
 .tabela {
@@ -114,8 +128,8 @@ td {
 .pnUser {
   z-index: 100;
   color: #e0f2f1;
-  background: #29689c;
-  margin-top: 70px;
+  background: #4d84ff;
+  margin-top: 54px;
   padding: 3px 3px 3px 3px;
   -moz-transition: all 0.5s ease;
   -webkit-transition: all 0.5s ease;
@@ -213,7 +227,7 @@ td {
 }
 
 .btnP {
-  background-color: #2e4bab !important;
+  background-color: #3e85c1 !important;
   font-size: 14px !important;
   border: #2e4bab !important;
 }
@@ -304,7 +318,7 @@ td {
   padding: 5px;
 }
 .pnMenu li:hover {
-  background: #37474f;
+  background: #444444;
 }
 .pnMenu li i {
   padding-left: 5px;
@@ -359,7 +373,7 @@ textarea:focus {
 }
 
 .nav-blue {
-  background-color: #1d4b70 !important;
+  background-color: #2f2f2f;
 }
 
 #edtCodigoConf {

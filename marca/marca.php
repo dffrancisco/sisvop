@@ -16,10 +16,10 @@
 
     <div class="row">
         <div class="col s3">
-            <input type="text" class="margintop validate" placeholder="Pesquisar" id="edtPesquisa">
+            <input type="text" class="margintop validate" placeholder="Pesquisar(F2)" id="edtPesquisa">
         </div>
         <div id="pnButtons" class="right-align col s9"></div>
     </div>
 
-    <div id="pnCodigoTela">Marca</div>
 </div>
+<div id="pnCodigoTela">Marca</div>

@@ -25,7 +25,7 @@ const contas = (function () {
         xgContas = new xGridV2.create({
             el: "#xgContas",
             height: 210,
-            heightLine: 35,
+            heightLine: 27,
             theme: "x-clownV2",
             onSelectLine: (ln) => {
                 $('#btnImprimir').removeAttr("disabled")

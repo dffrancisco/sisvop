@@ -106,8 +106,8 @@ class Entrada
     function editItens($param)
     {
         $call = $this->sql->updateDelProduto($param);
-        $call = $this->sql->updateProdutoEdit($param);
-        $call = $this->sql->updateItens($param);
+        $callProduto = $this->sql->updateProdutoEdit($param);
+        $callItens = $this->sql->updateItens($param);
     }
 
     function insertNota($param)
@@ -117,21 +117,20 @@ class Entrada
             $id_nota = $this->sql->insertNota($param);
             $call = $this->sql->getCabecalho($id_nota[0]->ID_NOTA);
             echo json_encode($call);
-
         } else if ($param['id_nota']) {
 
             $id_nota = $this->sql->updateNota($param);
             $call = $this->sql->getCabecalho($id_nota);
             echo json_encode($call);
         } else {
-//=======
-//        } else if($param['id_nota']){
-//            
-//           $id_nota = $this->sql->updateNota($param);
-//            $call = $this->sql->getCabecalho($id_nota);
-//            echo json_encode($call);
-//        }else{
-//>>>>>>> master
+            //=======
+            //        } else if($param['id_nota']){
+            //            
+            //           $id_nota = $this->sql->updateNota($param);
+            //            $call = $this->sql->getCabecalho($id_nota);
+            //            echo json_encode($call);
+            //        }else{
+            //>>>>>>> master
             echo 'ERRO INTERNO';
         }
     }

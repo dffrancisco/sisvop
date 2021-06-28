@@ -7,7 +7,6 @@ $(function () {
     funcionario.getCargo();
 
     xgFuncionarios.queryOpen({ search: '' })
-
     $("#edtPesquisa").keydown(function (e) {
 
         if (e.keyCode == 13) {
@@ -29,7 +28,7 @@ const funcionario = (function () {
         xgFuncionarios = new xGridV2.create({
             el: "#xgFuncionarios",
             height: 210,
-            heightLine: 35,
+            heightLine: 27,
             theme: "x-clownV2",
             columns: {
                 Nome: {
@@ -164,7 +163,12 @@ const funcionario = (function () {
         })
             .then(rs => {
                 xgFuncionarios.querySourceAdd(rs.data);
-
+                for (let i in rs.data) {
+                    if (rs.data[i].SENDEMAIL == 1) {
+                        $("#checkEmail").prop("checked", true);
+                        console.log(rs.data[i].SENDEMAIL)
+                    }
+                }
                 if (rs.data[0]) {
                     xgFuncionarios.focus();
                 }
@@ -216,6 +220,7 @@ const funcionario = (function () {
     function novo() {
         controleGrid = 'insert';
         $('.btnEdit').removeAttr('disabled')
+        $('#checkEmail').removeAttr('disabled')
         $('.btnDel').removeAttr('disabled')
         $('.container .validate').removeAttr("disabled")
 
@@ -237,7 +242,7 @@ const funcionario = (function () {
         $('.container .validate').removeAttr("disabled")
         $('#edtPesquisa').prop("disabled", true)
         $('.btnPesq').prop("disabled", true);
-
+        $('#checkEmail').removeAttr('disabled')
     }
 
     const salvar = async () => {
@@ -245,14 +250,17 @@ const funcionario = (function () {
         let param = xgFuncionarios.getElementSideBySideJson()
 
         param.BAIRRO = $('#slctBairro option:selected').text()
-
+        param.ID_CARGO = Number(param.ID_CARGO)
         param.ENDERECO = param.ENDERECO.toUpperCase()
         param.CIDADE = param.CIDADE.toUpperCase()
-
+        param.EMAIL = ""
         param.NOME = param.NOME.toUpperCase()
         param.NOME = param.NOME.toUpperCase()
         param.UF = param.UF.toUpperCase()
-
+        param.SENDEMAIL = 0
+        if ($('#checkEmail').is(':checked') == true) {
+            param.SENDEMAIL = 1
+        }
         let allDuplicty = await xgFuncionarios.getDuplicityAll()
 
         // if (allDuplicty == false)
@@ -293,13 +301,13 @@ const funcionario = (function () {
 
         })
             .then(r => {
+                $('#checkEmail').prop("disabled", true);
 
                 if (r.data[0].ID_FUNCIONARIOS) {
                     param.id_funcionario = r.data[0].ID_FUNCIONARIOS
                     xgFuncionarios.insertLine(param)
                 } else {
                     xgFuncionarios.dataSource(param)
-
                 }
 
             })
