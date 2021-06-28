@@ -432,6 +432,10 @@ textarea:focus {
   margin-top: 5px;
 }
 
+.tabServico{
+  border-bottom: 1px solid #eeeeee;
+}
+
 .marginBottom {
   margin-bottom: 5px;
 }

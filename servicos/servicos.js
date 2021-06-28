@@ -1,4 +1,5 @@
-let xgItensServico
+let xgItensOperacinal
+let xgItensFinalizacao
 let xgProdutos
 
 let xmProdutos
@@ -13,22 +14,40 @@ $(function () {
     servicos.modalProdutos()
     servicos.keydown()
 
-    $('#edtPesquisa').keydown(function (e) {
+    $('.tabServico').tabs();
+
+    $('#edtPesquisaOpe').keydown(function (e) {
 
         if (e.keyCode == 13) {
-            $(".btnPesqItem").click()
+            $(".btnPesqItemOpe").click()
         }
-
         if (e.keyCode == 40) {
-            xgItensServico.focus()
-            $("#edtPesquisa").val('')
+            xgItensOperacinal.focus()
+            $("#edtPesquisaOpe").val('')
         }
     })
 
-    $(".btnPesqItem").click(function () {
-        let item = $('#edtPesquisa').val()
-        xgItensServico.queryOpen({ search: item.toUpperCase() })
-        xgItensServico.source([])
+    $('#edtPesquisaFin').keydown(function (e) {
+
+        if (e.keyCode == 13) {
+            $(".btnPesqItemFin").click()
+        }
+        if (e.keyCode == 40) {
+            xgItensFinalizacao.focus()
+            $("#edtPesquisaFin").val('')
+        }
+    })
+
+    $(".btnPesqItemOpe").click(function () {
+        let item = $('#edtPesquisaOpe').val()
+        xgItensOperacinal.queryOpen({ search: item.toUpperCase() })
+        xgItensOperacinal.source([])
+    })
+
+    $(".btnPesqItemFin").click(function () {
+        let item = $('#edtPesquisaFin').val()
+        xgItensFinalizacao.queryOpen({ search: item.toUpperCase() })
+        xgItensFinalizacao.source([])
     })
 
     $('#xmEdtPesquisa').keydown(function (e) {
@@ -56,15 +75,15 @@ const servicos = (function () {
     let lista_servico
 
     function grid() {
-        xgItensServico = new xGridV2.create({
-            el: "#xgItensServico",
+        xgItensOperacinal = new xGridV2.create({
+            el: "#xgItensOperacinal",
             height: 300,
             heightLine: 27,
             theme: "x-clownV2",
 
             columns: {
 
-                Descrição: {
+                Operacional: {
                     dataField: "DESCRICAO",
                 }
 
@@ -75,7 +94,7 @@ const servicos = (function () {
             },
             sideBySide: {
                 frame: {
-                    el: '#pnButtons',
+                    el: '#pnButtonsOpe',
                     buttons: {
 
                         add: {
@@ -95,6 +114,49 @@ const servicos = (function () {
             query: {
                 execute: (r) => {
                     getMascaraProjeto(r.param.search, r.offset)
+                },
+            }
+        })
+
+        xgItensFinalizacao = new xGridV2.create({
+            el: "#xgItensFinalizacao",
+            height: 300,
+            heightLine: 27,
+            theme: "x-clownV2",
+
+            columns: {
+
+                Finalização: {
+                    dataField: "DESCRICAO",
+                }
+
+            },
+            onKeyDown: {
+                '13': (ln) => {
+                }
+            },
+            sideBySide: {
+                frame: {
+                    el: '#pnButtonsFin',
+                    buttons: {
+
+                        add: {
+                            html: "Adicionar",
+                            class: "btnP btnAdd",
+                            click: add,
+                        },
+                        del: {
+                            html: "Excluir",
+                            class: "btnP btnDel",
+                            click: deletar,
+                        },
+                    }
+                },
+            },
+
+            query: {
+                execute: (r) => {
+                    getMascaraProjetoFin(r.param.search, r.offset)
 
                 },
             }
@@ -146,7 +208,6 @@ const servicos = (function () {
         })
             .then(r => {
                 lista_servico = r.data
-
                 for (let i in r.data) {
                     let servico = `
                 <div class="col s3">
@@ -171,8 +232,24 @@ const servicos = (function () {
                 offset: offset
             }
         }).then(r => {
-            xgItensServico.sourceAdd(r.data)
-            xgItensServico.focus()
+            xgItensOperacinal.sourceAdd(r.data)
+            xgItensOperacinal.focus()
+        })
+
+    }
+
+    function getMascaraProjetoFin(param, offset) {
+
+        axios.post(url, {
+            call: 'getMascaraProjetoFin',
+            param: {
+                id_servico: id_servico,
+                item: param,
+                offset: offset
+            }
+        }).then(r => {
+            xgItensFinalizacao.sourceAdd(r.data)
+            xgItensFinalizacao.focus()
         })
 
     }
@@ -207,36 +284,64 @@ const servicos = (function () {
     }
 
     function deletar() {
-        let param = xgItensServico.dataSource().ID_MASCARA_PROJETO
-        confirma({
-            msg: `Deseja deletar o item ${xgItensServico.dataSource().DESCRICAO}`,
-            call: () => {
-                axios.post(url, {
-                    call: 'deleteProduto',
-                    param: param
-                }).then(r => {
-                    xgItensServico.deleteLine()
-                })
-            }
-        })
+        if ($('#operacional').hasClass("active") == true) {
+            let param = xgItensOperacinal.dataSource().ID_MASCARA_PROJETO
+            confirma({
+                msg: `Deseja deletar o item ${xgItensOperacinal.dataSource().DESCRICAO}`,
+                call: () => {
+                    axios.post(url, {
+                        call: 'deleteProduto',
+                        param: param
+                    }).then(r => {
+                        xgItensOperacinal.deleteLine()
+                    })
+                }
+            })
+        }
+        if ($('#finalizacao').hasClass("active") == true) {
+            let param = xgItensFinalizacao.dataSource().ID_MASCARA_PROJETO
+            confirma({
+                msg: `Deseja deletar o item ${xgItensFinalizacao.dataSource().DESCRICAO}`,
+                call: () => {
+                    axios.post(url, {
+                        call: 'deleteProduto',
+                        param: param
+                    }).then(r => {
+                        xgItensFinalizacao.deleteLine()
+                    })
+                }
+            })
+        }
+
     }
 
     function addProduto(ln) {
-
+        let FINALIZACAO
+        if ($('#operacional').hasClass("active") == true) {
+            FINALIZACAO = 0
+        }
+        if ($('#finalizacao').hasClass("active") == true) {
+            FINALIZACAO = 1
+        }
         axios.post(url, {
             call: 'insertProduto',
-            param: { ID_SERVICO: id_servico, ID_PRODUTO: ln.ID_PRODUTO }
+            param: { ID_SERVICO: id_servico, ID_PRODUTO: ln.ID_PRODUTO, FINALIZACAO: FINALIZACAO }
         }).then(r => {
             if (r.data.msg) {
                 show(r.data.msg)
                 return false
             }
-
+            if (FINALIZACAO == 0) {
+                xgItensOperacinal.insertLine(ln)
+            }
+            if (FINALIZACAO == 1) {
+                xgItensFinalizacao.insertLine(ln)
+            }
             ln.ID_MASCARA_PROJETO = r.data[0].ID_MASCARA_PROJETO
-            xgItensServico.insertLine(ln)
             xmProdutos.close()
         })
     }
+
 
     // MODAIS
     function modalProdutos() {
@@ -250,10 +355,10 @@ const servicos = (function () {
     }
 
     function keydown() {
-        $('#xgItensServico').keydown(function (e) {
+        $('#xgItensOperacinal').keydown(function (e) {
 
             if (e.keyCode == 113) {
-                $('#edtPesquisa').focus()
+                $('#edtPesquisaOpe').focus()
             }
 
             if (e.keyCode == 13) {
@@ -277,19 +382,29 @@ const servicos = (function () {
 })();
 
 function activeCard(param) {
-    let cards = $('.servico')
-    id_servico = param
-
-    $('#pnButtons').removeAttr("hidden")
-    $('#rowPesq').removeAttr("hidden")
-
-    for (let i = 0; i < cards.length; i++) {
-        cards[i].style.background = "#3e85c1"
+    if ($('#operacional').hasClass("active") == true) {
+        let cards = $('.servico')
+        id_servico = param
+        $('#pnButtonsOpe').removeAttr("hidden")
+        $('#rowPesqOpe').removeAttr("hidden")
+        for (let i = 0; i < cards.length; i++) {
+            cards[i].style.background = "#3e85c1"
+        }
+        document.getElementById(param).style.background = "#26679e"
+        xgItensOperacinal.queryOpen({ search: '' })
+        xgItensOperacinal.source([])
     }
-    document.getElementById(param).style.background = "#26679e"
-
-    xgItensServico.queryOpen({ search: '' })
-
-    xgItensServico.source([])
+    if ($('#finalizacao').hasClass("active") == true) {
+        let cards = $('.servico')
+        id_servico = param
+        $('#pnButtonsFin').removeAttr("hidden")
+        $('#rowPesqFin').removeAttr("hidden")
+        for (let i = 0; i < cards.length; i++) {
+            cards[i].style.background = "#3e85c1"
+        }
+        document.getElementById(param).style.background = "#26679e"
+        xgItensFinalizacao.queryOpen({ search: '' })
+        xgItensFinalizacao.source([])
+    }
 
 }

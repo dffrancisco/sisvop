@@ -32,6 +32,12 @@ class Servicos
         echo json_encode($call);
     }
 
+    function getMascaraProjetoFin($param)
+    {
+        $call = $this->sql->getMascaraProjetoFin($param);
+        echo json_encode($call);
+    }
+
     function getProdutos($param)
     {
         $call = $this->sql->getProdutos($param);
