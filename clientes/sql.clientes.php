@@ -43,9 +43,6 @@ class SqlClientes
   {
     $sql = "DELETE FROM clientes WHERE ID_CLIENTE = $param
     RETURNING ID_CLIENTE";
-
-
-
     $this->db->exec($sql);
   }
 
@@ -68,13 +65,17 @@ class SqlClientes
   {
     extract($param);
 
-    $sql = "UPDATE clientes SET cnpj = '$CNPJ', razao = '$RAZAO', fantasia = '$FANTASIA', email = '$EMAIL', inscricao = '$INSCRICAO', fixo = '$FIXO', tel = '$TEL', representante = '$REPRESENTANTE'
+    $sql = "UPDATE clientes SET cnpj = '$CNPJ', razao = '$RAZAO', 
+    fantasia = '$FANTASIA', email = '$EMAIL', inscricao = '$INSCRICAO', 
+    fixo = '$FIXO', tel = '$TEL', representante = '$REPRESENTANTE', cep = '$CEP',
+    id_uf = '$ID_UF', endereco = '$ENDERECO', cidade = '$CIDADE', bairro = '$BAIRRO'
     WHERE id_cliente = '$ID_CLIENTE' ";
 
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
+
 
   function duplicity($param)
   {
