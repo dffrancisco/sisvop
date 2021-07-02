@@ -40,6 +40,7 @@ nav, nav .nav-wrapper i, nav a.sidenav-trigger, nav a.sidenav-trigger i{
 }
 .fontOrcamento {
   font-size: 17px;
+  color: #000000;
 }
 
 #checkbox span{
@@ -133,7 +134,7 @@ table,
 th,
 td {
   /* border: none; */
-  padding: 2px !important;
+  padding: 0px !important;
 }
 .pnUser {
   z-index: 100;
@@ -439,4 +440,33 @@ textarea:focus {
 .marginBottom {
   margin-bottom: 5px;
 }
+
+#passwordConf{
+  width: 40% !important
+}
+
+.secondary-content{
+  color: #3e85c1;
+}
+
+#servicosProposta p{
+    color: #333333;
+    font-size: 15px;
+}
+
+#produtosProposta p{
+  color: #333333;
+  font-size: 15px;
+}
+
+#valoresProposta div{
+  color: #3e85c1;
+  font-size: 14px;
+}
+
+#valoresProposta a{
+  color: #bb1414;
+  font-size: 14px;
+}
+
 /*materialize* fim *********************************/

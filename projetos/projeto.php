@@ -67,6 +67,12 @@
 <div class="container" id="dados_cliente" hidden>
     <div class="tabela" id="pnFields">
         <div class="row">
+            <div class="col s1">
+                <button class="btnBS"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i></button>
+            </div>
+        </div>
+        <div class="row">
+
             <div class="col s6">
                 <span id="spId_cliente" hidden></span>
                 <span id="spId_lista_servico" hidden></span>
@@ -93,8 +99,8 @@
             </div>
 
             <div class="col s3">
-                <label>Executores</label><br>
-                <span id="spExecutores" class="spanAutoPreenc"></span>
+                <label>Pontos</label><br>
+                <span id="spPontos" class="spanAutoPreenc"></span>
             </div>
 
             <div class="col s3">
@@ -108,6 +114,12 @@
                 <label>OBS</label><br>
                 <span id="spObs" class="spanAutoPreenc">VER OBSERVAÇÃO...</span>
             </div>
+
+            <div class=" col s3">
+                <label>Prazo de meta (H)</label><br>
+                <span id="spMeta" class="spanAutoPreenc"></span>
+            </div>
+
             <div class=" col s3">
                 <label>Data de início</label><br>
                 <span id="spDataI" class="spanAutoPreenc"></span>
@@ -129,6 +141,27 @@
         <hr>
         <br>
 
+
+        <!-- <div class="btnAll" style="margin-bottom: 7px; margin-top:-16px;">
+            <button class="btn-Frame btn-Frame-blue btnP btnPesq btnNovoServ">Novo Serviço</button>
+            <button class="btn-Frame btn-Frame-blue btnP btnBS">Buscar Serviço</button>
+            <button class="btn-Frame btn-Frame-blue btnP btnVR">VENDA REALIZADA</button>
+
+            <button class="btn-Frame btn-Frame-blue btnP btnRG">Relatório Geral</button>
+            <button class="btn-Frame btn-Frame-blue btnP btnFS">Finalizar Serviço</button> 
+        </div> -->
+
+    </div>
+
+
+
+    <ul class="tabs" style="margin-left: 5px">
+        <li class="tab col s4"><a class="active" href="#tabItensProjeto">Produto do Serviço</a></li>
+        <li class="tab col s4" disabled><a href="#tabOrcamento">Orçamento</a></li>
+        <!-- <li class="tab col s3"><a href="#tabAcrecismo">Acréscimo</a></li> -->
+    </ul>
+
+    <div id="tabItensProjeto" class="col s12">
         <div id="setQtd" hidden>
             <div class="row">
 
@@ -153,27 +186,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="btnAll" style="margin-bottom: 7px; margin-top:-16px;">
-            <button class="btn-Frame btn-Frame-blue btnP btnPesq btnNovoServ">Novo Serviço</button>
-            <button class="btn-Frame btn-Frame-blue btnP btnBS">Buscar Serviço</button>
-            <button class="btn-Frame btn-Frame-blue btnP btnVR">VENDA REALIZADA</button>
-
-            <!-- <button class="btn-Frame btn-Frame-blue btnP btnRG">Relatório Geral</button>
-            <button class="btn-Frame btn-Frame-blue btnP btnFS">Finalizar Serviço</button> -->
-        </div>
-
-    </div>
-
-
-
-    <ul class="tabs" style="margin-left: 5px">
-        <li class="tab col s4"><a class="active" href="#tabItensProjeto">Produto do Serviço</a></li>
-        <li class="tab col s4" disabled><a href="#tabOrcamento">Orçamento</a></li>
-        <!-- <li class="tab col s3"><a href="#tabAcrecismo">Acréscimo</a></li> -->
-    </ul>
-
-    <div id="tabItensProjeto" class="col s12">
         <div id="xgProjeto" class="list"></div>
         <div id="pnButtonsP" style="margin-left: 20px !important" class="col s12"></div>
     </div>
@@ -186,10 +198,14 @@
 
             <ul class="collection with-header list" id="tableOrcamento">
                 <li class="collection-header">
-                    <h4>Orçamento</h4>
+                    <h4>ORÇAMENTO</h4>
                 </li>
                 <li class="collection-item">
                     <div class="fontOrcamento">Margem de produto<a class="secondary-content" id="margem"></a>
+                    </div>
+                </li>
+                <li class="collection-item">
+                    <div class="fontOrcamento">Margem de mão de obra<a class="secondary-content" id="maoDeObra"></a>
                     </div>
                 </li>
                 <li class="collection-item">
@@ -203,10 +219,6 @@
                 </li>
                 <li class="collection-item">
                     <div class="fontOrcamento">Valor de maior %<a class="secondary-content" id="valorMaximo"></a>
-                    </div>
-                </li>
-                <li class="collection-item">
-                    <div class="fontOrcamento">Valor vendido: <a class="secondary-content" id="valorVendido"></a>
                     </div>
                 </li>
             </ul>
@@ -272,12 +284,14 @@
     </div>
 
     <div class="row">
+        <div class="col s6" style="width: 48.1% !important;">
+            <label>Numero de pontos</label><br>
+            <input type="number" class="validate" id="xmInPontos">
+        </div>
 
-
-        <div class="col s12">
-            <label>Executores</label>
-            <select name="id_servico" class="validate" id="slctExecutor">
-            </select>
+        <div class="col s6" style="width: 48.1% !important;">
+            <label>Meta de 10%</label><br>
+            <input type="number" class="validate" id="xmInMeta">
         </div>
 
     </div>
@@ -336,77 +350,116 @@
     <div class="tabela" style="font-size: 15px !important;">
 
         <div class="row">
-            <div class="col s4">
+            <div class="col s6">
                 <label>Cliente</label><br>
                 <span id="rlFantasia"><span>
-
             </div>
 
-            <div class="col s4">
+            <div class="col s6">
                 <label>CNPJ</label><br>
                 <span id="rlCnpj"><span>
             </div>
 
-            <div class="col s4">
-                <label>Engenheiro</label><br>
-                <span id="rlEngenheiro"></span>
-            </div>
         </div>
 
         <div class="row">
+            <div class="col s2">
+                <label>CEP</label><br>
+                <span id="rlCep"><span>
+            </div>
+
+            <div class="col s5">
+                <label>ENDEREÇO</label><br>
+                <span id="rlEndereco"><span>
+            </div>
 
             <div class="col s2">
-                <label>Serviço</label><br>
-                <span id="rlServico"></span>
+                <label>CIDADE</label><br>
+                <span id="rlCidade"><span>
             </div>
 
             <div class="col s3">
-                <label>Executores</label><br>
-                <span id="rlExecutores"></span>
-            </div>
-
-            <div class="col s3">
-                <label>Data prevista de início</label><br>
-                <span id="rlDataI"></span>
-            </div>
-
-            <div class="col s4">
-                <label>Data prevista de finalização</label><br>
-                <span id="rlDataF"></span>
+                <label>BAIRRO</label><br>
+                <span id="rlBairro"><span>
             </div>
         </div>
     </div>
+    <ul class="collection with-header list" id="tableOrcamento">
+        <li class="collection-header">
+            <h5 style="color: #000000;" id="rlProjeto"></h5>
+        </li>
+        <li class="collection-item">
+            <p class="fontOrcamento">TAREFAS A SEREM REALIZADAS - <b id="rlPontos"></b>
+            <p class="fontOrcamento">SERVIÇO: <span id="rlServico"></span></b>
+            </p>
+        </li>
+        <div id="servicosProposta" class="collection-item">
+            <p style=" color: #253fc1;">
+                SERVIÇOS
+            </p>
+            <p>
+                1º INSTALAÇÃO DE TUBULAÇÃO P/ PASSAGEM DOS CABOS (ELETRODUTO ROSCÁVEL)
+            </p>
+            <p>
+                2º PASSAGEM DE CABEAMENTO DE REDE CAT5-E
+            </p>
+            <p>
+                3º INSTALAÇÃO, ATIVAÇÃO E CONFIGURAÇÃO DE PONTOS DE REDE
+            </p>
+            <p>
+                4º INSTAL. E CONFIGURAÇÃO DE ROTEADOR, CONTROLADORA, ETC
+            </p>
+            <p>
+                SERVIÇO TOTAL EM HORAS: <b id="rlMeta"></b>
+            </p>
+        </div>
+        <div id="produtosProposta" class="collection-item">
+            <p style="color: #253fc1;">
+                PRODUTOS
+            </p>
+            <p>
+                1º CABEAMENTO 100% COBRE CAT5-E SOHO PLUS / FURUKAWA
+            </p>
+            <p>
+                2º NO-BREAK 700VA 6 TOMADAS INTELBRAS COM PROTEÇÃO A SURTOS DE TENSÃO
+            </p>
+            <p>
+                3º PATCH PANEL 24 PORTAS CAT5-E FURUKAWA SOHO 10/100/1000
+            </p>
+            <p>
+                4º ORGANIZADOR HORIZONTAL DE REDE PARA RACK PADRÃO 19” MEKHANIC
+            </p>
+            <p>
+                5º REGUA COM VARISTOR SELADA 6 TOMADAS INTELBRAS COM PROT CONTRA RAIOS
+            </p>
+            <p>
+                6º PATCH CORD 1,5 MTS VERMELHO 100% COBRE CAT5-E SOHO FURUKAWA
+            </p>
+            <p>
+                7º RACK PARA FIXAÇÃO EM PAREDE PADRÃO 19” 12US MECHANIKA
+            </p>
+            <p>
+                8º SWITCH GIGABIT INTELBRAS 24 PORTAS 100/1000 P/ RACK PADRÃO 19”
+            </p>
+            <p>
+                9º ACCESS POINT BUSINESS UBIQUITI UNIFI AP AC LR 867 MBPS 100/1000
+            </p>
+            <p>
+                10º MATERIAIS HIDRAULICOS = TUBOS CONEXOES ABRAÇADEIRAS
+            </p>
+        </div>
+        <div id="valoresProposta" class="collection-item">
+            <div class="fontOrcamento">PREÇO MÃO DE OBRA =<a id="rlValorObras"></a>
+            </div>
 
-    <center>
-        <h5>ORÇAMENTO</h5>
-    </center>
+            <div class="fontOrcamento">PREÇO PRODUTOS =<a id="rlMargem"></a>
+            </div>
 
-    <table>
-        <tr>
-            <td>
-                Valor mínimo de venda
-            </td>
-            <td id="valorMenor">
-            </td>
-        </tr>
+            <div class="fontOrcamento">TOTAL =<a id="rlValorMaximo"></a>
+            </div>
+        </div>
+    </ul>
 
-        <tr>
-            <td>
-                Valor de intercessão da %
-            </td>
-            <td id="intercessaoValor">
-
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-                Valor de maior %
-            </td>
-            <td id="valorMaior">
-            </td>
-        </tr>
-    </table>
 </div>
 
 <div id="pnCodigoTela">PROJETOS</div>

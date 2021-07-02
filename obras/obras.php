@@ -64,7 +64,6 @@
         <div class="row">
             <div class="col s1">
                 <button class="btnBS"><i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i></button>
-
             </div>
         </div>
 

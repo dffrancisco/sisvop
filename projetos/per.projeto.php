@@ -20,6 +20,17 @@ class Projeto
         $this->sql = new SqlProjeto();
     }
 
+
+    function getSenha($param)
+    {
+        $call = $this->sql->getSenha($param);
+        if (empty($call)) {
+            echo "Senha inválida ";
+            return false;
+        }
+        // echo json_encode($call);
+    }
+
     // GET
     function getServicos($param)
     {
@@ -53,7 +64,7 @@ class Projeto
             $finalizado = $this->sql->getServicosAna($param);
             $dados = array_merge($finalizado, $dados);
         }
-        if ($param['finalizado'] == '' && $param['projeto'] == '' && $param['andamento'] == '') {
+        if ($param['finalizado'] == '' && $param['projeto'] == '' && $param['andamento'] == '' && $param['orcamento'] == '' && $param['analise'] == '') {
             $todos = $this->sql->getServicos($param);
             $dados = array_merge($todos, $dados);
         }
@@ -73,11 +84,7 @@ class Projeto
         echo json_encode($call);
     }
 
-    function getExecutor()
-    {
-        $call = $this->sql->getExecutor();
-        echo json_encode($call);
-    }
+
 
     function getVendedor()
     {
@@ -124,7 +131,6 @@ class Projeto
     {
         extract($param);
         $call = $this->sql->gerarServico($param);
-
         extract($projeto);
 
         mkdir("../arquivos_projetos/" . $call[0]->ID_LISTA_SERVICO);
@@ -139,7 +145,7 @@ class Projeto
 
         file_put_contents("../arquivos_projetos/" . $call[0]->ID_LISTA_SERVICO . "/" . $name, $dados);
 
-        echo json_encode("../arquivos_projetos/" . $call[0]->ID_LISTA_SERVICO);
+        echo json_encode($call);
     }
 
     function setQtd($param)

@@ -301,7 +301,6 @@ class SqlEntrada
     st = '$st',
     valor_total = '$valor_total' 
     WHERE id_nota = $id_nota";
-    print_r($sql);
 
     $query = $this->db->prepare($sql);
     $query->execute();
