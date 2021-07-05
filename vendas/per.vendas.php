@@ -22,7 +22,17 @@ class vendas
 
     function getVenda($param)
     {
-        $call = $this->sql->getVenda($param);
+        if ($param['analise'] == 1) {
+            $call = $this->sql->getVenda($param);
+        } else {
+            $call = $this->sql->getAllVendas($param);
+        }
+        echo json_encode($call);
+    }
+
+    function getListaServico($param)
+    {
+        $call = $this->sql->getListaServico($param);
         echo json_encode($call);
     }
 }
