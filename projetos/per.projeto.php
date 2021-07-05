@@ -72,6 +72,19 @@ class Projeto
         echo json_encode($dados);
     }
 
+    function getTarefaServico($param)
+    {
+        $call = $this->sql->getTarefaServico($param);
+        echo json_encode($call);
+    }
+
+    function getTarefaProduto($param)
+    {
+        $call = $this->sql->getTarefaProduto($param);
+        echo json_encode($call);
+    }
+
+
     function getCliente($param)
     {
         $call = $this->sql->getCliente($param);

@@ -397,7 +397,7 @@
             <p style=" color: #253fc1;">
                 SERVIÇOS
             </p>
-            <p>
+            <!-- <p>
                 1º INSTALAÇÃO DE TUBULAÇÃO P/ PASSAGEM DOS CABOS (ELETRODUTO ROSCÁVEL)
             </p>
             <p>
@@ -408,7 +408,7 @@
             </p>
             <p>
                 4º INSTAL. E CONFIGURAÇÃO DE ROTEADOR, CONTROLADORA, ETC
-            </p>
+            </p> -->
             <p>
                 SERVIÇO TOTAL EM HORAS: <b id="rlMeta"></b>
             </p>
@@ -417,7 +417,7 @@
             <p style="color: #253fc1;">
                 PRODUTOS
             </p>
-            <p>
+            <!-- <p>
                 1º CABEAMENTO 100% COBRE CAT5-E SOHO PLUS / FURUKAWA
             </p>
             <p>
@@ -446,7 +446,7 @@
             </p>
             <p>
                 10º MATERIAIS HIDRAULICOS = TUBOS CONEXOES ABRAÇADEIRAS
-            </p>
+            </p> -->
         </div>
         <div id="valoresProposta" class="collection-item">
             <div class="fontOrcamento">PREÇO MÃO DE OBRA =<a id="rlValorObras"></a>

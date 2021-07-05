@@ -759,10 +759,10 @@ const projetos = (function () {
 
                             TOTAL += QTD * VALOR;
                         }
-                        margem = TOTAL * 0.1 + TOTAL;
-                        valorObra = pontos * 55 + (margem * 0.78);
-                        valorMinimo = margem * 0.5 + margem;
-                        valorIntercessao = margem * 0.67 + margem;
+                        margem = TOTAL * 0.15 + TOTAL;
+                        valorObra = pontos * 55 + (margem * 0.74);
+                        valorMinimo = margem * 0.47 + margem;
+                        valorIntercessao = margem * 0.65 + margem;
                         valorMaximo = valorObra + margem;
                         console.log('valorObra :', valorObra);
                         STATUS = "ORÇAMENTO";
@@ -924,7 +924,34 @@ const projetos = (function () {
         $("#rlMargem").html(" R$ " + margem);
         $("#rlValorMaximo").html(" R$ " + valorMaximo);
 
-        $("#pdfOrcamento").xPrint();
+        axios.post(url, {
+            call: "getTarefaServico",
+            param: {
+                ID_SERVICO: dados_servico.ID_SERVICO
+            },
+        })
+            .then((r) => {
+                for (let i in r.data) {
+                    let TAREFAS = `<p>${r.data[i].TAREFA}</p>`;
+                    $("#servicosProposta").append(TAREFAS);
+                }
+                axios.post(url, {
+                    call: "getTarefaProduto",
+                    param: {
+                        ID_SERVICO: dados_servico.ID_SERVICO
+                    },
+                })
+                    .then((rs) => {
+                        for (let i in rs.data) {
+                            let PRODUTOS = `<p>${rs.data[i].TAREFA}</p>`;
+                            $("#produtosProposta").append(PRODUTOS);
+                        }
+
+                        $("#pdfOrcamento").xPrint();
+                    })
+
+            });
+
     }
 
     // SET
@@ -945,6 +972,7 @@ const projetos = (function () {
             CNPJ: param.CNPJ,
             ENGENHEIRO: param.ENGENHEIRO,
             SERVICO: param.SERVICO,
+            ID_SERVICO: param.ID_SERVICO,
             CEP: param.CEP,
             ENDERECO: param.ENDERECO,
             CIDADE: param.CIDADE,
