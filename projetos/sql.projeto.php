@@ -182,6 +182,31 @@ class SqlProjeto
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function getTarefaServico($param)
+  {
+    extract($param);
+    $sql = "SELECT tarefa
+          FROM tarefa_orcamento 
+          WHERE id_servico = $ID_SERVICO
+          AND produto = 0";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function getTarefaProduto($param)
+  {
+    extract($param);
+    $sql = "SELECT tarefa
+            FROM tarefa_orcamento 
+            WHERE id_servico = $ID_SERVICO
+            AND produto = 1";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
   function getVendedor()
   {
 
@@ -202,7 +227,7 @@ class SqlProjeto
       a.engenheiro, a.executores, a.obs, b.servico,
       a.meta, a.pontos, a.projeto, a.margem_produto, a.valor_minimo, a.valor_intercessao,
       a.valor_maximo, a.valor_obra, c.id_cliente, c.fantasia, c.cnpj,
-      c.cep, c.endereco, c.cidade, c.bairro
+      c.cep, c.endereco, c.cidade, c.bairro, a.id_servico
       FROM lista_servicos a, servicos b, clientes c
       WHERE a.id_servico = b.id_servico
       AND a.id_cliente = c.id_cliente
