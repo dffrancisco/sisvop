@@ -62,7 +62,7 @@ if (!empty($_GET['p'])) {
 
 
     <div class="cabecalho">
-        <table width="100%" class="tbTitulo" style="font-size:13px ;">
+        <table width="100%" class="tbTitulo" style="font-size:10px ;">
             <tr>
                 <td rowspan="4" style="width: 130px;"><img src="img/LOGO AZUL WEB.png" width="130" alt="" /></td>
                 <td colspan="3" style="font-weight: bold" id="printRazao"></td>
@@ -70,18 +70,20 @@ if (!empty($_GET['p'])) {
             </tr>
             <tr>
                 <td colspan="2" id="printEndereco"></td>
-                <td colspan="2" style="font-weight: bold" id="printCnpj"></td>
+                <td style="font-weight: bold" id="printCnpj"></td>
+                <td><span id="printCep"></span> </td>
+
             </tr>
             <tr>
-                <td>Cidade.: <span id="printCidade"></span> </td>
-                <td>Bairro.: <span id="printBairro"></span> </td>
-                <td>CEP.: <span id="printCep"></span> </td>
+                <td><span id="printCidade"></span> </td>
+                <td><span id="printBairro"></span> </td>
+                <td><span id="printInscricao"></span> </td>
+                <td><span id="printFixo"></span> </td>
             </tr>
             <tr>
-                <td>Inscrição.: <span id="printInscricao"></span> </td>
-                <td>Telefone.: <span id="printFixo"></span> </td>
-                <td></td>
-                <td></td>
+                <td>
+                    <p>Engenheiro:</p><span id="printEng"></span>
+                </td>
             </tr>
             <!-- <tr>
                 <td colspan="5">
@@ -190,25 +192,31 @@ if (!empty($_GET['p'])) {
 
         <div id="projeto">
             <a href="?p=projetos/projeto">
-                <li><i class="fa fa-key"></i>Projetos</i></li>
+                <li><i class="fa fa-map"></i>Projetos</i></li>
             </a>
         </div>
 
         <div id="obras">
             <a href="?p=obras/obras">
-                <li><i class="fa fa-usd"></i>Obras</li>
+                <li><i class="fa fa-calendar-check-o"></i>Obras</li>
             </a>
         </div>
 
         <div id="servicos">
             <a href="?p=servicos/servicos">
-                <li><i class="fa fa-usd"></i>Serviços</li>
+                <li><i class="fa fa-tag"></i>Serviços</li>
             </a>
         </div>
 
         <div id="usuario">
             <a href="?p=usuario/usuario">
                 <li><i class="fa fa-key"></i>Usuario</i></li>
+            </a>
+        </div>
+
+        <div id="vendas">
+            <a href="?p=vendas/vendas">
+                <li><i class="fa fa-usd"></i>Vendas</i></li>
             </a>
         </div>
 

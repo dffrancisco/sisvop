@@ -13,6 +13,20 @@ class SqlProjeto
   }
 
   // GET
+
+
+  function getSenha($param)
+  {
+    extract($param);
+    $sql = "SELECT senha
+          FROM usuarios
+          WHERE senha = '$SENHA'
+          AND id_funcionarios = $ID_FUNCIONARIOS";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
   function getServicos($param)
   {
     extract($param);
@@ -20,8 +34,8 @@ class SqlProjeto
             a.id_lista_servico,
             a.data_inicio, a.hora, a.status, 
             a.data_finalizacao, a.engenheiro,
-            b.id_servico,  b.servico ,
-            c.id_cliente,c.fantasia
+            b.id_servico,  b.servico,
+            c.id_cliente,c.fantasia, a.pontos, a.meta
             FROM lista_servicos a, servicos b, clientes c
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
@@ -39,7 +53,7 @@ class SqlProjeto
             a.id_lista_servico, a.executores,
             a.data_inicio, a.hora, a.status, 
             a.data_finalizacao, a.engenheiro,
-            b.id_servico,  b.servico ,
+            b.id_servico,  b.servico , a.pontos, a.meta ,
             c.id_cliente,c.fantasia
             FROM lista_servicos a, servicos b, clientes c
             WHERE a.id_servico = b.id_servico
@@ -61,7 +75,7 @@ class SqlProjeto
             a.data_inicio, a.hora, a.status, 
             a.data_finalizacao, a.engenheiro,
             b.id_servico,  b.servico ,
-            c.id_cliente,c.fantasia
+            c.id_cliente,c.fantasia , a.pontos, a.meta
             FROM lista_servicos a, servicos b, clientes c
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
@@ -82,7 +96,7 @@ class SqlProjeto
             a.data_inicio, a.hora, a.status, 
             a.data_finalizacao, a.engenheiro,
             b.id_servico,  b.servico ,
-            c.id_cliente,c.fantasia
+            c.id_cliente,c.fantasia, a.pontos, a.meta
             FROM lista_servicos a, servicos b, clientes c
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
@@ -103,7 +117,7 @@ class SqlProjeto
             a.data_inicio, a.hora, a.status, 
             a.data_finalizacao, a.engenheiro,
             b.id_servico,  b.servico ,
-            c.id_cliente,c.fantasia
+            c.id_cliente,c.fantasia, a.pontos, a.meta
             FROM lista_servicos a, servicos b, clientes c
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
@@ -124,7 +138,7 @@ class SqlProjeto
             a.data_inicio, a.hora, a.status, 
             a.data_finalizacao, a.engenheiro,
             b.id_servico,  b.servico ,
-            c.id_cliente,c.fantasia
+            c.id_cliente,c.fantasia, a.pontos, a.meta
             FROM lista_servicos a, servicos b, clientes c
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
@@ -179,31 +193,20 @@ class SqlProjeto
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function getExecutor()
-  {
-
-    $sql = "SELECT lider, id_executores, auxiliar
-          FROM executores";
-    $query = $this->db->prepare($sql);
-    $query->execute();
-    return $query->fetchAll(PDO::FETCH_OBJ);
-  }
-
   function getListaServicoX($param)
   {
-
+    extract($param);
     $sql = "SELECT 
-      a.id_lista_servico, a.valor,
-      a.data_inicio, a.hora, a.status, 
-      a.data_finalizacao, a.engenheiro,
-      a.executores, a.obs, a.margem_produto,
-      a.valor_minimo, a.valor_intercessao, a.valor_maximo,
-      b.servico, 
-      c.id_cliente,c.fantasia, c.cnpj
+      a.id_lista_servico, a.data_inicio,
+      a.hora, a.status, a.data_finalizacao,
+      a.engenheiro, a.executores, a.obs, b.servico,
+      a.meta, a.pontos, a.projeto, a.margem_produto, a.valor_minimo, a.valor_intercessao,
+      a.valor_maximo, a.valor_obra, c.id_cliente, c.fantasia, c.cnpj,
+      c.cep, c.endereco, c.cidade, c.bairro
       FROM lista_servicos a, servicos b, clientes c
       WHERE a.id_servico = b.id_servico
       AND a.id_cliente = c.id_cliente
-      AND id_lista_servico = :id_lista_servico";
+      AND id_lista_servico = $id_lista_servico";
 
     $sql = prepare::SQL($sql, $param);
 
@@ -266,14 +269,11 @@ class SqlProjeto
     extract($param);
     $sql = "INSERT INTO lista_servicos 
             (id_cliente, id_servico, data, hora,
-            status, engenheiro, projeto, executores,id_vendedor, obs)
+            status, engenheiro, projeto, pontos, meta, id_vendedor, obs)
             VALUES 
-            (:ID_CLIENTE, :ID_SERVICO, 
-            :DATA, :HORA, 'PROJETO',
-            :ENGENHEIRO,:PROJETO, :EXECUTORES,:ID_VENDEDOR, :OBS)
-            returning id_lista_servico";
-
-    $sql = prepare::SQL($sql, $param);
+            ($ID_CLIENTE, $ID_SERVICO, '$DATA', '$HORA', 'PROJETO',
+            '$ENGENHEIRO', '$PROJETO', '$PONTOS', '$METAS' , $ID_VENDEDOR, '$OBS')
+            returning id_lista_servico ";
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -342,7 +342,8 @@ class SqlProjeto
       SET margem_produto = '$margem', 
       valor_minimo = '$valorMinimo',
       valor_intercessao = '$valorIntercessao',
-      valor_maximo = '$valorMaximo'
+      valor_maximo = '$valorMaximo',
+      valor_obra = '$valorObra'
       WHERE id_lista_servico = $ID_LISTA_SERVICO";
 
     $query = $this->db->prepare($sql);
