@@ -236,7 +236,6 @@ function getDataEmpresa() {
         $('#printCep').html(r.data[0].CEP)
         $('#printInscricao').html(r.data[0].INSCRICAO)
         $('#printFixo').html(r.data[0].FIXO)
-        $('#printEng').html(usuario.NOME)
     })
 }
 
