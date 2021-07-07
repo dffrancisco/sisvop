@@ -28,7 +28,6 @@ class Projeto
             echo "Senha inválida ";
             return false;
         }
-        // echo json_encode($call);
     }
 
     // GET

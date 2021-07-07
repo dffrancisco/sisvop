@@ -62,6 +62,11 @@
                 <label>Status</label><br>
                 <span id="spStatus" class="spanAutoPreenc"></span>
             </div>
+            <div class="col s3">
+                <label>Vendedor</label><br>
+                <span id="spVendedor" class="spanAutoPreenc"></span>
+            </div>
+
         </div>
 
         <div class="row">
@@ -74,37 +79,39 @@
                 <label>Data de finalização</label><br>
                 <span id="spDataF" class="spanAutoPreenc"></span>
             </div>
+            <div class="col s3">
+                <label>Comissão do vendedor</label><br>
+                <span id="spValorVendedor" class="spanAutoPreenc"></span>
+            </div>
         </div>
         <br>
         <div class="row">
-            <div class=" col s4">
+            <div class=" col s3">
                 <label>Valor de venda</label><br>
-                <input type="text" id="edtValorVenda" class="validate">
+                <input type="text" id="edtValorVenda" class="validate real">
             </div>
 
-            <div class=" col s4">
-                <label>Porcentagem</label><br>
-                <select name="porcentagem" class="validate" id="slctPorcentagem">
-                    <option value="0">1.5X</option>
-                    <option value="1">2X</option>
-                    <option value="2">2.5X</option>
+            <div class=" col s3">
+                <label>Verba</label><br>
+                <select name="verba" class="validate" id="slctFonte">
+                    <option value="">SELECIONE</option>
+                    <option value="PDDE">pdde</option>
+                    <option value="PDAF">pdaf</option>
+                    <option value="EMERGENCIAL">emergencial</option>
+                    <option value="CONECTADO">conectado</option>
                 </select>
             </div>
 
-            <div class=" col s4">
-                <label>Fonte</label><br>
-                <select name="fonte" class="validate" id="slctFonte">
-                    <option value="0">pdde</option>
-                    <option value="1">pdaf</option>
-                    <option value="2">emergencial</option>
-                    <option value="3">conectado</option>
-                </select>
+
+            <div class="col s2 margintop" style="margin-top: 5px !important">
+                <button class="btn-Frame btn-Frame-blue btnP btnCad" disabled>Cadastrar</button>
             </div>
+
         </div>
         <hr>
         <br>
     </div>
 
-
 </div>
+
 <div id="pnCodigoTela">vendas</div>

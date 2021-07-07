@@ -20,6 +20,15 @@ class vendas
         $this->sql = new SqlVendas();
     }
 
+    function getSenha($param)
+    {
+        $call = $this->sql->getSenha($param);
+        if (empty($call)) {
+            echo "Senha inválida ";
+            return false;
+        }
+    }
+
     function getVenda($param)
     {
         if ($param['analise'] == 1) {
@@ -33,6 +42,12 @@ class vendas
     function getListaServico($param)
     {
         $call = $this->sql->getListaServico($param);
+        echo json_encode($call);
+    }
+
+    function UpdateVenda($param)
+    {
+        $call = $this->sql->UpdateVenda($param);
         echo json_encode($call);
     }
 }

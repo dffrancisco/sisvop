@@ -32,11 +32,20 @@ $(function () {
     $(".btnBS").click(function () {
         vendas.buscarServ();
     });
+
+    $(".btnCad").click(function () {
+        vendas.fazerVenda();
+    });
+
 });
 
 
 const vendas = (function () {
     let analise
+    let status
+    let VALOR_MINIMO
+    let VALOR_INTERCESSAO
+    let VALOR_MAXIMO
     let url = 'vendas/per.vendas.php';
 
     function grid() {
@@ -70,6 +79,7 @@ const vendas = (function () {
         });
     }
 
+
     function getDadosServ(ln) {
         ID_LISTA_SERVICO = ln.ID_LISTA_SERVICO;
         $("#pnVendas").hide();
@@ -87,6 +97,96 @@ const vendas = (function () {
             $("#spStatus").html(r.data[0].STATUS);
             $("#spDataI").html(r.data[0].DATA_INICIO);
             $("#spDataF").html(r.data[0].DATA_FINALIZACAO);
+            $("#spVendedor").html(r.data[0].NOME);
+            $("#spValorVendedor").html('R$ ' + r.data[0].VALOR_VENDEDOR);
+            if (r.data[0].VALOR_VENDEDOR == null) {
+                $("#spValorVendedor").html('R$ ');
+            }
+            status = r.data[0].STATUS
+            VALOR_MINIMO = r.data[0].VALOR_MINIMO
+            VALOR_INTERCESSAO = r.data[0].VALOR_INTERCESSAO
+            VALOR_MAXIMO = r.data[0].VALOR_MAXIMO
+            $("#edtValorVenda").val(r.data[0].VALOR);
+            $("#slctFonte").val(r.data[0].VERBA);
+            adicionais()
+        })
+    }
+
+    function fazerVenda() {
+        confirma({
+            msg: `<span>Digite sua senha:</span> <br>
+            <input type="password" id="passwordConf"/>`,
+            call: () => {
+                let SENHA = $("#passwordConf").val()
+                let valor = $("#edtValorVenda").val().replace('.', '')
+                valor = valor.replace('.', '')
+                valor = valor.replace(',', '.')
+                let param = {
+                    valor: $("#edtValorVenda").val(),
+                    verba: $("#slctFonte").val(),
+                    status: 'PREPARO',
+                    id_lista_servico: ID_LISTA_SERVICO
+                }
+
+                if (param.valor == "") {
+                    show('Preencha o valor da venda')
+                    return false
+                }
+
+                if (param.verba == "") {
+                    show('Preencha o modo de verba')
+                    return false
+                }
+
+                axios.post(url, {
+                    call: "getSenha",
+                    param: { SENHA: SENHA, ID_FUNCIONARIOS: usuario.ID_FUNCIONARIOS },
+                })
+                    .then((r) => {
+                        if (r.data) {
+                            show(r.data)
+                            return false
+                        }
+                        let SENHA = $("#passwordConf").val()
+                        VALOR_MAXIMO = parseFloat(VALOR_MAXIMO)
+                        VALOR_INTERCESSAO = parseFloat(VALOR_INTERCESSAO)
+                        VALOR_MINIMO = parseFloat(VALOR_MINIMO)
+                        valor = parseFloat(valor)
+                        let valor_vendedor
+                        param.valor = valor
+                        if (valor >= VALOR_MAXIMO) {
+                            valor_vendedor = valor * 0.025
+                        }
+
+                        if (valor < VALOR_MAXIMO && valor >= VALOR_INTERCESSAO) {
+                            valor_vendedor = valor * 0.02
+                        }
+
+                        if (valor < VALOR_INTERCESSAO) {
+                            valor_vendedor = valor * 0.015
+                        }
+
+                        $("#spValorVendedor").val('R$ ' + valor_vendedor)
+
+                        param.valor_vendedor = valor_vendedor.toFixed(2)
+
+                        if (valor_vendedor == undefined) {
+                            show('Valor inválido')
+                            return false
+                        }
+                        axios.post(url, {
+                            call: "UpdateVenda",
+                            param: param
+                        }).then((r) => {
+                            adicionais()
+                            $("#spValorVendedor").html('R$ ' + valor_vendedor);
+                            $("#spStatus").html(param.status);
+                            $("#edtValorVenda").val('');
+                            $("#slctFonte").val('');
+
+                        })
+                    })
+            }
         })
     }
 
@@ -127,9 +227,24 @@ const vendas = (function () {
         $("#dados_cliente").hide();
         $("#pnVendas").show();
     }
+
+    function adicionais() {
+        if (status == "ANÁLISE") {
+            $(".btnCad").removeAttr("disabled", true);
+            $("#edtValorVenda").removeAttr("disabled", true);
+            $("#slctFonte").removeAttr("disabled", true);
+        }
+        if (status != "ANÁLISE") {
+            $(".btnCad").prop("disabled", true);
+            $("#edtValorVenda").prop("disabled", true);
+            $("#slctFonte").prop("disabled", true);
+        }
+
+    }
     return {
         grid: grid,
         buscarServ: buscarServ,
-
+        fazerVenda: fazerVenda,
+        adicionais: adicionais,
     }
 })();
