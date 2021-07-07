@@ -207,6 +207,17 @@ class SqlProjeto
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function getEmailVendedor($param)
+  {
+
+    $sql = "SELECT nome, email
+          FROM funcionarios 
+          WHERE id_cargo = 5
+          AND id_funcionarios = $param";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
   function getVendedor()
   {
 
@@ -226,7 +237,7 @@ class SqlProjeto
       a.hora, a.status, a.data_finalizacao,
       a.engenheiro, a.executores, a.obs, b.servico,
       a.meta, a.pontos, a.projeto, a.margem_produto, a.valor_minimo, a.valor_intercessao,
-      a.valor_maximo, a.valor_obra, c.id_cliente, c.fantasia, c.cnpj,
+      a.valor_maximo, a.valor_obra,a.id_vendedor, c.id_cliente, c.fantasia, c.cnpj,
       c.cep, c.endereco, c.cidade, c.bairro, a.id_servico
       FROM lista_servicos a, servicos b, clientes c
       WHERE a.id_servico = b.id_servico
@@ -262,9 +273,11 @@ class SqlProjeto
     extract($param);
     $sql = "SELECT FIRST 10 SKIP $offset 
             a.id_itens_servico, a.id_lista_servico, 
-            a.qtd, b.id_produto, b.descricao, b.valor 
-            FROM lista_itens_servico a, produtos b
+            a.qtd, b.id_produto, b.descricao, b.valor,
+            b.id_tipo_item, c.id_tipo, c.tipo_item 
+            FROM lista_itens_servico a, produtos b, tipo_iten c
             WHERE a.ID_PRODUTO = b.ID_PRODUTO
+            AND b.id_tipo_item = c.id_tipo
             AND a.id_lista_servico = $ID_LISTA_SERVICO";
 
     $query = $this->db->prepare($sql);
@@ -275,13 +288,16 @@ class SqlProjeto
   function getProdutos($param)
   {
     extract($param);
-    $sql = "SELECT FIRST 10 SKIP $offset
+    $sql = "SELECT FIRST 20 SKIP $offset
             a.id_produto, a.qtd, a.descricao,
-            a.valor, a.codigo, 
-            b.id_marca, b.marca 
-            FROM produtos a, marcas b
+            a.valor, a.codigo, a.id_tipo_item,
+            b.id_marca, b.marca,
+            c.id_tipo, c.tipo_item 
+            FROM produtos a, marcas b, tipo_iten c
             WHERE a.id_marca = b.id_marca 
+            AND a.id_tipo_item = c.id_tipo
             AND descricao LIKE '%$search%'";
+
 
     $query = $this->db->prepare($sql);
     $query->execute();

@@ -18,10 +18,14 @@ class SqlProdutos
   function getProdutos($param)
   {
     extract($param);
-    $sql = "SELECT first 10 skip $offset a.id_produto, a.qtd, a.descricao, a.valor, a.codigo, 
-            a.id_marca, a.data_cadastro, a.endereco, a.qtd_minima, a.medida, b.marca, b.id_marca 
-            from produtos a, marcas b
+    $sql = "SELECT first 10 skip $offset 
+            a.id_produto, a.qtd, a.descricao, a.valor, a.codigo, 
+            a.id_marca, a.data_cadastro, a.endereco, a.qtd_minima, 
+            a.medida, a.id_tipo_item, b.marca, b.id_marca,
+            c.tipo_item
+            from produtos a, marcas b, tipo_iten c
             where b.id_marca = a.id_marca
+            AND c.id_tipo = a.id_tipo_item 
             and a.descricao like '%$search%' 
             ORDER BY qtd asc";
 
@@ -36,6 +40,17 @@ class SqlProdutos
     * 
     FROM marcas
     ORDER BY marca ASC";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function getTipoItem(){
+    $sql = "SELECT
+    * 
+    FROM tipo_iten
+    ORDER BY tipo_item ASC";
 
     $query = $this->db->prepare($sql);
     $query->execute();
@@ -57,13 +72,15 @@ class SqlProdutos
   function insert($param)
   {
     extract($param);
-    $sql = "INSERT INTO produtos (qtd, descricao, valor, codigo, id_marca, data_cadastro, endereco, qtd_minima, MEDIDA)
-    VALUES(:QTD, :DESCRICAO, :VALOR, :CODIGO, :ID_MARCA, :DATA_CADASTRO, :ENDERECO, :QTD_MINIMA, :MEDIDA)
+    $sql = "INSERT INTO produtos (qtd, descricao, valor, codigo, id_marca, data_cadastro, endereco, qtd_minima, MEDIDA, id_tipo_item)
+    VALUES(:QTD, :DESCRICAO, :VALOR, :CODIGO, :ID_MARCA, :DATA_CADASTRO, :ENDERECO, :QTD_MINIMA, :MEDIDA, :ID_TIPO_ITEM)
     returning id_produto";
     $sql = prepare::SQL($sql, $param);
-    $query = $this->db->prepare($sql);
-    $query->execute();
-    return $query->fetchAll(PDO::FETCH_OBJ);
+
+    return $sql;
+    // $query = $this->db->prepare($sql);
+    // $query->execute();
+    // return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function update($param)
@@ -71,9 +88,8 @@ class SqlProdutos
     extract($param);
     $sql = "UPDATE produtos  
     SET qtd = :QTD, descricao = :DESCRICAO, valor = :VALOR, codigo = :CODIGO, id_marca = :ID_MARCA, 
-    endereco = :ENDERECO, qtd_minima = :QTD_MINIMA, MEDIDA = :MEDIDA
-    WHERE id_produto =  :ID_PRODUTO
-    returning id_produto";
+    endereco = :ENDERECO, qtd_minima = :QTD_MINIMA, MEDIDA = :MEDIDA, ID_TIPO_ITEM = :ID_TIPO_ITEM
+    WHERE id_produto =  :ID_PRODUTO";
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
