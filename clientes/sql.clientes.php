@@ -53,7 +53,7 @@ class SqlClientes
     $sql = "INSERT INTO clientes 
             (cnpj, razao, fantasia, email, inscricao, fixo, tel, representante, data_cadastro, cep, endereco, id_uf, cidade, bairro)
             VALUES
-            ('$CNPJ', '$RAZAO', '$EMAIL','$FANTASIA', '$INSCRICAO', '$FIXO',' $TEL', '$REPRESENTANTE', '$DATA_CADASTRO', '$CEP', '$ENDERECO', '$ID_UF', '$CIDADE', '$BAIRRO')
+            ('$CNPJ', '$RAZAO', '$FANTASIA', '$EMAIL', '$INSCRICAO', '$FIXO', '$TEL', '$REPRESENTANTE', '$DATA_CADASTRO', '$CEP', '$ENDERECO', '$ID_UF', '$CIDADE', '$BAIRRO')
             RETURNING ID_CLIENTE";
 
     $query = $this->db->prepare($sql);
@@ -81,8 +81,8 @@ class SqlClientes
   {
 
     extract($param);
-    $sql = "SELECT cnpj FROM clientes
-          WHERE cnpj = '$CNPJ'";
+    $sql = "SELECT razao FROM clientes
+          WHERE razao = '$RAZAO'";
 
     $query = $this->db->prepare($sql);
     $query->execute();

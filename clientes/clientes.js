@@ -75,12 +75,11 @@ const cliente = (function () {
                     }
                 },
                 duplicity: {
-                    dataField: ['CNPJ'],
+                    dataField: ['RAZAO'],
 
                     execute: (r) => {
                         let param = {}
-                        param.CNPJ = r.value,
-                            validarCpnj(param.CNPJ),
+                        param.RAZAO = r.value,
                             axios.post(url, {
                                 call: 'duplicity',
                                 param: param
@@ -89,7 +88,7 @@ const cliente = (function () {
                                 .then(rs => {
 
                                     if (rs.data[0]) {
-                                        xgCliente.showMessageDuplicity('CNPJ inválido DUP')
+                                        xgCliente.showMessageDuplicity('Cliente já cadastrado')
                                         xgCliente.focusField(r.field);
                                     }
                                 })
@@ -168,6 +167,26 @@ const cliente = (function () {
     const salvar = async () => {
 
         let param = xgCliente.getElementSideBySideJson()
+
+        if ($('#edtInscricao').val() == "") {
+            param.INSCRICAO = ""
+        }
+        if ($('#edtFixo').val() == "") {
+            param.FIXO = ""
+        }
+        if ($('#edtTel').val() == "") {
+            param.TEL = ""
+        }
+        if ($('#edtRepresentante').val() == "") {
+            param.REPRESENTANTE = ""
+        }
+        if ($('#edtEmail').val() == "") {
+            param.EMAIL = ""
+        }
+        if ($('#edtCnpj').val() == "") {
+            param.CNPJ = ""
+        }
+
         param.DATA_CADASTRO = $('#edtData').val()
         // let allDuplicty = await xgCliente.getDuplicityAll()
         // if (allDuplicty == false) {
@@ -178,6 +197,7 @@ const cliente = (function () {
 
         let valCampos = {
             razao: $('#edtRazao').val(),
+            fantasia: $('#edtFantasia').val(),
             data_cadastro: $('#edtData').val(),
             cep: $('#edtCep').val(),
             endereco: $('#edtEndereco').val(),
@@ -189,7 +209,6 @@ const cliente = (function () {
         for (let i in param) {
             param[i] = param[i].toUpperCase()
         }
-
 
         for (let i in valCampos) {
             if (valCampos[i] == '' || valCampos.id_uf == null) {
@@ -206,13 +225,13 @@ const cliente = (function () {
             param.ID_CLIENTE = ''
         }
 
-        console.log(' :', param);
         axios.post(url, {
             call: 'save',
             param: param
 
         })
             .then(r => {
+
                 if (r.data == 'edit') {
                     xgCliente.dataSource(param)
 
@@ -250,70 +269,7 @@ const cliente = (function () {
         })
     }
 
-    function validarCpnj(cnpj) {
 
-        cnpj = cnpj.replace(/[^\d]+/g, '');
-
-        if (cnpj == '') return false;
-
-        if (cnpj.length != 14) {
-            xgCliente.showMessageDuplicity(`Digite um CNPJ com tamanho válido`);
-            xgCliente.focusField();
-            return false;
-        }
-
-        if (cnpj == "00000000000000" ||
-            cnpj == "11111111111111" ||
-            cnpj == "22222222222222" ||
-            cnpj == "33333333333333" ||
-            cnpj == "44444444444444" ||
-            cnpj == "55555555555555" ||
-            cnpj == "66666666666666" ||
-            cnpj == "77777777777777" ||
-            cnpj == "88888888888888" ||
-            cnpj == "99999999999999") {
-            xgCliente.showMessageDuplicity("CNPJ inválido");
-            xgCliente.focusField();
-            return false;
-        }
-
-        tamanho = cnpj.length - 2
-        numeros = cnpj.substring(0, tamanho);
-        digitos = cnpj.substring(tamanho);
-        soma = 0;
-        pos = tamanho - 7;
-        for (i = tamanho; i >= 1; i--) {
-            soma += numeros.charAt(tamanho - i) * pos--;
-            if (pos < 2)
-                pos = 9;
-        }
-        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-        if (resultado != digitos.charAt(0)) {
-            xgCliente.showMessageDuplicity("CNPJ inválido!");
-            xgCliente.focusField();
-            return false;
-        }
-
-        tamanho = tamanho + 1;
-        numeros = cnpj.substring(0, tamanho);
-        soma = 0;
-        pos = tamanho - 7;
-        for (i = tamanho; i >= 1; i--) {
-            soma += numeros.charAt(tamanho - i) * pos--;
-            if (pos < 2)
-                pos = 9;
-        }
-        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-        if (resultado != digitos.charAt(1)) {
-            xgCliente.showMessageDuplicity("CNPJ inválido!");
-            xgCliente.focusField();
-            return false;
-        }
-
-        return true;
-
-
-    }
 
     return {
         grid: grid,

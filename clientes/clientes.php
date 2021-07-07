@@ -19,7 +19,7 @@
 
         <div class="row">
             <div class="col s4">
-                <label>Nome Fantasia</label>
+                <label>Nome Fantasia*</label>
                 <input placeholder="" type="text" class="validate" id="edtFantasia" name="FANTASIA">
             </div>
             <div class="col s5">
@@ -28,7 +28,7 @@
             </div>
             <div class="col s3">
                 <label>Inscrição estadual</label>
-                <input placeholder="" type="text" class="validate" id="edtIscricao" name="INSCRICAO">
+                <input placeholder="" type="text" class="validate" id="edtInscricao" name="INSCRICAO">
             </div>
         </div>
 
