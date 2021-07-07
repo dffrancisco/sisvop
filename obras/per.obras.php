@@ -130,16 +130,17 @@ class Obras
             $dados = array_merge($encerrado, $dados);
         }
 
-        if ($param['encerrado'] == '' && $param['preparo'] == '' && $param['andamento'] == '') {
+        if ($param['encerrado'] == '' && $param['preparo'] == '' 
+            && $param['andamento'] == '' && $param['finalizacao'] == ''
+            && $param['atrasado'] == '') {
 
             $todos = $this->sql->getServicos($param);
 
             foreach ($todos as $ln) {
 
-                if (
-                    $ln->STATUS == 'PREPARO' || $ln->STATUS == 'ANDAMENTO' ||
-                    $ln->STATUS == 'ENCERRADO'
-                ) {
+                if ($ln->STATUS == 'PREPARO' || $ln->STATUS == 'ANDAMENTO' ||
+                    $ln->STATUS == 'ENCERRADO'|| $ln->STATUS == 'FINALIZACAO'
+                    || $ln->STATUS == 'ATRASADO') {
                     // print_r(Array($ln));
 
                     $dados = array_merge(array($ln), $dados);

@@ -94,10 +94,6 @@ $(function () {
         }
     })
 
-    $(".btnObra").click(function () {
-        saida.statusObra()
-    })
-
     $(".btnBS").click(function () {
         saida.buscarServ()
 
@@ -113,20 +109,7 @@ $(function () {
 
     $("#spObs").click(function (e) {
 
-        if (view == 0) {
-            $("#obsText").show()
-            $("#spObsText").html(OBS)
-            view = 1
-        }
-        else if (view == 1) {
-            $("#obsText").hide()
-            $("#spObsText").html('')
-            view = 0
-        }
-        else {
-            console.log('ERRO')
-        }
-
+        show(OBS)
     })
 
     $('.btnRG').click(function (e) {
@@ -287,6 +270,14 @@ const saida = (function () {
                     $('.btnDel').attr("disabled", true);
                 }
 
+                else if (origem == 'PROJETO' && STATUS == 'FINALIZACAO') {
+                    $('.btnDel').attr("disabled", true);
+                }
+
+                else if (origem == 'PROJETO' && STATUS == 'ATRASADO') {
+                    $('.btnDel').attr("disabled", true);
+                }
+
                 else if (origem == 'PROJETO' && STATUS == 'ENCERRADO') {
                     $('.btnDel').attr("disabled", true);
                 }
@@ -296,6 +287,10 @@ const saida = (function () {
                 }
 
                 else if (origem == 'ADICIONAL' && STATUS == 'PREPARO') {
+                    $('.btnDel').removeAttr("disabled", true);
+                }
+
+                else if (origem == 'ADICIONAL' && STATUS == 'ATRASADO') {
                     $('.btnDel').removeAttr("disabled", true);
                 }
 
@@ -318,6 +313,14 @@ const saida = (function () {
                     }
 
                     if (ORIGEM == 'PROJETO' && STATUS == 'ANDAMENTO') {
+                        return false
+                    }
+
+                    if (ORIGEM == 'PROJETO' && STATUS == 'FINALIZACAO') {
+                        return false
+                    }
+
+                    if (ORIGEM == 'PROJETO' && STATUS == 'ATRASADO') {
                         return false
                     }
 
@@ -406,7 +409,6 @@ const saida = (function () {
                     $('.btnPDF').attr("disabled", true);
                     $('.btnFR').removeAttr("disabled");
 
-
                 }
                 if (r.STATUS == "PRONTO") {
 
@@ -489,41 +491,6 @@ const saida = (function () {
 
     }
 
-    function statusObra() {
-
-
-        console.log(' :', STATUS);
-        if (STATUS == 'ANDAMENTO') {
-
-
-        }
-
-        // confirmaCodigo({
-        //     msg: 'Digite o código abaixo caso deseja finalizar o projeto<br>' +
-        //         '(APÓS ISSO, O PROJETO NÃO PODERÁ SER FINALIZADO NOVAMENTE)',
-        //     call: () => {
-
-        //         axios.post(url, {
-        //             call: 'atualizaStatus',
-        //             param: { ID_LISTA_SERVICO: ID_LISTA_SERVICO, STATUS: 'FINALIZADO' }
-        //         })
-
-        //         $('#spStatus').html('FINALIZADO');
-
-        //         $('.btnInsP').prop('disabled', true)
-        //         $('.btnDel').prop('disabled', true)
-        //         $('.btnNR').prop('disabled', true)
-        //         $('.btnPR').prop('disabled', true)
-        //         $('.btnFR').prop('disabled', true)
-        //         $('.btnPDF').prop('disabled', true)
-        //         $('.btnDI').prop('disabled', true)
-        //         $('.btnObra').prop('disabled', true)
-        //         $('.btnRG').removeAttr('disabled')
-
-        //     }
-        // })
-    }
-
     // FUNCTION SERVICOS
 
     function getDadosServ(ln) {
@@ -535,7 +502,8 @@ const saida = (function () {
 
         $('.btnInsP').removeAttr("disabled");
 
-        if (STATUS == 'ANDAMENTO') {
+        if (STATUS == 'ANDAMENTO' || STATUS == "FINALIZACAO" 
+            || STATUS == "ATRASADO") {
             $('.btnNR').removeAttr("disabled");
             $('.btnObra').removeAttr("disabled");
             $('.btnRG').prop('disabled', true)
@@ -807,7 +775,7 @@ const saida = (function () {
 
     function finalizarRomaneio() {
 
-        confirmaCodigo({
+        confirma({
             msg: 'Digite o código abaixo caso deseja finalizar o romaneio <br>' +
                 '(APÓS ISSO, O ROMANEIO NÃO PODERÁ SER FINALIZADO NOVAMENTE)',
             call: () => {
@@ -997,6 +965,7 @@ const saida = (function () {
     }
 
     // FUNCTIONS ROMANEIO ITENS
+    
     function getItensRomaneio(ID_ROMANEIO, offset) {
 
         axios.post(url, {
@@ -1091,7 +1060,9 @@ const saida = (function () {
 
 
     }
+
     // RELATORIOS 
+    
     async function relatorioGeral() {
 
         let dados_servico = {
@@ -1276,7 +1247,6 @@ const saida = (function () {
         modalInsProduto: modalInsProduto,
         buscarServ: buscarServ,
         modalInserirRomaneio: modalInserirRomaneio,
-        statusObra: statusObra,
         relatorioGeral: relatorioGeral,
 
     }
@@ -1288,7 +1258,7 @@ const produtos = (function () {
     let ControleGrid;
 
     function grid() {
-
+// GRID DE PRODUTOS
         xgProduto = new xGridV2.create({
 
             el: '#xmPnGridProduto',
@@ -1411,6 +1381,7 @@ const produtos = (function () {
         })
     }
 
+    // DO DE PRODUTOS
     function getProdutos(search, offset) {
 
         axios.post(url, {
@@ -1451,7 +1422,8 @@ const produtos = (function () {
             return false
         }
 
-        if (status == 'ANDAMENTO' || status == 'PREPARO') {
+        if (status == 'ANDAMENTO' || status == 'PREPARO' 
+            || status == 'FINALIZACAO' || status == 'ATRASADO') {
 
             origem = 'ADICIONAL'
         }
@@ -1490,24 +1462,6 @@ const produtos = (function () {
         }
 
 
-
-    }
-
-    function getServico() {
-
-        axios.post(url, {
-
-            call: 'getServ',
-
-        })
-            .then(rs => {
-
-                for (let i in rs.data) {
-
-                    let table = `<option value="${rs.data[i].ID_SERVICO}"> ${rs.data[i].SERVICO}</option>`
-                    $('#slctServico').append(table)
-                }
-            })
     }
 
     async function InserirItemRomaneio() {
@@ -1581,6 +1535,25 @@ const produtos = (function () {
 
     }
 
+    // GET DE PRODUTOS
+    function getServico() {
+
+        axios.post(url, {
+
+            call: 'getServ',
+
+        })
+            .then(rs => {
+
+                for (let i in rs.data) {
+
+                    let table = `<option value="${rs.data[i].ID_SERVICO}"> ${rs.data[i].SERVICO}</option>`
+                    $('#slctServico').append(table)
+                }
+            })
+    }
+
+    // UPDATE DE PRODUTOS
     function atualizaProduto(ID_PRODUTO, newEstoque) {
 
         axios.post(url, {
@@ -1591,6 +1564,7 @@ const produtos = (function () {
         })
     }
 
+    // MODAL DO PRODUTO
     function modalEdtQtd() {
 
         xmEdtQtd = new xModal.create({
@@ -1660,7 +1634,7 @@ const devolucao = (function () {
     let ControleGrid;
 
     function grid() {
-
+// GRID DE DEVOLUCAO
         xgDevolucao = new xGridV2.create({
 
             el: '#xgDevolucao',
@@ -1742,6 +1716,7 @@ const devolucao = (function () {
         })
     }
 
+    // GET DE DEVOLUCAO
     function getDevolucao(search, offset) {
 
         axios.post(url, {
@@ -1774,6 +1749,8 @@ const devolucao = (function () {
         xgRomaneiosItensD.queryOpen({ search: ID_LISTA_SERVICO })
 
     }
+
+    // DO DE DEVOLVER ITEM
 
     function devolverItem() {
 
@@ -1869,8 +1846,7 @@ const devolucao = (function () {
         evento = "DEVOLVER"
     }
 
-
-    // MODAL 
+    // MODAL DE DEVOLUCAO
 
     function modalPDevolucao() {
         xmModalPDevolucao = new xModal.create({

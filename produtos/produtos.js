@@ -3,6 +3,7 @@ let xgProduto;
 $(function () {
     produto.grid();
     produto.getMarca();
+    produto.getTipoItem();
     produto.keydown();
     xgProduto.queryOpen({ search: '' })
 
@@ -169,7 +170,10 @@ const produto = (function () {
         param.ID_MARCA = Number(param.ID_MARCA)
         param.MARCA = xgProduto.dataSource().MARCA
         param.DATA_CADASTRO = $('#edtData').val()
+        param.ID_TIPO_ITEM = Number(param.ID_TIPO_ITEM)
 
+        console.log('param :', param);
+        
         let valCampos = {
             codigo: $('#editCodigo').val(),
             descricao: $('#editDescricao').val(),
@@ -177,6 +181,7 @@ const produto = (function () {
             qtd: $('#editQtd').val(),
             marca: $('#slctMarca').val(),
             medida: $('#slctMedida').val(),
+            tipo_item: $('#slctTipoItem').val(),
 
         }
         valCampos.valor = valCampos.valor.replace(',', '');
@@ -220,7 +225,6 @@ const produto = (function () {
             param: param
         })
             .then(r => {
-
                 cancelar()
                 if (r.data == 'edit') {
                     xgProduto.dataSource("QTD", param.QTD)
@@ -287,6 +291,18 @@ const produto = (function () {
 
         })
     }
+    function getTipoItem() {
+        axios.post(url, {
+            call: 'getTipoItem',
+
+        }).then(rs => {
+            for (let i in rs.data) {
+                let table = `<option value="${rs.data[i].ID_TIPO}"> ${rs.data[i].TIPO_ITEM}</option>`
+                $('#slctTipoItem').append(table)
+            }
+
+        })
+    }
 
     function cancelar() {
         $('.btnPesq').removeAttr("disabled")
@@ -340,6 +356,7 @@ const produto = (function () {
     return {
         grid: grid,
         getMarca: getMarca,
-        keydown: keydown
+        keydown: keydown,
+        getTipoItem:getTipoItem,
     };
 })();

@@ -198,7 +198,7 @@
     </div>
     <div class="row">
         <div class="col s5" id="pnFieldEdtQtd">
-            <label>Marca</label>
+            <label>Marca</label><br>
             <span id="xmSpMarca" class="spanAutoPreenc"></span>
         </div>
 
@@ -206,16 +206,17 @@
             <label>Quantidade existente</label><br>
             <b id="xmBQtd"></b><b> Unidades restantes</b>
         </div>
-
-        <div class="col s10" id="pnFieldQtdRetirado" hidden>
-            <b id="xmBQtdRetirado"></b><b> Unidades retiradas</b>
-        </div>
+        
     </div>
 
     <div class="row">
         <div class="col s5" id="pnFieldEdtQtd">
             <label>QTD</label>
             <input type="number" id="xmEdtQtd">
+        </div>
+<br>
+        <div class="col s5" id="pnFieldQtdRetirado" hidden>
+            <b id="xmBQtdRetirado"></b><b> Unidades retiradas</b>
         </div>
     </div>
 </div>

@@ -51,6 +51,12 @@ class Produtos
         echo json_encode($call);
     }
 
+    function getTipoItem()
+    {
+        $call = $this->sql->getTipoItem();
+        echo json_encode($call);
+    }
+
     function getCodigo($param)
     {
         $codigo = $this->sql->getCodigo($param);

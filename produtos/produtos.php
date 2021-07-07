@@ -40,22 +40,30 @@
                 <select name="MEDIDA" id="slctMedida">
                     <option value="UNIDADE" selected>UNIDADE</option>
                     <option value="METRO">METRO</option>
+                    <option value="CAIXA">CAIXA</option>
                 </select>
             </div>
+            
         </div>
 
         <div class="row">
+
+            <div class="col s3">
+                <label>Tipo de Item*</label>
+                <select name="ID_TIPO_ITEM" id="slctTipoItem"></select>
+            </div>
+
             <div class="col s3">
                 <label>Quantidade mínima</label>
                 <input type="number" id="editMinima" placeholder="" name="QTD_MINIMA">
             </div>
 
-            <div class="col s5">
+            <div class="col s3">
                 <label>Marca*</label>
                 <select name="ID_MARCA" id="slctMarca"></select>
             </div>
 
-            <div class="col s4">
+            <div class="col s3">
                 <label>Data de cadastro</label>
                 <input type="text" id="edtData" placeholder="" name="DATA_CADASTRO" disabled>
             </div>

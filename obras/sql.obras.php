@@ -91,7 +91,7 @@ class SqlObras
   function getProdutos($param)
   {
     extract($param);
-    $sql = "SELECT FIRST 10 SKIP $offset
+    $sql = "SELECT FIRST 20 SKIP $offset
             a.id_produto, a.qtd, a.descricao,
             a.valor, a.codigo, 
             b.id_marca, b.marca 
@@ -187,17 +187,20 @@ class SqlObras
   function getItens2($param)
   {
     extract($param);
-    $sql = "SELECT FIRST 10 SKIP $offset
+    $sql = "SELECT FIRST 20 SKIP $offset
     a.id_itens_servico, a.id_lista_servico, a.qtd as qtd_p,
     a.data, a.origem , a.qtd_retirada,
     b.id_produto, b.descricao, b.qtd, b.codigo,
-    c.id_marca,  c.marca
+    c.id_marca,  c.marca,
+    d.id_tipo, d.tipo_item
     FROM
     lista_itens_servico a,
     produtos b,
-    marcas c
+    marcas c,
+    tipo_iten d
     WHERE a.id_produto = b.id_produto
     AND c.id_marca = b.id_marca
+    AND d.id_tipo = b.id_tipo_item
     AND id_lista_servico = $search";
     $query = $this->db->prepare($sql);
     $query->execute();
