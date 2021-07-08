@@ -143,10 +143,9 @@ class Entrada
             echo '{"msg":"Produto ja incluso"}';
             return false;
         }
-        $id_itens_nota = $this->sql->insertProduto($param);
+        $id_itens = $this->sql->insertProduto($param);
         $call = $this->sql->updateProduto($param);
-
-        // echo '{"id_itens_nota":"' . $id_itens_nota[0] . '"}';
+        echo json_encode($id_itens);
     }
     function insertPagamento($param)
     {

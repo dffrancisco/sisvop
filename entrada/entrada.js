@@ -760,7 +760,7 @@ const itens = (function () {
                 call: 'insertProduto',
                 param: param
             }).then(r => {
-                id_itens_nota = r.data.ID_ITENS_NOTA
+                id_itens_nota = r.data[0].ID_ITENS_NOTA
 
                 if (r.data.msg) {
                     show(r.data.msg)
@@ -782,7 +782,7 @@ const itens = (function () {
                     VALOR_ANTIGO: produtoSelecionado.VALOR
                 }
                 xgItens.insertLine(itensGrid)
-
+                id_produto = produtoSelecionado.ID_PRODUTO
                 $('#edtCodigo').focus()
                 $('#spDescricao').val('')
                 $('#edtCodigo').val('')
@@ -866,12 +866,12 @@ const itens = (function () {
         let param = {
             id_fornecedor: id_fornecedor,
             id_nota: id_nota,
-            numero_nota: $('#edtNumero').val(),
-            chave_acesso: $('#edtChave').val(),
-            data_emissao: $('#edtData').val(),
-            st: $('#edtSt').val(),
-            icms: $('#edtIcms').val(),
-            valor_total: $('#edtValor').val(),
+            NUMERO_NOTA: $('#edtNumero').val(),
+            CHAVE_ACESSO: $('#edtChave').val(),
+            DATA_EMISSAO: $('#edtData').val(),
+            ST: $('#edtSt').val(),
+            ICMS: $('#edtIcms').val(),
+            VALOR_TOTAL: $('#edtValor').val(),
 
         }
 
@@ -900,6 +900,8 @@ const itens = (function () {
         }).then(r => {
             cabecalho = r.data[0]
             id_nota = r.data[0].ID_NOTA
+            editNota = param
+
             $('#spNumero').html(cabecalho.NUMERO_NOTA)
             $('#spData').html(cabecalho.DATA_EMISSAO)
             $('#spSt').html(cabecalho.ST)
@@ -977,8 +979,8 @@ const itens = (function () {
             qtd_nota: xgItens.dataSource().QTD_NOTA,
             qtd: Number($('#edtQtdEdit').val()),
             valor_nota: $('#edtValorUniEdit').val(),
-            id_produto: xgItens.dataSource().ID_PRODUTO,
-            id_itens_nota: xgItens.dataSource().ID_ITENS_NOTA
+            id_produto: id_produto,
+            id_itens_nota: id_itens_nota
         }
         axios.post(url, {
             call: 'editItens',

@@ -43,7 +43,8 @@ class SqlExecutor
     extract($param);
 
     $sql = "INSERT INTO executores (lider, auxiliar)
-            VALUES('$LIDER', '$AUXILIAR') returning id_executores";
+            VALUES('$LIDER', '$AUXILIAR') 
+            returning id_executores";
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);

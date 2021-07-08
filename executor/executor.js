@@ -171,10 +171,8 @@ const executor = (function () {
                 xgExecutores.dataSource(param);
             }
             else if (rs.data[0].ID_EXECUTORES) {
-                param.ID_EXECUTORES = rs.data.ID_EXECUTORES;
+                param.ID_EXECUTORES = rs.data[0].ID_EXECUTORES;
                 xgExecutores.insertLine(param);
-            } else {
-                show('ERRO INTERNO!')
             }
         });
     }

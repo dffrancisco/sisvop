@@ -190,7 +190,7 @@ class SqlEntrada
 
     extract($param);
     $sql = "INSERT INTO nota (id_fornecedor, numero_nota, chave_acesso, data_emissao, icms, st, valor_total)
-    VALUES('$id_fornecedor','$numero_nota', '$chave_acesso', '$data_emissao', '$icms', '$st', '$valor_total')
+    VALUES('$id_fornecedor','$NUMERO_NOTA', '$CHAVE_ACESSO', '$DATA_EMISSAO', '$ICMS', '$ST', '$VALOR_TOTAL')
     returning id_nota";
     $query = $this->db->prepare($sql);
     $query->execute();
@@ -205,7 +205,7 @@ class SqlEntrada
     returning id_itens_nota ";
     $query = $this->db->prepare($sql);
     $query->execute();
-    return $param;
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function insertPagamento($param)
@@ -225,8 +225,7 @@ class SqlEntrada
     $sql = "UPDATE produtos 
               SET qtd = $qtd_nota + qtd, 
               valor = '$valor_nota'
-            WHERE id_produto = $id_produto 
-            returning id_produto";
+            WHERE id_produto = $id_produto";
 
     $query = $this->db->prepare($sql);
     $query->execute();
