@@ -218,6 +218,18 @@ class SqlProjeto
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
+
+  function getAvaliador()
+  {
+
+    $sql = "SELECT nome, email
+          FROM funcionarios 
+          WHERE sendemail = 1";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
   function getVendedor()
   {
 

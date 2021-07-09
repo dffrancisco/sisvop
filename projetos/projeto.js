@@ -63,6 +63,11 @@ $(function () {
     }
   });
 
+  $("#spObs").click(function (e) {
+    
+    projetos.showObs()
+  });
+
   $(document).on("change", "#up_file", function (e) {
     $("#icon_up").css("color", "green");
   });
@@ -173,6 +178,7 @@ const projetos = (function () {
     CIDADE: "",
     BAIRRO: "",
     VALOR: ",",
+    OBS: "",
   };
 
   let VALOR;
@@ -722,25 +728,40 @@ const projetos = (function () {
     });
   }
 
+  function checarItensProjeto(){
+    for (let i in xgProjeto.data()) {
+            
+      let QTD = Number(xgProjeto.data()[i].QTD);
+
+      if (QTD == 0) {
+        show("O projeto possui item sem quantidade!");
+        return false;
+      }
+    }
+  }
+
   function finalizarProjeto() {
-    
+
+    checarItensProjeto()
+
     confirma({
       msg: `<span>Digite sua senha:</span> <br>
             <input type="password" id="passwordConf"/>`,
-      call: () => {
+      call: async () => {
         $("#setQtd").hide();
 
         let SENHA = $("#passwordConf").val();
-        axios
-          .post(url, {
+
+       await axios.post(url, {
             call: "getSenha",
             param: { SENHA: SENHA, ID_FUNCIONARIOS: usuario.ID_FUNCIONARIOS },
-          })
-          .then((r) => {
+          }).then((r) => {
+
             if (r.data) {
               show(r);
               return false;
             }
+
             axios
               .post(url, {
                 call: "statusServico",
@@ -750,6 +771,7 @@ const projetos = (function () {
                 },
               })
               .then((r) => {
+
                 let TOTAL = 0;
                 for (let i in xgProjeto.data()) {
             
@@ -814,10 +836,35 @@ const projetos = (function () {
                     );
                     $("#valorMaximo").html("R$" + valorMaximo.toFixed(2));
                   });
+
+                  axios.post(url,{
+                    call: "getAvaliador",
+                  }).then(r =>{
+          
+                    for(let i in r.data){
+          
+                    $.ajax({
+                        type: "POST",
+                        url: "../Mailer_Sisvop/email_avaliadores.php",
+                        data: {
+                          SERVICO: dados_servico.SERVICO,
+                          FANTASIA: dados_servico.FANTASIA,
+                          EMAIL: r.data[i].EMAIL,
+                          NOME: r.data[i].NOME,
+                        },
+                      })
+                    }
+                  })
+
               });
           });
+
       },
     });
+  }
+
+  function showObs(){
+    show(dados_servico.OBS)
   }
 
   function ativaButtons() {
@@ -880,10 +927,7 @@ const projetos = (function () {
                 ID_VENDEDOR: dados_servico.ID_VENDEDOR,
                 EMAIL: r.data[0].EMAIL
               },
-            }).done(function (r) {
-              // de mensagem enviada com sucesso
-              console.log("r :", r);
-            });
+            })
           });
 
         axios
@@ -1233,5 +1277,6 @@ const projetos = (function () {
     modalConfirmaValor: modalConfirmaValor,
     aceitarOrçamento: aceitarOrçamento,
     relatorio: relatorio,
+    showObs: showObs,
   };
 })();

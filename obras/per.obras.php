@@ -82,7 +82,6 @@ class Obras
         echo json_encode($rs);
     }
 
-
     function getItens($param)
     {
         $call = $this->sql->getItens($param);
@@ -168,6 +167,13 @@ class Obras
         $call = $this->sql->getUf();
         echo json_encode($call);
     }
+
+    function checarItemProjeto($param)
+    {
+        $call = $this->sql->checarItemProjeto($param);
+        echo json_encode($call);
+    }
+
     //NOVO E GERAR
     function novoRomaneio($param)
     {
@@ -188,6 +194,11 @@ class Obras
         echo '{"ID_CLIENTE":"' . $id_cliente[0]->ID_CLIENTE . '"}';
     }
 
+    function compesar_qtd_produto($param){
+        $call = $this->sql->compesar_qtd_produto($param);
+        echo json_encode($call);
+    }
+
     //INSERIR
     function inserirItens($param)
     {
@@ -199,6 +210,12 @@ class Obras
     {
         $call = $this->sql->inserirItemRomaneio($param);
         $attServ = $this->sql->atualizaQtdItens($param);
+        echo json_encode($call);
+    }
+
+    function inserirItemRomaneioX($param)
+    {
+        $call = $this->sql->inserirItemRomaneio($param);
         echo json_encode($call);
     }
 
@@ -240,6 +257,12 @@ class Obras
     {
         $attP = $this->sql->atualizaProduto($param);
         $attQ = $this->sql->atualizaQtdItens($param);
+        $dltI = $this->sql->deletarItemRomaneio($param);
+    }
+    
+    function deletarItemRomaneioX($param)
+    {
+        $attP = $this->sql->atualizaProduto($param);
         $dltI = $this->sql->deletarItemRomaneio($param);
     }
 }
