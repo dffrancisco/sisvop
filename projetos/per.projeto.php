@@ -101,9 +101,16 @@ class Projeto
         $call = $this->sql->getEmailVendedor($param);
         echo json_encode($call);
     }
+    
     function getVendedor()
     {
         $call = $this->sql->getVendedor();
+        echo json_encode($call);
+    }
+    
+    function getAvaliador()
+    {
+        $call = $this->sql->getAvaliador();
         echo json_encode($call);
     }
 

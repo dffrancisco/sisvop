@@ -32,6 +32,25 @@ class SqlObras
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function getItensOpeFin($param)
+  {
+
+    $sql = "SELECT 
+            a.id_produto, a.descricao,
+            b.id_marca, b.marca,
+            c.id_mascara_projeto, c.finalizacao,
+            d.id_servico, d.servico
+            FROM produtos a, marcas b, mascara_projeto c, servicos d
+            WHERE a.id_marca = b.id_marca
+            AND a.id_produto = c.id_produto
+            AND c.id_servico = d.id_servico
+            AND d.id_servico = $param";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
   function getListaServicoX($param)
   {
 
@@ -40,11 +59,13 @@ class SqlObras
       a.data_inicio, a.hora, a.status, 
       a.data_finalizacao, a.engenheiro,
       a.executores, a.obs,
-      b.servico, 
-      c.id_cliente,c.fantasia, c.cnpj
-      FROM lista_servicos a, servicos b, clientes c
+      b.id_servico, b.servico, 
+      c.id_cliente,c.fantasia, c.cnpj, 
+      d.id_executores, d.lider, d.auxiliar
+      FROM lista_servicos a, servicos b, clientes c, executores d
       WHERE a.id_servico = b.id_servico
       AND a.id_cliente = c.id_cliente
+      AND a.executores = d.id_executores
       AND id_lista_servico = :id_lista_servico";
 
     $sql = prepare::SQL($sql, $param);
@@ -104,6 +125,20 @@ class SqlObras
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function checarItemProjeto($param)
+  {
+    extract($param);
+    $sql = "SELECT
+            *
+            FROM lista_itens_servico
+            WHERE id_lista_servico = $ID_LISTA_SERVICO 
+            AND ID_PRODUTO = $ID_PRODUTO";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
   function getProduto($param)
   {
 
@@ -149,15 +184,14 @@ class SqlObras
     $sql = "SELECT FIRST 100 skip $offset
           a.id_item_romaneio, a.qtd, a.id_romaneio,
           b.id_produto, b.descricao,
-          c.marca,
-          d.origem, d.id_itens_servico
+          c.marca
           FROM itens_romaneio a,
           produtos b, marcas c,
-          lista_itens_servico d
+          romaneio d
           WHERE a.id_produto = b.id_produto
           AND c.id_marca = b.id_marca
-          AND a.id_itens_servico = d.id_itens_servico
-          AND id_romaneio = $ID_ROMANEIO";
+          AND a.id_romaneio = d.id_romaneio
+          AND a.id_romaneio = $ID_ROMANEIO";
 
     $query = $this->db->prepare($sql);
     $query->execute();
@@ -187,7 +221,7 @@ class SqlObras
   function getItens2($param)
   {
     extract($param);
-    $sql = "SELECT FIRST 20 SKIP $offset
+    $sql = "SELECT FIRST 30 SKIP $offset
     a.id_itens_servico, a.id_lista_servico, a.qtd as qtd_p,
     a.data, a.origem , a.qtd_retirada,
     b.id_produto, b.descricao, b.qtd, b.codigo,
@@ -207,6 +241,25 @@ class SqlObras
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function compesar_qtd_produto($param)
+  {
+    extract($param);
+    $sql = "SELECT FIRST 1
+            a.ID_PRODUTO,
+            a.DESCRICAO, a.QTD,
+            c.id_marca, c.marca
+            FROM PRODUTOS a , TIPO_ITEN b, marcas c
+            WHERE a.ID_TIPO_ITEM  = b.ID_TIPO
+            AND  a.id_marca = c.id_marca
+            AND b.ID_TIPO = $ID_TIPO_ITEM
+            AND a.ID_PRODUTO <> $ID_PRODUTO
+            AND a.QTD  >= $QTD_FALTA";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
   function getServicos($param)
   {
     extract($param);
@@ -336,7 +389,7 @@ class SqlObras
   function getDevolucao($param)
   {
     extract($param);
-    $sql = "SELECT FIRST 10 SKIP $offset
+    $sql = "SELECT
       a.id_devolucao, a.qtd, a.data, a.hora,
       b.id_produto, b.descricao,
       c.marca
@@ -367,7 +420,8 @@ class SqlObras
             lista_itens_servico 
             (id_lista_servico, id_produto, qtd, data, origem, qtd_retirada)
             VALUES 
-            (:ID_SERVICO, :ID_PRODUTO , :QTD_PRODUTO, :DATA, :ORIGEM, :QTD_RETIRADA)";
+            (:ID_SERVICO, :ID_PRODUTO , :QTD_PRODUTO, :DATA, :ORIGEM, :QTD_RETIRADA)
+            returnning id_itens_servico";
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
     $query->execute();
@@ -378,9 +432,24 @@ class SqlObras
   {
 
     $sql = "INSERT INTO itens_romaneio
-          (id_romaneio, id_produto, qtd, id_itens_servico)
+          (id_romaneio, id_produto, qtd)
           VALUES
-          (:ID_ROMANEIO, :ID_PRODUTO, :QTD, :ID_ITENS_SERVICO)
+          (:ID_ROMANEIO, :ID_PRODUTO, :QTD)
+          returning id_item_romaneio";
+
+    $sql = prepare::SQL($sql, $param);
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+  
+  function inserirItemRomaneioX($param)
+  {
+
+    $sql = "INSERT INTO itens_romaneio
+          (id_romaneio, id_produto, qtd)
+          VALUES
+          (:ID_ROMANEIO, :ID_PRODUTO, :QTD)
           returning id_item_romaneio";
 
     $sql = prepare::SQL($sql, $param);
