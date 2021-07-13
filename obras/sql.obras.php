@@ -32,6 +32,25 @@ class SqlObras
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function getItensOpeFin($param)
+  {
+
+    $sql = "SELECT 
+            a.id_produto, a.descricao,
+            b.id_marca, b.marca,
+            c.id_mascara_projeto, c.finalizacao,
+            d.id_servico, d.servico
+            FROM produtos a, marcas b, mascara_projeto c, servicos d
+            WHERE a.id_marca = b.id_marca
+            AND a.id_produto = c.id_produto
+            AND c.id_servico = d.id_servico
+            AND d.id_servico = $param";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
   function getListaServicoX($param)
   {
 
@@ -40,7 +59,7 @@ class SqlObras
       a.data_inicio, a.hora, a.status, 
       a.data_finalizacao, a.engenheiro,
       a.executores, a.obs,
-      b.servico, 
+      b.id_servico, b.servico, 
       c.id_cliente,c.fantasia, c.cnpj, 
       d.id_executores, d.lider, d.auxiliar
       FROM lista_servicos a, servicos b, clientes c, executores d
@@ -202,7 +221,7 @@ class SqlObras
   function getItens2($param)
   {
     extract($param);
-    $sql = "SELECT FIRST 20 SKIP $offset
+    $sql = "SELECT FIRST 30 SKIP $offset
     a.id_itens_servico, a.id_lista_servico, a.qtd as qtd_p,
     a.data, a.origem , a.qtd_retirada,
     b.id_produto, b.descricao, b.qtd, b.codigo,

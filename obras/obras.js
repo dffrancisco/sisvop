@@ -142,6 +142,8 @@ const saida = (function () {
   let url = "obras/per.obras.php";
   let ControleGrid;
 
+  let itensOpeFin = {}
+
   let andamento;
   let projeto;
   let finalizado;
@@ -317,6 +319,7 @@ const saida = (function () {
       },
 
       dblClick: (ln) => {
+
         if (ln == false) return false;
         edtQtd(ln);
       },
@@ -475,6 +478,51 @@ const saida = (function () {
     $("#dados_cliente").show();
   }
 
+  function getItensOpeFin(param){
+
+    axios.post(url,{
+      call:"getItensOpeFin",
+      param: param,
+    }).then(r=>{
+      itensOpeFin = r.data
+    })
+
+  }
+
+  function separarItensOpeFin(produto){
+    let permitido = "sim"
+
+      for(let i in itensOpeFin){
+
+        let id_produto = itensOpeFin[i].ID_PRODUTO
+
+        if(id_produto == produto.ID_PRODUTO){
+            
+          if(STATUS == "PREPARO"){
+
+            if(itensOpeFin[i].FINALIZACAO == 1){
+              permitido = "nao"
+
+            }
+            
+          }
+
+          if(STATUS == "ANDAMENTO"){
+
+            if(itensOpeFin[i].FINALIZACAO == 0){
+              permitido = "nao"
+
+            }
+          }
+          
+        }
+        
+        // if(id_produto == itensOpeFin[i].ID_PRODUTO){}
+      }
+      return permitido
+
+  }
+
   // FUNCTION PRODUTOS SERVICO
 
   function getItens1(search, offset) {
@@ -562,6 +610,7 @@ const saida = (function () {
   }
 
   function edtQtd(ln) {
+
     for (let i in xgRomaneiosItens.data()) {
       if (xgRomaneiosItens.data()[i].ID_PRODUTO == ln.ID_PRODUTO) {
         setTimeout(function () {
@@ -660,6 +709,7 @@ const saida = (function () {
       CNPJ: param.CNPJ,
       ENGENHEIRO: param.ENGENHEIRO,
       SERVICO: param.SERVICO,
+      ID_SERVICO: param.ID_SERVICO,
       EXECUTORES: param.EXECUTORES,
       DATA_INICIO: param.DATA_INICIO,
       DATA_FINALIZACAO: param.DATA_FINALIZACAO,
@@ -710,6 +760,8 @@ const saida = (function () {
 
   function InserirRomaneio() {
     evento = "Inserir Romaneio";
+
+    getItensOpeFin(dados_servico.ID_SERVICO)
 
     xgProdRomaneio.queryOpen({ search: ID_LISTA_SERVICO });
 
@@ -848,8 +900,6 @@ const saida = (function () {
 
                     if(rss.data[0]==undefined){
 
-                        console.log('param1 :', param);
-
                         axios.post(url, {
                             call: "deletarItemRomaneioX",
                             param: param,
@@ -862,7 +912,6 @@ const saida = (function () {
 
                         param.QTD_RETIRADA = QTD_RETIRADA - r.QTD;
                         param.ID_ITENS_SERVICO = rss.data[0].ID_ITENS_SERVICO
-                        console.log('param 2:', param);
 
                         axios.post(url, {
                             call: "deletarItemRomaneio",
@@ -898,12 +947,13 @@ const saida = (function () {
       });
   }
 
-    function todosProdutos() {
+  function todosProdutos() {
     confirmaCodigo({
       msg: "Digite o código abaixo para selecionar todos os itens",
       call: async () => {
         for (let i in xgProdRomaneio.data()) {
           let existe = "nao";
+          let estoque_qtd = xgProdRomaneio.data()[i].QTD
 
           let param = {
             ID_ITENS_SERVICO: xgProdRomaneio.data()[i].ID_ITENS_SERVICO,
@@ -917,95 +967,99 @@ const saida = (function () {
             ID_TIPO_ITEM: Number(xgProdRomaneio.data()[i].ID_TIPO),
           };
 
+          let permitido = separarItensOpeFin(param)
+
           for (let j in xgRomaneiosItens.data()) {
+
             if (param.ID_PRODUTO == xgRomaneiosItens.data()[j].ID_PRODUTO) {
+              
               existe = "sim";
-              show(
-                param.DESCRICAO +
-                  " já foi inserido! O item não será cadastrado novamente!"
-              );
+
+              show(param.DESCRICAO + " já foi inserido! O item não será cadastrado novamente!");
             }
+
           }
 
-          if (param.QTD > xgProdRomaneio.data()[i].QTD) {
-            
-            let produto_compensado = {
-              ID_PRODUTO: param.ID_PRODUTO,
-              ID_TIPO_ITEM: param.ID_TIPO_ITEM,
-              QTD_FALTA: param.QTD - Number(xgProdRomaneio.data()[i].QTD),
-            };
+          setTimeout(() => {
+          
+            if (existe == 'nao') {
 
-            await axios.post(url, {
-                call: "compesar_qtd_produto",
-                param: produto_compensado,
-              })
-              .then((r) => {
-                
-                if(r.data[0] == undefined){
-
-                  show('Quantidade projetada de ' + param.DESCRICAO + ' é maior do que a existente, e não há item no estoque para compensar!')
+              if(permitido == 'sim'){
+              
+                if (param.QTD > xgProdRomaneio.data()[i].QTD) {
                   
-                }else{
-
-                  let compensador_existe = 'nao'
-                  let param_compensador = {
-                    ID_SERVICO: ID_LISTA_SERVICO,
-                    ID_PRODUTO: r.data[0].ID_PRODUTO,
-                    DESCRICAO: r.data[0].DESCRICAO,
-                    newEstoque: r.data[0].QTD - produto_compensado.QTD_FALTA ,
-                    DATA: new Date().toLocaleDateString("pt-BR"),
-                    QTD: produto_compensado.QTD_FALTA,
-                    ID_ROMANEIO: xgRomaneios.dataSource().ID_ROMANEIO,
-                    ID_MARCA: r.data[0].ID_MARCA,
-                    MARCA: r.data[0].MARCA,
+                  let produto_compensado = {
+                    ID_PRODUTO: param.ID_PRODUTO,
+                    ID_TIPO_ITEM: param.ID_TIPO_ITEM,
+                    QTD_FALTA: param.QTD - Number(xgProdRomaneio.data()[i].QTD),
                   };
 
-                  for(let i in xgRomaneiosItens.data()){
+                  axios.post(url, {
+                      call: "compesar_qtd_produto",
+                      param: produto_compensado,
+                    })
+                    .then((r) => {
+                      
+                      if(r.data[0] == undefined){
+  
+                        show('Quantidade projetada de ' + param.DESCRICAO + ' é maior do que a existente, e não há item no estoque para compensar!')
+                        
+                      }else{
+  
+                        let compensador_existe = 'nao'
 
-                    if(param_compensador.ID_PRODUTO == xgRomaneiosItens.data()[i].ID_PRODUTO){
-                      compensador_existe = 'sim'
-                      show(
-                        param.DESCRICAO +
-                          " já foi inserido! O item não será cadastrado novamente!"
-                      );
-
-                    }
-
-                  }
-                    // console.log('param_compensador :', param_compensador);
-
-                    if(compensador_existe = 'nao'){
-
-                      produtos.atualizaProduto(param_compensador.ID_PRODUTO, param_compensador.newEstoque)
-
-                      axios.post(url, {
-                          call: "inserirItemRomaneioX",
-                          param: param_compensador,
-                        }).then(r =>{
-                          xgRomaneiosItens.insertLine(param_compensador);
-                        });
-
-                        param.QTD = Number(xgProdRomaneio.data()[i].QTD)                   
-                        param.QTD_RETIRADA = Number(xgProdRomaneio.data()[i].QTD) + Number(xgProdRomaneio.data()[i].QTD_RETIRADA)
-
-
-                        if(param.QTD > 0){
-
-                          insertTodosProdutos(param)
+                        let param_compensador = {
+                          ID_SERVICO: ID_LISTA_SERVICO,
+                          ID_PRODUTO: r.data[0].ID_PRODUTO,
+                          DESCRICAO: r.data[0].DESCRICAO,
+                          newEstoque: r.data[0].QTD - produto_compensado.QTD_FALTA ,
+                          DATA: new Date().toLocaleDateString("pt-BR"),
+                          QTD: produto_compensado.QTD_FALTA,
+                          ID_ROMANEIO: xgRomaneios.dataSource().ID_ROMANEIO,
+                          ID_MARCA: r.data[0].ID_MARCA,
+                          MARCA: r.data[0].MARCA,
+                        };
+  
+                        for(let i in xgRomaneiosItens.data()){
+  
+                          if(param_compensador.ID_PRODUTO == xgRomaneiosItens.data()[i].ID_PRODUTO){
+                            compensador_existe = 'sim'
+                            show(
+                              param.DESCRICAO +
+                                " já foi inserido! O item não será cadastrado novamente!"
+                            );
+  
+                          }
+  
                         }
-                    }
+  
+                          if(compensador_existe = 'nao'){
+
+                            produtos.atualizaProduto(param_compensador.ID_PRODUTO, param_compensador.newEstoque)
+  
+                            axios.post(url, {
+                                call: "inserirItemRomaneioX",
+                                param: param_compensador,
+                              }).then(r =>{
+                                xgRomaneiosItens.insertLine(param_compensador);
+                              });
+  
+                          }
+                      }
+                      
+                    });
+  
                 }
-                
-              });
+  
+              }
 
-              
+              if(estoque_qtd > 0){
 
-          }
+                insertTodosProdutos(param)
+              }
+            }
+        }, 1);
 
-          else if (existe == 'nao') {
-
-              await insertTodosProdutos(param)
-          }
         }
       },
     });
@@ -1246,6 +1300,7 @@ const produtos = (function () {
 
       onKeyDown: {
         13: (ln, e) => {
+
           for (let i = 0; i < 11; i++) {
             delete ln[i];
           }
@@ -1286,10 +1341,12 @@ const produtos = (function () {
           $("#xmEdtQtd").focus();
 
           $("#pnFieldQtdRetirado").hide();
+
         },
       },
 
       dblClick: (ln) => {
+        
         if (ln == false) return false;
 
         for (let i = 0; i < 11; i++) {
@@ -1354,6 +1411,7 @@ const produtos = (function () {
   }
 
   const salvarCarrinho = async () => {
+
     let origem;
     let status = $("#spStatus").text();
 
@@ -1373,13 +1431,9 @@ const produtos = (function () {
       return false;
     }
 
-    if (
-      status == "ANDAMENTO" ||
-      status == "PREPARO" ||
-      status == "FINALIZACAO" ||
-      status == "ATRASADO"
-    ) {
-      origem = "ADICIONAL";
+    if (status == "ANDAMENTO" || status == "PREPARO" ||
+      status == "FINALIZACAO" || status == "ATRASADO") {
+        origem = "ADICIONAL";
     }
 
     param = {
@@ -1424,9 +1478,6 @@ const produtos = (function () {
     }
 
     if (item.QTD > qtdServico) {
-      setTimeout(function () {
-        show("Quantidade maior que a existente!");
-      }, 1);
 
       if (item.QTD > xgProdRomaneio.dataSource().QTD) {
             
@@ -1472,7 +1523,6 @@ const produtos = (function () {
                   }
 
                 }
-                  console.log('param_compensador :', param_compensador);
 
                   if(compensador_existe = 'nao'){
 
@@ -1487,7 +1537,6 @@ const produtos = (function () {
 
 
                       if(item.QTD > 0){
-                        console.log('item maior que 0:', item);
 
                         // saida.insertTodosProdutos(item)
                       }
@@ -1503,11 +1552,10 @@ const produtos = (function () {
 
         }
 
-        // else if (existe == 'nao') {
-        // console.log('existe :', existe);
+        else if (existe == 'nao') {
 
-        //     // await saida.insertTodosProdutos(param)
-        // }
+            await saida.insertTodosProdutos(param)
+        }
 
         
     }
@@ -1518,11 +1566,10 @@ const produtos = (function () {
     xgRomaneiosItens.insertLine(item);
 
     xgProdRomaneio.dataSource("QTD", qtdServico - item.QTD);
-return
+
     qtdServico = xgProdRomaneio.dataSource().QTD_RETIRADA;
     item.QTD_RETIRADA = qtdServico + item.QTD;
 
-    console.log('item :', item);
     await axios
       .post(url, {
         call: "inserirItemRomaneio",

@@ -162,6 +162,12 @@ class Obras
         echo json_encode($call);
     }
 
+    function getItensOpeFin($param)
+    {
+        $call = $this->sql->getItensOpeFin($param);
+        echo json_encode($call);
+    }
+
     function getUf()
     {
         $call = $this->sql->getUf();
