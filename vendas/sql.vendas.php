@@ -69,7 +69,7 @@ class SqlVendas
       WHERE a.id_servico = b.id_servico
       AND a.id_cliente = c.id_cliente
       AND a.id_vendedor = d.id_funcionarios
-      AND id_lista_servico = $id_lista_servico";
+      AND id_lista_servico = $id_lista_servico ";
     $sql = prepare::SQL($sql, $param);
 
     $query = $this->db->prepare($sql);

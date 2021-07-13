@@ -45,8 +45,8 @@ class clientes
 
     function duplicity($param)
     {
-        $cnpj = $this->sql->duplicity($param);
-        echo json_encode($cnpj);
+        $RAZAO = $this->sql->duplicity($param);
+        echo json_encode($RAZAO);
     }
 
     function getUf()
