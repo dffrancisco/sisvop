@@ -128,16 +128,16 @@
         </div>
 
         <hr>
+        <button class="btn-Frame btn-Frame-blue btnP" id="btnEncerrarServ" disabled hidden>Encerrar Serviço</button>
         <br>
     </div>
-
-
 
     <ul class="tabs" style="margin-left: 5px">
         <li class="tab"><a class="active" href="#tabRomaneio">Romaneio</a></li>
         <li class="tab"><a href="#tabProdutoServico">Produto do Serviço</a></li>
         <li class="tab"><a href="#tabDevolucao">Devolução</a></li>
     </ul>
+
 
     <div id="tabProdutoServico" class="col s12">
         <div id="pnGridSaida" class="list"></div>
@@ -220,7 +220,20 @@
         </div>
     </div>
 </div>
+
 <div id="xmQtdBtn"></div>
+</div>
+
+<!-- MODAL FINALIZAR SERVICO -->
+<div id="xmDataFin">
+
+<div class="row">
+    <div class="col s7 push-s2">
+        <label>Data de Conclusão</label><br>
+        <input type="text" id="xmEdtDateFin">
+    </div>
+</div>
+
 </div>
 
 <!-- MODAL INSERIR ROMANEIO -->
