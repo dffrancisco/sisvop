@@ -40,8 +40,8 @@
 
             <div class="col s2" style="margin-top: 18px;">
                 <label>
-                    <input type="checkbox" id="checkFinalizado" name="filtro">
-                    <span>FINALIZADO</span>
+                    <input type="checkbox" id="checkFinalizacao" name="filtro">
+                    <span>FINALIZACAO</span>
                 </label>
             </div>
         </div>
@@ -135,7 +135,6 @@
 
         <div id="obsText">
             <span id="spObsText"></span>
-
         </div>
 
         <hr>
@@ -156,9 +155,9 @@
 
 
     <ul class="tabs" style="margin-left: 5px">
-        <li class="tab col s4"><a class="active" href="#tabItensProjeto">Produto do Serviço</a></li>
-        <li class="tab col s4" disabled><a href="#tabOrcamento">Orçamento</a></li>
-        <!-- <li class="tab col s3"><a href="#tabAcrecismo">Acréscimo</a></li> -->
+        <li class="tab col s3"><a class="active" href="#tabItensProjeto">Produto do Serviço</a></li>
+        <li class="tab col s3" disabled><a href="#tabOrcamento">Orçamento</a></li>
+        <li class="tab col s3" disabled id="liPdfProjeto"><a href="#tabPdfProjeto">Projeto</a></li>
     </ul>
 
     <div id="tabItensProjeto" class="col s12">
@@ -240,6 +239,9 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="tabPdfProjeto">
     </div>
 
 </div>
@@ -386,80 +388,42 @@
     </div>
     <ul class="collection with-header list" id="tableOrcamento">
         <li class="collection-header">
-            <h5 style="color: #000000;" id="rlProjeto"></h5>
+            <h6 style="color: #000000;" id="rlProjeto"></h6>
         </li>
         <li class="collection-item">
             <p class="fontOrcamento">TAREFAS A SEREM REALIZADAS - <b id="rlPontos"></b>
             <p class="fontOrcamento">SERVIÇO: <span id="rlServico"></span></b>
             </p>
         </li>
-        <div id="servicosProposta" class="collection-item">
-            <p style=" color: #253fc1;">
-                SERVIÇOS
-            </p>
-            <!-- <p>
-                1º INSTALAÇÃO DE TUBULAÇÃO P/ PASSAGEM DOS CABOS (ELETRODUTO ROSCÁVEL)
-            </p>
-            <p>
-                2º PASSAGEM DE CABEAMENTO DE REDE CAT5-E
-            </p>
-            <p>
-                3º INSTALAÇÃO, ATIVAÇÃO E CONFIGURAÇÃO DE PONTOS DE REDE
-            </p>
-            <p>
-                4º INSTAL. E CONFIGURAÇÃO DE ROTEADOR, CONTROLADORA, ETC
-            </p> -->
-            <p>
-                SERVIÇO TOTAL EM HORAS: <b id="rlMeta"></b>
-            </p>
-        </div>
-        <div id="produtosProposta" class="collection-item">
-            <p style="color: #253fc1;">
-                PRODUTOS
-            </p>
-            <!-- <p>
-                1º CABEAMENTO 100% COBRE CAT5-E SOHO PLUS / FURUKAWA
-            </p>
-            <p>
-                2º NO-BREAK 700VA 6 TOMADAS INTELBRAS COM PROTEÇÃO A SURTOS DE TENSÃO
-            </p>
-            <p>
-                3º PATCH PANEL 24 PORTAS CAT5-E FURUKAWA SOHO 10/100/1000
-            </p>
-            <p>
-                4º ORGANIZADOR HORIZONTAL DE REDE PARA RACK PADRÃO 19” MEKHANIC
-            </p>
-            <p>
-                5º REGUA COM VARISTOR SELADA 6 TOMADAS INTELBRAS COM PROT CONTRA RAIOS
-            </p>
-            <p>
-                6º PATCH CORD 1,5 MTS VERMELHO 100% COBRE CAT5-E SOHO FURUKAWA
-            </p>
-            <p>
-                7º RACK PARA FIXAÇÃO EM PAREDE PADRÃO 19” 12US MECHANIKA
-            </p>
-            <p>
-                8º SWITCH GIGABIT INTELBRAS 24 PORTAS 100/1000 P/ RACK PADRÃO 19”
-            </p>
-            <p>
-                9º ACCESS POINT BUSINESS UBIQUITI UNIFI AP AC LR 867 MBPS 100/1000
-            </p>
-            <p>
-                10º MATERIAIS HIDRAULICOS = TUBOS CONEXOES ABRAÇADEIRAS
-            </p> -->
-        </div>
-        <div id="valoresProposta" class="collection-item">
-            <div class="fontOrcamento">PREÇO MÃO DE OBRA =<a id="rlValorObras"></a>
-            </div>
+        <div id="servicosProposta" class="collection-item"></div>
 
-            <div class="fontOrcamento">PREÇO PRODUTOS =<a id="rlMargem"></a>
-            </div>
-
-            <div class="fontOrcamento">TOTAL =<a id="rlValorMaximo"></a>
-            </div>
-        </div>
+        <div id="produtosProposta" class="collection-item"></div>
     </ul>
+    <div id="valoresProposta" class="collection-item" style="margin-left: 8px;">
+        <div class="fontOrcamento">PREÇO MÃO DE OBRA =<a id="rlValorObras"></a>
+        </div>
+
+        <div class="fontOrcamento">PREÇO PRODUTOS =<a id="rlMargem"></a>
+        </div>
+
+        <div class="fontOrcamento">TOTAL =<a id="rlValorMaximo"></a>
+        </div>
+    </div>
+
+    <div>
+        <div class="fontOrcamento" style="margin-top: 20px;">X_________________________________</div>
+        <a id="rlNomeAss" style="margin-left: 6px;"></a>
+    </div>
+
+    <center>
+        <div>
+            <div>Validade da proposta: 15 dias</div>
+        </div>
+    </center>
+
 
 </div>
+
+
 
 <div id="pnCodigoTela">PROJETOS</div>

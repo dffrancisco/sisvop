@@ -451,22 +451,28 @@ textarea:focus {
 
 #servicosProposta p{
     color: #333333;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 #produtosProposta p{
   color: #333333;
-  font-size: 15px;
+  font-size: 14px;
+}
+
+#rlNomeAss{
+  color: #333333;
+  font-size: 14px;
 }
 
 #valoresProposta div{
   color: #3e85c1;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 #valoresProposta a{
   color: #bb1414;
-  font-size: 14px;
+  font-size: 12px;
 }
+
 
 /*materialize* fim *********************************/

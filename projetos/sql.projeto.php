@@ -101,7 +101,7 @@ class SqlProjeto
             WHERE a.id_servico = b.id_servico
             AND a.id_cliente = c.id_cliente
             AND b.servico like '%$search%'
-            AND a.status = '$finalizado'";
+            AND a.status = '$finalizacao'";
 
     $sql = prepare::SQL($sql, $param);
     $query = $this->db->prepare($sql);
