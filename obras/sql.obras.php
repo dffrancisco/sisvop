@@ -58,7 +58,7 @@ class SqlObras
       a.id_lista_servico, a.valor,
       a.data_inicio, a.hora, a.status, 
       a.data_finalizacao, a.engenheiro,
-      a.executores, a.obs,
+      a.projeto, a.executores, a.obs,
       b.id_servico, b.servico, 
       c.id_cliente,c.fantasia, c.cnpj, 
       d.id_executores, d.lider, d.auxiliar

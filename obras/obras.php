@@ -132,10 +132,11 @@
         <br>
     </div>
 
-    <ul class="tabs" style="margin-left: 5px">
+    <ul class="tabs" style="margin-left: 5px; width: 52% !important">
         <li class="tab"><a class="active" href="#tabRomaneio">Romaneio</a></li>
         <li class="tab"><a href="#tabProdutoServico">Produto do Serviço</a></li>
         <li class="tab"><a href="#tabDevolucao">Devolução</a></li>
+        <li class="tab" id="liPdfProjeto"><a href="#tabPdfProjeto">Projeto</a></li>
     </ul>
 
 
@@ -155,6 +156,10 @@
     <div id="tabDevolucao" class="col s12">
         <div id="xgDevolucao" class="list"></div>
         <div id="pnButtonD" style="margin-left: 20px !important"></div>
+    </div>
+
+    <div id="tabPdfProjeto" class="col s12">
+
     </div>
 
     <div class="tabela" id="pnFieldsItem"></div>

@@ -1077,6 +1077,7 @@ const projetos = (function () {
     // SET
     function setServicoTela(param) {
         $("#tabPdfProjeto").html("")
+        
         $("#spId_lista_servico").html(param.ID_LISTA_SERVICO);
         $("#spFantasia").html(param.FANTASIA);
         $("#spCnpj").html(param.CNPJ);
