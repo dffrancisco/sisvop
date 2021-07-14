@@ -46,7 +46,8 @@ class SqlProdutos
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function getTipoItem(){
+  function getTipoItem()
+  {
     $sql = "SELECT
     * 
     FROM tipo_iten
@@ -77,10 +78,10 @@ class SqlProdutos
     returning id_produto";
     $sql = prepare::SQL($sql, $param);
 
-    return $sql;
-    // $query = $this->db->prepare($sql);
-    // $query->execute();
-    // return $query->fetchAll(PDO::FETCH_OBJ);
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function update($param)
