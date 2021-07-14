@@ -172,8 +172,7 @@ const produto = (function () {
         param.DATA_CADASTRO = $('#edtData').val()
         param.ID_TIPO_ITEM = Number(param.ID_TIPO_ITEM)
 
-        console.log('param :', param);
-        
+
         let valCampos = {
             codigo: $('#editCodigo').val(),
             descricao: $('#editDescricao').val(),
@@ -357,6 +356,6 @@ const produto = (function () {
         grid: grid,
         getMarca: getMarca,
         keydown: keydown,
-        getTipoItem:getTipoItem,
+        getTipoItem: getTipoItem,
     };
 })();
