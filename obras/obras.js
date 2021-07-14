@@ -11,6 +11,7 @@ let xmEdtQtd;
 let xmInsProduto;
 let xmInserirRomaneio;
 let xmModalPDevolucao;
+let xmModalDataFin
 
 let total = 0;
 // let valorT = 0
@@ -29,6 +30,7 @@ $(function () {
   saida.modalInsProduto();
   saida.grid();
   saida.modalInserirRomaneio();
+  saida.modalDataFin();
 
   devolucao.grid();
   devolucao.modalPDevolucao();
@@ -100,6 +102,10 @@ $(function () {
     show(OBS);
   });
 
+  $("#btnEncerrarServ").click(function (e) {
+    saida.encerrarServico()
+  });
+
   $(".btnRG").click(function (e) {
     saida.relatorioGeral();
   });
@@ -126,6 +132,9 @@ $(function () {
     let search = $("#xmEdtServico").val().trim().toUpperCase();
     xgServicos.queryOpen({ search: search });
     $("#xmEdtServico").focus();
+  });
+  $("#spStatus").click(function (e) {
+    saida.validaSpStatus()
   });
 
   $("#checkAtrasado").click(function (e) {
@@ -234,23 +243,28 @@ const saida = (function () {
       onSelectLine: (r) => {
         let origem = r.ORIGEM;
 
-        if (origem == "PROJETO" && STATUS == "PREPARO") {
+        if (origem == "PROJETO" && dados_servico.STATUS == "PREPARO") {
           $(".btnDel").attr("disabled", true);
-        } else if (origem == "PROJETO" && STATUS == "ANDAMENTO") {
+        } else if (origem == "PROJETO" && dados_servico.STATUS == "ANDAMENTO") {
           $(".btnDel").attr("disabled", true);
-        } else if (origem == "PROJETO" && STATUS == "FINALIZACAO") {
+        } else if (origem == "PROJETO" && dados_servico.STATUS == "FINALIZACAO") {
           $(".btnDel").attr("disabled", true);
-        } else if (origem == "PROJETO" && STATUS == "ATRASADO") {
+        } else if (origem == "PROJETO" && dados_servico.STATUS == "ATRASADO") {
           $(".btnDel").attr("disabled", true);
-        } else if (origem == "PROJETO" && STATUS == "ENCERRADO") {
+        } else if (origem == "PROJETO" && dados_servico.STATUS == "ENCERRADO") {
           $(".btnDel").attr("disabled", true);
-        } else if (origem == "ADICIONAL" && STATUS == "ENCERRADO") {
+        } else if (origem == "ADICIONAL" && dados_servico.STATUS == "ENCERRADO") {
           $(".btnDel").attr("disabled", true);
-        } else if (origem == "ADICIONAL" && STATUS == "PREPARO") {
+        } else if (origem == "ADICIONAL" && dados_servico.STATUS == "PREPARO") {
           $(".btnDel").removeAttr("disabled", true);
-        } else if (origem == "ADICIONAL" && STATUS == "ATRASADO") {
+        } else if (origem == "ADICIONAL" && dados_servico.STATUS == "ATRASADO") {
           $(".btnDel").removeAttr("disabled", true);
-        } else if (origem == "ADICIONAL" && STATUS == "ANDAMENTO") {
+        } 
+        else if (origem == "ADICIONAL" && dados_servico.STATUS == "FINALIZACAO") {
+          $(".btnDel").removeAttr("disabled", true);
+        }
+
+        else if (origem == "ADICIONAL" && dados_servico.STATUS == "ANDAMENTO") {
           $(".btnDel").removeAttr("disabled", true);
         } else {
           show("erro interno");
@@ -261,27 +275,27 @@ const saida = (function () {
         46: (ln) => {
           let ORIGEM = ln.ORIGEM;
 
-          if (ORIGEM == "PROJETO" && STATUS == "PREPARO") {
+          if (ORIGEM == "PROJETO" && dados_servico.STATUS == "PREPARO") {
             return false;
           }
 
-          if (ORIGEM == "PROJETO" && STATUS == "ANDAMENTO") {
+          if (ORIGEM == "PROJETO" && dados_servico.STATUS == "ANDAMENTO") {
             return false;
           }
 
-          if (ORIGEM == "PROJETO" && STATUS == "FINALIZACAO") {
+          if (ORIGEM == "PROJETO" && dados_servico.STATUS == "FINALIZACAO") {
             return false;
           }
 
-          if (ORIGEM == "PROJETO" && STATUS == "ATRASADO") {
+          if (ORIGEM == "PROJETO" && dados_servico.STATUS == "ATRASADO") {
             return false;
           }
 
-          if (ORIGEM == "PROJETO" && STATUS == "ENCERRADO") {
+          if (ORIGEM == "PROJETO" && dados_servico.STATUS == "ENCERRADO") {
             return false;
           }
 
-          if (ORIGEM == "ADICIONAL" && STATUS == "ENCERRADO") {
+          if (ORIGEM == "ADICIONAL" && dados_servico.STATUS == "ENCERRADO") {
             return false;
           }
 
@@ -358,11 +372,10 @@ const saida = (function () {
           $(".btnPDF").removeAttr("disabled");
         }
 
-        if (
-          xgServicos.dataSource().STATUS == "FINALIZADO" ||
-          dados_servico.STATUS == "ENCERRADO"
-        ) {
-          $(".btnPDF").attr("disabled", true);
+        if (dados_servico.STATUS == "ENCERRADO") {
+              $(".btnPDF").attr("disabled", true);
+              $(".btnPR").attr("disabled", true);
+              $(".btnFR").attr("disabled", true);
         }
       },
 
@@ -438,15 +451,23 @@ const saida = (function () {
 
     $(".btnInsP").removeAttr("disabled");
 
-    if (
-      STATUS == "ANDAMENTO" ||
-      STATUS == "FINALIZACAO" ||
-      STATUS == "ATRASADO"
-    ) {
+    if (STATUS == "ANDAMENTO") {
       $(".btnNR").removeAttr("disabled");
       $(".btnObra").removeAttr("disabled");
       $(".btnRG").prop("disabled", true);
       $(".btnFR").prop("disabled", true);
+      $("#btnEncerrarServ").hide();
+      $("#btnEncerrarServ").prop("disabled",true);
+
+    }
+    if (STATUS == "FINALIZACAO" || STATUS == "ATRASADO") {
+      $(".btnNR").removeAttr("disabled");
+      $(".btnObra").removeAttr("disabled");
+      $(".btnRG").prop("disabled", true);
+      $(".btnFR").prop("disabled", true);
+      $("#btnEncerrarServ").show();
+      $("#btnEncerrarServ").removeAttr("disabled",true);
+
     }
 
     if (STATUS == "PREPARO") {
@@ -454,6 +475,8 @@ const saida = (function () {
       $(".btnRG").prop("disabled", true);
       $(".btnPDF").prop("disabled", true);
       $(".btnObra").prop("disabled", true);
+      $("#btnEncerrarServ").hide();
+      $("#btnEncerrarServ").prop("disabled",true);
     }
 
     if (STATUS == "ENCERRADO") {
@@ -466,11 +489,15 @@ const saida = (function () {
       $(".btnDI").prop("disabled", true);
       $(".btnObra").prop("disabled", true);
       $(".btnRG").removeAttr("disabled", true);
+      $("#btnEncerrarServ").hide();
+      $("#btnEncerrarServ").prop("disabled",true);
     }
 
     xgSaida.queryOpen({ search: ln.ID_LISTA_SERVICO });
     xgRomaneios.queryOpen({ search: ln.ID_LISTA_SERVICO });
     xgDevolucao.queryOpen({ search: ln.ID_LISTA_SERVICO });
+    getItensOpeFin(ln.ID_SERVICO)
+
 
     getListaServicoX(ID_LISTA_SERVICO);
 
@@ -521,6 +548,52 @@ const saida = (function () {
       }
       return permitido
 
+  }
+
+  function encerrarServico(){
+
+    if(dados_servico.STATUS == "FINALIZACAO" ||
+      dados_servico.STATUS == "ATRASADO"){
+
+      confirmaCodigo({
+        msg:"Digite o código abaixo para encerrar o serviço.",
+        call: ()=>{
+
+          let data = new Date().toLocaleDateString("pt-BR")
+          $("#xmEdtDateFin").val(data)
+          xmModalDataFin.open()
+
+        }
+      })
+    }
+
+  }
+
+  function validaSpStatus(){
+
+    if(dados_servico.STATUS == "ANDAMENTO" || dados_servico.STATUS == "FINALIZACAO"){
+      confirmaCodigo({
+        msg: "Digite o código abaixo para trocar o status do servico.",
+        call: () =>{
+    
+          axios.post(url,{
+            call: "atualizaStatus",
+            param:{
+              ID_LISTA_SERVICO: ID_LISTA_SERVICO,
+              STATUS: "ATRASADO",
+              DATA: dados_servico.DATA_INICIO,
+              DATA_FINALIZACAO: "",
+            },
+          }).then(r =>{
+            $("#spStatus").html("ATRASADO")
+            dados_servico.STATUS = "ATRASADO"
+            $("#btnEncerrarServ").show();
+            $("#btnEncerrarServ").removeAttr("disabled",true);
+          })
+    
+        }
+      })
+    }
   }
 
   // FUNCTION PRODUTOS SERVICO
@@ -718,6 +791,7 @@ const saida = (function () {
     };
 
     OBS = param.OBS;
+
   }
 
   // FUNCTIONS DO ROMANEIO
@@ -747,21 +821,93 @@ const saida = (function () {
         axios.post(url, {
           call: "finalizarRomaneio",
           param: romaneio,
+        }).then(()=>{
+
+          if (STATUS == "PREPARO") {
+            axios
+              .post(url, {
+                call: "atualizaStatus",
+                param: {
+                  ID_LISTA_SERVICO: ID_LISTA_SERVICO,
+                  STATUS: "ANDAMENTO",
+                  DATA: new Date().toLocaleDateString("pt-BR"),
+                  DATA_FINALIZACAO: "",
+                },
+              })
+              .then((r) => {
+
+                $("#spDataI").html(new Date().toLocaleDateString("pt-BR"));
+                $("#spStatus").html("ANDAMENTO");
+
+                dados_servico.STATUS = "ANDAMENTO"
+              });
+          }
+          else if (STATUS == "ANDAMENTO") {
+
+            let ID_ROMANEIO = xgRomaneios.dataSource().ID_ROMANEIO
+            let offset = 0
+            let tem_finalicao = 'nao'
+
+            axios.post(url, {
+              call: "getItensRomaneio",
+              param: { ID_ROMANEIO, offset },
+            }).then((rs) => {
+              
+              for(let i in rs.data){
+
+                let item_romaneio = rs.data[i]
+
+                for(let j in itensOpeFin){
+
+                  if(itensOpeFin[j].FINALIZACAO == 0 && 
+                    itensOpeFin[j].ID_PRODUTO == item_romaneio.ID_PRODUTO){
+
+                      axios.post(url, {
+                        call: "atualizaStatus",
+                        param: {
+                          ID_LISTA_SERVICO: ID_LISTA_SERVICO,
+                          STATUS: "FINALIZACAO",
+                          DATA: dados_servico.DATA_INICIO,
+                          DATA_FINALIZACAO: "",
+                        },
+                      })
+                      .then(r => {
+  
+                        $("#spStatus").html("FINALIZACAO");
+
+                        dados_servico.STATUS = "FINALIZACAO"
+                      });
+                      tem_finalicao = 'sim'
+                      break
+  
+                  }
+
+                }
+
+                if(tem_finalicao == 'sim'){
+                  break
+                }
+              }
+              
+            });
+
+          }
+
+          xgRomaneios.dataSource("STATUS", romaneio.STATUS);
+
+          $(".btnPR").attr("disabled", true);
+          $(".btnFR").attr("disabled", true);
+          $(".btnObra").removeAttr("disabled");
+
         });
 
-        xgRomaneios.dataSource("STATUS", romaneio.STATUS);
-
-        $(".btnPR").attr("disabled", true);
-        $(".btnFR").attr("disabled", true);
-        $(".btnObra").removeAttr("disabled");
+        
       },
     });
   }
 
   function InserirRomaneio() {
     evento = "Inserir Romaneio";
-
-    getItensOpeFin(dados_servico.ID_SERVICO)
 
     xgProdRomaneio.queryOpen({ search: ID_LISTA_SERVICO });
 
@@ -788,21 +934,6 @@ const saida = (function () {
           .then((rs) => {
             $(".btnPR").attr("disabled", true);
 
-            if (STATUS == "PREPARO") {
-              axios
-                .post(url, {
-                  call: "atualizaStatus",
-                  param: {
-                    ID_LISTA_SERVICO: ID_LISTA_SERVICO,
-                    STATUS: "ANDAMENTO",
-                    DATA: param.DATA,
-                  },
-                })
-                .then((r) => {
-                  $("#spDataI").html(param.DATA);
-                  $("#spStatus").html("ANDAMENTO");
-                });
-            }
             xgRomaneios.queryOpen({ search: ID_LISTA_SERVICO });
             xgRomaneios.focus();
           });
@@ -867,7 +998,7 @@ const saida = (function () {
   
     let status = xgRomaneios.dataSource().STATUS;
 
-    if (status == "PREPARO") {
+    if (status == "PREPARO" && dados_servico.STATUS != "ENCERRADO") {
       await confirma({
         msg: `Deseja excluir o item "${r.DESCRICAO}"?`,
         call: () => {
@@ -923,9 +1054,6 @@ const saida = (function () {
                     }
                     xgRomaneiosItens.deleteLine();
                   })
-
-                  
-                
             });
         },
       });
@@ -1061,10 +1189,10 @@ const saida = (function () {
         }, 1);
 
         }
+
       },
     });
   }
-
 
   async function insertTodosProdutos(param) {
     await axios
@@ -1095,7 +1223,6 @@ const saida = (function () {
   }
 
   // RELATORIOS
-
   async function relatorioGeral() {
     let dados_servico = {
       FANTASIA: $("#spFantasia").html(),
@@ -1234,6 +1361,67 @@ const saida = (function () {
   }
 
   // MODAIS
+  function modalDataFin() {
+    xmModalDataFin = new xModal.create({
+      el: "#xmDataFin",
+      title: "Finalizar Serviço",
+      width: "300",
+      height: "155",
+
+      buttons: {
+        btn1: {
+          html: "Concluir",
+          click: () => {
+            if(dados_servico.STATUS == "FINALIZACAO" ||
+              dados_servico.STATUS == "ATRASADO"){
+
+                dados_servico.DATA_FINALIZACAO = $("#xmEdtDateFin").val()
+
+              axios.post(url, {
+                call: "atualizaStatus",
+                param: {
+                  ID_LISTA_SERVICO: ID_LISTA_SERVICO,
+                  STATUS: "ENCERRADO",
+                  DATA: dados_servico.DATA_INICIO,
+                  DATA_FINALIZACAO: dados_servico.DATA_FINALIZACAO,
+                  
+                },
+              }).then(() =>{
+    
+                $(".btnInsP").prop("disabled", true);
+                $(".btnDel").prop("disabled", true);
+                $(".btnNR").prop("disabled", true);
+                $(".btnPR").prop("disabled", true);
+                $(".btnFR").prop("disabled", true);
+                $(".btnPDF").prop("disabled", true);
+                $(".btnDI").prop("disabled", true);
+                $(".btnObra").prop("disabled", true);
+                $(".btnRG").removeAttr("disabled", true);
+                $("#btnEncerrarServ").hide();
+                $("#btnEncerrarServ").prop("disabled",true);
+                $("#spStatus").html("ENCERRADO");
+                $("#btnEncerrarServ").hide();
+                $("#btnEncerrarServ").attr("disabled",true);
+    
+                dados_servico.STATUS = "ENCERRADO"
+
+                $("#spDataF").html(dados_servico.DATA_FINALIZACAO)
+
+                xmModalDataFin.close()
+    
+              })
+            }
+            
+          },
+        },
+      },
+
+      onClose: () => {
+        $("#xmEdtDateFin").val("")
+      },
+    });
+  }
+
   function modalInsProduto() {
     xmInsProduto = new xModal.create({
       el: "#xmInsProduto",
@@ -1248,7 +1436,7 @@ const saida = (function () {
       },
     });
   }
-
+  
   function modalInserirRomaneio() {
     xmInserirRomaneio = new xModal.create({
       el: "#xmIRomaneio",
@@ -1276,6 +1464,9 @@ const saida = (function () {
     modalInserirRomaneio: modalInserirRomaneio,
     relatorioGeral: relatorioGeral,
     insertTodosProdutos: insertTodosProdutos,
+    encerrarServico: encerrarServico,
+    validaSpStatus: validaSpStatus,
+    modalDataFin: modalDataFin,
   };
 })();
 

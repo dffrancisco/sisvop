@@ -68,6 +68,14 @@ nav, nav .nav-wrapper i, nav a.sidenav-trigger, nav a.sidenav-trigger i{
 .btnFR{
   float: right;
 }
+#btnEncerrarServ{
+  float: right;
+}
+
+#spStatus:hover{
+  cursor: pointer;
+  color: #29455c;
+}
 
 .notify:hover {
   color: #b3b3b3;

@@ -541,7 +541,7 @@ class SqlObras
     extract($param);
 
     $sql = "UPDATE lista_servicos
-            SET status = :STATUS, data_inicio = :DATA
+            SET status = :STATUS, data_inicio = :DATA, data_finalizacao = :DATA_FINALIZACAO
             WHERE id_lista_servico = :ID_LISTA_SERVICO";
 
     $sql = prepare::SQL($sql, $param);
