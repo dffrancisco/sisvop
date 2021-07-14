@@ -166,8 +166,6 @@ const vendas = (function () {
                             valor_vendedor = valor * 0.015
                         }
 
-                        $("#spValorVendedor").val('R$ ' + valor_vendedor)
-
                         param.valor_vendedor = valor_vendedor.toFixed(2)
 
                         if (valor_vendedor == undefined) {

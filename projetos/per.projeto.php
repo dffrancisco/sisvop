@@ -48,10 +48,10 @@ class Projeto
             $dados = array_merge($projeto, $dados);
         }
 
-        if ($param['finalizado'] == 'FINALIZADO') {
+        if ($param['finalizacao'] == 'FINALIZACAO') {
 
-            $finalizado = $this->sql->getServicosFin($param);
-            $dados = array_merge($finalizado, $dados);
+            $finalizacao = $this->sql->getServicosFin($param);
+            $dados = array_merge($finalizacao, $dados);
         }
         if ($param['orcamento'] == 'ORÇAMENTO') {
 
@@ -63,7 +63,7 @@ class Projeto
             $finalizado = $this->sql->getServicosAna($param);
             $dados = array_merge($finalizado, $dados);
         }
-        if ($param['finalizado'] == '' && $param['projeto'] == '' && $param['andamento'] == '' && $param['orcamento'] == '' && $param['analise'] == '') {
+        if ($param['finalizacao'] == '' && $param['projeto'] == '' && $param['andamento'] == '' && $param['orcamento'] == '' && $param['analise'] == '') {
             $todos = $this->sql->getServicos($param);
             $dados = array_merge($todos, $dados);
         }
@@ -101,13 +101,13 @@ class Projeto
         $call = $this->sql->getEmailVendedor($param);
         echo json_encode($call);
     }
-    
+
     function getVendedor()
     {
         $call = $this->sql->getVendedor();
         echo json_encode($call);
     }
-    
+
     function getAvaliador()
     {
         $call = $this->sql->getAvaliador();
