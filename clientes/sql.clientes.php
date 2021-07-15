@@ -41,9 +41,9 @@ class SqlClientes
 
   function delete($param)
   {
-    $sql = "DELETE FROM clientes WHERE ID_CLIENTE = $param
-    RETURNING ID_CLIENTE";
-    $this->db->exec($sql);
+    $sql = "DELETE FROM clientes WHERE ID_CLIENTE = $param";
+    $query = $this->db->prepare($sql);
+    $query->execute();
   }
 
   function insert($param)

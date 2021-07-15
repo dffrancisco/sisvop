@@ -166,7 +166,6 @@ const funcionario = (function () {
                 for (let i in rs.data) {
                     if (rs.data[i].SENDEMAIL == 1) {
                         $("#checkEmail").prop("checked", true);
-                        console.log(rs.data[i].SENDEMAIL)
                     }
                 }
                 if (rs.data[0]) {
@@ -249,17 +248,16 @@ const funcionario = (function () {
 
         let param = xgFuncionarios.getElementSideBySideJson()
 
-        param.BAIRRO = $('#slctBairro option:selected').text()
-        param.ID_CARGO = Number(param.ID_CARGO)
-        param.ENDERECO = param.ENDERECO.toUpperCase()
-        param.CIDADE = param.CIDADE.toUpperCase()
-        param.EMAIL = ""
-        param.NOME = param.NOME.toUpperCase()
-        param.NOME = param.NOME.toUpperCase()
-        param.UF = param.UF.toUpperCase()
-        param.SENDEMAIL = 0
         if ($('#checkEmail').is(':checked') == true) {
             param.SENDEMAIL = 1
+        }
+
+        if ($('#edtEmail').val() == "") {
+            param.EMAIL = ""
+        }
+
+        for (let i in param) {
+            param[i] = param[i].toUpperCase()
         }
         let allDuplicty = await xgFuncionarios.getDuplicityAll()
 
@@ -275,12 +273,12 @@ const funcionario = (function () {
             endereco: $('#edtEnd').val(),
             uf: $('#edtUf').val(),
             cidade: $('#edtCidade').val(),
-            bairro: $('#slctBairro').val(),
+            bairro: $('#slctBairro').val()
         }
 
 
         for (let i in valCampos) {
-            if (valCampos[i] == '' || valCampos.uf == null) {
+            if (valCampos[i] == '' || valCampos.bairro == null) {
                 show('Por favor preencha todos os campos')
                 return false
             }
