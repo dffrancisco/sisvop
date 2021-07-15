@@ -166,7 +166,6 @@ const funcionario = (function () {
                 for (let i in rs.data) {
                     if (rs.data[i].SENDEMAIL == 1) {
                         $("#checkEmail").prop("checked", true);
-                        console.log(rs.data[i].SENDEMAIL)
                     }
                 }
                 if (rs.data[0]) {
