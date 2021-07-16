@@ -233,7 +233,7 @@ const produto = (function () {
                 }
 
                 else if (r.data[0].ID_PRODUTO) {
-                    param.ID_PRODUTO = r.data[0]
+                    param.ID_PRODUTO = r.data[0].ID_PRODUTO
                     xgProduto.insertLine(param)
 
                 }

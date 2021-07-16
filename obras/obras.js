@@ -143,6 +143,11 @@ $(function () {
     $("#xmEdtServico").focus();
   });
 
+  $("#liPdfProjeto").click(function () {
+    $("#tabPdfProjeto").html("")
+    saida.setIframe()
+});
+
   xgServicos.queryOpen({ search: "" });
   $("#xmEdtServico").focus();
 });
@@ -766,6 +771,8 @@ const saida = (function () {
   }
 
   function setServicoTela(param) {
+    $("#tabPdfProjeto").html("")
+
     $("#spId_lista_servico").html(param.ID_LISTA_SERVICO);
     $("#spFantasia").html(param.FANTASIA);
     $("#spCnpj").html(param.CNPJ);
@@ -787,12 +794,19 @@ const saida = (function () {
       DATA_INICIO: param.DATA_INICIO,
       DATA_FINALIZACAO: param.DATA_FINALIZACAO,
       STATUS: param.STATUS,
-      ID_LISTA_SERVICO: param.ID_LISTA_SERVICO
+      ID_LISTA_SERVICO: param.ID_LISTA_SERVICO,
+      PROJETO: param.PROJETADO
     };
 
     OBS = param.OBS;
 
+    setIframe()
   }
+
+  function setIframe() {
+    let iframe = `<iframe src="./arquivos_projetos/${dados_servico.ID_LISTA_SERVICO}/${dados_servico.PROJETO}.pdf" style="height: 450px; width: 100%; margin-top: 5px;"></iframe>`
+    $("#tabPdfProjeto").append(iframe)
+}
 
   // FUNCTIONS DO ROMANEIO
 
@@ -1467,6 +1481,7 @@ const saida = (function () {
     encerrarServico: encerrarServico,
     validaSpStatus: validaSpStatus,
     modalDataFin: modalDataFin,
+    setIframe: setIframe,
   };
 })();
 

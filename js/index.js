@@ -103,43 +103,66 @@ function Login() {
             var nomeTela = $('#pnCodigoTela').html();
 
             if (r.data.CARGO == 'RH') {
-                $('#projeto').remove()
                 $('#obras').remove()
                 $('#servicos').remove()
+                $('#executor').remove()
 
                 if (['Clientes', 'contas', 'Marca',
                     'Funcionarios', 'Home', 'Documentos',
-                    'entrada', 'Fornecedor', 'Estoque', 'usuario'].indexOf(nomeTela) < 0) {
+                    'entrada', 'Fornecedor', 'Estoque', 'usuario',
+                    'PROJETOS', 'vendas'].indexOf(nomeTela) < 0) {
                     location.href = '/sisvop/index.php?p=home';
                 }
             }
 
             if (r.data.CARGO == 'ENG') {
                 $('#contas').remove()
-                $('#cliente').remove()
-                $('#funcionarios').remove()
                 $('#empresa').remove()
+                $('#entrada').remove()
+                $('#funcionarios').remove()
                 $('#fornecedor').remove()
                 $('#usuario').remove()
-                $('#entrada').remove()
+                $('#vendas').remove()
 
-                if (['Marca', 'Estoque', 'PROJETOS', 'Obras', 'servicos', 'Home'].indexOf(nomeTela) < 0) {
+                if (['Marca', 'Estoque', 'PROJETOS', 
+                    'Obras', 'servicos', 'Home', 'Clientes', 'Executor'].indexOf(nomeTela) < 0) {
                     location.href = '/sisvop/index.php?p=home';
                 }
             }
 
             if (r.data.CARGO == 'OBR') {
                 $('#contas').remove()
-                $('#cliente').remove()
-                $('#funcionarios').remove()
                 $('#empresa').remove()
-                $('#fornecedor').remove()
-                $('#usuario').remove()
                 $('#entrada').remove()
+                $('#fornecedor').remove()
+                $('#funcionarios').remove()
                 $('#projeto').remove()
+                $('#usuario').remove()
                 $('#servicos').remove()
+                $('#vendas').remove()
 
-                if (['Marca', 'Obras', 'Estoque', 'Home'].indexOf(nomeTela) < 0) {
+                if (['Marca', 'Obras', 'Estoque', 'Home', 'Clientes', 'Executor'].indexOf(nomeTela) < 0) {
+                    location.href = '/sisvop/index.php?p=home';
+                }
+            }
+
+            if (r.data.CARGO == 'VND' || r.data.CARGO == 'FNL') {
+                $('#cliente').remove()
+                $('#contas').remove()
+                $('#empresa').remove()
+                $('#entrada').remove()
+                $('#executor').remove()
+                $('#fornecedor').remove()
+                $('#funcionarios').remove()
+                $('#marca').remove()
+                $('#produtos').remove()
+                $('#projeto').remove()
+                $('#obras').remove()
+                $('#servicos').remove()
+                $('#usuario').remove()
+                $('#vendas').remove()
+
+                if ([''].indexOf(nomeTela) < 0) {
                     location.href = '/sisvop/index.php?p=home';
                 }
             }
