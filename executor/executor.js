@@ -140,6 +140,11 @@ const executor = (function () {
     const salvar = async () => {
 
         let param = xgExecutores.getElementSideBySideJson();
+
+        if ($('#edtAuxiliar').val() == "") {
+            param.AUXILIAR = ""
+        }
+
         if ($('#edtLider').val() == "") {
             show('Por favor insira o lider para criar uma equipe')
             return false
