@@ -1112,7 +1112,7 @@ const projetos = (function () {
     }
 
     function setIframe() {
-        let iframe = `<iframe src="10.0.80.38:2608/home/sisvop/arquivos_projetos/${dados_servico.ID_LISTA_SERVICO}/${dados_servico.PROJETO}.pdf" style="height: 450px; width: 100%; margin-top: 5px;"></iframe>`
+        let iframe = `<iframe src="/home/sisvop/arquivos_projetos/${dados_servico.ID_LISTA_SERVICO}/${dados_servico.PROJETO}.pdf" style="height: 450px; width: 100%; margin-top: 5px;"></iframe>`
         $("#tabPdfProjeto").append(iframe)
     }
 
