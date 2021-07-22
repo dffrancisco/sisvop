@@ -111,7 +111,8 @@ function Login() {
                     'Funcionarios', 'Home', 'Documentos',
                     'entrada', 'Fornecedor', 'Estoque', 'usuario',
                     'PROJETOS', 'vendas'].indexOf(nomeTela) < 0) {
-                    location.href = '/sisvop/index.php?p=home';
+                    window.location = "/index.php?p=home";
+                        location.href = '/sisvop/index.php?p=home';
                 }
             }
 
@@ -126,7 +127,8 @@ function Login() {
 
                 if (['Marca', 'Estoque', 'PROJETOS', 
                     'Obras', 'servicos', 'Home', 'Clientes', 'Executor'].indexOf(nomeTela) < 0) {
-                    location.href = '/sisvop/index.php?p=home';
+                    window.location = "/index.php?p=home";
+                        location.href = '/sisvop/index.php?p=home';
                 }
             }
 
@@ -142,6 +144,7 @@ function Login() {
                 $('#vendas').remove()
 
                 if (['Marca', 'Obras', 'Estoque', 'Home', 'Clientes', 'Executor'].indexOf(nomeTela) < 0) {
+                    window.location = "/index.php?p=home";
                     location.href = '/sisvop/index.php?p=home';
                 }
             }
@@ -162,7 +165,8 @@ function Login() {
                 $('#usuario').remove()
                 $('#vendas').remove()
 
-                if ([''].indexOf(nomeTela) < 0) {
+                if (['Home'].indexOf(nomeTela) < 0) {
+                    // window.location = "/index.php?p=home";
                     location.href = '/sisvop/index.php?p=home';
                 }
             }

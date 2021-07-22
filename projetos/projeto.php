@@ -116,7 +116,7 @@
             </div>
 
             <div class=" col s3">
-                <label>Prazo de meta (H)</label><br>
+                <label>Prazo de meta</label><br>
                 <span id="spMeta" class="spanAutoPreenc"></span>
             </div>
 
