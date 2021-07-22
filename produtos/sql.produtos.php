@@ -73,8 +73,8 @@ class SqlProdutos
   function insert($param)
   {
     extract($param);
-    $sql = "INSERT INTO produtos (qtd, descricao, valor, codigo, id_marca, data_cadastro, endereco, qtd_minima, MEDIDA, id_tipo_item)
-    VALUES(:QTD, :DESCRICAO, :VALOR, :CODIGO, :ID_MARCA, :DATA_CADASTRO, :ENDERECO, :QTD_MINIMA, :MEDIDA, :ID_TIPO_ITEM)
+    $sql = "INSERT INTO produtos (qtd, descricao, valor, codigo, id_marca, data_cadastro, endereco, qtd_minima, MEDIDA)--, id_tipo_item)
+    VALUES(:QTD, :DESCRICAO, :VALOR, :CODIGO, :ID_MARCA, :DATA_CADASTRO, :ENDERECO, :QTD_MINIMA, :MEDIDA)--, :ID_TIPO_ITEM)
     returning id_produto";
     $sql = prepare::SQL($sql, $param);
 
@@ -89,13 +89,13 @@ class SqlProdutos
     extract($param);
     $sql = "UPDATE produtos  
     SET qtd = :QTD, descricao = :DESCRICAO, valor = :VALOR, codigo = :CODIGO, id_marca = :ID_MARCA, 
-    endereco = :ENDERECO, qtd_minima = :QTD_MINIMA, MEDIDA = :MEDIDA, ID_TIPO_ITEM = :ID_TIPO_ITEM
+    endereco = :ENDERECO, qtd_minima = :QTD_MINIMA, MEDIDA = :MEDIDA--, ID_TIPO_ITEM = :ID_TIPO_ITEM
     WHERE id_produto =  :ID_PRODUTO";
 
     $sql = prepare::SQL($sql, $param);
-    //$query = $this->db->prepare($sql);
-    //$query->execute();
-    return $sql;// $query->fetchAll(PDO::FETCH_OBJ);
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function delete($param)
