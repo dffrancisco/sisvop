@@ -546,13 +546,13 @@ const projetos = (function () {
                     bloqueiaButtons();
 
                     margem = rs.data[0].MARGEM_PRODUTO;
-                    obra = rs.data[0].VALOR_OBRA;
+                    valorObra = rs.data[0].VALOR_OBRA;
                     valorMinimo = rs.data[0].VALOR_MINIMO;
                     valorIntercessao = rs.data[0].VALOR_INTERCESSAO;
                     valorMaximo = rs.data[0].VALOR_MAXIMO;
-
+                    
                     $("#margem").html("R$" + margem);
-                    $("#maoDeObra").html("R$" + obra);
+                    $("#maoDeObra").html("R$" + valorObra);
                     $("#valorMinimo").html("R$" + valorMinimo);
                     $("#valorIntercessao").html("R$" + valorIntercessao);
                     $("#valorMaximo").html("R$" + valorMaximo);
@@ -779,104 +779,128 @@ const projetos = (function () {
                         })
                         .then((r) => {
 
-                            let TOTAL = 0;
-                            for (let i in xgProjeto.data()) {
-
-                                let QTD = Number(xgProjeto.data()[i].QTD);
-
-                                if (QTD == 0) {
-                                    show("O projeto possui item sem quantidade!");
-                                    return false;
-                                }
-                                console.log('QTD :', QTD);
-
-                                let VALOR = Number(xgProjeto.data()[i].VALOR.replace(",", ".")
-                                );
-                                console.log('VALOR :', VALOR);
-                                // alterar if de tipo item, coletar o nome metros, pacotes, caixas do nome e tratat valor em qtd
-                                if (xgProjeto.data()[i].TIPO_ITEM == "CABO") {
-
-                                    let tamanho_cabo = Number(tratarCabos(xgProjeto.data()[i].DESCRICAO))
-
-                                    VALOR = VALOR / tamanho_cabo
-                                    console.log('VALOR Real:', VALOR);
-
-                                }
-
-                                TOTAL += QTD * VALOR;
-
-                            }
-
-                            console.log('TOTAL :', TOTAL);
-                            margem = (TOTAL * 0.1) + TOTAL;
-                            console.log('margem :', margem);
-                            valorObra = margem * 0.61;
-                            valorMinimo = margem * 0.49 + margem;
-                            valorIntercessao = margem * 0.52 + margem;
-                            valorMaximo = valorObra + margem;
-
-                            Number(margem)
-                            Number(valorObra).toFixed(2)
-                            Number(valorMinimo).toFixed(2)
-                            Number(valorIntercessao).toFixed(2)
-                            Number(valorMaximo).toFixed(2)
-
-                            STATUS = "ORÇAMENTO";
-
-                            $("#spStatus").html(STATUS);
-
-                            $("#orcaIndispo").hide();
-                            $("#orcaDispo").show();
-
+                            let param = {
+                                offset: 0,
+                                ID_LISTA_SERVICO: ID_LISTA_SERVICO,
+                                controle: ControleGrid,
+                            };
+                            
                             axios
                                 .post(url, {
-                                    call: "updateOrcamento",
-                                    param: {
-                                        margem: margem.toFixed(2),
-                                        valorMinimo: valorMinimo.toFixed(2),
-                                        valorIntercessao: valorIntercessao.toFixed(2),
-                                        valorMaximo: valorMaximo.toFixed(2),
-                                        valorObra: valorObra.toFixed(2),
-                                        ID_LISTA_SERVICO: ID_LISTA_SERVICO,
-                                    },
+                                    call: "getItensProjeto",
+                                    param: param,
                                 })
                                 .then((r) => {
-                                    bloqueiaButtons();
-                                    $("#btnPropostas").attr("disabled", true);
-                                    $("#btnAprovado").removeAttr("disabled", true);
-                                    $("#btnReprovado").removeAttr("disabled", true);
-                                    $("#margem").html("R$" + margem.toFixed(2)
-                                    );
-                                    $("#maoDeObra").html("R$" + valorObra.toFixed(2)
-                                    );
-                                    $("#valorMinimo").html("R$" + valorMinimo.toFixed(2)
-                                    );
-                                    $("#valorIntercessao").html(
-                                        "R$" + valorIntercessao.toFixed(2)
 
-                                    );
-                                    $("#valorMaximo").html("R$" + valorMaximo.toFixed(2)
-                                    );
-                                });
+                                    let TOTAL = 0;
+                                    for (let i in r.data) {
 
-                            axios.post(url, {
-                                call: "getAvaliador",
-                            }).then(r => {
+                                        let QTD = Number(r.data[i].QTD);
 
-                                for (let i in r.data) {
+                                        if (QTD == 0) {
+                                            show("O projeto possui item sem quantidade!");
+                                            return false;
+                                        }
 
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "../Mailer_Sisvop/email_avaliadores.php",
-                                        data: {
-                                            SERVICO: dados_servico.SERVICO,
-                                            FANTASIA: dados_servico.FANTASIA,
-                                            EMAIL: r.data[i].EMAIL,
-                                            NOME: r.data[i].NOME,
-                                        },
+                                        let VALOR = Number(r.data[i].VALOR.replace(",", ".")
+                                        );
+
+                                        // alterar if de tipo item, coletar o nome metros, pacotes, caixas do nome e tratat valor em qtd
+                                        if (r.data[i].DESCRICAO.indexOf("METROS") != -1) {
+
+                                            let tamanho_cabo = Number(tratarCabos(r.data[i].DESCRICAO))
+
+                                            VALOR = VALOR / tamanho_cabo
+
+                                        }
+
+                                        if (r.data[i].DESCRICAO.indexOf("(CAIXA") != -1) {
+
+                                            let qtd_unitaria = Number(tratarCaixa(r.data[i].DESCRICAO))
+
+                                            VALOR = VALOR / qtd_unitaria
+
+                                        }
+
+                                        TOTAL += QTD * VALOR;
+
+                                    }
+
+                                    
+                                    margem = (TOTAL * 0.13) + TOTAL;
+                                    valorObra = margem * 0.90;
+                                    valorMinimo = margem * 0.68 + margem;
+                                    valorIntercessao = margem * 0.82 + margem;
+                                    valorMaximo = valorObra + margem;
+                                    
+                                    if(dados_servico.SERVICO == 'SONORIZACAO'){
+                                        valorMaximo += 500  
+                                    }
+
+                                    STATUS = "ORÇAMENTO";
+
+                                    $("#spStatus").html(STATUS);
+
+                                    $("#orcaIndispo").hide();
+                                    $("#orcaDispo").show();
+
+                                    axios.post(url, {
+                                            call: "updateOrcamento",
+                                            param: {
+                                                margem: margem.toFixed(2),
+                                                valorMinimo: valorMinimo.toFixed(2),
+                                                valorIntercessao: valorIntercessao.toFixed(2),
+                                                valorMaximo: valorMaximo.toFixed(2),
+                                                valorObra: valorObra.toFixed(2),
+                                                ID_LISTA_SERVICO: ID_LISTA_SERVICO,
+                                            },
+                                        })
+                                        .then((r) => {
+                                            bloqueiaButtons();
+                                            $("#btnPropostas").attr("disabled", true);
+                                            $("#btnAprovado").removeAttr("disabled", true);
+                                            $("#btnReprovado").removeAttr("disabled", true);
+                                            $("#margem").html("R$" + margem.toFixed(2)
+                                            );
+                                            $("#maoDeObra").html("R$" + valorObra.toFixed(2)
+                                            );
+                                            $("#valorMinimo").html("R$" + valorMinimo.toFixed(2)
+                                            );
+                                            $("#valorIntercessao").html(
+                                                "R$" + valorIntercessao.toFixed(2)
+
+                                            );
+                                            $("#valorMaximo").html("R$" + valorMaximo.toFixed(2)
+                                            );
+
+                                           
+                                            margem = String(margem.toFixed(2))
+                                            valorObra = String(valorObra.toFixed(2))
+                                            valorMinimo = String(valorMinimo.toFixed(2))
+                                            valorIntercessao = String(valorIntercessao.toFixed(2))
+                                            valorMaximo = String(valorMaximo.toFixed(2))
+
+                                        });
+
+                                    axios.post(url, {
+                                        call: "getAvaliador",
+                                    }).then(r => {
+
+                                        for (let i in r.data) {
+
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "../Mailer_Sisvop/email_avaliadores.php",
+                                                data: {
+                                                    SERVICO: dados_servico.SERVICO,
+                                                    FANTASIA: dados_servico.FANTASIA,
+                                                    EMAIL: r.data[i].EMAIL,
+                                                    NOME: r.data[i].NOME,
+                                                },
+                                            })
+                                        }
                                     })
-                                }
-                            })
+                                });
 
                         });
                 });
@@ -930,8 +954,7 @@ const projetos = (function () {
         confirmaCodigo({
             msg: "Digite o código abaixo para aceitar o orçamento.",
             call: () => {
-                axios
-                    .post(url, {
+                axios.post(url, {
                         call: "getEmailVendedor",
                         param: dados_servico.ID_VENDEDOR,
                     })
@@ -952,8 +975,7 @@ const projetos = (function () {
                         })
                     });
 
-                axios
-                    .post(url, {
+                axios.post(url, {
                         call: "statusServico",
                         param: {
                             ID_LISTA_SERVICO: ID_LISTA_SERVICO,
@@ -1030,9 +1052,18 @@ const projetos = (function () {
         $("#rlProjeto").html("PROPOSTA - " + dados_servico.PROJETO);
         $("#rlNomeAss").html(usuario.NOME);
 
+        console.log('valorObra :', valorObra);
+        console.log('margem :', margem);
         $("#rlValorObras").html(" R$ " + valorObra.replace('.', ','));
         $("#rlMargem").html(" R$ " + margem.replace('.', ','));
         $("#rlValorMaximo").html(" R$ " + valorMaximo.replace('.', ','));
+
+        if(dados_servico.SERVICO == 'SONORIZACAO'){
+            $("#licencaHide").show()
+            $("#rlLicenca").html(" R$ 500");  
+        }else{
+            $("#licencaHide").hide()
+        }
 
         axios.post(url, {
             call: "getTarefaServico",
@@ -1080,6 +1111,15 @@ const projetos = (function () {
 
         return tamanho_cabo = tamanho_cabo[0].split(" ").pop()
 
+    }
+
+    function tratarCaixa(nome){
+
+        let qtd_unitaria = nome.split("CAIXA ")
+
+        qtd_unitaria = qtd_unitaria[1].split(")")
+
+        return qtd_unitaria[0]
     }
 
     // SET
