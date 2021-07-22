@@ -21,11 +21,11 @@ class SqlProdutos
     $sql = "SELECT first 10 skip $offset 
             a.id_produto, a.qtd, a.descricao, a.valor, a.codigo, 
             a.id_marca, a.data_cadastro, a.endereco, a.qtd_minima, 
-            a.medida, a.id_tipo_item, b.marca, b.id_marca,
-            c.tipo_item
-            from produtos a, marcas b, tipo_iten c
+            a.medida, a.id_tipo_item, b.marca, b.id_marca--,
+            --c.tipo_item
+            from produtos a, marcas b--, tipo_iten c
             where b.id_marca = a.id_marca
-            AND c.id_tipo = a.id_tipo_item 
+            --AND c.id_tipo = a.id_tipo_item 
             and a.descricao like '%$search%' 
             ORDER BY qtd asc";
 
@@ -93,9 +93,9 @@ class SqlProdutos
     WHERE id_produto =  :ID_PRODUTO";
 
     $sql = prepare::SQL($sql, $param);
-    $query = $this->db->prepare($sql);
-    $query->execute();
-    return $query->fetchAll(PDO::FETCH_OBJ);
+    //$query = $this->db->prepare($sql);
+    //$query->execute();
+    return $sql;// $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function delete($param)

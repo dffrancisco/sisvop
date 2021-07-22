@@ -155,9 +155,9 @@ class Projeto
         $call = $this->sql->gerarServico($param);
         extract($projeto);
 
-        mkdir("/home/sisvop/arquivos_projetos/" . $call[0]->ID_LISTA_SERVICO);
+        mkdir("../arquivos_projetos/" . $call[0]->ID_LISTA_SERVICO);
 
-        chmod("/home/sisvop/arquivos_projetos/" . $call[0]->ID_LISTA_SERVICO, 0777);
+        chmod("../arquivos_projetos/" . $call[0]->ID_LISTA_SERVICO, 0777);
 
         list($tipo, $dados) = explode(';', $arquivo);
 
@@ -165,7 +165,7 @@ class Projeto
 
         $dados = base64_decode($dados);
 
-        file_put_contents("/home/sisvop/arquivos_projetos/" . $call[0]->ID_LISTA_SERVICO . "/" . $name, $dados);
+        file_put_contents("../arquivos_projetos/" . $call[0]->ID_LISTA_SERVICO . "/" . $name, $dados);
 
         echo json_encode($call);
     }

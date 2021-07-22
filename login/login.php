@@ -32,7 +32,7 @@ class Login
                 FROM FUNCIONARIOS A, USUARIOS B, CARGO C
                 WHERE B.ID_FUNCIONARIOS = A.ID_FUNCIONARIOS
                 AND C.ID_CARGO = A.ID_CARGO
-                AND B.SENHA = :senha";
+                AND B.SENHA = '$senha'";
         if ($length == 14) {
             $sql = $sql . " AND A.CPF = '$login'";
         } else {

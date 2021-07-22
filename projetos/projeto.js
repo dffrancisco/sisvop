@@ -546,11 +546,13 @@ const projetos = (function () {
                     bloqueiaButtons();
 
                     margem = rs.data[0].MARGEM_PRODUTO;
+                    obra = rs.data[0].VALOR_OBRA;
                     valorMinimo = rs.data[0].VALOR_MINIMO;
                     valorIntercessao = rs.data[0].VALOR_INTERCESSAO;
                     valorMaximo = rs.data[0].VALOR_MAXIMO;
 
                     $("#margem").html("R$" + margem);
+                    $("#maoDeObra").html("R$" + obra);
                     $("#valorMinimo").html("R$" + valorMinimo);
                     $("#valorIntercessao").html("R$" + valorIntercessao);
                     $("#valorMaximo").html("R$" + valorMaximo);
@@ -763,7 +765,7 @@ const projetos = (function () {
                 }).then((r) => {
 
                     if (r.data) {
-                        show(r);
+                        show(r.data);
                         return false;
                     }
 
@@ -786,16 +788,18 @@ const projetos = (function () {
                                     show("O projeto possui item sem quantidade!");
                                     return false;
                                 }
+                                console.log('QTD :', QTD);
 
-                                let VALOR = Number(
-                                    xgProjeto.data()[i].VALOR.replace(",", ".")
+                                let VALOR = Number(xgProjeto.data()[i].VALOR.replace(",", ".")
                                 );
-
+                                console.log('VALOR :', VALOR);
+                                // alterar if de tipo item, coletar o nome metros, pacotes, caixas do nome e tratat valor em qtd
                                 if (xgProjeto.data()[i].TIPO_ITEM == "CABO") {
 
                                     let tamanho_cabo = Number(tratarCabos(xgProjeto.data()[i].DESCRICAO))
 
                                     VALOR = VALOR / tamanho_cabo
+                                    console.log('VALOR Real:', VALOR);
 
                                 }
 
@@ -803,17 +807,19 @@ const projetos = (function () {
 
                             }
 
-                            margem = pontos * 55 + (TOTAL * 0.15) + TOTAL;
-                            valorObra = margem * 0.74;
-                            valorMinimo = margem * 0.47 + margem;
-                            valorIntercessao = margem * 0.65 + margem;
+                            console.log('TOTAL :', TOTAL);
+                            margem = (TOTAL * 0.1) + TOTAL;
+                            console.log('margem :', margem);
+                            valorObra = margem * 0.61;
+                            valorMinimo = margem * 0.49 + margem;
+                            valorIntercessao = margem * 0.52 + margem;
                             valorMaximo = valorObra + margem;
 
-                            margem.toFixed(2)
-                            valorObra.toFixed(2)
-                            valorMinimo.toFixed(2)
-                            valorIntercessao.toFixed(2)
-                            valorMaximo.toFixed(2)
+                            Number(margem)
+                            Number(valorObra).toFixed(2)
+                            Number(valorMinimo).toFixed(2)
+                            Number(valorIntercessao).toFixed(2)
+                            Number(valorMaximo).toFixed(2)
 
                             STATUS = "ORÇAMENTO";
 
@@ -826,11 +832,11 @@ const projetos = (function () {
                                 .post(url, {
                                     call: "updateOrcamento",
                                     param: {
-                                        margem: margem,
-                                        valorMinimo: valorMinimo,
-                                        valorIntercessao: valorIntercessao,
-                                        valorMaximo: valorMaximo,
-                                        valorObra: valorObra,
+                                        margem: margem.toFixed(2),
+                                        valorMinimo: valorMinimo.toFixed(2),
+                                        valorIntercessao: valorIntercessao.toFixed(2),
+                                        valorMaximo: valorMaximo.toFixed(2),
+                                        valorObra: valorObra.toFixed(2),
                                         ID_LISTA_SERVICO: ID_LISTA_SERVICO,
                                     },
                                 })
@@ -839,17 +845,17 @@ const projetos = (function () {
                                     $("#btnPropostas").attr("disabled", true);
                                     $("#btnAprovado").removeAttr("disabled", true);
                                     $("#btnReprovado").removeAttr("disabled", true);
-                                    $("#margem").html("R$" + margem
+                                    $("#margem").html("R$" + margem.toFixed(2)
                                     );
-                                    $("#maoDeObra").html("R$" + valorObra
+                                    $("#maoDeObra").html("R$" + valorObra.toFixed(2)
                                     );
-                                    $("#valorMinimo").html("R$" + valorMinimo
+                                    $("#valorMinimo").html("R$" + valorMinimo.toFixed(2)
                                     );
                                     $("#valorIntercessao").html(
-                                        "R$" + valorIntercessao
+                                        "R$" + valorIntercessao.toFixed(2)
 
                                     );
-                                    $("#valorMaximo").html("R$" + valorMaximo
+                                    $("#valorMaximo").html("R$" + valorMaximo.toFixed(2)
                                     );
                                 });
 
@@ -1035,9 +1041,11 @@ const projetos = (function () {
             },
         })
             .then((r) => {
+                Number(dados_servico.META)
+                metaHora = dados_servico.META * 24
                 $("#servicosProposta").html("")
                 let rlServico = `<p style=" color: #253fc1;">SERVIÇOS</p>
-                <p>SERVIÇO TOTAL EM HORAS: <b>${dados_servico.META + " HORA(S)"}</b></p>`
+                <p>SERVIÇO TOTAL EM HORAS: <b>${metaHora + " HORA(S)"}</b></p>`
 
                 $("#servicosProposta").append(rlServico)
 
@@ -1077,7 +1085,7 @@ const projetos = (function () {
     // SET
     function setServicoTela(param) {
         $("#tabPdfProjeto").html("")
-        
+
         $("#spId_lista_servico").html(param.ID_LISTA_SERVICO);
         $("#spFantasia").html(param.FANTASIA);
         $("#spCnpj").html(param.CNPJ);
@@ -1112,7 +1120,7 @@ const projetos = (function () {
     }
 
     function setIframe() {
-        let iframe = `<iframe src="/home/sisvop/arquivos_projetos/${dados_servico.ID_LISTA_SERVICO}/${dados_servico.PROJETO}.pdf" style="height: 450px; width: 100%; margin-top: 5px;"></iframe>`
+        let iframe = `<iframe src="../arquivos_projetos/${dados_servico.ID_LISTA_SERVICO}/${dados_servico.PROJETO}.pdf" style="height: 450px; width: 100%; margin-top: 5px;"></iframe>`
         $("#tabPdfProjeto").append(iframe)
     }
 
