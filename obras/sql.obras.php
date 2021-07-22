@@ -442,7 +442,7 @@ class SqlObras
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
-  
+
   function inserirItemRomaneioX($param)
   {
 

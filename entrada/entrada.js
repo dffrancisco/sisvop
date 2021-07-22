@@ -1028,7 +1028,6 @@ const itens = (function () {
             }
 
             xgPagamento.insertLine(insertLine)
-            $('#edtValorPagar').val('')
             $('#edtDataVencimento').val('')
             $('#edtDataVencimento').focus()
         })
