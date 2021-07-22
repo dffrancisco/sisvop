@@ -406,6 +406,9 @@
         <div class="fontOrcamento">PREÇO PRODUTOS =<a id="rlMargem"></a>
         </div>
 
+        <div class="fontOrcamento" id="licencaHide">PREÇO LICENÇA ANUAL =<a id="rlLicenca"></a>
+        </div>
+
         <div class="fontOrcamento">TOTAL =<a id="rlValorMaximo"></a>
         </div>
     </div>

@@ -283,7 +283,7 @@ class SqlProjeto
   {
 
     extract($param);
-    $sql = "SELECT FIRST 10 SKIP $offset 
+    $sql = "SELECT FIRST 100 SKIP $offset 
             a.id_itens_servico, a.id_lista_servico, 
             a.qtd, b.id_produto, b.descricao, b.valor,
             b.id_tipo_item--, c.id_tipo, c.tipo_item 
