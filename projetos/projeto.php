@@ -224,16 +224,19 @@
 
             <div class="row">
 
+                <div class="col s1">
+                    <button class="btnP btn-Frame btn-Frame-blue" id="btnPropostas"> PDF </button>
+                </div>
                 <div class="col s2">
-                    <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnPropostas"> PDF </button>
+                    <button class="btnP btn-Frame btn-Frame-blue" id="btnRelatorio"> RELATORIO </button>
                 </div>
 
-                <div class="col s1 push-s8">
+                <div class="col s1 push-s7">
                     <button class="btnBuscarFornecedor btn-Frame btn-Frame-blue" id="btnAprovado"><i
                             class="fa fa-check"></i></button>
                 </div>
 
-                <div class="col s1 push-s8">
+                <div class="col s1 push-s7">
                     <button class="btnVermelho btn-Frame btn-Frame-blue" id="btnReprovado"><i
                             class="fa fa-times"></i></button>
                 </div>
@@ -426,6 +429,8 @@
 
 
 </div>
+
+<div id="pdfRelatorio" hidden></div>
 
 
 
