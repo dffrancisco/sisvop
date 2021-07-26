@@ -134,6 +134,10 @@ $(function () {
         projetos.aceitarOrçamento();
     });
 
+    $("#btnRelatorio").click(function () {
+        projetos.relatorioOrcamento();
+    });
+
     $("#btnReprovado").click(function () {
         projetos.recusarOrçamento();
     });
@@ -293,7 +297,7 @@ const projetos = (function () {
 
         xgProjeto = new xGridV2.create({
             el: "#xgProjeto",
-            height: "180",
+            height: "229",
             theme: "x-clownV2",
             heightLine: "27",
 
@@ -539,6 +543,7 @@ const projetos = (function () {
                 if (STATUS == "PROJETO") {
                     ativaButtons();
                     $("#btnAprovado").attr("disabled", true);
+                    $("#btnRelatorio").attr("disabled", true);
                     $("#btnReprovado").attr("disabled", true);
                     $(".btnVR").attr("disabled", true);
                     $("#btnPropostas").attr("disabled", true);
@@ -561,6 +566,7 @@ const projetos = (function () {
                     $("#btnPropostas").attr("disabled", true);
 
                     $("#btnAprovado").removeAttr("disabled", true);
+                    $("#btnRelatorio").removeAttr("disabled", true);
                     $("#btnReprovado").removeAttr("disabled", true);
                 } else if (STATUS == "ANÁLISE" || STATUS == "ANDAMENTO" || STATUS == "FINALIZACAO") {
                     bloqueiaButtons();
@@ -581,6 +587,7 @@ const projetos = (function () {
                     $("#btnPropostas").removeAttr("disabled", true);
 
                     $("#btnAprovado").attr("disabled", true);
+                    $("#btnRelatorio").attr("disabled", true);
                     $("#btnReprovado").attr("disabled", true);
                 } else {
                     show("ERRO INTERNO!");
@@ -802,8 +809,7 @@ const projetos = (function () {
                                             return false;
                                         }
 
-                                        let VALOR = Number(r.data[i].VALOR.replace(",", ".")
-                                        );
+                                        let VALOR = Number(r.data[i].VALOR.replace(",", "."));
 
                                         // alterar if de tipo item, coletar o nome metros, pacotes, caixas do nome e tratat valor em qtd
                                         if (r.data[i].DESCRICAO.indexOf("METROS") != -1) {
@@ -860,6 +866,7 @@ const projetos = (function () {
                                             $("#btnPropostas").attr("disabled", true);
                                             $("#btnAprovado").removeAttr("disabled", true);
                                             $("#btnReprovado").removeAttr("disabled", true);
+                                            $("#btnRelatorio").removeAttr("disabled", true);
                                             $("#margem").html("R$" + margem.toFixed(2)
                                             );
                                             $("#maoDeObra").html("R$" + valorObra.toFixed(2)
@@ -992,9 +999,103 @@ const projetos = (function () {
 
                         $("#btnAprovado").attr("disabled", true);
                         $("#btnReprovado").attr("disabled", true);
+                        $("#btnRelatorio").attr("disabled", true);
                     });
             },
         });
+    }
+
+    function relatorioOrcamento(){
+
+        let param = {
+            offset: 0,
+            ID_LISTA_SERVICO: ID_LISTA_SERVICO,
+            controle: ControleGrid,
+        };
+        
+        axios
+            .post(url, {
+                call: "getItensProjeto",
+                param: param,
+            })
+            .then((r) => {
+                let TOTAL_GERAL = 0
+
+                $("#pdfRelatorio").html('')
+
+                let table = `<table id="tbRelatorio">
+                                <tr>
+                                    <th>DESCRICAO</th>
+                                    <th>QTD</th>
+                                    <th>MEDIDA</th>
+                                    <th>VALOR</th>
+                                    <th>TOTAL PARCIAL</th>
+                                </tr>
+                            </table>`
+
+                $("#pdfRelatorio").append(table)
+
+                for (let i in r.data) {
+
+                    let produto = {
+                        DESCRICAO: r.data[i].DESCRICAO,
+                        VALOR: Number(r.data[i].VALOR.replace(",", ".")).toFixed(2),
+                        QTD: Number(r.data[i].QTD),
+                        MEDIDA: "UND"
+                    }
+                    
+
+                    // alterar if de tipo item, coletar o nome metros, pacotes, caixas do nome e tratat valor em qtd
+                    if (produto.DESCRICAO.indexOf("METROS") != -1) {
+
+                        let tamanho_cabo = Number(tratarCabos(produto.DESCRICAO))
+
+                        produto.VALOR =  produto.VALOR / tamanho_cabo
+
+                        produto.MEDIDA = "METROS"
+
+                    }
+
+                    if (produto.DESCRICAO.indexOf("(CAIXA") != -1) {
+
+                        let qtd_unitaria = Number(tratarCaixa(produto.DESCRICAO))
+
+                        produto.VALOR =  produto.VALOR / qtd_unitaria
+
+                    }
+                    
+                    TOTAL_GERAL +=  produto.QTD *  produto.VALOR;
+
+                    produto.TOTAL =  produto.QTD *  produto.VALOR;
+
+                    let td = `<tr>
+                                <td>${produto.DESCRICAO}</td>
+                                <td style="text-align:center;">${produto.QTD}</td>
+                                <td style="text-align:center;">${produto.MEDIDA}</td>
+                                <td>${Number(produto.VALOR).toFixed(2)}</td>
+                                <td style="text-align:center;">${produto.TOTAL.toFixed(2)}</td>
+                              </tr>`
+
+                    $("#tbRelatorio").append(td)
+
+                }
+
+                let margem = TOTAL_GERAL * 0.1
+                let total = `<tr>
+                                <td  style="font-size: 17px;"><b>MARGEM</b></td>
+                                <td COLSPAN="3" style="font-size: 17px;"><b>R$ ${margem.toFixed(2)}</b></td>
+                              </tr>
+                              <tr>
+                                <td  style="font-size: 17px;"><b>TOTAL</b></td>
+                                <td COLSPAN="3" style="font-size: 17px;"><b>R$ ${TOTAL_GERAL.toFixed(2)}</b></td>
+                              </tr>
+                              `
+
+                $("#tbRelatorio").append(total)
+
+                $("#pdfRelatorio").xPrint()
+            });
+
     }
 
     function validaCheckbox() {
@@ -1361,5 +1462,6 @@ const projetos = (function () {
         aceitarOrçamento: aceitarOrçamento,
         relatorio: relatorio,
         showObs: showObs,
+        relatorioOrcamento: relatorioOrcamento
     };
 })();

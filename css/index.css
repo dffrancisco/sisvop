@@ -77,6 +77,22 @@ nav, nav .nav-wrapper i, nav a.sidenav-trigger, nav a.sidenav-trigger i{
   color: #29455c;
 }
 
+#tbRelatorio{
+
+  border: 1px solid black;
+  line-height: 23px;
+}
+
+#tbRelatorio th{
+  font-size: 15px;
+  border: 1px solid black;
+  text-align:center;
+}
+#tbRelatorio td{
+  font-size: 14px;
+  border: 1px solid black;
+}
+
 .notify:hover {
   color: #b3b3b3;
 }
