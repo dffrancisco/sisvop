@@ -80,6 +80,7 @@ class Entrada
     {
         $id_itens_nota = $this->sql->deleteItensUni($param);
         $call = $this->sql->updateDelProduto($param);
+        $delValor = $this->sql->delValorProduto($param);
     }
 
     function deletePagamento($param)
@@ -93,11 +94,6 @@ class Entrada
         $call = $this->sql->updateDelProduto($param);
     }
 
-    function updateItens($param)
-    {
-        $call = $this->sql->updateItens($param);
-    }
-
     function updatePagamento($param)
     {
         $call = $this->sql->updatePagamento($param);
@@ -107,7 +103,7 @@ class Entrada
     {
         $call = $this->sql->updateDelProduto($param);
         $callProduto = $this->sql->updateProdutoEdit($param);
-        $callItens = $this->sql->updateItens($param);
+        $editValor = $this->sql->editValorProduto($param);
     }
 
     function insertNota($param)
@@ -118,19 +114,10 @@ class Entrada
             $call = $this->sql->getCabecalho($id_nota[0]->ID_NOTA);
             echo json_encode($call);
         } else if ($param['id_nota']) {
-
             $id_nota = $this->sql->updateNota($param);
             $call = $this->sql->getCabecalho($id_nota);
             echo json_encode($call);
         } else {
-            //=======
-            //        } else if($param['id_nota']){
-            //            
-            //           $id_nota = $this->sql->updateNota($param);
-            //            $call = $this->sql->getCabecalho($id_nota);
-            //            echo json_encode($call);
-            //        }else{
-            //>>>>>>> master
             echo 'ERRO INTERNO';
         }
     }
@@ -145,7 +132,9 @@ class Entrada
         }
         $id_itens = $this->sql->insertProduto($param);
         $call = $this->sql->updateProduto($param);
-        echo json_encode($id_itens);
+        $insertValor = $this->sql->insertValorProduto($param);
+        $dados = array_merge($id_itens, $insertValor);
+        echo json_encode($dados);
     }
     function insertPagamento($param)
     {

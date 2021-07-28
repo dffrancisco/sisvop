@@ -109,6 +109,7 @@
 
         </div>
         <hr>
+        <div id="loading" hidden></div>
         <br>
     </div>
 

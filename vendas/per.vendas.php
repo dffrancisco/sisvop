@@ -45,9 +45,39 @@ class vendas
         echo json_encode($call);
     }
 
+    function getItensProjeto($param)
+    {
+        $call = $this->sql->getItensProjeto($param);
+        echo json_encode($call);
+    }
+
+    function getItensValorProduto($param)
+    {
+        $call = $this->sql->getItensValorProduto($param);
+        echo json_encode($call);
+    }
+
+    function deleteItensValorProduto($param)
+    {
+        $call = $this->sql->deleteItensValorProduto($param);
+        echo json_encode($call);
+    }
+
     function UpdateVenda($param)
     {
         $call = $this->sql->UpdateVenda($param);
+        echo json_encode($call);
+    }
+
+    function updateValorProduto($param)
+    {
+        $call = $this->sql->updateValorProduto($param);
+        echo json_encode($call);
+    }
+
+    function UpdateProduto($param)
+    {
+        $call = $this->sql->UpdateProduto($param);
         echo json_encode($call);
     }
 }

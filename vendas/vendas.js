@@ -46,6 +46,7 @@ const vendas = (function () {
     let VALOR_MINIMO
     let VALOR_INTERCESSAO
     let VALOR_MAXIMO
+    let ID_LISTA_SERVICO
     let url = 'vendas/per.vendas.php';
 
     function grid() {
@@ -102,6 +103,7 @@ const vendas = (function () {
             if (r.data[0].VALOR_VENDEDOR == null) {
                 $("#spValorVendedor").html('R$ ');
             }
+
             status = r.data[0].STATUS
             VALOR_MINIMO = r.data[0].VALOR_MINIMO
             VALOR_INTERCESSAO = r.data[0].VALOR_INTERCESSAO
@@ -142,12 +144,15 @@ const vendas = (function () {
                     call: "getSenha",
                     param: { SENHA: SENHA, ID_FUNCIONARIOS: usuario.ID_FUNCIONARIOS },
                 })
-                    .then((r) => {
+                    .then(async (r) => {
+
                         if (r.data) {
                             show(r.data)
                             return false
                         }
-                        let SENHA = $("#passwordConf").val()
+
+                        $("#loading").show()
+
                         VALOR_MAXIMO = parseFloat(VALOR_MAXIMO)
                         VALOR_INTERCESSAO = parseFloat(VALOR_INTERCESSAO)
                         VALOR_MINIMO = parseFloat(VALOR_MINIMO)
@@ -172,6 +177,76 @@ const vendas = (function () {
                             show('Valor inválido')
                             return false
                         }
+
+                        let itens_projeto
+                        let itens_valor_produto
+
+                        itens_projeto = await getItensProjeto()
+
+                        for (let i in itens_projeto) {
+
+                            itens_valor_produto = await getItensValorProduto(itens_projeto[i])
+
+                            if (itens_valor_produto.length > 0) {
+
+                                // OPERAÇÃO DE ABATER A QUANTIDADE
+                                let nova_qtd
+
+                                for (let j in itens_valor_produto) {
+
+                                    nova_qtd = Number(itens_projeto[i].QTD) - itens_valor_produto[j].QTD
+
+
+                                    // VALIDAR SE O ITEM PODE CONTINUA OS ABATES OU PODE SAIR
+
+                                    if (nova_qtd > 0) {
+                                        // A QUANTIDADE DA TABELA "VALOR PRODUTO" É MENOR QUE A QTD PROJETADA
+
+                                        deleteItensValorProduto(itens_valor_produto[j].ID_VALOR_PRODUTO)
+
+                                        itens_projeto[i].QTD = nova_qtd
+
+                                    }
+                                    else if (nova_qtd <= 0) {
+                                        // A QUANTIDADE DA TABELA "VALOR PRODUTO" ABATE A QTD PROJETADA
+                                        // TIRAR DO NEGATIVO O VALOR E ATUALIZAR A QUANTIDADE DO ITEM DE "VALOR PRODUTO"
+
+                                        if (nova_qtd < 0) {
+
+                                            itens_valor_produto[j].QTD = nova_qtd * -1
+
+                                            updateValorProduto(itens_valor_produto[j])
+
+                                        }
+                                        if (nova_qtd == 0) {
+
+                                            deleteItensValorProduto(itens_valor_produto[j].ID_VALOR_PRODUTO)
+                                        }
+
+
+                                        itens_projeto[i].VALOR = itens_valor_produto[j].VALOR
+
+                                        UpdateProduto(itens_projeto[i])
+
+                                        break
+                                    }
+                                    else {
+                                        show("ERRO INTERNO!")
+                                        return false
+                                    }
+
+
+                                }
+
+
+
+                            }
+
+
+
+                        }
+
+                        return
                         axios.post(url, {
                             call: "UpdateVenda",
                             param: param
@@ -181,10 +256,61 @@ const vendas = (function () {
                             $("#spStatus").html(param.status);
                             $("#edtValorVenda").val('');
                             $("#slctFonte").val('');
-
+                            $("#loading").hide()
                         })
                     })
             }
+        })
+    }
+
+    async function getItensProjeto() {
+        let itens
+        await axios.post(url, {
+            call: "getItensProjeto",
+            param: { ID_LISTA_SERVICO: ID_LISTA_SERVICO }
+        }).then(r => {
+            itens = r.data
+        })
+
+        return itens
+
+    }
+
+    async function getItensValorProduto(itens_projeto) {
+        let itens
+        await axios.post(url, {
+            call: "getItensValorProduto",
+            param: { ID_PRODUTO: itens_projeto.ID_PRODUTO }
+        }).then(r => {
+            itens = r.data
+        })
+
+        return itens
+    }
+
+    async function deleteItensValorProduto(ID_VALOR_PRODUTO) {
+
+        await axios.post(url, {
+            call: "deleteItensValorProduto",
+            param: { ID_VALOR_PRODUTO: ID_VALOR_PRODUTO }
+        }).then(r => {
+            itens = r.data
+        })
+    }
+
+    function UpdateProduto(produto) {
+
+        axios.post(url, {
+            call: "UpdateProduto",
+            param: produto
+        })
+    }
+
+    function updateValorProduto(itens_valor_produto) {
+
+        axios.post(url, {
+            call: "updateValorProduto",
+            param: itens_valor_produto
         })
     }
 

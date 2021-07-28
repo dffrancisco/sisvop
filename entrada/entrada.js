@@ -626,6 +626,7 @@ const itens = (function () {
 
     }
 
+
     //xgPagamentos
     function editPagamento() {
         $('.btnSavePag').removeAttr("disabled")
@@ -734,22 +735,17 @@ const itens = (function () {
                 show("Selecione um produto pelo codigo ou na lupa")
                 return false
             }
+
             let qtd_compra = $('#edtQtdCompra').val()
             let valor_compra = $('#edtValorUni').val()
 
             let param = {
                 id_nota: id_nota,
                 id_produto: produtoSelecionado.ID_PRODUTO,
-                qtd_nota: qtd_compra,
+                qtd_nota: Number(qtd_compra),
                 valor_nota: valor_compra,
-                valor_antigo: produtoSelecionado.VALOR
-            }
-
-
-            if ($('#spDescricao').html() == '') {
-                show("Adicione o item")
-                return false
-
+                valor_antigo: produtoSelecionado.VALOR,
+                data: new Date().toLocaleDateString('pt-BR')
             }
 
             $('#btnEditar').removeAttr("disabled")
@@ -761,6 +757,7 @@ const itens = (function () {
                 param: param
             }).then(r => {
                 id_itens_nota = r.data[0].ID_ITENS_NOTA
+                console.log('r.data[0] :', r.data);
 
                 if (r.data.msg) {
                     show(r.data.msg)
@@ -774,13 +771,16 @@ const itens = (function () {
                 }
 
                 itensGrid = {
-                    id_itens_nota: r.data.ID_ITENS_NOTA,
+                    id_itens_nota: r.data[0].ID_ITENS_NOTA,
                     CODIGO: produtoSelecionado.CODIGO,
                     DESCRICAO: produtoSelecionado.DESCRICAO,
                     QTD_NOTA: qtd_compra,
                     VALOR_NOTA: valor_compra,
-                    VALOR_ANTIGO: produtoSelecionado.VALOR
+                    VALOR_ANTIGO: produtoSelecionado.VALOR,
+                    ID_VALOR_PRODUTO: r.data[1].id_valor_produto
+
                 }
+
                 xgItens.insertLine(itensGrid)
                 id_produto = produtoSelecionado.ID_PRODUTO
                 $('#edtCodigo').focus()
@@ -815,6 +815,7 @@ const itens = (function () {
 
             $('#edtQtdEdit').val(xgItens.dataSource().QTD_NOTA)
             $('#edtValorUniEdit').val(xgItens.dataSource().VALOR_NOTA)
+            $('#edtValorUniEdit').select()
 
         })
 
@@ -835,6 +836,7 @@ const itens = (function () {
                         qtd_nota: xgItens.dataSource().QTD_NOTA,
                         valor_nota: xgItens.dataSource().VALOR_ANTIGO,
                         id_produto: xgItens.dataSource().ID_PRODUTO,
+                        id_valor_produto: xgItens.dataSource().ID_VALOR_PRODUTO,
                     }
                     axios.post(url, {
                         call: 'deleteItensUni',
@@ -875,7 +877,6 @@ const itens = (function () {
 
         }
 
-        $('#edtCodigo').focus()
 
         let valCampos = {
             numero_nota: $('#edtNumero').val(),
@@ -884,14 +885,20 @@ const itens = (function () {
             chave_acesso: $('#edtChave').val(),
         }
 
-        valCampos.valor_total = valCampos.valor_total.replace(',', '');
 
         for (let i in valCampos) {
-            if (valCampos[i] == '' || valCampos.valor_total == 0) {
+            if (valCampos[i] == '') {
                 show('Por favor preencha todos os campos')
                 return false
             }
         }
+        valCampos.valor_total = valCampos.valor_total.replace(',', '');
+
+        if (valCampos.valor_total == 000) {
+            show('Valor total inválido')
+            return false
+        }
+
         xmNovaNota.close()
 
         axios.post(url, {
@@ -901,6 +908,7 @@ const itens = (function () {
             cabecalho = r.data[0]
             id_nota = r.data[0].ID_NOTA
             editNota = param
+            $('#edtCodigo').focus()
 
             $('#spNumero').html(cabecalho.NUMERO_NOTA)
             $('#spData').html(cabecalho.DATA_EMISSAO)
@@ -979,9 +987,11 @@ const itens = (function () {
             qtd_nota: xgItens.dataSource().QTD_NOTA,
             qtd: Number($('#edtQtdEdit').val()),
             valor_nota: $('#edtValorUniEdit').val(),
-            id_produto: id_produto,
-            id_itens_nota: id_itens_nota
+            id_produto: xgItens.dataSource().ID_PRODUTO,
+            id_itens_nota: xgItens.dataSource().ID_ITENS_NOTA,
+            id_valor_produto: xgItens.dataSource().ID_VALOR_PRODUTO
         }
+
         axios.post(url, {
             call: 'editItens',
             param: param
