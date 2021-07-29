@@ -80,7 +80,7 @@ class SqlVendas
     $sql = "SELECT
             a.id_itens_servico, a.id_lista_servico, 
             a.qtd, b.id_produto, b.descricao, b.valor,
-            b.id_tipo_item--, c.id_tipo, c.tipo_item 
+            b.id_tipo_item, b.medida--, c.id_tipo, c.tipo_item 
             FROM lista_itens_servico a, produtos b--, tipo_iten c
             WHERE a.ID_PRODUTO = b.ID_PRODUTO
             --AND b.id_tipo_item = c.id_tipo
@@ -110,9 +110,9 @@ class SqlVendas
     extract($param);
     $sql = "DELETE FROM valor_produto 
             WHERE ID_VALOR_PRODUTO = $ID_VALOR_PRODUTO";
-    // $query = $this->db->prepare($sql);
-    // $query->execute();
-    return $sql; //$query->fetchAll(PDO::FETCH_OBJ);
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function UpdateVenda($param)
@@ -135,9 +135,9 @@ class SqlVendas
     $sql = "UPDATE produtos 
       SET valor = '$VALOR'
       WHERE id_produto = $ID_PRODUTO";
-    // $query = $this->db->prepare($sql);
-    // $query->execute();
-    return $sql; //$query->fetchAll(PDO::FETCH_OBJ);
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
   function updateValorProduto($param)
@@ -146,8 +146,8 @@ class SqlVendas
     $sql = "UPDATE valor_produtos 
       SET qtd = $QTD
       WHERE id_valor_produto = $ID_VALOR_PRODUTO";
-    // $query = $this->db->prepare($sql);
-    // $query->execute();
-    return $sql; //$query->fetchAll(PDO::FETCH_OBJ);
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
   }
 }

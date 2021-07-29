@@ -246,7 +246,6 @@ const vendas = (function () {
 
                         }
 
-                        return
                         axios.post(url, {
                             call: "UpdateVenda",
                             param: param

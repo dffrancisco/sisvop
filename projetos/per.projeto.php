@@ -142,6 +142,12 @@ class Projeto
         }
     }
 
+    function getItensValorProduto($param)
+    {
+        $call = $this->sql->getItensValorProduto($param);
+        echo json_encode($call);
+    }
+
     function getProdutos($param)
     {
         $call = $this->sql->getProdutos($param);
