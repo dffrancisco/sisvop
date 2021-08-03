@@ -286,11 +286,25 @@ class SqlProjeto
     $sql = "SELECT FIRST 100 SKIP $offset 
             a.id_itens_servico, a.id_lista_servico, 
             a.qtd, b.id_produto, b.descricao, b.valor,
-            b.id_tipo_item--, c.id_tipo, c.tipo_item 
+            b.id_tipo_item, b.MEDIDA--, c.id_tipo, c.tipo_item 
             FROM lista_itens_servico a, produtos b--, tipo_iten c
             WHERE a.ID_PRODUTO = b.ID_PRODUTO
             --AND b.id_tipo_item = c.id_tipo
             AND a.id_lista_servico = $ID_LISTA_SERVICO";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function getItensValorProduto($param)
+  {
+    extract($param);
+    $sql = "SELECT
+             *
+            FROM valor_produto
+            WHERE QTD > 0
+            AND ID_PRODUTO = $ID_PRODUTO";
 
     $query = $this->db->prepare($sql);
     $query->execute();

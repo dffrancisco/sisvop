@@ -555,7 +555,7 @@ const projetos = (function () {
                     valorMinimo = rs.data[0].VALOR_MINIMO;
                     valorIntercessao = rs.data[0].VALOR_INTERCESSAO;
                     valorMaximo = rs.data[0].VALOR_MAXIMO;
-                    
+
                     $("#margem").html("R$" + margem);
                     $("#maoDeObra").html("R$" + valorObra);
                     $("#valorMinimo").html("R$" + valorMinimo);
@@ -781,7 +781,7 @@ const projetos = (function () {
                             call: "statusServico",
                             param: {
                                 ID_LISTA_SERVICO: ID_LISTA_SERVICO,
-                                STATUS: "ORÇAMENTO",
+                                STATUS: "PROJETO",
                             },
                         })
                         .then((r) => {
@@ -791,56 +791,126 @@ const projetos = (function () {
                                 ID_LISTA_SERVICO: ID_LISTA_SERVICO,
                                 controle: ControleGrid,
                             };
-                            
+
                             axios
                                 .post(url, {
                                     call: "getItensProjeto",
                                     param: param,
                                 })
-                                .then((r) => {
+                                .then(async (r) => {
 
                                     let TOTAL = 0;
                                     for (let i in r.data) {
 
                                         let QTD = Number(r.data[i].QTD);
+                                        let VALOR = Number(r.data[i].VALOR.replace(",", "."));
 
                                         if (QTD == 0) {
                                             show("O projeto possui item sem quantidade!");
                                             return false;
                                         }
 
-                                        let VALOR = Number(r.data[i].VALOR.replace(",", "."));
+                                        itens_valor_produto = await getItensValorProduto(r.data[i])
 
-                                        // alterar if de tipo item, coletar o nome metros, pacotes, caixas do nome e tratat valor em qtd
-                                        if (r.data[i].DESCRICAO.indexOf("METROS") != -1) {
+                                        if (itens_valor_produto.length > 0) {
+                                            let qtd_restante = 0
 
-                                            let tamanho_cabo = Number(tratarCabos(r.data[i].DESCRICAO))
+                                            for (let j in itens_valor_produto) {
+                                                // caso item projeto seja maior que valor produto, 
+                                                // armazenar a qtd e valor do proximo valor produto
+                                                itens_valor_produto[j].VALOR = Number(itens_valor_produto[j].VALOR.replace(",", "."))
 
-                                            VALOR = VALOR / tamanho_cabo
+                                                console.log('r.data[i].QTD :', r.data[i].MEDIDA);
 
+
+                                                if (r.data[i].MEDIDA == "METRO") {
+
+                                                    let tamanho_cabo = Number(tratarCabos(r.data[i].DESCRICAO))
+
+                                                    itens_valor_produto[j].VALOR = itens_valor_produto[j].VALOR / tamanho_cabo
+
+                                                }
+
+                                                if (r.data[i].MEDIDA == "CAIXA") {
+                                                    console.log('CAIXA :',);
+
+                                                    let qtd_unitaria = Number(tratarCaixa(r.data[i].DESCRICAO))
+
+                                                    itens_valor_produto[j].VALOR = itens_valor_produto[j].VALOR / qtd_unitaria
+
+                                                }
+
+
+                                                if (r.data[i].QTD > itens_valor_produto[j].QTD) {
+
+                                                    VALOR = itens_valor_produto[j].VALOR
+
+                                                    TOTAL += itens_valor_produto[j].QTD * VALOR
+
+                                                }
+
+                                                else if (r.data[i].QTD < itens_valor_produto[j].QTD) {
+
+                                                    console.log(' MAIO QUE VALOR PRODUTO');
+                                                    VALOR = itens_valor_produto[j].VALOR
+
+                                                    TOTAL += r.data[i].QTD * VALOR
+
+                                                    break
+
+                                                }
+
+                                                else if (r.data[i].QTD == itens_valor_produto[j].QTD) {
+
+                                                    console.log(' IGUAL VALOR PRODUTO');
+                                                    VALOR = itens_valor_produto[j].VALOR
+
+                                                    TOTAL += r.data[i].QTD * VALOR
+
+                                                    break
+
+                                                }
+
+
+                                                r.data[i].QTD -= itens_valor_produto[j].QTD
+
+                                            }
+                                        }
+                                        else {
+
+                                            if (r.data[i].MEDIDA == "METRO") {
+
+                                                let tamanho_cabo = Number(tratarCabos(r.data[i].DESCRICAO))
+
+                                                VALOR = VALOR / tamanho_cabo
+
+                                            }
+
+                                            if (r.data[i].MEDIDA == "CAIXA") {
+
+                                                let qtd_unitaria = Number(tratarCaixa(r.data[i].DESCRICAO))
+
+                                                VALOR = VALOR / qtd_unitaria
+
+                                            }
+
+                                            console.log('else');
+                                            TOTAL += QTD * VALOR;
                                         }
 
-                                        if (r.data[i].DESCRICAO.indexOf("(CAIXA") != -1) {
 
-                                            let qtd_unitaria = Number(tratarCaixa(r.data[i].DESCRICAO))
 
-                                            VALOR = VALOR / qtd_unitaria
-
-                                        }
-
-                                        TOTAL += QTD * VALOR;
 
                                     }
 
-                                    
                                     margem = (TOTAL * 0.13) + TOTAL;
                                     valorObra = margem * 0.90;
                                     valorMinimo = margem * 0.68 + margem;
                                     valorIntercessao = margem * 0.82 + margem;
                                     valorMaximo = valorObra + margem;
-                                    
-                                    if(dados_servico.SERVICO == 'SONORIZACAO'){
-                                        valorMaximo += 500  
+
+                                    if (dados_servico.SERVICO == 'SONORIZACAO') {
+                                        valorMaximo += 500
                                     }
 
                                     STATUS = "ORÇAMENTO";
@@ -851,16 +921,16 @@ const projetos = (function () {
                                     $("#orcaDispo").show();
 
                                     axios.post(url, {
-                                            call: "updateOrcamento",
-                                            param: {
-                                                margem: margem.toFixed(2),
-                                                valorMinimo: valorMinimo.toFixed(2),
-                                                valorIntercessao: valorIntercessao.toFixed(2),
-                                                valorMaximo: valorMaximo.toFixed(2),
-                                                valorObra: valorObra.toFixed(2),
-                                                ID_LISTA_SERVICO: ID_LISTA_SERVICO,
-                                            },
-                                        })
+                                        call: "updateOrcamento",
+                                        param: {
+                                            margem: margem.toFixed(2),
+                                            valorMinimo: valorMinimo.toFixed(2),
+                                            valorIntercessao: valorIntercessao.toFixed(2),
+                                            valorMaximo: valorMaximo.toFixed(2),
+                                            valorObra: valorObra.toFixed(2),
+                                            ID_LISTA_SERVICO: ID_LISTA_SERVICO,
+                                        },
+                                    })
                                         .then((r) => {
                                             bloqueiaButtons();
                                             $("#btnPropostas").attr("disabled", true);
@@ -880,7 +950,7 @@ const projetos = (function () {
                                             $("#valorMaximo").html("R$" + valorMaximo.toFixed(2)
                                             );
 
-                                           
+
                                             margem = String(margem.toFixed(2))
                                             valorObra = String(valorObra.toFixed(2))
                                             valorMinimo = String(valorMinimo.toFixed(2))
@@ -918,6 +988,18 @@ const projetos = (function () {
 
     function showObs() {
         show(dados_servico.OBS)
+    }
+
+    async function getItensValorProduto(itens_projeto) {
+        let itens
+        await axios.post(url, {
+            call: "getItensValorProduto",
+            param: { ID_PRODUTO: itens_projeto.ID_PRODUTO }
+        }).then(r => {
+            itens = r.data
+        })
+
+        return itens
     }
 
     function ativaButtons() {
@@ -962,9 +1044,9 @@ const projetos = (function () {
             msg: "Digite o código abaixo para aceitar o orçamento.",
             call: () => {
                 axios.post(url, {
-                        call: "getEmailVendedor",
-                        param: dados_servico.ID_VENDEDOR,
-                    })
+                    call: "getEmailVendedor",
+                    param: dados_servico.ID_VENDEDOR,
+                })
                     .then((r) => {
 
                         $.ajax({
@@ -983,12 +1065,12 @@ const projetos = (function () {
                     });
 
                 axios.post(url, {
-                        call: "statusServico",
-                        param: {
-                            ID_LISTA_SERVICO: ID_LISTA_SERVICO,
-                            STATUS: "ANÁLISE",
-                        },
-                    })
+                    call: "statusServico",
+                    param: {
+                        ID_LISTA_SERVICO: ID_LISTA_SERVICO,
+                        STATUS: "ANÁLISE",
+                    },
+                })
                     .then((r) => {
                         STATUS = "ANÁLISE";
 
@@ -1005,14 +1087,14 @@ const projetos = (function () {
         });
     }
 
-    function relatorioOrcamento(){
+    function relatorioOrcamento() {
 
         let param = {
             offset: 0,
             ID_LISTA_SERVICO: ID_LISTA_SERVICO,
             controle: ControleGrid,
         };
-        
+
         axios
             .post(url, {
                 call: "getItensProjeto",
@@ -1043,14 +1125,14 @@ const projetos = (function () {
                         QTD: Number(r.data[i].QTD),
                         MEDIDA: "UND"
                     }
-                    
+
 
                     // alterar if de tipo item, coletar o nome metros, pacotes, caixas do nome e tratat valor em qtd
                     if (produto.DESCRICAO.indexOf("METROS") != -1) {
 
                         let tamanho_cabo = Number(tratarCabos(produto.DESCRICAO))
 
-                        produto.VALOR =  produto.VALOR / tamanho_cabo
+                        produto.VALOR = produto.VALOR / tamanho_cabo
 
                         produto.MEDIDA = "METROS"
 
@@ -1060,13 +1142,13 @@ const projetos = (function () {
 
                         let qtd_unitaria = Number(tratarCaixa(produto.DESCRICAO))
 
-                        produto.VALOR =  produto.VALOR / qtd_unitaria
+                        produto.VALOR = produto.VALOR / qtd_unitaria
 
                     }
-                    
-                    TOTAL_GERAL +=  produto.QTD *  produto.VALOR;
 
-                    produto.TOTAL =  produto.QTD *  produto.VALOR;
+                    TOTAL_GERAL += produto.QTD * produto.VALOR;
+
+                    produto.TOTAL = produto.QTD * produto.VALOR;
 
                     let td = `<tr>
                                 <td>${produto.DESCRICAO}</td>
@@ -1159,10 +1241,10 @@ const projetos = (function () {
         $("#rlMargem").html(" R$ " + margem.replace('.', ','));
         $("#rlValorMaximo").html(" R$ " + valorMaximo.replace('.', ','));
 
-        if(dados_servico.SERVICO == 'SONORIZACAO'){
+        if (dados_servico.SERVICO == 'SONORIZACAO') {
             $("#licencaHide").show()
-            $("#rlLicenca").html(" R$ 500");  
-        }else{
+            $("#rlLicenca").html(" R$ 500");
+        } else {
             $("#licencaHide").hide()
         }
 
@@ -1214,7 +1296,7 @@ const projetos = (function () {
 
     }
 
-    function tratarCaixa(nome){
+    function tratarCaixa(nome) {
 
         let qtd_unitaria = nome.split("CAIXA ")
 

@@ -24,9 +24,6 @@ class SqlVendas
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-
-
-
   function getVenda($param)
   {
     extract($param);
@@ -77,6 +74,47 @@ class SqlVendas
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function getItensProjeto($param)
+  {
+    extract($param);
+    $sql = "SELECT
+            a.id_itens_servico, a.id_lista_servico, 
+            a.qtd, b.id_produto, b.descricao, b.valor,
+            b.id_tipo_item, b.medida--, c.id_tipo, c.tipo_item 
+            FROM lista_itens_servico a, produtos b--, tipo_iten c
+            WHERE a.ID_PRODUTO = b.ID_PRODUTO
+            --AND b.id_tipo_item = c.id_tipo
+            AND a.id_lista_servico = $ID_LISTA_SERVICO";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function getItensValorProduto($param)
+  {
+    extract($param);
+    $sql = "SELECT
+             *
+            FROM valor_produto
+            WHERE QTD > 0
+            AND ID_PRODUTO = $ID_PRODUTO";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function deleteItensValorProduto($param)
+  {
+    extract($param);
+    $sql = "DELETE FROM valor_produto 
+            WHERE ID_VALOR_PRODUTO = $ID_VALOR_PRODUTO";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
   function UpdateVenda($param)
   {
     extract($param);
@@ -86,6 +124,28 @@ class SqlVendas
       valor_vendedor = '$valor_vendedor',
       status = '$status'
       WHERE id_lista_servico = $id_lista_servico";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function UpdateProduto($param)
+  {
+    extract($param);
+    $sql = "UPDATE produtos 
+      SET valor = '$VALOR'
+      WHERE id_produto = $ID_PRODUTO";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  function updateValorProduto($param)
+  {
+    extract($param);
+    $sql = "UPDATE valor_produtos 
+      SET qtd = $QTD
+      WHERE id_valor_produto = $ID_VALOR_PRODUTO";
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);

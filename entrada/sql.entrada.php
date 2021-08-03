@@ -96,6 +96,19 @@ class SqlEntrada
     WHERE b.id_nota = c.id_nota
     AND a.id_produto = b.id_produto
     AND c.id_nota = $param";
+
+    if ($param >= 68) {
+      $sql = "SELECT a.codigo, a.descricao, b.valor_nota,
+    b.qtd_nota, a.id_produto, b.id_itens_nota, b.valor_antigo,
+    d.id_valor_produto
+    FROM produtos a, lista_itens_nota b, nota c, valor_produto d
+    WHERE b.id_nota = c.id_nota
+    AND a.id_produto = b.id_produto
+    AND c.id_nota = $param
+    AND d.id_nota = c.id_nota
+    AND d.id_produto = b.id_produto";
+    };
+
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
@@ -166,6 +179,16 @@ class SqlEntrada
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function delValorProduto($param)
+  {
+    extract($param);
+    $sql = "DELETE FROM valor_produto  
+    WHERE id_valor_produto = $id_valor_produto";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
   function deletePagamento($param)
   {
     $sql = "DELETE FROM pagamentos
@@ -208,6 +231,17 @@ class SqlEntrada
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
+  function insertValorProduto($param)
+  {
+    extract($param);
+    $sql = "INSERT INTO valor_produto (id_nota, id_produto, valor, qtd, data)
+    VALUES($id_nota, $id_produto, '$valor_nota', $qtd_nota, '$data')
+    returning id_valor_produto";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
   function insertPagamento($param)
   {
     extract($param);
@@ -223,8 +257,7 @@ class SqlEntrada
   {
     extract($param);
     $sql = "UPDATE produtos 
-              SET qtd = $qtd_nota + qtd, 
-              valor = '$valor_nota'
+              SET qtd = $qtd_nota + qtd              
             WHERE id_produto = $id_produto";
 
     $query = $this->db->prepare($sql);
@@ -249,8 +282,7 @@ class SqlEntrada
   {
     extract($param);
     $sql = "UPDATE produtos 
-              SET qtd = $qtd + qtd, 
-              valor = '$valor_nota'
+              SET qtd = $qtd + qtd
             WHERE id_produto = $id_produto 
             returning id_produto";
 
@@ -264,8 +296,7 @@ class SqlEntrada
   {
     extract($param);
     $sql = "UPDATE produtos 
-              SET qtd = qtd - $qtd_nota, 
-              valor = '$valor_nota'
+              SET qtd = qtd - $qtd_nota
             WHERE id_produto = $id_produto 
             returning id_produto";
 
@@ -274,14 +305,27 @@ class SqlEntrada
     return $query->fetchAll(PDO::FETCH_OBJ);
   }
 
-  function updateItens($param)
+  // function updateItens($param)
+  // {
+  //   extract($param);
+  //   $sql = "UPDATE lista_itens_nota 
+  //   SET qtd_nota = '$qtd', 
+  //   valor_nota = '$valor_nota'
+  //   WHERE id_itens_nota = $id_itens_nota
+  //   returning id_itens_nota";
+
+  //   $query = $this->db->prepare($sql);
+  //   $query->execute();
+  //   return $query->fetchAll(PDO::FETCH_OBJ);
+  // }
+
+  function editValorProduto($param)
   {
     extract($param);
-    $sql = "UPDATE lista_itens_nota 
-    SET qtd_nota = '$qtd', 
-    valor_nota = '$valor_nota'
-    WHERE id_itens_nota = $id_itens_nota
-    returning id_itens_nota";
+    $sql = "UPDATE valor_produto 
+    SET valor = '$valor_nota', 
+    qtd = '$qtd'
+    WHERE id_valor_produto = $id_valor_produto";
 
     $query = $this->db->prepare($sql);
     $query->execute();
@@ -293,12 +337,12 @@ class SqlEntrada
     extract($param);
     $sql = "UPDATE nota 
     SET id_fornecedor = $id_fornecedor, 
-    numero_nota = '$numero_nota', 
-    chave_acesso = '$chave_acesso', 
-    data_emissao = '$data_emissao', 
-    icms = '$icms', 
-    st = '$st',
-    valor_total = '$valor_total' 
+    numero_nota = '$NUMERO_NOTA', 
+    chave_acesso = '$CHAVE_ACESSO', 
+    data_emissao = '$DATA_EMISSAO', 
+    icms = '$ICMS', 
+    st = '$ST',
+    valor_total = '$VALOR_TOTAL' 
     WHERE id_nota = $id_nota";
 
     $query = $this->db->prepare($sql);
@@ -311,7 +355,7 @@ class SqlEntrada
     extract($param);
 
     $sql = "SELECT id_produto FROM lista_itens_nota 
-          WHERE id_nota = $id_nota 
+          WHERE id_nota = $id_nota
           and id_produto = $id_produto";
 
     $query = $this->db->prepare($sql);
