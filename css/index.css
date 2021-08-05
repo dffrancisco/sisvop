@@ -498,6 +498,10 @@ textarea:focus {
   font-size: 12px;
 }
 
+#pdfOrcamento span{
+  font-size: 11px; 
+}
+
 /* ANIMAÇÃO */
 #loading {
   width: 40px;
