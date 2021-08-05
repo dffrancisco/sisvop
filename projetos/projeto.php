@@ -352,7 +352,7 @@
 <!-- ÁREA DE PDF -->
 <div id="pdfOrcamento" hidden>
     <br>
-    <div class="tabela" style="font-size: 15px !important;">
+    <div class="" style="font-size: 11px !important;">
 
         <div class="row">
             <div class="col s6">

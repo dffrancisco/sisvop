@@ -820,7 +820,6 @@ const projetos = (function () {
                                                 // armazenar a qtd e valor do proximo valor produto
                                                 itens_valor_produto[j].VALOR = Number(itens_valor_produto[j].VALOR.replace(",", "."))
 
-                                                console.log('r.data[i].QTD :', r.data[i].MEDIDA);
 
 
                                                 if (r.data[i].MEDIDA == "METRO") {
@@ -832,7 +831,6 @@ const projetos = (function () {
                                                 }
 
                                                 if (r.data[i].MEDIDA == "CAIXA") {
-                                                    console.log('CAIXA :',);
 
                                                     let qtd_unitaria = Number(tratarCaixa(r.data[i].DESCRICAO))
 
@@ -851,7 +849,6 @@ const projetos = (function () {
 
                                                 else if (r.data[i].QTD < itens_valor_produto[j].QTD) {
 
-                                                    console.log(' MAIO QUE VALOR PRODUTO');
                                                     VALOR = itens_valor_produto[j].VALOR
 
                                                     TOTAL += r.data[i].QTD * VALOR
@@ -862,7 +859,6 @@ const projetos = (function () {
 
                                                 else if (r.data[i].QTD == itens_valor_produto[j].QTD) {
 
-                                                    console.log(' IGUAL VALOR PRODUTO');
                                                     VALOR = itens_valor_produto[j].VALOR
 
                                                     TOTAL += r.data[i].QTD * VALOR
@@ -894,7 +890,6 @@ const projetos = (function () {
 
                                             }
 
-                                            console.log('else');
                                             TOTAL += QTD * VALOR;
                                         }
 
@@ -903,10 +898,10 @@ const projetos = (function () {
 
                                     }
 
-                                    margem = (TOTAL * 0.13) + TOTAL;
-                                    valorObra = margem * 0.90;
-                                    valorMinimo = margem * 0.68 + margem;
-                                    valorIntercessao = margem * 0.82 + margem;
+                                    margem = (TOTAL * 0.10) + TOTAL;
+                                    valorObra = margem * 0.85;
+                                    valorMinimo = margem * 0.69 + margem;
+                                    valorIntercessao = margem * 0.76 + margem;
                                     valorMaximo = valorObra + margem;
 
                                     if (dados_servico.SERVICO == 'SONORIZACAO') {
@@ -1235,8 +1230,6 @@ const projetos = (function () {
         $("#rlProjeto").html("PROPOSTA - " + dados_servico.PROJETO);
         $("#rlNomeAss").html(usuario.NOME);
 
-        console.log('valorObra :', valorObra);
-        console.log('margem :', margem);
         $("#rlValorObras").html(" R$ " + valorObra.replace('.', ','));
         $("#rlMargem").html(" R$ " + margem.replace('.', ','));
         $("#rlValorMaximo").html(" R$ " + valorMaximo.replace('.', ','));
