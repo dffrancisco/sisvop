@@ -772,6 +772,7 @@ const itens = (function () {
 
                 itensGrid = {
                     id_itens_nota: r.data[0].ID_ITENS_NOTA,
+                    ID_PRODUTO: produtoSelecionado.ID_PRODUTO,
                     CODIGO: produtoSelecionado.CODIGO,
                     DESCRICAO: produtoSelecionado.DESCRICAO,
                     QTD_NOTA: qtd_compra,
