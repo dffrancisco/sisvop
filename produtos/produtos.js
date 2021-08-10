@@ -31,21 +31,21 @@ const produto = (function () {
                 Código: {
                     dataField: "CODIGO",
                     center: true,
-                    width: "10%",
+                    width: "22%",
                 },
                 Descrição: {
                     dataField: "DESCRICAO",
-                    width: "60%",
+                    width: "55%",
                 },
                 QTD: {
                     dataField: "QTD",
-                    width: "15%",
+                    width: "10%",
                     center: true,
                 },
                 Valor: {
                     dataField: "VALOR",
                     render: addReal,
-                    width: "15%",
+                    width: "13%",
                 },
             },
 

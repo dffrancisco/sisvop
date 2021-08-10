@@ -112,7 +112,7 @@ function Login() {
                     'entrada', 'Fornecedor', 'Estoque', 'usuario',
                     'PROJETOS', 'vendas'].indexOf(nomeTela) < 0) {
                     window.location = "/index.php?p=home";
-                        location.href = '/sisvop/index.php?p=home';
+                    location.href = '/sisvop/index.php?p=home';
                 }
             }
 
@@ -125,10 +125,10 @@ function Login() {
                 $('#usuario').remove()
                 $('#vendas').remove()
 
-                if (['Marca', 'Estoque', 'PROJETOS', 
+                if (['Marca', 'Estoque', 'PROJETOS',
                     'Obras', 'servicos', 'Home', 'Clientes', 'Executor'].indexOf(nomeTela) < 0) {
                     window.location = "/index.php?p=home";
-                        location.href = '/sisvop/index.php?p=home';
+                    location.href = '/sisvop/index.php?p=home';
                 }
             }
 
