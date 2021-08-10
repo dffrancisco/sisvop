@@ -42,8 +42,22 @@ const login = (function () {
 
                 // window.location = "/index.php?p=home";
 
+                if (r.data.CARGO == "FNL") {
+                    window.location = "/sisvop/index.php?p=saida_rapida/saida";
+                }
+                else if (r.data.CARGO == "OBR") {
+                    window.location = "/sisvop/index.php?p=obras/obras";
+                }
+                else if (r.data.CARGO == "ENG") {
+                    window.location = "/sisvop/index.php?p=projetos/projeto";
+                }
+                else if (r.data.CARGO == "RH") {
+                    window.location = "/sisvop/index.php?p=entrada/entrada";
+                }
+                else {
+                    window.location = "/sisvop/index.php?p=home";
+                }
 
-                window.location = "/sisvop/index.php?p=home";
 
 
                 $('#spUser').html(r.data.NOME.split(' ')[0])
