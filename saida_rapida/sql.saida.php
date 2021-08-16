@@ -12,7 +12,7 @@ class SqlSaida
     $this->db = ConexaoFirebird::getConectar();
   }
 
-
+// GET
   function getProdutos($param)
   {
     extract($param);
@@ -47,5 +47,43 @@ class SqlSaida
     $query = $this->db->prepare($sql);
     $query->execute();
     return $query->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  // INSERT
+  function gerarCarrinho($param, $OBS){
+
+    extract($param);
+
+    $sql="INSERT INTO saida_rapida (id_funcionarios, data, obs)
+          VALUES ($ID_FUNCIONARIOS, '$DATA', '$OBS')
+          returning id_saida_rapida";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_OBJ);
+
+  }
+
+  function insertCarrinho($param, $carrinho){
+    extract($param);
+    $ID_SAIDA_RAPIDA = $carrinho[0]->ID_SAIDA_RAPIDA;
+    $sql="INSERT INTO itens_saida_rapida (id_saida_rapida, id_produto, qtd)
+          VALUES ($ID_SAIDA_RAPIDA, $ID_PRODUTO, $QTD_RETIRADA)";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+
+  }
+
+  // UPDATE
+
+  function atualizaEstoque($param){
+
+    extract($param);
+
+    $sql="UPDATE produtos
+          SET qtd = $newEstoque
+          WHERE id_produto = $ID_PRODUTO";
+    $query = $this->db->prepare($sql);
+    $query->execute();
   }
 }
