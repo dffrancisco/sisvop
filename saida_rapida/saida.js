@@ -1,6 +1,7 @@
 let xgCarrinho
 let xmModalPrdutos
 let xgProdutos
+let xmObs
 
 $(function () {
     saida.grid()
@@ -42,6 +43,10 @@ $(function () {
     $("#btnDeletar").click(()=>{
         saida.retirarItem()
     })
+    $("#btnFin").click(()=>{
+        saida.validaCarrinho()
+        // xmObs.open()
+    })
 
 });
 
@@ -49,6 +54,7 @@ $(function () {
 var saida = (function () {
 
     let produto = {}
+    let carrinho = {}
     let from = ""
 
     let url = "saida_rapida/per.saida.php"
@@ -57,12 +63,12 @@ var saida = (function () {
         xgCarrinho = new xGridV2.create({
             el: "#xgCarrinho",
             theme: "x-clownV2",
-            height: "300",
+            height: "200",
             columns: {
                 CODIGO:{ dataField: "CODIGO", width:"20%"},
                 DESCRICAO:{ dataField: "DESCRICAO", width:"40%"},
                 MARCA:{ dataField: "MARCA", width:"30%"},
-                QTD:{ dataField: "QTD", width:"10%"},
+                QTD:{ dataField: "QTD_RETIRADA", width:"10%"},
             },
 
             onKeyDown: {
@@ -86,7 +92,7 @@ var saida = (function () {
 
                 setQTD()
 
-                $("#edtQTD").val(produto.QTD)
+                $("#edtQTD").val(produto.QTD_RETIRADA)
 
             },
         })
@@ -106,7 +112,13 @@ var saida = (function () {
                 13: (ln, e) => {
                     produto = ln
 
-                    if(produto.QTD <= 0) return false
+                    if(produto.QTD <= 0){
+                        setTimeout(()=>{
+                            show("Não há item em estoque!")
+                        })    
+                        produto = {}
+                        return false
+                    }
 
                     from = "estoque"
 
@@ -118,11 +130,19 @@ var saida = (function () {
 
             dblClick: (ln) => {
                 if (ln == false) return false;
-                
-                if(produto.QTD <= 0) return false
-                
+
                 produto = ln
-                
+
+                if(produto.QTD <= 0){
+                    setTimeout(()=>{
+                        show("Não há item em estoque!")
+                    })    
+                    produto = {}
+                    return false
+                }
+
+                from = "estoque"
+
                 setQTD(produto)
 
                 xmModalPrdutos.close()
@@ -162,9 +182,15 @@ var saida = (function () {
         })
             .then(rs => {
                 produto = rs.data[0]
-                console.log('produto :', produto);
                 
                 if(produto == "" || produto == undefined || codigo == null){
+                    return false
+                }
+
+                if(produto.QTD <= 0){
+                    setTimeout(()=>{
+                        show("Não há item em estoque!")
+                    })    
                     return false
                 }
 
@@ -176,7 +202,9 @@ var saida = (function () {
     // DO
     function setQTD(){
 
-        $("#edtCodigo").val(produto.CODIGO)
+        if(produto.CODIGO != "" || produto.CODIGO != null)
+            $("#edtCodigo").val(produto.CODIGO)
+        
         $("#spDescricao").html(produto.DESCRICAO)
         $("#spMarca").html(produto.MARCA)
         $("#spEstoque").html(produto.QTD)
@@ -200,14 +228,22 @@ var saida = (function () {
             return false
         }
 
-        produto.QTD = $("#edtQTD").val()
+        produto.QTD_RETIRADA = $("#edtQTD").val()
 
-        if(produto.QTD == 0 || produto.QTD == undefined || produto.QTD == "" || produto.QTD == NaN){
+        if(produto.QTD_RETIRADA == 0 || produto.QTD_RETIRADA == undefined 
+            || produto.QTD_RETIRADA == "" || produto.QTD_RETIRADA == NaN){
             setTimeout(()=>{
                 show("Quantidade vazia!")
             })
             return false
 
+        }
+
+        if(produto.QTD_RETIRADA > produto.QTD){
+            setTimeout(()=>{
+                show("Quantidade maior!")
+            })
+            return false
         }
 
         for(let i in xgCarrinho.data()){
@@ -232,14 +268,9 @@ var saida = (function () {
         if(produto.ID_PRODUTO == undefined || produto.ID_PRODUTO == null || produto.ID_PRODUTO == ""){
             return false
         }
-        console.log('produto :', produto);
 
         for(let i in xgCarrinho.data()){
             if(produto.ID_PRODUTO == xgCarrinho.data()[i].ID_PRODUTO){
-                console.log('xgCarrinho.data()[i].ID_PRODUTO :', xgCarrinho.data()[i].ID_PRODUTO);
-                console.log('produto.ID_PRODUTO :', produto.ID_PRODUTO);
-                console.log('i :', i);
-
                 xgCarrinho.deleteLine(i)
                 break
             }
@@ -252,7 +283,65 @@ var saida = (function () {
         $("#spMarca").html("")
         $("#edtQTD").val("")
 
+        $("#edtCodigo").focus()
+
+        xgCarrinho.focus()
     }
+
+    function finalizarCarrinho(){
+
+        let funcionario = {
+            ID_FUNCIONARIOS: usuario.ID_FUNCIONARIOS,
+            DATA: new Date().toLocaleDateString("pt-BR")
+        }
+
+        let OBS = $("#txtObs").val().toUpperCase()
+
+        carrinho = {}
+        carrinho = xgCarrinho.data()
+
+        for(let i in carrinho){
+
+            carrinho[i].newEstoque = carrinho[i].QTD - carrinho[i].QTD_RETIRADA
+
+        }
+
+        axios.post(url,{
+            call: "gerarCarrinho",
+            param: {itens: carrinho, OBS: OBS, funcionario: funcionario}
+        }).then(r=>{
+
+            if(r.data == "feito"){
+                xmObs.close()
+                show("RETIRADA FEITA COM SUCESSO!")
+                 $(".container").remove()
+            }
+            else{
+                show("ERRO INTERNO!")
+            }
+        })
+    }
+
+    function validaCarrinho(){
+        carrinho = {}
+
+        for(let i in xgCarrinho.data()){
+            carrinho[i] = xgCarrinho.data()[i] 
+        }
+
+        if(isEmpty(carrinho) == true){
+            setTimeout(()=>{
+                show("Carrinho vazio!")
+            })
+            return false
+        }
+
+        xmObs.open()
+    }
+
+    function isEmpty(obj) {
+        return Object.keys(obj).length === 0 && obj.constructor === Object;
+      }
 
     // MODAL
 
@@ -263,6 +352,21 @@ var saida = (function () {
             width: "700",
             height: "500",
         });
+
+        xmObs = new xModal.create({
+            el: "#xmModalObs",
+            title: "OBS",
+            width: "500",
+            height: "210",
+            buttons:{
+                btn1:{
+                    html:"Confirmar",
+                    click: ()=>{
+                        finalizarCarrinho();
+                    }
+                }
+            },
+        });
     }
 
     return {
@@ -271,5 +375,6 @@ var saida = (function () {
         getCodigoProduto: getCodigoProduto,
         inserirCarrinho: inserirCarrinho,
         retirarItem: retirarItem,
+        validaCarrinho: validaCarrinho,
     }
 })();
