@@ -149,7 +149,29 @@ function Login() {
                 }
             }
 
-            if (r.data.CARGO == 'VND' || r.data.CARGO == 'FNL') {
+            if (r.data.CARGO == 'FNL') {
+                $('#cliente').remove()
+                $('#contas').remove()
+                $('#empresa').remove()
+                $('#entrada').remove()
+                $('#executor').remove()
+                $('#fornecedor').remove()
+                $('#funcionarios').remove()
+                $('#marca').remove()
+                $('#produtos').remove()
+                $('#projeto').remove()
+                $('#obras').remove()
+                $('#servicos').remove()
+                $('#usuario').remove()
+                $('#vendas').remove()
+
+                if (['Home', 'RETIRADA RAPIDA'].indexOf(nomeTela) < 0) {
+                    // window.location = "/index.php?p=home";
+                    location.href = '/sisvop/index.php?p=home';
+                }
+            }
+
+            if (r.data.CARGO == 'VND') {
                 $('#cliente').remove()
                 $('#contas').remove()
                 $('#empresa').remove()
